@@ -8,3 +8,4 @@ The best source for buying and selling online
 * Batya Bialik - 315341461
 * Sahar Kalifa - 311438709
 
+![alt text](logo.jpg)
