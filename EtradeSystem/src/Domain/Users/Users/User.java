@@ -8,7 +8,7 @@ public abstract class User {
     }
 
     public User() {
-        this.myShopCart = new ShoppingCart();
+        this.myShopCart = new ShoppingCart(0);
     }
 
     // exitSystem:
@@ -26,9 +26,7 @@ public abstract class User {
         return myShopCart.displayCart();
     }
 
-    public void purchase(){
-        myShopCart.purchase();
-    }
+    public abstract boolean purchase(CreditCard card,SupplyAddress address);
 
     //getStoreInfo:
     //input:store -> output: store info and store's items info(2.1)
@@ -43,8 +41,8 @@ public abstract class User {
     }
     //signIn:
     //create new Member object return it to controller to save it.
-    public Member signIn(String userName,String password,int age,String mail){
-        return new Member(userName,password,age,mail);
+    public Member signIn(String userName,String password,int age,String mail,String city,String street,int streetNum,int apartementNum){
+        return new Member(userName,password,age,mail,city,street,streetNum,apartementNum);
     }
 
     //logIn:

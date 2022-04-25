@@ -20,4 +20,19 @@ public class MemberPurchaseHistory {
     public void addToHistory(StoreBasket b){
         basketsPurchased.add(b);
     }
+
+    public boolean isProdPurchased(String prodName){
+        for(StoreBasket b : basketsPurchased){
+            if(b.isProdExisit(prodName))
+                return true;
+        }
+        return false;
+    }
+    public boolean isPurchasedFromStore(String storeName){
+        for(StoreBasket b : basketsPurchased){
+            if(b.getStoreName() == storeName)
+                return true;
+        }
+        return false;
+    }
 }

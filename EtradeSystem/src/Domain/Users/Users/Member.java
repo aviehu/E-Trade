@@ -13,14 +13,20 @@ public class Member extends User{
     protected int securityLvl;
     protected HashMap<String,String> securityQuests;
 
+    protected SupplyAddress address;
+    protected CreditCard card;
+    protected int discount;
+
 
     @Override
     public void exitSystem() {
         //save details to database
     }
 
-    public Member(String userName, String password, int age, String mail) {
+    public Member(String userName, String password, int age, String mail,String city,String street,int streetNum,int apartementNum) {
         super();
+        this.discount = 10;
+        this.myShopCart.setDiscount(discount);
         this.securityLvl = 0;
         this.securityQuests = new HashMap<>();
         this.pHistory = new MemberPurchaseHistory();
@@ -28,6 +34,8 @@ public class Member extends User{
         this.password = password;
         this.age = age;
         this.mail = mail;
+        this.address = new SupplyAddress(city,street,streetNum,apartementNum);
+        this.card = null;
     }
 
     @Override
@@ -51,13 +59,17 @@ public class Member extends User{
     }
 
     @Override
-    public void purchase() {
-        List<StoreBasket> bas;
-        if((bas = myShopCart.purchase()) != null){
-            for (StoreBasket b : bas){
-                pHistory.addToHistory(b);
+    public boolean purchase(CreditCard card,SupplyAddress address) {
+        if(myShopCart.purchaseCart(card,address)){
+            for (StoreBasket b : myShopCart.getBaskets()){
+                StoreBasket copy = b;
+                pHistory.addToHistory(copy);
             }
+            myShopCart.finishPurchase();
+            return true;
         }
+        else
+            return false;
     }
 
     @Override
@@ -80,6 +92,34 @@ public class Member extends User{
 //
 //    }
 
+    public boolean writeReviewOnProduct(Store s,String prodName, String review){
+        if(pHistory.isProdPurchased(prodName)) {
+            s.writeReviewOnProd(prodName, review, this.userName);
+            return true;
+        }
+        return false;
+    }
+    public boolean rateProduct(Store s,String prodName, int rate){
+        if(pHistory.isProdPurchased(prodName)) {
+            s.rateProd(prodName,rate,userName);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean RateStore(Store s,int rate){
+
+        if(pHistory.isPurchasedFromStore(s.getName())){
+            s.rateStore(rate,this.userName);
+            return true;
+        }
+        return false;
+    }
+    public void sendMessageToStore(Store s,String message){
+        s.askAs(message,userName);
+    }
+
+
 
     @Override
     public void searchProducts(String prodName) {
@@ -87,8 +127,8 @@ public class Member extends User{
     }
 
     @Override
-    public Member signIn(String userName, String password, int age, String mail) {
-        return super.signIn(userName, password, age, mail);
+    public Member signIn(String userName, String password, int age, String mail,String city,String street,int streetNum,int apartementNum) {
+        return super.signIn(userName, password, age, mail,city,street,streetNum,apartementNum);
     }
 
     public void addSecurityQuest(String quest,String ans){
@@ -138,5 +178,40 @@ public class Member extends User{
 
     public int getSecurityLvl() {
         return securityLvl;
+    }
+
+    public SupplyAddress getAddress() {
+        return address;
+    }
+
+    public void setCity(String city) {
+        this.address.setCity(city);
+    }
+    public void setStreet(String street) {
+        this.address.setStreet(street);
+    }
+    public void setStreetNum(int sNum) {
+        this.address.setStreetNum(sNum);
+    }
+    public void setApartmentNum(int apartmentNum) {
+        this.address.setApartmentNum(apartmentNum);
+    }
+
+    public void setDiscount(int discount) {
+        this.discount = discount;
+        this.myShopCart.setDiscount(discount);
+    }
+
+    public CreditCard getCard() {
+        return card;
+    }
+
+    public int getDiscount() {
+        return discount;
+    }
+
+
+    public void setCard(CreditCard card) {
+        this.card = card;
     }
 }

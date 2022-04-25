@@ -58,10 +58,25 @@ public class StoreBasket {
         return store.getName();
     }
     public boolean purchase(){
+        store.purchase(prods,getTotalPrice());
+        return true;
+    }
+
+    public boolean canPurchase(){
         for (String prod : prods.keySet()){
             if (!store.canPurchase(prod,prods.get(prod)))
                 return false;
         }
         return true;
+    }
+    public void finishPurchase(){
+        prods.clear();
+    }
+    public boolean isProdExisit(String prodName){
+        return prods.containsKey(prodName);
+    }
+
+    public HashMap<String, Integer> getProds() {
+        return prods;
     }
 }

@@ -36,8 +36,13 @@ public class Guest extends User {
     }
 
     @Override
-    public void purchase() {
-        super.purchase();
+    public boolean purchase(CreditCard card,SupplyAddress address) {
+        if(myShopCart.purchaseCart(card,address)) {
+            myShopCart.finishPurchase();
+            return true;
+        }
+        else
+            return false;
     }
 
     @Override
@@ -51,8 +56,8 @@ public class Guest extends User {
     }
 
     @Override
-    public Member signIn(String userName, String password, int age, String mail) {
-        return super.signIn(userName, password, age, mail);
+    public Member signIn(String userName, String password, int age, String mail,String city,String street,int streetNum,int apartementNum) {
+        return super.signIn(userName, password, age, mail,city,street,streetNum,apartementNum);
     }
 
     @Override

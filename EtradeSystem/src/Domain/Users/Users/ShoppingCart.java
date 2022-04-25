@@ -1,13 +1,42 @@
 package Domain.Users.Users;
 
+import Domain.Users.ExternalService.ExtSysController;
+
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-public class ShoppingCart {
-    private List<StoreBasket> baskets;
+import static Domain.Users.Users.UserController.memberDiscount;
 
-    public ShoppingCart() {
+public class ShoppingCart {
+    private ExtSysController extSystems = null;
+    private List<StoreBasket> baskets;
+    private int discount;
+
+    public ShoppingCart(int discount) {
+        this.discount = discount;
         this.baskets = new ArrayList<>();
+        extSystems = ExtSysController.getInstance();
+    }
+
+    public boolean purchaseCart(CreditCard card,SupplyAddress address){
+        int cardFrom = card.getCardNumber();
+        LocalTime expDate = card.getExpDate();
+        int cvv = card.getCvv();
+        boolean payment = extSystems.canPay(cardFrom, expDate, cvv, getTotalPrice());
+        //payment
+        if(payment && canPurchase()) {
+            if(!extSystems.supply(this,address))
+                return false;
+
+            for(StoreBasket b : baskets){
+                extSystems.pay(cardFrom,expDate,cvv,b.getTotalPrice(),b.getStore().getCard());
+                b.purchase();
+                }
+            return true;
+            }
+        return false;
     }
 
     public String displayCart(){
@@ -22,16 +51,16 @@ public class ShoppingCart {
         for(StoreBasket b : baskets){
             price += b.getTotalPrice();
         }
+        price = price - ((price*discount)/100);
         return price;
     }
-    public List<StoreBasket> purchase(){
+    public boolean canPurchase(){
         List<StoreBasket> bas = new ArrayList<>();
         for(StoreBasket b : baskets){
             if(!b.purchase())
-                return bas = null;
-            bas.add(b);
+                return false;
         }
-        return bas;
+        return true;
     }
     public StoreBasket getBasketByStore(Store s){
         for(StoreBasket b : baskets){
@@ -57,5 +86,18 @@ public class ShoppingCart {
         }
         else
             b.removeProd(quantity,prodName);
+    }
+
+    public List<StoreBasket> getBaskets() {
+        return baskets;
+    }
+    public void finishPurchase(){
+        for(StoreBasket b : baskets)
+            b.finishPurchase();
+        baskets.clear();
+    }
+
+    public void setDiscount(int discount) {
+        this.discount = discount;
     }
 }
