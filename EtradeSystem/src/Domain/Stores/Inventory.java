@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Inventory {
+
     private List<Product> products;
 
     public Inventory() {
@@ -71,6 +72,14 @@ public class Inventory {
             if(product.getKeywords().contains(keyword)) {
                 result.add(product);
             }
+        }
+        return result;
+    }
+
+    public String toString(){
+        String result = "";
+        for(Product product : products) {
+            result = result + product.toString();
         }
         return result;
     }
