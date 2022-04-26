@@ -5,13 +5,13 @@ import java.util.List;
 
 public class Owner extends Member {
 
-    boolean isFounder;
+    //boolean isFounder;
     List<Owner> myOwners;
     List<Manager> myManegers;
 
     public Owner(String userName, String password, int age, String mail, String city, String street, int streetNum, int apartementNum,boolean isFounder) {
         super(userName, password, age, mail, city, street, streetNum, apartementNum);
-        this.isFounder = isFounder;
+        //this.isFounder = isFounder;
         this.myManegers = new ArrayList<>();
         this.myOwners = new ArrayList<>();
     }
