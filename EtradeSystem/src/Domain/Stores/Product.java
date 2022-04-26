@@ -1,5 +1,7 @@
 package Domain.Stores;
 
+import Domain.purchaseOption;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -10,6 +12,7 @@ public class Product {
     private int price;
     private String category;
     private List<String> keywords;
+    private purchaseOption selectedOption;
 
     public Product(String name, int amount, int price, String category) {
         this.name = name;
@@ -17,6 +20,11 @@ public class Product {
         this.price = price;
         this.category = category;
         this.keywords = new LinkedList<>();
+        selectedOption = purchaseOption.IMMEDIATE;
+    }
+
+    public void setSelectedOption(purchaseOption selectedOption) {
+        this.selectedOption = selectedOption;
     }
 
     public String getCategory() {

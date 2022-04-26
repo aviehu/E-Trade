@@ -1,5 +1,7 @@
 package Domain.Stores;
 
+import Domain.purchaseOption;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,21 +12,49 @@ public class Store {
     private int card;
     private String name;
     private Inventory inventory;
-    private String originalOwner;
+    private String founderName;
     private Map<String, List<String>> ownersAppointments;
     private Map<String, List<String>> managersAppointments;
+    private List<Bid> bids;
+    private List<Auction> auctions;
+    private boolean isClosed;
+    private List<Purchase> purchaseHistory;
 
     private PolicyManager policyManager;
 
-    public Store(String storeName, String ownersName,int card) {
+    public Store(String storeName, String founderName,int card) {
         name = storeName;
         inventory = new Inventory();
-        originalOwner = ownersName;
+        founderName = founderName;
         ownersAppointments = new HashMap<>();
-        ownersAppointments.put(ownersName, new LinkedList<>());
+        ownersAppointments.put(founderName, new LinkedList<>());
         managersAppointments = new HashMap<>();
         policyManager = new PolicyManager();
         this.card = card;
+        this.bids = new LinkedList<>();
+        this.auctions = new LinkedList<>();
+        isClosed = false;
+        this.purchaseHistory = new LinkedList<>();
+    }
+
+    public String getHistory(String name) {
+        return "";
+    }
+
+    public boolean closeStore(String name) {
+        return false;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public purchaseOption getPurchaseOption(String productName){
+        return purchaseOption.BID;
+    }
+
+    public boolean setPurchaseOption(String productName, purchaseOption option) {
+        return true;
     }
 
     public void addManager(String ownerName, String nameToAdd){
@@ -37,18 +67,47 @@ public class Store {
         return card;
     }
 
-    public void addOwner(String ownersName, String nameToAdd){
+    public boolean addOwner(String ownersName, String nameToAdd){
         if(isOwner(ownersName) && !isOwner(nameToAdd)){
            ownersAppointments.get(ownersName).add(nameToAdd);
            ownersAppointments.put(nameToAdd, new LinkedList<>());
            managersAppointments.put(nameToAdd, new LinkedList<>());
+           return true;
         }
+        return false;
+    }
+
+    public int getPrice(Map<String, Integer> items) {
+        return 0;
     }
 
     public void addProduct(String ownerName, String name, int amount, int price, String category) {
         if(isOwner(ownerName)) {
             inventory.addProduct(name, amount, price, category);
         }
+    }
+
+    public List<String> getOwners(String name) {
+        if(isOwner(name)) {
+
+        }
+        return new LinkedList<>();
+    }
+
+    public boolean removeOwner(String ownersName) {
+        return false;
+    }
+
+    public boolean removeManager(String managerName) {
+        return false;
+    }
+
+    public List<String> getManagers(String name) {
+        return new LinkedList<>();
+    }
+
+    public List<String> getAllManagement(String name) {
+        return new LinkedList<>();
     }
 
     public boolean canPurchase(String prodName,int quantity){
@@ -95,6 +154,10 @@ public class Store {
         return result;
     }
 
+    public boolean canAddProduct(String productName, int quantity) {
+        return true;
+    }
+
     private boolean isOwner(String nameToSearch) {
         for(String owner : ownersAppointments.keySet()) {
             if(owner.equals(nameToSearch)){
@@ -113,5 +176,9 @@ public class Store {
             }
         }
         return false;
+    }
+
+    public String toString() {
+        return inventory.toString();
     }
 }
