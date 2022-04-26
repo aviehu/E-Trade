@@ -2,25 +2,28 @@ package Domain.Stores;
 
 import Domain.purchaseOption;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDate;
+import java.util.*;
 
 public class Store {
 
-    private int card;
     private String name;
-    private Inventory inventory;
     private String founderName;
+    private int card;
+    private boolean closed;
+    private int auctionId;
+    private int bidId;
+    private int purchaseId;
+    private int raffleId;
+    private Inventory inventory;
+    private PolicyManager policyManager;
     private Map<String, List<String>> ownersAppointments;
     private Map<String, List<String>> managersAppointments;
+    private List<Raffle> raffles;
     private List<Bid> bids;
     private List<Auction> auctions;
-    private boolean isClosed;
     private List<Purchase> purchaseHistory;
 
-    private PolicyManager policyManager;
 
     public Store(String storeName, String founderName,int card) {
         name = storeName;
@@ -33,38 +36,126 @@ public class Store {
         this.card = card;
         this.bids = new LinkedList<>();
         this.auctions = new LinkedList<>();
-        isClosed = false;
+        closed = false;
         this.purchaseHistory = new LinkedList<>();
-    }
-
-    public String getHistory(String name) {
-        return "";
-    }
-
-    public boolean closeStore(String name) {
-        return false;
+        raffles = new LinkedList<>();
+        auctionId = 1;
+        bidId = 1;
+        purchaseId = 1;
+        raffleId = 1;
     }
 
     public String getName() {
         return name;
     }
 
+    private boolean isFounder(String name){
+        return founderName.equals(name);
+    }
+
+    public int getCard() {
+        return card;
+    }
+
+    public boolean isClosed() {
+        return closed;
+    }
+
+    public boolean closeStore(String name) {
+        if(isOwner(name) && !closed) {
+            closed = true;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean purchase(Map<String,Integer> prods, String buyer){
+        if(policyManager.canPurchase(prods) && inventory.canPurchase(prods)) {
+            inventory.purchase(prods);
+            for(String productName : prods.keySet()) {
+                Product product = inventory.getProductByName(productName);
+                purchaseHistory.add(new Purchase(policyManager.getProductPrice(product, prods),productName, prods.get(productName), buyer, purchaseId));
+                purchaseId++;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public String getHistory(String name) {
+        String result = "";
+        for(Purchase purchase : purchaseHistory) {
+            result = result + purchase.toString();
+        }
+        return result;
+    }
+
+    public boolean startAuction(double startingPrice, LocalDate auctionEnd, String productName) {
+        Product product = inventory.getProductByName(productName);
+        if(product == null || product.getSelectedOption() != purchaseOption.AUCTION) {
+            return false;
+        }
+        auctions.add(new Auction(startingPrice, auctionEnd, product, "NONE", auctionId));
+        auctionId++;
+        return true;
+    }
+
+    public String printAuctions() {
+        StringBuilder result = new StringBuilder();
+        for(Auction auction : auctions) {
+            result.append(auction.toString());
+        }
+        return result.toString();
+    }
+
+    public String printAuction(int auctionId){
+        Auction auction = getAuctionById(auctionId);
+        if(auction == null) {
+            return "There is no auction with id: " + auctionId;
+        }
+        return auction.toString();
+    }
+
+    private Auction getAuctionById(int auctionId) {
+        for(Auction auction : auctions) {
+            if(auction.getAuctionId() == auctionId) {
+                return auction;
+            }
+        }
+        return null;
+    }
+
+    public boolean addBid(String productName, double amount, String biddersName) {
+        Product product = inventory.getProductByName(productName);
+        if(product != null && product.getSelectedOption() == purchaseOption.BID) {
+            bids.add(new Bid(product,biddersName,amount,ownersAppointments.keySet(), bidId));
+            bidId++;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean startRaffle(String productName, LocalDate raffleEnd, double price) {
+        Product product = inventory.getProductByName(productName);
+        if(product != null && product.getSelectedOption() == purchaseOption.RAFFLE) {
+            raffles.add(new Raffle(product,price, raffleEnd, raffleId));
+            return true;
+        }
+        return false;
+    }
+
     public purchaseOption getPurchaseOption(String productName){
-        return purchaseOption.BID;
+        return inventory.getPurchaseOption(productName);
     }
 
     public boolean setPurchaseOption(String productName, purchaseOption option) {
-        return true;
+        return inventory.setPurchaseOption(productName, option);
     }
 
     public void addManager(String ownerName, String nameToAdd){
         if(!isManager(nameToAdd) && !isOwner(nameToAdd) && isOwner(ownerName)){
             managersAppointments.get(ownerName).add(nameToAdd);
         }
-    }
-
-    public int getCard() {
-        return card;
     }
 
     public boolean addOwner(String ownersName, String nameToAdd){
@@ -77,8 +168,13 @@ public class Store {
         return false;
     }
 
-    public int getPrice(Map<String, Integer> items) {
-        return 0;
+    public double getPrice(Map<String, Integer> items) {
+        List<Product> products = inventory.getProductsByListOfNames(items.keySet());
+        Map<Product, Integer> productsAmounts = new HashMap<>();
+        for(Product product : products) {
+            productsAmounts.put(product, items.get(product.getName()));
+        }
+        return policyManager.getTotalPrice(productsAmounts);
     }
 
     public void addProduct(String ownerName, String name, int amount, int price, String category) {
@@ -87,27 +183,45 @@ public class Store {
         }
     }
 
-    public List<String> getOwners(String name) {
-        if(isOwner(name)) {
-
+    public boolean removeOwner(String ownersName, String ownerToRemove) {
+        if(isOwner(ownersName) && ownersAppointments.get(ownersName).contains(ownerToRemove)) {
+            ownersAppointments.get(ownersName).remove(ownerToRemove);
+            return true;
         }
-        return new LinkedList<>();
-    }
-
-    public boolean removeOwner(String ownersName) {
         return false;
     }
 
-    public boolean removeManager(String managerName) {
+    public boolean removeManager(String ownersName ,String managerName) {
+        if(isOwner(ownersName) && managersAppointments.get(ownersName).contains(managerName)) {
+            managersAppointments.get(ownersName).remove(managerName);
+            return true;
+        }
         return false;
     }
 
-    public List<String> getManagers(String name) {
-        return new LinkedList<>();
+    public Set<String> getOwners(String name) {
+        if(isOwner(name)) {
+            return ownersAppointments.keySet();
+        }
+        return null;
     }
 
-    public List<String> getAllManagement(String name) {
-        return new LinkedList<>();
+    public Set<String> getManagers(String name) {
+        if(isOwner(name)) {
+            return managersAppointments.keySet();
+        }
+        return null;
+    }
+
+    public Set<String> getAllManagement(String name) {
+        Set<String> managers = getManagers(name);
+        Set<String> owners = getOwners(name);
+        if(managers == null || owners == null) {
+            return null;
+        }
+        Set<String> management = managers;
+        management.addAll(owners);
+        return management;
     }
 
     public boolean canPurchase(String prodName,int quantity){
@@ -146,16 +260,24 @@ public class Store {
         }
     }
 
-    public String getAllProdsByKeyword(String keyword){
-        String result = "";
-        for(Product product: inventory.getProductsByKeyword(keyword)) {
-            result = result + product.toString();
-        }
-        return result;
+    public boolean canAddProduct(String productName, int quantity) {
+        return inventory.canPurchase(productName, quantity);
     }
 
-    public boolean canAddProduct(String productName, int quantity) {
-        return true;
+    public String searchByKeyword(String keyword) {
+        return inventory.searchByKeyword(keyword);
+    }
+
+    public String searchByName(String name) {
+        return inventory.searchByName(name);
+    }
+
+    public String searchByCategory(String category) {
+        return inventory.searchByCategory(category);
+    }
+
+    public String toString() {
+        return inventory.toString();
     }
 
     private boolean isOwner(String nameToSearch) {
@@ -176,9 +298,5 @@ public class Store {
             }
         }
         return false;
-    }
-
-    public String toString() {
-        return inventory.toString();
     }
 }

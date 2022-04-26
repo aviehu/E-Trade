@@ -9,18 +9,22 @@ public class Product {
 
     private String name;
     private int amount;
-    private int price;
+    private double price;
     private String category;
     private List<String> keywords;
     private purchaseOption selectedOption;
 
-    public Product(String name, int amount, int price, String category) {
+    public Product(String name, int amount, double price, String category) {
         this.name = name;
         this.amount = amount;
         this.price = price;
         this.category = category;
         this.keywords = new LinkedList<>();
         selectedOption = purchaseOption.IMMEDIATE;
+    }
+
+    public purchaseOption getSelectedOption() {
+        return selectedOption;
     }
 
     public void setSelectedOption(purchaseOption selectedOption) {
@@ -51,13 +55,21 @@ public class Product {
         return amount;
     }
 
-    public void setPrice(int newPrice){
+    public boolean setAmount(int newAmount) {
+        if(amount < 0) {
+            return false;
+        }
+        amount = newAmount;
+        return true;
+    }
+
+    public void setPrice(double newPrice){
         if(newPrice > 0) {
             this.price = newPrice;
         }
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
@@ -76,6 +88,12 @@ public class Product {
     }
 
     public String toString(){
-        return name + "\t" + price + "$\t" + category + "\t" + amount;
+        String result = "Product: " + name + "\n";
+        result +=       "Amount In Stock: " + amount + "\n";
+        result +=       "Base Price: " + price + "\n";
+        result +=       "Category: " + category + "\n";
+        result +=       "Keywords: " + keywords.toString() + "\n";
+        result +=       "Purchase Option: " + selectedOption.toString();
+        return result;
     }
 }
