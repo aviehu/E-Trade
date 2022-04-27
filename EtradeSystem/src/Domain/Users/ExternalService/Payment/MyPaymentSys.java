@@ -15,4 +15,11 @@ public class MyPaymentSys {
     public boolean canPay(int cardFrom, LocalTime expDate, int cvv,double price){
         return realPaymentSys.canPay(cardFrom, expDate, cvv, price);
     }
+    public boolean isExist(){
+        return realPaymentSys.isExist();
+    }
+    public boolean changePayment(PaymentAdaptee paymentAdaptee){
+        this.realPaymentSys = new PaymentAdapter(paymentAdaptee);
+        return true;
+    }
 }

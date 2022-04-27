@@ -25,5 +25,12 @@ public class mySupplySys {
         PackageToShip pack = new PackageToShip(prods,cart.getTotalPrice());
         return supplyAdapter.supply(pack,address);
     }
+    public boolean isExist(){
+        return supplyAdapter.isExist();
+    }
+    public boolean changeSupply(SupplyAdaptee supplyAdaptee){
+        this.supplyAdapter = new SupplyAdapter(supplyAdaptee);
+        return true;
+    }
 
 }

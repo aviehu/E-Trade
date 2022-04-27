@@ -18,18 +18,21 @@ public class Guest extends User {
 
     // exitSystem:
     // guest loosing his shopCart and not consider as guest(users.2)
+
+
     @Override
-    public void exitSystem() {
-        myShopCart = null;
+    public boolean exitSystem() {
+        this.myShopCart = null;
+        return super.exitSystem();
     }
 
     @Override
-    public boolean addProdToCart(Store s, int quantity, String prodName) {
+    public String addProdToCart(Store s, int quantity, String prodName) {
         return super.addProdToCart(s, quantity, prodName);
     }
 
     @Override
-    public boolean removeProd(Store s, int quantity, String prodName) {
+    public String removeProd(Store s, int quantity, String prodName) {
         return super.removeProd(s, quantity, prodName);
     }
 
@@ -67,8 +70,4 @@ public class Guest extends User {
         return userName;
     }
 
-    @Override
-    public boolean exitSys() {
-        return super.exitSys();
-    }
 }

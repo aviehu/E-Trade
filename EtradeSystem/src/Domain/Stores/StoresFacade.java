@@ -150,4 +150,11 @@ public class StoresFacade {
         }
         return store.addManager(userName, newManager);
     }
+    public Store getStore(String storeName){
+        for(Store s : stores){
+            if(s.getName() == storeName)
+                return s;
+        }
+        return null;
+    }
 }

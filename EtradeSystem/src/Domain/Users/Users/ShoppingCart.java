@@ -70,7 +70,7 @@ public class ShoppingCart {
         }
         return null;
     }
-    public boolean addProd(Store s,int quantity,String prodName){
+    public String addProd(Store s,int quantity,String prodName){
         StoreBasket b = getBasketByStore(s);
         if(b == null){
             b = new StoreBasket(s);
@@ -79,15 +79,19 @@ public class ShoppingCart {
         }
         else
             b.addProd(quantity,prodName);
-        return true;
+        return displayCart();
     }
-    public boolean removeProd(Store s,int quantity,String prodName){
+    public String removeProd(Store s,int quantity,String prodName){
         StoreBasket b = getBasketByStore(s);
         if(b == null){
-            return false;
+            return null;
         }
-        else
-            return b.removeProd(quantity,prodName);
+        else {
+            if (b.removeProd(quantity, prodName))
+                return displayCart();
+            else
+                return null;
+        }
     }
 
     public List<StoreBasket> getBaskets() {

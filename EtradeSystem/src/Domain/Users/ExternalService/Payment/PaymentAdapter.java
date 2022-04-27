@@ -30,4 +30,11 @@ public class PaymentAdapter implements IPay {
         }
         return paymentAdaptee.canPay(cardFrom,expDate,cvv,price);
     }
+
+    @Override
+    public boolean isExist() {
+        if(paymentAdaptee == null)
+            return false;
+        return true;
+    }
 }
