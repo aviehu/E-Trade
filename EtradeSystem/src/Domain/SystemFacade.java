@@ -1,81 +1,84 @@
 package Domain;
 
 import Domain.Stores.managersPermission;
-
-import java.time.LocalTime;
+import Service.ResultPackge.Result;
+import Service.ResultPackge.ResultBool;
+import Service.ResultPackge.ResultMsg;
 
 public interface SystemFacade {
 
-    public boolean addExternalPaymentService();
+    public ResultBool addExternalPaymentService();
 
-    public boolean changeExternalPaymentService();
+    public ResultBool changeExternalPaymentService();
 
-    public boolean editExternalPaymentService();
+    public ResultBool editExternalPaymentService();
 
-    public boolean addExternalSupplyService();
+    public ResultBool addExternalSupplyService();
 
-    public boolean changeExternalSupplyService();
+    public ResultBool changeExternalSupplyService();
 
-    public boolean editExternalSupplyService();
+    public ResultBool editExternalSupplyService();
 
-    public boolean exitSystem(String name);
+    public ResultBool exitSystem(String name);
 
-    public boolean exitSystemAsGuest(String name);
+    public ResultBool exitSystemAsGuest(String name);
 
-    public boolean signUp(String userName, String password);
+    public ResultBool signUp(String userName, String password);
 
-    public boolean login(String userName, String password);
+    public ResultBool login(String userName, String password);
 
-    public String getStoreInfo(String userName, String storeName);
+    public ResultMsg getStoreInfo(String userName, String storeName);
 
-    public String searchByKeyword(String userName, String keyword);
+    public ResultMsg searchByKeyword(String userName, String keyword);
 
-    public String searchByCategory(String userName, String category);
+    public ResultMsg searchByCategory(String userName, String category);
 
-    public String searchByName(String userName, String productName);
+    public ResultMsg searchByName(String userName, String productName);
 
-    public boolean addProductToShoppingCart(String userName, String productName, String storeName, int quantity);
+    public ResultBool addProductToShoppingCart(String userName, String productName, String storeName, int quantity);
 
-    public String displayShoppingCart(String userName);
+    public ResultMsg displayShoppingCart(String userName);
 
-    public String addProductToShoppingCart(String userName);
+    public ResultMsg addProductToShoppingCart(String userName);
 
-    public String removeProductFromShoppingCart(String userName);
+    public ResultMsg removeProductFromShoppingCart(String userName);
 
-    public boolean purchase(String userName);
+    public ResultBool purchase(String userName);
 
-    public boolean logOut(String userName);
+    public ResultBool logOut(String userName);
 
-    public boolean openStore(String founderName, String storeName, int card);
+    public ResultBool openStore(String founderName, String storeName, int card);
 
-    public boolean addProductToStore(String userName, String storeName, String productName, int amount, double price, String category);
+    public ResultBool addProductToStore(String userName, String storeName, String productName, int amount, double price, String category);
 
-    public boolean removeProductFromStore(String userName, String storeName, String productName);
+    public ResultBool removeProductFromStore(String userName, String storeName, String productName);
 
-    public boolean editProductName(String userName, String storeName, String oldProductName, String newProductName);
+    public ResultBool editProductName(String userName, String storeName, String oldProductName, String newProductName);
 
-    public boolean editProductPrice(String userName, String storeName, String ProductName, double newPrice);
+    public ResultBool editProductPrice(String userName, String storeName, String ProductName, double newPrice);
 
-    public boolean editProductQuantity(String userName, String storeName, String ProductName, int newQuantity);
+    public ResultBool editProductQuantity(String userName, String storeName, String ProductName, int newQuantity);
 
-    public boolean changePurchaseOption(String userName, String storeName, String ProductName, purchaseOption newOption);
+    public ResultBool changePurchaseOption(String userName, String storeName, String ProductName, purchaseOption newOption);
 
-    public boolean appointStoreOwner(String userName, String storeName, String newOwner);
+    public ResultBool appointStoreOwner(String userName, String storeName, String newOwner);
 
-    public boolean appointStoreManager(String userName, String storeName, String newManager);
+    public ResultBool appointStoreManager(String userName, String storeName, String newManager);
 
-    public boolean changeStoreManagersPermission(String userName, String storeName, String managerName, managersPermission newPermission);
+    public ResultBool changeStoreManagersPermission(String userName, String storeName, String managerName, managersPermission newPermission);
 
-    public boolean closeStore(String userName, String storeName);
+    public ResultBool closeStore(String userName, String storeName);
 
-    public String getStoresManagement(String userName, String storeName);
+    public ResultMsg getStoresManagement(String userName, String storeName);
 
-    public String getStoresPurchaseHistory(String userName, String storeName);
+    public ResultMsg getStoresPurchaseHistory(String userName, String storeName);
 
-    public boolean adminCloseStorePermanently(String adminName, String storeName);
+    public ResultBool adminCloseStorePermanently(String adminName, String storeName);
 
-    public boolean adminTerminateUser(String adminName, String userToTerminate);
+    public ResultBool adminTerminateUser(String adminName, String userToTerminate);
 
-    public boolean adminGetStoresPurchaseHistory(String adminName, String storeName);
+    public ResultBool adminGetStoresPurchaseHistory(String adminName, String storeName);
+
+    public ResultBool exitSystem();
 
 }
