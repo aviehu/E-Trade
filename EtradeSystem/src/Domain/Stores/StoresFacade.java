@@ -30,6 +30,14 @@ public class StoresFacade {
         return result;
     }
 
+    public boolean adminCloseStore(String storeName) {
+        Store store = getStoreByName(storeName);
+        if(store != null) {
+            return store.adminCloseStore();
+        }
+        return false;
+    }
+
     public boolean canAddProduct(String productName, String storeName, int quantity) {
         Store store = getStoreByName(storeName);
         return store.canAddProduct(productName, quantity);
