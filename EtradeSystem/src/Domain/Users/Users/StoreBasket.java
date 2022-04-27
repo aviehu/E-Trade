@@ -26,13 +26,18 @@ public class StoreBasket {
             }
         }
     }
-    public void removeProd(int quantity,String prodName){
-        if (prods.isEmpty() || !prods.containsKey(prodName))
-            System.out.println("no such product " + prodName+" in your basket");
-        else if(prods.get(prodName) - quantity <= 0)
+    public boolean removeProd(int quantity,String prodName){
+        if (prods.isEmpty() || !prods.containsKey(prodName)) {
+            System.out.println("no such product " + prodName + " in your basket");
+            return false;
+        }
+        else if(prods.get(prodName) - quantity <= 0) {
             prods.remove(prodName);
-        else
-            prods.computeIfPresent(prodName,(k,v)->v-quantity);
+            return true;
+        }else{
+                prods.computeIfPresent(prodName, (k, v) -> v - quantity);
+                return true;
+            }
     }
 
     public double getTotalPrice(){

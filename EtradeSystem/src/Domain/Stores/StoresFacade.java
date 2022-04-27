@@ -1,5 +1,7 @@
 package Domain.Stores;
 
+import Domain.purchaseOption;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -115,5 +117,37 @@ public class StoresFacade {
             return false;
         }
         return store.changeProductPrice(userName ,productName, newPrice);
+    }
+
+    public boolean editProductQuantity(String userName, String storeName, String productName, int newQuantity) {
+        Store store = getStoreByName(storeName);
+        if(store == null) {
+            return false;
+        }
+        return store.changeProductQuantity(userName ,productName, newQuantity);
+    }
+
+    public boolean changePurchaseOption(String userName, String storeName, String productName, purchaseOption newOption) {
+        Store store = getStoreByName(storeName);
+        if(store == null) {
+            return false;
+        }
+        return store.setPurchaseOption(userName, productName ,newOption);
+    }
+
+    public boolean appointStoreOwner(String userName, String storeName, String newOwner) {
+        Store store = getStoreByName(storeName);
+        if(store == null) {
+            return false;
+        }
+        return store.addOwner(userName, newOwner);
+    }
+
+    public boolean appointStoreManager(String userName, String storeName, String newManager) {
+        Store store = getStoreByName(storeName);
+        if(store == null) {
+            return false;
+        }
+        return store.addManager(userName, newManager);
     }
 }

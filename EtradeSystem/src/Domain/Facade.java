@@ -1,9 +1,10 @@
 package Domain;
 
-import Domain.Stores.Store;
 import Domain.Stores.StoresFacade;
 import Domain.Stores.managersPermission;
 import Domain.Users.Users.UserController;
+import Service.ResultPackge.ResultBool;
+import Service.ResultPackge.ResultMsg;
 
 public class Facade implements SystemFacade {
     private StoresFacade storesFacade;
@@ -15,213 +16,269 @@ public class Facade implements SystemFacade {
     }
 
     @Override
-    public boolean addExternalPaymentService() {
-        return true;
+    public ResultBool addExternalPaymentService() {
+        return new ResultBool(true, null);
     }
 
     @Override
-    public boolean changeExternalPaymentService() {
-        return false;
+    public ResultBool changeExternalPaymentService() {
+        return new ResultBool(true, null);
     }
 
     @Override
-    public boolean editExternalPaymentService() {
-        return false;
+    public ResultBool editExternalPaymentService() {
+        return new ResultBool(true, null);
     }
 
     @Override
-    public boolean addExternalSupplyService() {
-        return false;
+    public ResultBool addExternalSupplyService() {
+        return new ResultBool(true, null);
     }
 
     @Override
-    public boolean changeExternalSupplyService() {
-        return false;
+    public ResultBool changeExternalSupplyService() {
+        return new ResultBool(true, null);
     }
 
     @Override
-    public boolean editExternalSupplyService() {
-        return false;
+    public ResultBool editExternalSupplyService() {
+        return new ResultBool(true, null);
     }
 
     @Override
-    public boolean exitSystem(String name) {
-        return false;
+    public ResultBool exitSystem(String name) {
+        return new ResultBool(true, null);
     }
 
     @Override
-    public boolean exitSystemAsGuest(String name) {
-        return false;
+    public ResultBool exitSystemAsGuest(String name) {
+        return new ResultBool(true, null);
     }
 
     @Override
-    public boolean signUp(String userName, String password) {
-        return false;
+    public ResultBool signUp(String userName, String password) {
+        return new ResultBool(true, null);
     }
 
     @Override
-    public boolean login(String userName, String password) {
-        return false;
+    public ResultBool login(String userName, String password) {
+        return new ResultBool(true, null);
     }
 
     @Override
-    public String getStoreInfo(String userName, String storeName) {
+    public ResultMsg getStoreInfo(String userName, String storeName) {
         if(userController.isConnected(userName)){
-            return storesFacade.displayStore(storeName);
+            String ans = storesFacade.displayStore(storeName);
+            if(ans != null) {
+                return new ResultMsg(ans, null);
+            }
+            return new ResultMsg("", "No Such Store" + storeName);
         }
-        return null;
+        return new ResultMsg("", "User Is Not Connected");
     }
 
     @Override
-    public String searchByKeyword(String userName, String keyword) {
+    public ResultMsg searchByKeyword(String userName, String keyword) {
         if(userController.isConnected(userName)){
-            return storesFacade.searchByKeyword(keyword);
+            String ans = storesFacade.searchByKeyword(keyword);
+            if(ans != null) {
+                return new ResultMsg(ans, null);
+            }
+            return new ResultMsg("", "No Items Matched Your Search");
         }
-        return null;
+        return new ResultMsg("", "User Is Not Connected");
     }
 
     @Override
-    public String searchByCategory(String userName, String category) {
+    public ResultMsg searchByCategory(String userName, String category) {
         if(userController.isConnected(userName)){
-            return storesFacade.searchByCategory(category);
+            String ans = storesFacade.searchByCategory(category);
+            if(ans != null) {
+                return new ResultMsg(ans, null);
+            }
+            return new ResultMsg("", "No Items Matched Your Search");
         }
-        return null;
+        return new ResultMsg("", "User Is Not Connected");
     }
 
     @Override
-    public String searchByName(String userName, String productName) {
+    public ResultMsg searchByName(String userName, String productName) {
         if(userController.isConnected(userName)){
-            return storesFacade.searchByName(productName);
+            String ans = storesFacade.searchByName(productName);
+            if(ans != null) {
+                return new ResultMsg(ans, null);
+            }
+            return new ResultMsg("", "No Items Matched Your Search");
         }
-        return null;
+        return new ResultMsg("", "User Is Not Connected");
     }
 
     @Override
-    public boolean addProductToShoppingCart(String userName, String productName, String storeName, int quantity) {
-        return false;
+    public ResultBool addProductToShoppingCart(String userName, String productName, String storeName, int quantity) {
+        return new ResultBool(true, null);
     }
 
     @Override
-    public String displayShoppingCart(String userName) {
-        return null;
+    public ResultMsg displayShoppingCart(String userName) {
+        return new ResultMsg("", null);
     }
 
     @Override
-    public String addProductToShoppingCart(String userName) {
-        return null;
+    public ResultMsg addProductToShoppingCart(String userName) {
+        return new ResultMsg("", null);
     }
 
     @Override
-    public String removeProductFromShoppingCart(String userName) {
-        return null;
+    public ResultMsg removeProductFromShoppingCart(String userName) {
+        return new ResultMsg("", null);
     }
 
     @Override
-    public boolean purchase(String userName) {
-        return false;
+    public ResultBool purchase(String userName) {
+        return new ResultBool(true, null);
     }
 
     @Override
-    public boolean logOut(String userName) {
-        return false;
+    public ResultBool logOut(String userName) {
+        return new ResultBool(true, null);
     }
 
     @Override
-    public boolean openStore(String founderName, String storeName, int card) {
+    public ResultBool openStore(String founderName, String storeName, int card) {
         if(userController.isConnected(userName)){
-            return storesFacade.addStore(storeName, founderName, card);
+            if(storesFacade.addStore(storeName, founderName, card)) {
+                return new ResultBool(true, null);
+            }
+            return new ResultBool(false, "Store With A Name - " + storeName + " exists");
         }
-        return false;
+        return new ResultBool(false, "User Is Not Connected");
     }
 
     @Override
-    public boolean addProductToStore(String userName, String storeName, String productName, int amount, double price, String category) {
+    public ResultBool addProductToStore(String userName, String storeName, String productName, int amount, double price, String category) {
         if(userController.isConnected(userName)){
-            return storesFacade.addProductToStore(userName, storeName, productName, amount, price, category);
+            if(storesFacade.addProductToStore(userName, storeName, productName, amount, price, category)) {
+                return new ResultBool(true, null);
+            }
+            return new ResultBool(false, "Could Not Add Product To Store");
         }
-        return false;
+        return new ResultBool(false, "User Is Not Connected");
     }
 
     @Override
-    public boolean removeProductFromStore(String userName, String storeName, String productName) {
+    public ResultBool removeProductFromStore(String userName, String storeName, String productName) {
         if(userController.isConnected(userName)){
-            return storesFacade.removeProductFromStore(userName, storeName, productName);
+            if(storesFacade.removeProductFromStore(userName, storeName, productName)) {
+                return new ResultBool(true, null);
+            }
+            return new ResultBool(false, "Could Not Remove Product From Store");
         }
-        return false;
+        return new ResultBool(false, "User Is Not Connected");
     }
 
     @Override
-    public boolean editProductName(String userName, String storeName, String oldProductName, String newProductName) {
+    public ResultBool editProductName(String userName, String storeName, String oldProductName, String newProductName) {
         if(userController.isConnected(userName)){
-            return storesFacade.editProductName(userName, storeName, oldProductName, newProductName);
+            if(storesFacade.editProductName(userName, storeName, oldProductName, newProductName)) {
+                return new ResultBool(true, null);
+            }
+            return new ResultBool(false, "No Such Product Or Store");
         }
-        return false;
+        return new ResultBool(false, "User Is Not Connected");
     }
 
     @Override
-    public boolean editProductPrice(String userName, String storeName, String productName, double newPrice) {
+    public ResultBool editProductPrice(String userName, String storeName, String productName, double newPrice) {
         if(userController.isConnected(userName)){
-            return storesFacade.editProductPrice(userName, storeName, productName, newPrice);
+            if(storesFacade.editProductPrice(userName, storeName, productName, newPrice)) {
+                return new ResultBool(true, null);
+            }
+            return new ResultBool(false, "Could Not Edit Product Price");
         }
-        return false;
+        return new ResultBool(false, "User Is Not Connected");
     }
 
     @Override
-    public boolean editProductQuantity(String userName, String storeName, String ProductName, int newQuantity) {
-        return false;
+    public ResultBool editProductQuantity(String userName, String storeName, String productName, int newQuantity) {
+        if(userController.isConnected(userName)){
+            if(storesFacade.editProductQuantity(userName, storeName, productName, newQuantity)) {
+                return new ResultBool(true, null);
+            }
+            return new ResultBool(false, "Could Not Edit Product Quantity");
+        }
+        return new ResultBool(false, "User Is Not Connected");
     }
 
     @Override
-    public boolean changePurchaseOption(String userName, String storeName, String ProductName, purchaseOption newOption) {
-        return false;
+    public ResultBool changePurchaseOption(String userName, String storeName, String productName, purchaseOption newOption) {
+        if(userController.isConnected(userName)){
+            if(storesFacade.changePurchaseOption(userName, storeName, productName, newOption)) {
+                return new ResultBool(true, null);
+            }
+            return new ResultBool(false, "Could Not Change Product Purchase Option");
+        }
+        return new ResultBool(false, "User Is Not Connected");
     }
 
     @Override
-    public boolean appointStoreOwner(String userName, String storeName, String newOwner) {
-        return false;
+    public ResultBool appointStoreOwner(String userName, String storeName, String newOwner) {
+        if(userController.isConnected(userName)){
+            if(storesFacade.appointStoreOwner(userName, storeName, newOwner)) {
+                return new ResultBool(true, null);
+            }
+            return new ResultBool(false, "Could Not Appoint Store Owner");
+        }
+        return new ResultBool(false, "User Is Not Connected");
     }
 
     @Override
-    public boolean appointStoreManager(String userName, String storeName, String newManager) {
-        return false;
+    public ResultBool appointStoreManager(String userName, String storeName, String newManager) {
+        if(userController.isConnected(userName)){
+            if(storesFacade.appointStoreManager(userName, storeName, newManager)) {
+                return new ResultBool(true, null);
+            }
+            return new ResultBool(false, "Could Not Appoint Store Manager");
+        }
+        return new ResultBool(false, "User Is Not Connected");
     }
 
     @Override
-    public boolean changeStoreManagersPermission(String userName, String storeName, String managerName, managersPermission newPermission) {
-        return false;
+    public ResultBool changeStoreManagersPermission(String userName, String storeName, String managerName, managersPermission newPermission) {
+        return new ResultBool(false, null);
     }
 
     @Override
-    public boolean closeStore(String userName, String storeName) {
-        return false;
+    public ResultBool closeStore(String userName, String storeName) {
+        return new ResultBool(false, null);
     }
 
     @Override
-    public String getStoresManagement(String userName, String storeName) {
-        return null;
+    public ResultMsg getStoresManagement(String userName, String storeName) {
+        return new ResultMsg("", null);
     }
 
     @Override
-    public String getStoresPurchaseHistory(String userName, String storeName) {
-        return null;
+    public ResultMsg getStoresPurchaseHistory(String userName, String storeName) {
+        return new ResultMsg("", null);
     }
 
     @Override
-    public boolean adminCloseStorePermanently(String adminName, String storeName) {
-        return false;
+    public ResultBool adminCloseStorePermanently(String adminName, String storeName) {
+        return new ResultBool(false, null);
     }
 
     @Override
-    public boolean adminTerminateUser(String adminName, String userToTerminate) {
-        return false;
+    public ResultBool adminTerminateUser(String adminName, String userToTerminate) {
+        return new ResultBool(false, null);
     }
 
     @Override
-    public boolean adminGetStoresPurchaseHistory(String adminName, String storeName) {
-        return false;
+    public ResultBool adminGetStoresPurchaseHistory(String adminName, String storeName) {
+        return new ResultBool(false, null);
     }
 
-    public boolean exitSystem() {
-        return true;
+    public ResultBool exitSystem() {
+        return new ResultBool(false, null);
     }
+
 }

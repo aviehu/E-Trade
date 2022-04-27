@@ -150,8 +150,11 @@ public class Store {
         return inventory.getPurchaseOption(productName);
     }
 
-    public boolean setPurchaseOption(String productName, purchaseOption option) {
-        return inventory.setPurchaseOption(productName, option);
+    public boolean setPurchaseOption(String userName, String productName, purchaseOption option) {
+        if(isOwner(userName)) {
+            return inventory.setPurchaseOption(productName, option);
+        }
+        return false;
     }
 
     public boolean addManager(String ownerName, String nameToAdd){
@@ -330,6 +333,13 @@ public class Store {
                     return true;
                 }
             }
+        }
+        return false;
+    }
+
+    public boolean changeProductQuantity(String userName, String productName, int newQuantity) {
+        if(isOwner(userName)) {
+            return inventory.changeProductQuantity(productName, newQuantity);
         }
         return false;
     }

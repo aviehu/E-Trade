@@ -165,4 +165,12 @@ public class Inventory {
         }
         return true;
     }
+
+    public boolean changeProductQuantity(String productName, int newQuantity) {
+        Product product = getProductByName(productName);
+        if(product == null) {
+            return false;
+        }
+        return product.setAmount(newQuantity);
+    }
 }
