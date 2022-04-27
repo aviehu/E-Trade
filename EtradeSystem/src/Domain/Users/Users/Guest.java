@@ -1,8 +1,10 @@
 package Domain.Users.Users;
 
+import Domain.Stores.Store;
+
 public class Guest extends User {
 
-
+    String userName;
     @Override
     public ShoppingCart getMyShopCart() {
         return super.getMyShopCart();
@@ -10,6 +12,7 @@ public class Guest extends User {
 
     public Guest() {
         super();
+        this.userName = "Guest";
     }
 
 
@@ -37,7 +40,7 @@ public class Guest extends User {
 
     @Override
     public boolean purchase(CreditCard card,SupplyAddress address) {
-        if(myShopCart.purchaseCart(card,address)) {
+        if(myShopCart.purchaseCart(card,address,userName)) {
             myShopCart.finishPurchase();
             return true;
         }

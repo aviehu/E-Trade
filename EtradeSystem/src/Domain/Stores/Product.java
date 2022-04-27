@@ -1,5 +1,9 @@
 package Domain.Stores;
 
+import Domain.purchaseOption;
+
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -7,16 +11,27 @@ public class Product {
 
     private String name;
     private int amount;
-    private int price;
+    private double price;
     private String category;
     private List<String> keywords;
+    private purchaseOption selectedOption;
 
-    public Product(String name, int amount, int price, String category) {
+    public Product(String name, int amount, double price, String category) {
         this.name = name;
         this.amount = amount;
         this.price = price;
         this.category = category;
-        this.keywords = new LinkedList<>();
+        this.keywords = Collections.synchronizedList(new ArrayList<String>());
+        selectedOption = purchaseOption.IMMEDIATE;
+    }
+
+    public purchaseOption getSelectedOption() {
+        return selectedOption;
+    }
+
+    public boolean setSelectedOption(purchaseOption selectedOption) {
+        this.selectedOption = selectedOption;
+        return true;
     }
 
     public String getCategory() {
@@ -27,40 +42,57 @@ public class Product {
         return keywords;
     }
 
-    public void addKeyword(String keyword) {
+    public boolean addKeyword(String keyword) {
         if(!keyword.contains(keyword)) {
             keywords.add(keyword);
+            return true;
         }
+        return false;
     }
 
-    public void removeKeyword(String keyword) {
+    public boolean removeKeyword(String keyword) {
         if(keyword.contains(keyword)) {
             keywords.remove(keyword);
+            return true;
         }
+        return false;
     }
 
     public int getAmount() {
         return amount;
     }
 
-    public void setPrice(int newPrice){
-        if(newPrice > 0) {
-            this.price = newPrice;
+    public boolean setAmount(int newAmount) {
+        if(amount < 0) {
+            return false;
         }
+        amount = newAmount;
+        return true;
     }
 
-    public int getPrice() {
+    public boolean setPrice(double newPrice){
+        if(newPrice > 0) {
+            this.price = newPrice;
+            return true;
+        }
+        return false;
+    }
+
+    public double getPrice() {
         return price;
     }
 
-    public void addAmount(int amount) {
+    public boolean addAmount(int amount) {
         if(this.amount - amount >= 0) {
             this.amount = amount;
+            return true;
         }
+        return false;
     }
 
-    public void setName(String name) {
+    public boolean setName(String name) {
         this.name = name;
+        return true;
     }
 
     public String getName() {
@@ -68,6 +100,12 @@ public class Product {
     }
 
     public String toString(){
-        return name + "\t" + price + "$\t" + category + "\t" + amount;
+        String result = "Product: " + name + "\n";
+        result +=       "Amount In Stock: " + amount + "\n";
+        result +=       "Base Price: " + price + "\n";
+        result +=       "Category: " + category + "\n";
+        result +=       "Keywords: " + keywords.toString() + "\n";
+        result +=       "Purchase Option: " + selectedOption.toString();
+        return result;
     }
 }

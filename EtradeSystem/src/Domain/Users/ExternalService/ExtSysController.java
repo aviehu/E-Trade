@@ -22,10 +22,10 @@ public class ExtSysController {
         return myInstance;
     }
 
-    public boolean pay(int card, LocalTime expDate, int cvv, int price,int cardTo){
+    public boolean pay(int card, LocalTime expDate, int cvv, double price,int cardTo){
         return payment.pay(card, expDate, cvv, price,cardTo);
     }
-    public boolean canPay(int card, LocalTime expDate, int cvv, int price){
+    public boolean canPay(int card, LocalTime expDate, int cvv, double price){
         return payment.canPay(card, expDate, cvv, price);
     }
     public boolean supply(ShoppingCart cart, SupplyAddress address){

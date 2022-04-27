@@ -1,5 +1,7 @@
 package Domain.Users.Users;
 
+import Domain.Stores.Store;
+
 public abstract class User {
     protected ShoppingCart myShopCart;
 
@@ -15,7 +17,7 @@ public abstract class User {
     // guest loosing his shopCart and not consider as guest(users.2)
     public abstract void exitSystem();
 
-    public void addProd(Store s,int quantity,String prodName){
+    public void addProd(Store s, int quantity, String prodName){
         myShopCart.addProd(s,quantity,prodName);
     }
 
@@ -31,7 +33,7 @@ public abstract class User {
     //getStoreInfo:
     //input:store -> output: store info and store's items info(2.1)
     public String getStoreInfo(Store s){
-       return s.getInfo();
+       return s.toString();
     }
 
     //searchProducts:
