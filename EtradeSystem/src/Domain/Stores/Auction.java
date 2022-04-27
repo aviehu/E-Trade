@@ -1,6 +1,9 @@
 package Domain.Stores;
 
 import java.time.LocalDate;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class Auction {
     private int auctionId;
@@ -8,6 +11,7 @@ public class Auction {
     private LocalDate auctionEnd;
     private Product product;
     private String currentWinner;
+    private Lock auctionLock;
 
     public Auction(double price, LocalDate auctionEnd, Product product, String currentWinner, int auctionId) {
         this.auctionId = auctionId;
@@ -15,6 +19,8 @@ public class Auction {
         this.auctionEnd = auctionEnd;
         this.product = product;
         this.currentWinner = currentWinner;
+        ReadWriteLock lock = new ReentrantReadWriteLock();
+        auctionLock = lock.writeLock();
     }
 
     public int getAuctionId(){
@@ -26,11 +32,14 @@ public class Auction {
     }
 
     public boolean makeOffer(String userName, double newPrice) {
+        auctionLock.lock();
         if(isStillAvailable() && newPrice > price) {
             price = newPrice;
             currentWinner = userName;
+            auctionLock.unlock();
             return true;
         }
+        auctionLock.unlock();
         return false;
     }
 

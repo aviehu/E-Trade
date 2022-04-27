@@ -2,7 +2,9 @@ package Domain.Stores;
 
 import java.time.LocalDate;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Raffle {
 
@@ -10,14 +12,14 @@ public class Raffle {
     private int raffleId;
     private double price;
     private LocalDate raffleEnd;
-    private Hashtable<String, Double> usersShares;
+    private Map<String, Double> usersShares;
     Random rand = new Random();
 
     public Raffle(Product product, double price, LocalDate raffleEnd, int raffleId) {
         this.raffleId = raffleId;
         this.price = price;
         this.raffleEnd = raffleEnd;
-        this.usersShares = new Hashtable<>();
+        this.usersShares = new ConcurrentHashMap<>();
     }
 
     public boolean raffleEnded() {

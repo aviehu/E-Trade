@@ -1,5 +1,7 @@
 package Domain.Stores;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,7 +14,7 @@ public class Discount {
     public Discount(List<Product> products, int discountPercent, String desc, int discountId){
         this.discountId = discountId;
         this.discountPercent = discountPercent;
-        this.products = products;
+        this.products = Collections.synchronizedList(new ArrayList<Product>());
         this.desc = desc;
     }
 

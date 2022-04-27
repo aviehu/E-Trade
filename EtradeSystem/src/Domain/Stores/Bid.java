@@ -3,6 +3,7 @@ package Domain.Stores;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Bid {
 
@@ -17,7 +18,7 @@ public class Bid {
         this.bidderName = bidderName;
         this.price = price;
         this.bidId = bidId;
-        this.awaitingApprove = new HashMap<>();
+        this.awaitingApprove = new ConcurrentHashMap<>();
         initMap(ownersNames);
     }
 

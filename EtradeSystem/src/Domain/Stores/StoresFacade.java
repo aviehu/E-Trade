@@ -1,13 +1,14 @@
 package Domain.Stores;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class StoresFacade {
     private List<Store> stores;
 
     public StoresFacade(){
-        stores = new LinkedList<>();
+        stores = Collections.synchronizedList(new ArrayList<Store>());
     }
 
     public boolean addStore(String storeName, String founderName,int card) {

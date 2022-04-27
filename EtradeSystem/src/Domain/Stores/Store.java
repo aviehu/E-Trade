@@ -4,6 +4,9 @@ import Domain.purchaseOption;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class Store {
 
@@ -13,17 +16,16 @@ public class Store {
     private boolean closed;
     private int auctionId;
     private int bidId;
-    private int purchaseId;
     private int raffleId;
     private Inventory inventory;
     private PolicyManager policyManager;
+    private StorePurchaseHistory storeHistory;
     private Map<String, List<String>> ownersAppointments;
     private Map<String, List<String>> managersAppointments;
     private List<Raffle> raffles;
     private List<Bid> bids;
     private List<Auction> auctions;
-    private List<Purchase> purchaseHistory;
-
+    private Lock invLock;
 
     public Store(String storeName, String founderName,int card) {
         name = storeName;
@@ -34,15 +36,16 @@ public class Store {
         managersAppointments = new HashMap<>();
         policyManager = new PolicyManager();
         this.card = card;
-        this.bids = new LinkedList<>();
-        this.auctions = new LinkedList<>();
+        bids = new LinkedList<>();
+        auctions = new LinkedList<>();
         closed = false;
-        this.purchaseHistory = new LinkedList<>();
+        storeHistory = new StorePurchaseHistory();
         raffles = new LinkedList<>();
         auctionId = 1;
         bidId = 1;
-        purchaseId = 1;
         raffleId = 1;
+        ReadWriteLock lock = new ReentrantReadWriteLock();
+        invLock = lock.writeLock();
     }
 
     public String getName() {
@@ -71,23 +74,22 @@ public class Store {
 
     public boolean purchase(Map<String,Integer> prods, String buyer){
         if(policyManager.canPurchase(prods) && inventory.canPurchase(prods)) {
+            invLock.lock();
             inventory.purchase(prods);
+            invLock.unlock();
+            Map<Product, Integer> products = new HashMap<>();
             for(String productName : prods.keySet()) {
                 Product product = inventory.getProductByName(productName);
-                purchaseHistory.add(new Purchase(policyManager.getProductPrice(product, prods),productName, prods.get(productName), buyer, purchaseId));
-                purchaseId++;
+                products.put(product, prods.get(productName));
             }
+            storeHistory.addPurchase(policyManager.getTotalPrice(products), products, buyer);
             return true;
         }
         return false;
     }
 
-    public String getHistory(String name) {
-        String result = "";
-        for(Purchase purchase : purchaseHistory) {
-            result = result + purchase.toString();
-        }
-        return result;
+    public String getHistory() {
+        return storeHistory.getHistory();
     }
 
     public boolean startAuction(double startingPrice, LocalDate auctionEnd, String productName) {
@@ -152,10 +154,12 @@ public class Store {
         return inventory.setPurchaseOption(productName, option);
     }
 
-    public void addManager(String ownerName, String nameToAdd){
+    public boolean addManager(String ownerName, String nameToAdd){
         if(!isManager(nameToAdd) && !isOwner(nameToAdd) && isOwner(ownerName)){
             managersAppointments.get(ownerName).add(nameToAdd);
+            return true;
         }
+        return false;
     }
 
     public boolean addOwner(String ownersName, String nameToAdd){
@@ -177,10 +181,16 @@ public class Store {
         return policyManager.getTotalPrice(productsAmounts);
     }
 
-    public void addProduct(String ownerName, String name, int amount, int price, String category) {
+    public boolean addProduct(String ownerName, String name, int amount, int price, String category) {
         if(isOwner(ownerName)) {
             inventory.addProduct(name, amount, price, category);
+            return true;
         }
+        return false;
+    }
+
+    public String getProductPrice(String productName) {
+        return  inventory.getProductByName(productName).getName();
     }
 
     public boolean removeOwner(String ownersName, String ownerToRemove) {
@@ -228,22 +238,28 @@ public class Store {
         return inventory.canPurchase(prodName, quantity);
     }
 
-    public void removeProduct(String ownerName, String productName) {
+    public boolean removeProduct(String ownerName, String productName) {
         if(isOwner(ownerName)) {
             inventory.removeProduct(productName);
+            return true;
         }
+        return false;
     }
 
-    public void changeProductName(String ownerName,String oldName, String newName){
+    public boolean changeProductName(String ownerName,String oldName, String newName){
         if(isOwner(ownerName)) {
             inventory.changeProductName(oldName, newName);
+            return true;
         }
+        return false;
     }
 
-    public void changeProductPrice(String ownerName,String productName, int newPrice) {
+    public boolean changeProductPrice(String ownerName,String productName, int newPrice) {
         if(isOwner(ownerName)) {
             inventory.changeProductPrice(productName, newPrice);
+            return true;
         }
+        return false;
     }
 
     public String getAllProdsByCategory(String categoryName) {
@@ -254,10 +270,12 @@ public class Store {
         return result;
     }
 
-    public void addKeywordToProduct(String ownerName, String productName, String keyword) {
+    public boolean addKeywordToProduct(String ownerName, String productName, String keyword) {
         if(isOwner(ownerName)) {
             inventory.addKeyWordToProduct(productName, keyword);
+            return true;
         }
+        return false;
     }
 
     public boolean canAddProduct(String productName, int quantity) {
@@ -287,6 +305,22 @@ public class Store {
             }
         }
         return false;
+    }
+
+    public boolean writeReviewOnProduct(String productName, String review, String userName) {
+        return true;
+    }
+
+    public boolean rateProduct(String productName, int rating, String userName) {
+        return true;
+    }
+
+    public boolean rateStore(int rate, String userName) {
+        return true;
+    }
+
+    public boolean ask(String userName, String question) {
+        return true;
     }
 
     private boolean isManager(String nameToSearch) {

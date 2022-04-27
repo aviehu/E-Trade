@@ -1,9 +1,6 @@
 package Domain.Stores;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class PolicyManager {
     private int discountId;
@@ -18,8 +15,8 @@ public class PolicyManager {
         purchasePolicyId = 1;
         founderDiscount = new Discount();
         founderPurchasePolicy = new PurchasePolicy();
-        discounts = new LinkedList<>();
-        purchasePolicies = new LinkedList<>();
+        discounts = Collections.synchronizedList(new ArrayList<Discount>());
+        purchasePolicies = Collections.synchronizedList(new ArrayList<PurchasePolicy>());
     }
 
     public boolean addDiscount(List<Product> products, int discountPercent, String desc) {
