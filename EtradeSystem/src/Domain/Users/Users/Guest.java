@@ -3,16 +3,16 @@ package Domain.Users.Users;
 import Domain.Stores.Store;
 
 public class Guest extends User {
-
+    int id;
     String userName;
     @Override
     public ShoppingCart getMyShopCart() {
         return super.getMyShopCart();
     }
 
-    public Guest() {
+    public Guest(String userName) {
         super();
-        this.userName = "Guest";
+        this.userName = userName;
     }
 
 
@@ -24,13 +24,13 @@ public class Guest extends User {
     }
 
     @Override
-    public void addProd(Store s, int quantity, String prodName) {
-        super.addProd(s, quantity, prodName);
+    public boolean addProdToCart(Store s, int quantity, String prodName) {
+        return super.addProdToCart(s, quantity, prodName);
     }
 
     @Override
-    public void removeProd(Store s, int quantity, String prodName) {
-        super.removeProd(s, quantity, prodName);
+    public boolean removeProd(Store s, int quantity, String prodName) {
+        return super.removeProd(s, quantity, prodName);
     }
 
     @Override
@@ -54,11 +54,6 @@ public class Guest extends User {
     }
 
     @Override
-    public void searchProducts(String prodName) {
-        super.searchProducts(prodName);
-    }
-
-    @Override
     public Member signIn(String userName, String password, int age, String mail,String city,String street,int streetNum,int apartementNum) {
         return super.signIn(userName, password, age, mail,city,street,streetNum,apartementNum);
     }
@@ -66,5 +61,14 @@ public class Guest extends User {
     @Override
     public boolean logIn(String userName, String password) {
         return super.logIn(userName, password);
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    @Override
+    public boolean exitSys() {
+        return super.exitSys();
     }
 }
