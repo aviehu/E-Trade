@@ -1,5 +1,6 @@
 package Domain.Users.Users;
 
+import Domain.Stores.Store;
 import Domain.Users.ExternalService.ExtSysController;
 
 import java.time.LocalTime;
@@ -20,7 +21,7 @@ public class ShoppingCart {
         extSystems = ExtSysController.getInstance();
     }
 
-    public boolean purchaseCart(CreditCard card,SupplyAddress address){
+    public boolean purchaseCart(CreditCard card,SupplyAddress address,String userName){
         int cardFrom = card.getCardNumber();
         LocalTime expDate = card.getExpDate();
         int cvv = card.getCvv();
@@ -32,7 +33,7 @@ public class ShoppingCart {
 
             for(StoreBasket b : baskets){
                 extSystems.pay(cardFrom,expDate,cvv,b.getTotalPrice(),b.getStore().getCard());
-                b.purchase();
+                b.purchase(userName);
                 }
             return true;
             }
@@ -57,7 +58,7 @@ public class ShoppingCart {
     public boolean canPurchase(){
         List<StoreBasket> bas = new ArrayList<>();
         for(StoreBasket b : baskets){
-            if(!b.purchase())
+            if(!b.canPurchase())
                 return false;
         }
         return true;

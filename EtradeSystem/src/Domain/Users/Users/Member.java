@@ -1,5 +1,7 @@
 package Domain.Users.Users;
 
+import Domain.Stores.Store;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -60,7 +62,7 @@ public class Member extends User{
 
     @Override
     public boolean purchase(CreditCard card,SupplyAddress address) {
-        if(myShopCart.purchaseCart(card,address)){
+        if(myShopCart.purchaseCart(card,address,userName)){
             for (StoreBasket b : myShopCart.getBaskets()){
                 StoreBasket copy = b;
                 pHistory.addToHistory(copy);
@@ -92,32 +94,32 @@ public class Member extends User{
 //
 //    }
 
-    public boolean writeReviewOnProduct(Store s,String prodName, String review){
-        if(pHistory.isProdPurchased(prodName)) {
-            s.writeReviewOnProd(prodName, review, this.userName);
-            return true;
-        }
-        return false;
-    }
-    public boolean rateProduct(Store s,String prodName, int rate){
-        if(pHistory.isProdPurchased(prodName)) {
-            s.rateProd(prodName,rate,userName);
-            return true;
-        }
-        return false;
-    }
+//    public boolean writeReviewOnProduct(Store s,String prodName, String review){
+//        if(pHistory.isProdPurchased(prodName)) {
+//            s.writeReviewOnProd(prodName, review, this.userName);
+//            return true;
+//        }
+//        return false;
+//    }
+//    public boolean rateProduct(Store s,String prodName, int rate){
+//        if(pHistory.isProdPurchased(prodName)) {
+//            s.rateProd(prodName,rate,userName);
+//            return true;
+//        }
+//        return false;
+//    }
 
-    public boolean RateStore(Store s,int rate){
-
-        if(pHistory.isPurchasedFromStore(s.getName())){
-            s.rateStore(rate,this.userName);
-            return true;
-        }
-        return false;
-    }
-    public void sendMessageToStore(Store s,String message){
-        s.askAs(message,userName);
-    }
+//    public boolean RateStore(Store s, int rate){
+//
+//        if(pHistory.isPurchasedFromStore(s.getName())){
+//            s.rateStore(rate,this.userName);
+//            return true;
+//        }
+//        return false;
+//    }
+//    public void sendMessageToStore(Store s,String message){
+//        s.askAs(message,userName);
+//    }
 
 
 

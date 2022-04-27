@@ -1,5 +1,7 @@
 package Domain.Users.Users;
 
+import Domain.Stores.Store;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,11 +35,12 @@ public class StoreBasket {
             prods.computeIfPresent(prodName,(k,v)->v-quantity);
     }
 
-    public int getTotalPrice(){
-        int price = 0;
-        for (String prod : prods.keySet()){
-            price += (store.getProd(prod).getPrice()*prods.get(prod));
-        }
+    public double getTotalPrice(){
+        double price = 0;
+//        for (String prod : prods.keySet()){
+//            price += (s
+//        }
+        price = store.getPrice(prods);
         return price;
     }
 
@@ -50,15 +53,15 @@ public class StoreBasket {
         display += "**"+store.getName()+"**\n\n";
         display += "\tProduct\tQuantity\tTotal Price\n";
         for(String p : prods.keySet()){
-            display += "\t"+p+"\t"+prods.get(p)+"\t"+ (store.getProd(p).getPrice()*prods.get(p))+"\n";
+            //display += "\t"+p+"\t"+prods.get(p)+"\t"+ (store.getProd(p).getPrice()*prods.get(p))+"\n";
         }
         return display;
     }
     public String getStoreName(){
         return store.getName();
     }
-    public boolean purchase(){
-        store.purchase(prods,getTotalPrice());
+    public boolean purchase(String userName){
+        store.purchase(prods,userName);
         return true;
     }
 
