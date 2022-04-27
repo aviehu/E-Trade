@@ -13,11 +13,19 @@ public class Facade {
         userController = new UserController();
     }
 
-    public boolean addStore(String storeName, String founderName,int card) {
-        return storesFacade.addStore(storeName, founderName, card);
+    public String enterSystem() {
+        return "Welcome To E-Trade\n" + storesFacade.displayAllStores();
     }
 
-    public String displayAllStores() {
-        return storesFacade.displayAllStores();
+    public boolean addExternalPaymentService() {
+        return true;
     }
+
+    public boolean exitSystem() {
+        return true;
+    }
+
+
+
+
 }
