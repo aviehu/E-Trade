@@ -12,7 +12,7 @@ public class Inventory {
         products = Collections.synchronizedList(new ArrayList<Product>());
     }
 
-    public boolean addProduct(String name, int amount, int price, String category){
+    public boolean addProduct(String name, int amount, double price, String category){
         if(getProductByName(name) == null) {
             products.add(new Product(name, amount, price, category));
             return true;
@@ -65,7 +65,7 @@ public class Inventory {
         return result;
     }
 
-    public boolean changeProductPrice(String productName, int newPrice) {
+    public boolean changeProductPrice(String productName, double newPrice) {
         Product product = getProductByName(productName);
         if(product != null){
             product.setPrice(newPrice);

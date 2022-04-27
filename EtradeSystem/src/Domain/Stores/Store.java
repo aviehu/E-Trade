@@ -181,7 +181,7 @@ public class Store {
         return policyManager.getTotalPrice(productsAmounts);
     }
 
-    public boolean addProduct(String ownerName, String name, int amount, int price, String category) {
+    public boolean addProduct(String ownerName, String name, int amount, double price, String category) {
         if(isOwner(ownerName)) {
             inventory.addProduct(name, amount, price, category);
             return true;
@@ -254,7 +254,7 @@ public class Store {
         return false;
     }
 
-    public boolean changeProductPrice(String ownerName,String productName, int newPrice) {
+    public boolean changeProductPrice(String ownerName,String productName, double newPrice) {
         if(isOwner(ownerName)) {
             inventory.changeProductPrice(productName, newPrice);
             return true;

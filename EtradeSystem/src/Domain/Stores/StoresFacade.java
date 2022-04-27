@@ -85,4 +85,35 @@ public class StoresFacade {
         }
     }
 
+    public boolean addProductToStore(String ownerName, String storeName, String productName, int amount, double price, String category) {
+        Store store = getStoreByName(storeName);
+        if(store == null) {
+            return false;
+        }
+        return store.addProduct(ownerName,productName,amount,price,category);
+    }
+
+    public boolean removeProductFromStore(String userName, String storeName, String productName) {
+        Store store = getStoreByName(storeName);
+        if(store == null) {
+            return false;
+        }
+        return store.removeProduct(userName ,productName);
+    }
+
+    public boolean editProductName(String userName, String storeName, String oldProductName, String newProductName) {
+        Store store = getStoreByName(storeName);
+        if(store == null) {
+            return false;
+        }
+        return store.changeProductName(userName ,oldProductName, newProductName);
+    }
+
+    public boolean editProductPrice(String userName, String storeName, String productName, double newPrice) {
+        Store store = getStoreByName(storeName);
+        if(store == null) {
+            return false;
+        }
+        return store.changeProductPrice(userName ,productName, newPrice);
+    }
 }

@@ -6,8 +6,6 @@ import java.time.LocalTime;
 
 public interface SystemFacade {
 
-    public String initSystem();
-
     public boolean addExternalPaymentService();
 
     public boolean changeExternalPaymentService();
@@ -50,21 +48,17 @@ public interface SystemFacade {
 
     public boolean openStore(String founderName, String storeName, int card);
 
-    public boolean addProductToStore(String userName, String storeName, String productName, int amount, int price, String category);
+    public boolean addProductToStore(String userName, String storeName, String productName, int amount, double price, String category);
 
     public boolean removeProductFromStore(String userName, String storeName, String productName);
 
     public boolean editProductName(String userName, String storeName, String oldProductName, String newProductName);
 
-    public boolean editProductPrice(String userName, String storeName, String ProductName, int newPrice);
+    public boolean editProductPrice(String userName, String storeName, String ProductName, double newPrice);
 
     public boolean editProductQuantity(String userName, String storeName, String ProductName, int newQuantity);
 
     public boolean changePurchaseOption(String userName, String storeName, String ProductName, purchaseOption newOption);
-
-    public boolean changePurchasePolicy();
-
-    public boolean changeDiscountPolicy();
 
     public boolean appointStoreOwner(String userName, String storeName, String newOwner);
 
