@@ -20,7 +20,7 @@ public class EnterSystemAsGuestTest {
 
     @Test
     public void EnterSystemAsGuestTest(){
-        Assert.assertTrue(true);
+
 
     }
 }

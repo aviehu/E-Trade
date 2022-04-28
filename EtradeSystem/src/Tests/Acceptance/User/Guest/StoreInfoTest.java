@@ -12,6 +12,7 @@ public class StoreInfoTest {
     @Before
     public void setUp() throws Exception {
         systemService = new SystemService();
+
         systemService.signUp("Andalus", "100");
         systemService.login("Andalus", "100");
         systemService.openStore("Andalus", "Mega", 123);
