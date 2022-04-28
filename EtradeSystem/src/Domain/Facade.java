@@ -1,28 +1,76 @@
 package Domain;
 
+import Domain.Stores.Store;
 import Domain.Stores.StoresFacade;
 import Domain.Stores.managersPermission;
+import Domain.Users.ExternalService.ExtSysController;
+import Domain.Users.ExternalService.Payment.PaymentAdaptee;
+import Domain.Users.ExternalService.Supply.SupplyAdaptee;
 import Domain.Users.Users.UserController;
 import Service.ResultPackge.ResultBool;
 import Service.ResultPackge.ResultMsg;
 
+import java.time.LocalTime;
+
 public class Facade implements SystemFacade {
     private StoresFacade storesFacade;
     private UserController userController;
+    private ExtSysController externalSys;
 
     public Facade() {
         storesFacade = new StoresFacade();
         userController = new UserController();
+        externalSys = ExtSysController.getInstance();
     }
 
     @Override
-    public ResultBool addExternalPaymentService() {
-        return new ResultBool(true, null);
+    public ResultBool removeMember(String userName, String memberToRemove) {
+        if(userController.isConnected(userName)){
+            if(userController.removeMember(userName, memberToRemove))
+                return new ResultBool(true,null);
+            return new ResultBool(false,"Cant remove "+memberToRemove+"\n");
+
+        }
+        return new ResultBool(false, "User is not connected");
     }
 
     @Override
-    public ResultBool changeExternalPaymentService() {
+    public ResultBool addSystemManager(String userName, String managerToAdd) {
+        if(userController.isConnected(userName)){
+            if(userController.addSystemManager(userName,managerToAdd))
+                return new ResultBool(true,null);
+            return new ResultBool(false,"cant add "+managerToAdd+" as System Manager\n");
+        }
+        return new ResultBool(false, "User is not connected");
+    }
+
+    @Override
+    public ResultBool removeSystemManager(String userName, String managerToRemove) {
+        if(userController.isConnected(userName)){
+            if(userController.removeSystemManager(userName,managerToRemove))
+                return new ResultBool(true,null);
+            return new ResultBool(false,"cant remove "+managerToRemove+"\n");
+        }
+        return new ResultBool(false, "User is not connected");
+    }
+
+    @Override
+    public ResultBool addExternalPaymentService(PaymentAdaptee paymentAdaptee) {
         return new ResultBool(true, null);
+    }
+
+
+    @Override
+    public ResultBool changeExternalPaymentService(String userName,PaymentAdaptee paymentAdaptee) {
+        if(userController.isConnected(userName)) {
+            if(userController.isUserSysManager(userName)) {
+                if (this.externalSys.changePayment(paymentAdaptee))
+                    return new ResultBool(true, null);
+                return new ResultBool(false, "Failed to change payment service\n");
+            }
+            return new ResultBool(false,"PERMISSION DENIED\n");
+        }
+        return new ResultBool(false, "User is not connected\n");
     }
 
     @Override
@@ -31,13 +79,21 @@ public class Facade implements SystemFacade {
     }
 
     @Override
-    public ResultBool addExternalSupplyService() {
+    public ResultBool addExternalSupplyService(SupplyAdaptee supplyAdaptee) {
         return new ResultBool(true, null);
     }
 
     @Override
-    public ResultBool changeExternalSupplyService() {
-        return new ResultBool(true, null);
+    public ResultBool changeExternalSupplyService(String userName,SupplyAdaptee supplyAdaptee) {
+        if(userController.isConnected(userName)) {
+            if(userController.isUserSysManager(userName)) {
+                if (this.externalSys.changeSupply(supplyAdaptee))
+                    return new ResultBool(true, null);
+                return new ResultBool(false,"Failed to change supply Service");
+            }
+            return new ResultBool(false,"PERMISSION DENIED\n");
+        }
+        return new ResultBool(false, "User is not connected\n");
     }
 
     @Override
@@ -47,22 +103,42 @@ public class Facade implements SystemFacade {
 
     @Override
     public ResultBool exitSystem(String name) {
-        return new ResultBool(true, null);
+        if(userController.isConnected(name)) {
+            if (this.userController.exitSystem(name))
+                return new ResultBool(true, null);
+            return new ResultBool(false, "user is not in the system\n");
+        }
+        return new ResultBool(false, "User is not connected\n");
+    }
+
+//    @Override
+//    public ResultBool exitSystemAsGuest(String name) {
+//        return new ResultBool(true, null);
+//    }
+
+    @Override
+    public ResultBool signUp(String userName,String newUserName, String password) {
+        if(userController.isConnected(userName)) {
+            if (!this.userController.isValidPassword(password))
+                return new ResultBool(false, "Invalid password\n password must be at least 8 characters and contain uppercase character\n");
+            if (this.userController.isUserNameExist(newUserName))
+                return new ResultBool(false, "User name not available\n");
+            userController.signUp(newUserName, password);
+            return new ResultBool(true, null);
+        }
+        return new ResultBool(false, "User is not connected\n");
     }
 
     @Override
-    public ResultBool exitSystemAsGuest(String name) {
-        return new ResultBool(true, null);
-    }
-
-    @Override
-    public ResultBool signUp(String userName, String password) {
-        return new ResultBool(true, null);
-    }
-
-    @Override
-    public ResultBool login(String userName, String password) {
-        return new ResultBool(true, null);
+    public ResultBool login(String userName,String memberUserName, String password) {
+        if(userController.isConnected(userName)) {
+            if (!userController.isUserNameExist(memberUserName))
+                return new ResultBool(false, "Wrong user name");
+            if (userController.logIn(memberUserName, password))
+                return new ResultBool(true, null);
+            return new ResultBool(false, "Wrong password");
+        }
+        return new ResultBool(false, "User is not connected\n");
     }
 
     @Override
@@ -114,38 +190,78 @@ public class Facade implements SystemFacade {
     }
 
     @Override
-    public ResultBool addProductToShoppingCart(String userName, String productName, String storeName, int quantity) {
-        return new ResultBool(true, null);
+    public ResultMsg addProductToShoppingCart(String userName, String productName, String storeName, int quantity) {
+        if(userController.isConnected(userName)){
+            Store s = null;
+            String result;
+            if((s = storesFacade.getStore(storeName)) == null)
+                return new ResultMsg(null, "No such store");
+            else {
+                result = userController.addProductToShoppingCart(userName, productName, s, quantity);
+
+                if (result == null)
+                    return new ResultMsg(null, "Could not remove product from your shopping cart\n");
+                else
+                    return new ResultMsg(result, null);
+            }
+        }
+        return new ResultMsg(null, "User is not connected");
     }
 
     @Override
     public ResultMsg displayShoppingCart(String userName) {
-        return new ResultMsg("", null);
+        if(userController.isConnected(userName))
+            return new ResultMsg(userController.displayShoppingCart(userName),null);
+        return new ResultMsg(null,"User is not connected");
+    }
+
+//    @Override
+//    public ResultMsg addProductToShoppingCart(String userName, Store s, int quantity, String prodName) {
+//        return new ResultMsg("", null);
+//    }
+
+    @Override
+    public ResultMsg removeProductFromShoppingCart(String userName,String storeName,int quantity,String prodName) {
+        if(userController.isConnected(userName)){
+            Store s = null;
+            String result;
+            if((s = storesFacade.getStore(storeName)) == null)
+                return new ResultMsg(null, "No such store");
+            else {
+                result = userController.removeProductFromShoppingCart(userName,s,quantity,prodName);
+                if (result == null)
+                    return new ResultMsg(null, "Could not remove product from your shopping cart\n");
+                else
+                    return new ResultMsg(result, null);
+            }
+        }
+        return new ResultMsg(null, "User is not connected");
     }
 
     @Override
-    public ResultMsg addProductToShoppingCart(String userName) {
-        return new ResultMsg("", null);
-    }
-
-    @Override
-    public ResultMsg removeProductFromShoppingCart(String userName) {
-        return new ResultMsg("", null);
-    }
-
-    @Override
-    public ResultBool purchase(String userName) {
-        return new ResultBool(true, null);
+    public ResultBool purchase(String userName, int card, LocalTime expDate,int cvv,String city,String street,int stNum,int apartmentNum) {
+        if(userController.isConnected(userName)) {
+            if (userController.purchase(userName, card, expDate, cvv, city, street, stNum, apartmentNum))
+                return new ResultBool(true, null);
+            else
+                return new ResultBool(false,"Could not purchase your shopping cart");
+        }
+        return new ResultBool(false, "User is not connected");
     }
 
     @Override
     public ResultBool logOut(String userName) {
-        return new ResultBool(true, null);
+        if (userController.isConnected(userName)){
+            if(userController.logOut(userName))
+                return new ResultBool(true,null);
+            return new ResultBool(false,"Logout failed");
+        }
+        return new ResultBool(false, "User is not connected");
     }
 
     @Override
     public ResultBool openStore(String founderName, String storeName, int card) {
-        if(userController.isConnected(userName)){
+        if(userController.isConnected(founderName)){
             if(storesFacade.addStore(storeName, founderName, card)) {
                 return new ResultBool(true, null);
             }
@@ -274,10 +390,6 @@ public class Facade implements SystemFacade {
 
     @Override
     public ResultBool adminGetStoresPurchaseHistory(String adminName, String storeName) {
-        return new ResultBool(false, null);
-    }
-
-    public ResultBool exitSystem() {
         return new ResultBool(false, null);
     }
 

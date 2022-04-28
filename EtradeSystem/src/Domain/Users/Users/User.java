@@ -7,6 +7,7 @@ public abstract class User {
     protected SupplyAddress address;
     protected boolean isConnected;
     protected String userName;
+    protected CreditCard card;
 
     public ShoppingCart getMyShopCart() {
         return myShopCart;
@@ -16,6 +17,7 @@ public abstract class User {
         this.myShopCart = new ShoppingCart(0);
         this.isConnected = false;
         this.address = null;
+        this.card = null;
     }
 
     public boolean isConnected() {
@@ -28,16 +30,16 @@ public abstract class User {
 
     // exitSystem:
     // guest loosing his shopCart and not consider as guest(users.2)
-    public abstract void exitSystem();
+//    public abstract void exitSystem();
 
-    public boolean addProdToCart(Store s, int quantity, String prodName){
-        if(s.hasProd(prodName,quantity))
+    public String addProdToCart(Store s, int quantity, String prodName){
+        if(s.canPurchase(prodName,quantity))
             return myShopCart.addProd(s,quantity,prodName);
-        return false;
+        return null;
     }
 
 
-    public boolean removeProd(Store s,int quantity,String prodName){
+    public String removeProd(Store s,int quantity,String prodName){
         return myShopCart.removeProd(s,quantity,prodName);
     }
     public String displayCart(){
@@ -72,11 +74,29 @@ public abstract class User {
     public void addAddress(String city,String street,int streetNum,int apartmentNum ){
             this.address = new SupplyAddress(city,street,streetNum,apartmentNum);
     }
-    public boolean exitSys(){
+    public boolean exitSystem(){
+        this.isConnected = false;
         return true;
     }
 
     public String getUserName() {
         return userName;
     }
+
+    public SupplyAddress getAddress() {
+        return address;
+    }
+
+    public CreditCard getCard() {
+        return card;
+    }
+
+    public void setAddress(SupplyAddress address) {
+        this.address = address;
+    }
+
+    public void setCard(CreditCard card) {
+        this.card = card;
+    }
+
 }
