@@ -12,9 +12,10 @@ public class StoreInfoTest {
     @Before
     public void setUp() throws Exception {
         systemService = new SystemService();
-
-        systemService.signUp("Andalus", "100");
-        systemService.login("Andalus", "100");
+        systemService.enterSystem();
+        String guestName1 = systemService.getOnline().getVal();
+        systemService.signUp(guestName1,"Andalus", "100");
+        systemService.login(guestName1,"Andalus", "100");
         systemService.openStore("Andalus", "Mega", 123);
         systemService.addProductToStore("Andalus", "Mega",
                 "Bamba", 100, 5,"snacks");
@@ -29,6 +30,7 @@ public class StoreInfoTest {
         Assert.assertTrue(systemService.getStoreInfo("Andalus", "Mega").getVal().contains("Bamba"));
     }
 
+    @Test
     public void StoreInfoFailTest(){
         Assert.assertTrue(systemService.getStoreInfo("Andalus", "Shufer").getVal().contains("Bamba"));
     }

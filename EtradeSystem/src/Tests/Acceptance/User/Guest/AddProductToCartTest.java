@@ -11,7 +11,8 @@ public class AddProductToCartTest {
     @org.junit.Before
     public void setUp() throws Exception {
         systemService = new SystemService();
-        String guestName = systemService.enterSystem().getVal();
+        systemService.enterSystem();
+        String guestName = systemService.getOnline().getVal();
         systemService.signUp(guestName, "Andalus", "100");
         systemService.login(guestName, "Andalus", "100");
         systemService.openStore("Andalus", "Mega", 123);

@@ -16,7 +16,8 @@ public class LoginTest {
     @Before
     public void setUp() throws Exception {
         systemService = new SystemService();
-        guestName = systemService.enterSystem().getVal();
+        systemService.enterSystem();
+        String guestName = systemService.getOnline().getVal();
         systemService.signUp(guestName, "newMember", "123").getVal();
     }
 

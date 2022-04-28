@@ -13,8 +13,10 @@ public class SearchProductTest {
     @Before
     public void setUp() throws Exception {
         systemService = new SystemService();
-        systemService.signUp("Andalus", "100");
-        systemService.login("Andalus", "100");
+        systemService.enterSystem();
+        String guestName = systemService.getOnline().getVal();
+        systemService.signUp(guestName, "Andalus", "100");
+        systemService.login(guestName, "Andalus", "100");
         systemService.openStore("Andalus", "Mega", 123);
         systemService.addProductToStore("Andalus", "Mega",
                 "Bamba", 100, 5,"snacks");

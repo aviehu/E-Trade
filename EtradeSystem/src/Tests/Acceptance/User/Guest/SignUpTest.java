@@ -14,7 +14,8 @@ public class SignUpTest {
     @Before
     public void setUp() throws Exception {
         systemService = new SystemService();
-        guestName0 = systemService.enterSystem().getVal();
+        systemService.enterSystem();
+        String guestName0 = systemService.getOnline().getVal();
         systemService.signUp(guestName0, "Andalus", "123");
     }
 
@@ -25,7 +26,8 @@ public class SignUpTest {
     @Test
     public void signUpSuccessTest(){
         int numOfMembers = systemService.getMembers().size();
-        String guestName1 = systemService.enterSystem().getVal();
+        systemService.enterSystem();
+        String guestName1 = systemService.getOnline().getVal();
         systemService.signUp(guestName1, "newMember", "123").getVal();
         Assert.assertTrue(numOfMembers + 1 == systemService.getMembers().size());
         Assert.assertTrue( systemService.getMembers().contains("Andalus"));
@@ -35,7 +37,8 @@ public class SignUpTest {
     @Test
     public void signUpFailTest(){
         int numOfMembers = systemService.getMembers().size();
-        String guestName1 = systemService.enterSystem().getVal();
+        systemService.enterSystem();
+        String guestName1 = systemService.getOnline().getVal();
         systemService.signUp(guestName1,"Andalus", "123").getVal();
         Assert.assertTrue(numOfMembers == systemService.getMembers().size());
         Assert.assertTrue( systemService.getMembers().contains("Andalus"));
