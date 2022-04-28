@@ -1,32 +1,124 @@
 package Domain.Users.Users;
 
+import Domain.Stores.PurchasePolicy;
+import Domain.Stores.Store;
+import Domain.purchaseOption;
+
+import java.lang.management.ManagementPermission;
+import java.security.Permission;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Owner extends Member {
 
-    //boolean isFounder;
-    List<Owner> myOwners;
-    List<Manager> myManegers;
 
-    public Owner(String userName, String password, int age, String mail, String city, String street, int streetNum, int apartementNum,boolean isFounder) {
-        super(userName, password, age, mail, city, street, streetNum, apartementNum);
+    public Owner(String userName, String password) {
+        super(userName, password);
         //this.isFounder = isFounder;
-        this.myManegers = new ArrayList<>();
-        this.myOwners = new ArrayList<>();
+    }
+
+    @Override
+    public ShoppingCart getMyShopCart() {
+        return super.getMyShopCart();
+    }
+
+    @Override
+    public String addProdToCart(Store store, int quantity, String prodName) {
+        return super.addProdToCart(store, quantity, prodName);
     }
 
 
 
     @Override
-    public void exitSystem() {
-        super.exitSystem();
+    public String removeProd(Store s, int quantity, String prodName) {
+        return super.removeProd(s, quantity, prodName);
+    }
+
+//    public boolean addProdToStore(Store store, int quantity, String prodName,int price,String category) {
+//        return store.addProduct(userName,prodName,quantity,price,category);
+//    }
+//    public boolean removeProdFromStore(Store store, int quantity, String prodName,int price,String category) {
+//        return store.removeProduct(userName,prodName);
+//    }
+//    public boolean setProdPrice(Store store, int quantity, String prodName,int price) {
+//        return store.changeProductPrice(userName,prodName,price);
+//    }
+//    public boolean setProdName(Store store, int quantity, String prodName,String newName) {
+//        return store.changeProductName(userName,prodName,newName);
+//    }
+//    public boolean setProdPurOption(Store store, String prodName, purchaseOption pp) {
+//        return store.setPurchaseOption(userName,prodName,pp);
+//    }
+//    public boolean appointOwner(Store s,String appointee){
+//        return s.addOwner(userName,appointee);
+//    }
+//    public boolean appointManager(Store s,String appointee){
+//        return s.addManager(userName,appointee);
+//    }
+//    public boolean changeManagerPermission(Store s,String manager, ManagementPermission p){
+//        return s.changeStoreManagersPermission(userName,manager,p);
+//    }
+
+
+    @Override
+    public String displayCart() {
+        return super.displayCart();
     }
 
     @Override
-    public Guest logOut() {
-        return super.logOut();
+    public boolean purchase(CreditCard card, SupplyAddress address) {
+        return super.purchase(card, address);
     }
+
+    @Override
+    public String getStoreInfo(Store s) {
+        return super.getStoreInfo(s);
+    }
+
+//    @Override
+//    public Member signIn(String userName, String password, int age, String mail, String city, String street, int streetNum, int apartementNum) {
+//        return super.signIn(userName, password, age, mail, city, street, streetNum, apartementNum);
+//    }
+
+    @Override
+    public void setDiscount(int discount) {
+        super.setDiscount(discount);
+    }
+
+    @Override
+    public CreditCard getCard() {
+        return super.getCard();
+    }
+
+    @Override
+    public void setCard(CreditCard card) {
+        super.setCard(card);
+    }
+
+    @Override
+    public boolean isConnected() {
+        return super.isConnected();
+    }
+
+    @Override
+    public void setConnected(boolean connected) {
+        super.setConnected(connected);
+    }
+
+    @Override
+    public void addAddress(String city, String street, int streetNum, int apartmentNum) {
+        super.addAddress(city, street, streetNum, apartmentNum);
+    }
+
+    @Override
+    public boolean exitSystem() {
+        return super.exitSystem();
+    }
+
+//    @Override
+//    public Guest logOut() {
+//        return super.logOut();
+//    }
 
     @Override
     public void addSecurityQuest(String quest, String ans) {
