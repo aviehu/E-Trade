@@ -17,7 +17,7 @@ public class NotificationManager {
     public boolean sendNotification(User user, String message, String sentFrom) {
         Notification notification = new Notification(LocalDate.now(), sentFrom, message, user.getUserName());
         if(user.isConnected()) {
-            user.sendNotification(notification);
+//            user.sendNotification(notification);
             return true;
         }
         awaitingNotifications.add(notification);
