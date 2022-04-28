@@ -2,10 +2,12 @@ package Tests.Acceptance.User.Member;
 
 import Service.SystemService;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
-import org.junit.*;
+import org.junit.Test;
 
-public class UpdateManagerPermissionTest {
+public class AddProductToStoreTest {
+
     private SystemService systemService;
 
     @org.junit.Before
@@ -16,8 +18,6 @@ public class UpdateManagerPermissionTest {
         systemService.signUp(guestName, "Andalus", "100");
         systemService.login(guestName, "Andalus", "100");
         systemService.openStore("Andalus", "Mega", 123);
-        systemService.addProductToStore("Andalus", "Mega",
-                "Bamba", 100, 5,"snacks");
     }
 
     @org.junit.After
@@ -25,16 +25,19 @@ public class UpdateManagerPermissionTest {
     }
 
     @Test
-    public void updateManagerPermissionSuccessTest(){
-        Assert.assertTrue(systemService.getStoreInfo("Andalus", "Mega").getVal().contains("Bamba"));
-        systemService.removeProductFromStore("Andalus", "Mega", "Bamba");
+    public void addProductToStoreSuccessTest(){
         Assert.assertFalse(systemService.getStoreInfo("Andalus", "Mega").getVal().contains("Bamba"));
+        systemService.addProductToStore("Andalus", "Mega",
+                "Bamba", 100, 5,"snacks");
+        Assert.assertTrue(systemService.getStoreInfo("Andalus", "Mega").getVal().contains("Bamba"));
     }
 
     @Test
-    public void removeProductFromStoreFailTest(){
-        Assert.assertTrue(systemService.getStoreInfo("Andalus", "Mega").getVal().contains("Bamba"));
-        Assert.assertFalse(systemService.removeProductFromStore("Andalus", "Mega", "Bisly").isSuccess());
-        Assert.assertTrue(systemService.getStoreInfo("Andalus", "Mega").getVal().contains("Bamba"));
+    public void addProductToStoreFailTest(){
+        Assert.assertFalse(systemService.getStoreInfo("Andalus", "Mega").getVal().contains("Bamba"));
+        systemService.addProductToStore("Andalus", "Mega",
+                "Bamba", 100, 5,"snacks");
+        Assert.assertFalse(systemService.addProductToStore("Andalus", "Mega",
+                "Bamba", 100, 5,"snacks").isSuccess());
     }
 }
