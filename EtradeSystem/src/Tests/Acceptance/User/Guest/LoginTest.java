@@ -17,7 +17,7 @@ public class LoginTest {
     public void setUp() throws Exception {
         systemService = new SystemService();
         systemService.enterSystem();
-        String guestName = systemService.getOnline().getVal();
+        guestName = systemService.getOnline().getVal();
         systemService.signUp(guestName, "newMember", "123").getVal();
     }
 
@@ -34,6 +34,7 @@ public class LoginTest {
         Assert.assertTrue(systemService.getLoggedMembers().getVal().contains("newMember"));
     }
 
+    @Test
     public void loginFailTest() {
         List<String> loggedInMembers = systemService.getLoggedMembers().getVal();
         int numOfLoggedIn = loggedInMembers.size();
@@ -42,4 +43,4 @@ public class LoginTest {
         Assert.assertFalse(systemService.getLoggedMembers().getVal().contains("newMember"));
     }
 }
-}
+
