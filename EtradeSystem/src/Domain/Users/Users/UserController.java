@@ -16,6 +16,7 @@ public class UserController {
     private List<Guest> guests;
     private List<SystemManager> systemManagers;
     private List<User> users;
+    private Guest online;
 
     public UserController() {
         guestId = 0;
@@ -25,10 +26,15 @@ public class UserController {
         this.systemManagers = new ArrayList<>();
         users = new ArrayList<>();
 
+
         init();
     }
     public void init(){
         //load from database
+        SystemManager systemManager = new SystemManager("domain","domain");
+        Member member = new Member("member","member");
+        members.add(member);
+        systemManagers.add(systemManager);
         users.addAll(members);
         users.addAll(guests);
         users.addAll(systemManagers);
@@ -66,9 +72,10 @@ public class UserController {
         return true;
     }
     public boolean enterSystem(){
-        Guest g = new Guest("guest"+guestId);
-        this.guests.add(g);
-        this.users.add(g);
+        online = new Guest("guest"+guestId);
+        online.setConnected(true);
+        this.guests.add(online);
+        this.users.add(online);
         guestId++;
         return true;
     }
@@ -230,8 +237,11 @@ public class UserController {
         return systemManagers.size();
     }
 
+    public static int getGuestId() {
+        return guestId;
+    }
 
-
-
-
+    public String  getOnline() {
+        return online.getUserName();
+    }
 }

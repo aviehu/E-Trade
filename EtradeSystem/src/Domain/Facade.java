@@ -6,6 +6,7 @@ import Domain.Stores.managersPermission;
 import Domain.Users.ExternalService.ExtSysController;
 import Domain.Users.ExternalService.Payment.PaymentAdaptee;
 import Domain.Users.ExternalService.Supply.SupplyAdaptee;
+import Domain.Users.Users.SystemManager;
 import Domain.Users.Users.UserController;
 import Service.ResultPackge.ResultBool;
 import Service.ResultPackge.ResultMsg;
@@ -21,7 +22,9 @@ public class Facade implements SystemFacade {
         storesFacade = new StoresFacade();
         userController = new UserController();
         externalSys = ExtSysController.getInstance();
+
     }
+
 
     @Override
     public ResultBool removeMember(String userName, String memberToRemove) {
@@ -32,6 +35,13 @@ public class Facade implements SystemFacade {
 
         }
         return new ResultBool(false, "User is not connected");
+    }
+
+    @Override
+    public ResultBool enterSystem() {
+        if(userController.enterSystem())
+            return new ResultBool(true,null);
+        return new ResultBool(false,"Cant enter System");
     }
 
     @Override
@@ -392,5 +402,10 @@ public class Facade implements SystemFacade {
     public ResultBool adminGetStoresPurchaseHistory(String adminName, String storeName) {
         return new ResultBool(false, null);
     }
+    public String getOnline(){
+        return userController.getOnline();
+    }
+
+
 
 }
