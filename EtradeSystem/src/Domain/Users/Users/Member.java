@@ -20,8 +20,8 @@ public class Member extends User{
 
 
     @Override
-    public void exitSystem() {
-        //save details to database
+    public boolean exitSystem() {
+        return super.exitSystem();
     }
 
     public Member(String userName, String password) {
@@ -33,10 +33,9 @@ public class Member extends User{
         this.pHistory = new MemberPurchaseHistory();
         this.userName = userName;
         this.password = password;
-        this.age = age;
-        this.mail = mail;
+        this.age = 0;
+        this.mail = "";
         this.address = null;
-        this.card = null;
     }
 
     @Override
@@ -45,12 +44,12 @@ public class Member extends User{
     }
 
     @Override
-    public boolean addProdToCart(Store store, int quantity, String prodName) {
+    public String addProdToCart(Store store, int quantity, String prodName) {
          return super.addProdToCart(store,quantity,prodName);
     }
 
     @Override
-    public boolean removeProd(Store s, int quantity, String prodName) {
+    public String removeProd(Store s, int quantity, String prodName) {
         return super.removeProd(s, quantity, prodName);
     }
 
@@ -229,9 +228,4 @@ public class Member extends User{
         super.addAddress(city, street, streetNum, apartmentNum);
     }
 
-    @Override
-    public boolean exitSys() {
-        //save to date
-        return true;
-    }
 }

@@ -1,31 +1,39 @@
 package Domain;
 
+import Domain.Stores.Store;
 import Domain.Stores.managersPermission;
+import Domain.Users.ExternalService.Payment.PaymentAdaptee;
+import Domain.Users.ExternalService.Supply.SupplyAdaptee;
 import Service.ResultPackge.Result;
 import Service.ResultPackge.ResultBool;
 import Service.ResultPackge.ResultMsg;
 
+import java.time.LocalTime;
+
 public interface SystemFacade {
+    public ResultBool removeMember(String userName,String memberToRemove);
+    public ResultBool addSystemManager(String userName,String managerToAdd);
+    public ResultBool removeSystemManager(String userName,String managerToRemove);
 
-    public ResultBool addExternalPaymentService();
+    public ResultBool addExternalPaymentService(PaymentAdaptee paymentAdaptee);
 
-    public ResultBool changeExternalPaymentService();
+    public ResultBool changeExternalPaymentService(String userName,PaymentAdaptee paymentAdaptee);
 
     public ResultBool editExternalPaymentService();
 
-    public ResultBool addExternalSupplyService();
+    public ResultBool addExternalSupplyService(SupplyAdaptee supplyAdaptee);
 
-    public ResultBool changeExternalSupplyService();
+    public ResultBool changeExternalSupplyService(String userName,SupplyAdaptee supplyAdaptee);
 
     public ResultBool editExternalSupplyService();
 
     public ResultBool exitSystem(String name);
 
-    public ResultBool exitSystemAsGuest(String name);
+//    public ResultBool exitSystemAsGuest(String name);
 
-    public ResultBool signUp(String userName, String password);
+    public ResultBool signUp(String userName,String newUserName, String password);
 
-    public ResultBool login(String userName, String password);
+    public ResultBool login(String userName,String memberUserName, String password);
 
     public ResultMsg getStoreInfo(String userName, String storeName);
 
@@ -35,15 +43,15 @@ public interface SystemFacade {
 
     public ResultMsg searchByName(String userName, String productName);
 
-    public ResultBool addProductToShoppingCart(String userName, String productName, String storeName, int quantity);
+    public ResultMsg addProductToShoppingCart(String userName, String productName, String storeName, int quantity);
 
     public ResultMsg displayShoppingCart(String userName);
 
-    public ResultMsg addProductToShoppingCart(String userName);
+//    public ResultMsg addProductToShoppingCart(String userName, Store s, int quantity, String prodName);
 
-    public ResultMsg removeProductFromShoppingCart(String userName);
+    public ResultMsg removeProductFromShoppingCart(String userName,String storeName,int quantity,String prodName);
 
-    public ResultBool purchase(String userName);
+    public ResultBool purchase(String userName, int card, LocalTime expDate, int cvv, String city, String street, int stNum, int apartmentNum);
 
     public ResultBool logOut(String userName);
 
@@ -79,6 +87,6 @@ public interface SystemFacade {
 
     public ResultBool adminGetStoresPurchaseHistory(String adminName, String storeName);
 
-    public ResultBool exitSystem();
+//    public ResultBool exitSystem();
 
 }

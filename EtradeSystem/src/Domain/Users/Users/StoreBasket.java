@@ -27,10 +27,8 @@ public class StoreBasket {
         }
     }
     public boolean removeProd(int quantity,String prodName){
-        if (prods.isEmpty() || !prods.containsKey(prodName)) {
-            System.out.println("no such product " + prodName + " in your basket");
+        if (prods.isEmpty() || !prods.containsKey(prodName))
             return false;
-        }
         else if(prods.get(prodName) - quantity <= 0) {
             prods.remove(prodName);
             return true;
