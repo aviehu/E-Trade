@@ -34,4 +34,12 @@ public class SupplyAdapter implements ISupply{
         else
             return supplyAdaptee.supply(packageToShip, address);
     }
+
+    @Override
+    public boolean isExist() {
+        if(supplyAdaptee != null)
+            return true;
+        return false;
+    }
+
 }

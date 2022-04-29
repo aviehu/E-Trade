@@ -4,6 +4,8 @@ import Domain.Stores.PurchasePolicy;
 import Domain.Stores.Store;
 import Domain.purchaseOption;
 
+import java.lang.management.ManagementPermission;
+import java.security.Permission;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,35 +23,42 @@ public class Owner extends Member {
     }
 
     @Override
-    public boolean addProdToCart(Store store, int quantity, String prodName) {
+    public String addProdToCart(Store store, int quantity, String prodName) {
         return super.addProdToCart(store, quantity, prodName);
     }
 
 
 
     @Override
-    public boolean removeProd(Store s, int quantity, String prodName) {
+    public String removeProd(Store s, int quantity, String prodName) {
         return super.removeProd(s, quantity, prodName);
     }
 
-    public boolean addProdToStore(Store store, int quantity, String prodName,int price,String category) {
-        return store.addProduct(userName,prodName,quantity,price,category);
-    }
-    public boolean removeProdFromStore(Store store, int quantity, String prodName,int price,String category) {
-        return store.removeProduct(userName,prodName);
-    }
-    public boolean setProdPrice(Store store, int quantity, String prodName,int price) {
-        return store.changeProductPrice(userName,prodName,price);
-    }
-    public boolean setProdName(Store store, int quantity, String prodName,String newName) {
-        return store.changeProductName(userName,prodName,newName);
-    }
-    public boolean setProdPurOption(Store store, String prodName, purchaseOption pp) {
-        return store.setPurchaseOption(prodName,pp);
-    }
-    public boolean appointOwner(Store s,String appointee){
-        return s.addOwner(userName,appointee);
-    }
+//    public boolean addProdToStore(Store store, int quantity, String prodName,int price,String category) {
+//        return store.addProduct(userName,prodName,quantity,price,category);
+//    }
+//    public boolean removeProdFromStore(Store store, int quantity, String prodName,int price,String category) {
+//        return store.removeProduct(userName,prodName);
+//    }
+//    public boolean setProdPrice(Store store, int quantity, String prodName,int price) {
+//        return store.changeProductPrice(userName,prodName,price);
+//    }
+//    public boolean setProdName(Store store, int quantity, String prodName,String newName) {
+//        return store.changeProductName(userName,prodName,newName);
+//    }
+//    public boolean setProdPurOption(Store store, String prodName, purchaseOption pp) {
+//        return store.setPurchaseOption(userName,prodName,pp);
+//    }
+//    public boolean appointOwner(Store s,String appointee){
+//        return s.addOwner(userName,appointee);
+//    }
+//    public boolean appointManager(Store s,String appointee){
+//        return s.addManager(userName,appointee);
+//    }
+//    public boolean changeManagerPermission(Store s,String manager, ManagementPermission p){
+//        return s.changeStoreManagersPermission(userName,manager,p);
+//    }
+
 
     @Override
     public String displayCart() {
@@ -102,13 +111,8 @@ public class Owner extends Member {
     }
 
     @Override
-    public boolean exitSys() {
-        return super.exitSys();
-    }
-
-    @Override
-    public void exitSystem() {
-        super.exitSystem();
+    public boolean exitSystem() {
+        return super.exitSystem();
     }
 
 //    @Override

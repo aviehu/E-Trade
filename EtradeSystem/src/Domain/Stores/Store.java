@@ -4,12 +4,14 @@ import Domain.purchaseOption;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class Store {
 
+    private boolean closedByAdmin;
     private String name;
     private String founderName;
     private int card;
@@ -18,6 +20,7 @@ public class Store {
     private int bidId;
     private int raffleId;
     private Inventory inventory;
+    private Map<String, managersPermission> managersPermissions;
     private PolicyManager policyManager;
     private StorePurchaseHistory storeHistory;
     private Map<String, List<String>> ownersAppointments;
@@ -46,6 +49,37 @@ public class Store {
         raffleId = 1;
         ReadWriteLock lock = new ReentrantReadWriteLock();
         invLock = lock.writeLock();
+        managersPermissions = new ConcurrentHashMap<>();
+        closedByAdmin = false;
+    }
+
+    public boolean hasLowPermission(String userName) {
+        if(isManager(userName) || isOwner(userName)) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean hasMidPermission(String userName) {
+        if(isOwner(userName) || (isManager(userName) && managersPermissions.get(userName) != managersPermission.LOW)) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean hasHighPermission(String userName) {
+        if(isOwner(userName) || (isManager(userName) && managersPermissions.get(userName) == managersPermission.HIGH)) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean changeStoreManagersPermission(String userName, String managerName, managersPermission newPermission){
+        if(!isOwner(userName) || !isManager(managerName) || !managersAppointments.get(userName).equals(managerName)) {
+            return false;
+        }
+        managersPermissions.computeIfPresent(managerName, (K, V) -> V = newPermission);
+        return true;
     }
 
     public String getName() {
@@ -65,8 +99,17 @@ public class Store {
     }
 
     public boolean closeStore(String name) {
-        if(isOwner(name) && !closed) {
+        if(isFounder(name) && !closed) {
             closed = true;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean adminCloseStore() {
+        if(!closed) {
+            closed = true;
+            closedByAdmin = true;
             return true;
         }
         return false;
@@ -151,7 +194,7 @@ public class Store {
     }
 
     public boolean setPurchaseOption(String userName, String productName, purchaseOption option) {
-        if(isOwner(userName)) {
+        if(hasMidPermission(userName)) {
             return inventory.setPurchaseOption(productName, option);
         }
         return false;
@@ -160,6 +203,7 @@ public class Store {
     public boolean addManager(String ownerName, String nameToAdd){
         if(!isManager(nameToAdd) && !isOwner(nameToAdd) && isOwner(ownerName)){
             managersAppointments.get(ownerName).add(nameToAdd);
+            managersPermissions.put(nameToAdd, managersPermission.LOW);
             return true;
         }
         return false;
@@ -184,9 +228,9 @@ public class Store {
         return policyManager.getTotalPrice(productsAmounts);
     }
 
-    public boolean addProduct(String ownerName, String name, int amount, double price, String category) {
-        if(isOwner(ownerName)) {
-            inventory.addProduct(name, amount, price, category);
+    public boolean addProduct(String userName, String productName, int amount, double price, String category) {
+        if(hasHighPermission(userName)) {
+            inventory.addProduct(productName, amount, price, category);
             return true;
         }
         return false;
@@ -241,24 +285,24 @@ public class Store {
         return inventory.canPurchase(prodName, quantity);
     }
 
-    public boolean removeProduct(String ownerName, String productName) {
-        if(isOwner(ownerName)) {
+    public boolean removeProduct(String userName, String productName) {
+        if(hasHighPermission(userName)) {
             inventory.removeProduct(productName);
             return true;
         }
         return false;
     }
 
-    public boolean changeProductName(String ownerName,String oldName, String newName){
-        if(isOwner(ownerName)) {
+    public boolean changeProductName(String userName,String oldName, String newName){
+        if(hasMidPermission(userName)) {
             inventory.changeProductName(oldName, newName);
             return true;
         }
         return false;
     }
 
-    public boolean changeProductPrice(String ownerName,String productName, double newPrice) {
-        if(isOwner(ownerName)) {
+    public boolean changeProductPrice(String userName,String productName, double newPrice) {
+        if(hasMidPermission(userName)) {
             inventory.changeProductPrice(productName, newPrice);
             return true;
         }
@@ -338,7 +382,7 @@ public class Store {
     }
 
     public boolean changeProductQuantity(String userName, String productName, int newQuantity) {
-        if(isOwner(userName)) {
+        if(hasMidPermission(userName)) {
             return inventory.changeProductQuantity(productName, newQuantity);
         }
         return false;
