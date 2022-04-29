@@ -4,6 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 
 public class GetStorePurchaseHistoryTest {
+    // wait for data base implementation
     @Before
     public void setUp() throws Exception {
     }
