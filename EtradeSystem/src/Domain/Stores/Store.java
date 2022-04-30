@@ -395,4 +395,8 @@ public class Store {
     public int getProductAmount(String prodName){
         return inventory.getProductByName(prodName).getAmount();
     }
+
+    public String getHistory() {
+        return storeHistory.getHistory();
+    }
 }

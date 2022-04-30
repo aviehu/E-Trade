@@ -176,4 +176,36 @@ public class StoresFacade {
         }
         return null;
     }
+
+    public String adminGetStorePurchaseHistory(String storeName) {
+        Store store = getStoreByName(storeName);
+        if(store != null) {
+            return store.getHistory();
+        }
+        return null;
+    }
+
+    public String getStoresManagement(String userName, String storeName) {
+        Store store = getStoreByName(storeName);
+        if(store != null) {
+            return store.getAllManagement(userName).toString();
+        }
+        return null;
+    }
+
+    public boolean closeStore(String storeName, String userName) {
+        Store store = getStoreByName(storeName);
+        if(store != null) {
+            return store.closeStore(userName);
+        }
+        return false;
+    }
+
+    public boolean changeStoreManagersPermission(String userName, String storeName, String managerName, managersPermission newPermission) {
+        Store store = getStoreByName(storeName);
+        if(store != null) {
+            return store.changeStoreManagersPermission(userName, managerName, newPermission);
+        }
+        return false;
+    }
 }
