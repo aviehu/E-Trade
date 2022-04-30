@@ -139,7 +139,8 @@ public class Facade implements SystemFacade {
                 return new ResultBool(false, "Invalid password\n password must be at least 8 characters and contain uppercase character\n");
             if (this.userController.isUserNameExist(newUserName))
                 return new ResultBool(false, "User name not available\n");
-            userController.signUp(newUserName, password);
+            String pass = this.externalSys.encode(password);
+            userController.signUp(newUserName, pass);
             return new ResultBool(true, null);
         }
         return new ResultBool(false, "User is not connected\n");
@@ -150,7 +151,8 @@ public class Facade implements SystemFacade {
         if(userController.isConnected(userName)) {
             if (!userController.isUserNameExist(memberUserName))
                 return new ResultBool(false, "Wrong user name");
-            if (userController.logIn(memberUserName, password)){
+            String pass = this.externalSys.encode(password);
+            if (userController.logIn(memberUserName, pass)){
                 this.myUserName = memberUserName;
                 return new ResultBool(true, null);
             }
@@ -350,7 +352,7 @@ public class Facade implements SystemFacade {
 
     @Override
     public ResultBool changePurchaseOption(String userName, String storeName, String productName, purchaseOption newOption) {
-        if(userController.isConnected(userName)){
+        if(userController.isConnected(userName) && userController.isUserNameExist(userName)){
             if(storesFacade.changePurchaseOption(userName, storeName, productName, newOption)) {
                 return new ResultBool(true, null);
             }
@@ -361,7 +363,7 @@ public class Facade implements SystemFacade {
 
     @Override
     public ResultBool appointStoreOwner(String userName, String storeName, String newOwner) {
-        if(userController.isConnected(userName)){
+        if(userController.isConnected(userName) && userController.isUserNameExist(userName)){
             if(storesFacade.appointStoreOwner(userName, storeName, newOwner)) {
                 return new ResultBool(true, null);
             }
