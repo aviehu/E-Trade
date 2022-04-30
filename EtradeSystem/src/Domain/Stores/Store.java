@@ -120,13 +120,13 @@ public class Store {
         if(policyManager.canPurchase(prods) && inventory.canPurchase(prods)) {
             invLock.lock();
             inventory.purchase(prods);
-            invLock.unlock();
             Map<Product, Integer> products = new HashMap<>();
             for(String productName : prods.keySet()) {
                 Product product = inventory.getProductByName(productName);
                 products.put(product, prods.get(productName));
             }
             storeHistory.addPurchase(policyManager.getTotalPrice(products), products, buyer);
+            invLock.unlock();
             return true;
         }
         return false;
