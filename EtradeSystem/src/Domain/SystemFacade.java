@@ -12,7 +12,7 @@ import java.time.LocalTime;
 
 public interface SystemFacade {
     public ResultBool removeMember(String userName,String memberToRemove);
-    public ResultBool enterSystem();
+    public ResultMsg enterSystem();
     public ResultBool addSystemManager(String userName,String managerToAdd);
     public ResultBool removeSystemManager(String userName,String managerToRemove);
 

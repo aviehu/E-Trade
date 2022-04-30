@@ -9,7 +9,7 @@ public class MainDomain {
         Facade facade = new Facade();
         facade.enterSystem();
         System.out.println(facade.getOnline());
-        ResultBool r = facade.login(facade.getOnline(),"member","member");
+        ResultBool r = facade.login(facade.getOnline(),"domain","domain");
         if(r.getVal())
             System.out.println("good");
         else
