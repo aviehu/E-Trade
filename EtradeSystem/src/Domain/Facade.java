@@ -460,17 +460,6 @@ public class Facade implements SystemFacade {
         return new ResultBool(false, "User Is Not Connected");
     }
 
-    @Override
-    public ResultBool addCategory(String userName, String productName, String storeName, String category) {
-        if(userController.isConnected(userName)) {
-            if(storesFacade.addCategory(userName, storeName, productName, category)) {
-                return new ResultBool(true, null);
-            }
-            return new ResultBool(false, "Cannot add category");
-        }
-        return new ResultBool(false, "User Is Not Connected");
-    }
-
     public ResultBool supplyServiceExists() {
         if(this.externalSys.isExistSupply())
             return new ResultBool(true, null);
