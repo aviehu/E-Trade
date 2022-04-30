@@ -16,8 +16,7 @@ public class LoginTest {
     @Before
     public void setUp() throws Exception {
         systemService = new SystemService();
-        systemService.enterSystem();
-        guestName = systemService.getOnline().getVal();
+        guestName = systemService.enterSystem().getVal();
         systemService.signUp(guestName, "newMember", "123").getVal();
     }
 
@@ -27,20 +26,14 @@ public class LoginTest {
 
     @Test
     public void loginSuccessTest() {
-        List<String> loggedInMembers = systemService.getLoggedMembers().getVal();
-        int numOfLoggedIn = loggedInMembers.size();
+        Assert.assertFalse(systemService.logOut("newMember").isSuccess());
         systemService.login(guestName, "newMember", "123");
-        Assert.assertTrue(numOfLoggedIn + 1 == systemService.getLoggedMembers().getVal().size());
-        Assert.assertTrue(systemService.getLoggedMembers().getVal().contains("newMember"));
+        Assert.assertTrue(systemService.logOut("newMember").isSuccess());
     }
 
     @Test
     public void loginFailTest() {
-        List<String> loggedInMembers = systemService.getLoggedMembers().getVal();
-        int numOfLoggedIn = loggedInMembers.size();
-        systemService.login(guestName, "newMember", "1234");
-        Assert.assertTrue(numOfLoggedIn == systemService.getLoggedMembers().getVal().size());
-        Assert.assertFalse(systemService.getLoggedMembers().getVal().contains("newMember"));
+        Assert.assertFalse(systemService.logOut("newMember").isSuccess());
     }
 }
 

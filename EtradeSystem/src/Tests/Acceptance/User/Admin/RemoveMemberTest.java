@@ -14,8 +14,7 @@ public class RemoveMemberTest {
     public void setUp() throws Exception {
 
         systemService = new SystemService();
-        systemService.enterSystem();
-        guestName = systemService.getOnline().getVal();
+        guestName = systemService.enterSystem().getVal();
         systemService.signUp(guestName, "Andalus", "100");
     }
 
@@ -25,11 +24,11 @@ public class RemoveMemberTest {
 
     @Test
     public void RemoveMemberSuccessTest() {
-        Assert.assertTrue(systemService.login(guestName, "Andalus", "100").isSuccess());
-        systemService.logOut("Andalus");
-        systemService.login(systemService.getOnline().getVal(), "domain", "domain");
+        Assert.assertTrue(systemService.login(guestName, "Andalus", "100").getVal());
+        guestName = systemService.logOut("Andalus").getVal();
+        systemService.login(guestName, "domain", "domain");
         systemService.removeMember("domain", "Andalus");
-        systemService.logOut("domain");
-        Assert.assertFalse((systemService.login(systemService.getOnline().getVal(), "Andalus", "100")));
+        guestName = systemService.logOut("domain").getVal();
+        Assert.assertFalse((systemService.login(guestName, "Andalus", "100").getVal()));
     }
 }

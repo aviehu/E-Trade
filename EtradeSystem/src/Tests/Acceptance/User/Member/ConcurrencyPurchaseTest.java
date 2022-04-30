@@ -17,8 +17,7 @@ public class ConcurrencyPurchaseTest {
     public void setUp() throws Exception {
         t1 = new Thread(){
             public void run(){
-                systemService.enterSystem();
-                String guestName = systemService.getOnline().getVal();
+                String guestName = systemService.enterSystem().getVal();
                 systemService.login(guestName, "Andalus", "100");
                 systemService.addProductToShoppingCart("Andalus", "Bamba", "Mega", 10);
                 systemService.purchase("Andalus", 123, LocalTime.MAX, 776,
@@ -28,8 +27,7 @@ public class ConcurrencyPurchaseTest {
 
         t2 = new Thread(){
             public void run(){
-                systemService.enterSystem();
-                String guestName = systemService.getOnline().getVal();
+                String guestName = systemService.enterSystem().getVal();
                 systemService.login(guestName, "Andalus2", "200");
                 systemService.addProductToShoppingCart("Andalus", "Bamba", "Mega", 10);
                 systemService.purchase("Andalus2", 123, LocalTime.MAX, 776,
@@ -37,8 +35,7 @@ public class ConcurrencyPurchaseTest {
             }
         };
         systemService = new SystemService();
-        systemService.enterSystem();
-        String guestName = systemService.getOnline().getVal();
+        String guestName = systemService.enterSystem().getVal();
         systemService.signUp(guestName, "Andalus", "100");
         systemService.signUp(guestName, "Andalus2", "200");
         systemService.signUp(guestName, "Seller", "123");

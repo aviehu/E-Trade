@@ -20,8 +20,7 @@ public class EnterSystemAsGuestTest {
 
     @Test
     public void EnterSystemAsGuestTest(){
-        systemService.enterSystem();
-        String name = systemService.getOnline().getVal();
+        String name = systemService.enterSystem().getVal();
         Assert.assertTrue(name.contains("guest"));
     }
 }

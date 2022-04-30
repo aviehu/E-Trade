@@ -14,9 +14,7 @@ public class SignUpTest {
     @Before
     public void setUp() throws Exception {
         systemService = new SystemService();
-        systemService.enterSystem();
-        String guestName0 = systemService.getOnline().getVal();
-        systemService.signUp(guestName0, "Andalus", "123");
+        guestName0 = systemService.enterSystem().getVal();
     }
 
     @After
@@ -25,22 +23,17 @@ public class SignUpTest {
 
     @Test
     public void signUpSuccessTest(){
-        int numOfMembers = systemService.getMembers().size();
-        systemService.enterSystem();
-        String guestName1 = systemService.getOnline().getVal();
-        systemService.signUp(guestName1, "newMember", "123").getVal();
-        Assert.assertTrue(numOfMembers + 1 == systemService.getMembers().size());
-        Assert.assertTrue( systemService.getMembers().contains("Andalus"));
-
+        Assert.assertFalse(systemService.login(guestName0, "Andalus", "100").isSuccess());
+        systemService.signUp(guestName0, "Andalus", "123");
+        Assert.assertTrue(systemService.login(guestName0, "Andalus", "100").isSuccess());
     }
 
     @Test
     public void signUpFailTest(){
-        int numOfMembers = systemService.getMembers().size();
-        systemService.enterSystem();
-        String guestName1 = systemService.getOnline().getVal();
-        systemService.signUp(guestName1,"Andalus", "123").getVal();
-        Assert.assertTrue(numOfMembers == systemService.getMembers().size());
-        Assert.assertTrue( systemService.getMembers().contains("Andalus"));
+        guestName0 = systemService.enterSystem().getVal();
+        systemService.signUp(guestName0,"Andalus", "100").getVal();
+        Assert.assertTrue(systemService.login(guestName0, "Andalus", "100").isSuccess());
+        systemService.signUp(guestName0,"Andalus", "90").getVal();
+        Assert.assertTrue(systemService.login(guestName0, "Andalus", "90").isSuccess());
     }
 }

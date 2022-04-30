@@ -15,8 +15,7 @@ public class PurchaseCartTest {
     @Before
     public void setUp() throws Exception {
         systemService = new SystemService();
-        systemService.enterSystem();
-        String guestName = systemService.getOnline().getVal();
+        String guestName = systemService.enterSystem().getVal();
         systemService.signUp(guestName, "Andalus", "100");
         systemService.login(guestName, "Andalus", "100");
         systemService.openStore("Andalus", "Mega", 123);
@@ -30,20 +29,21 @@ public class PurchaseCartTest {
 
     @Test
     public void purchaseCartSuccessTest(){
-        systemService.purchase("Andalus", 123, LocalTime.MAX, 776,
-                "Beer-Sheva", "Andalus", 7, 7);
+        systemService.addProductToShoppingCart("Andalus", "Bamba", "Mega", 10);
+        Assert.assertTrue(systemService.purchase("Andalus", 123, LocalTime.MAX, 776,
+                "BeerSheva", "Andalus", 7, 7).isSuccess());
         Assert.assertEquals("", systemService.displayShoppingCart("Andalus").getVal());
-        Assert.assertEquals(90, systemService.getProductAmount("Mega", "Bamba"));
+        Assert.assertEquals(90, systemService.getProductAmount("Mega", "Bamba").getVal());
     }
 
     @Test
     public void purchaseCartFailTest(){
         String cart = systemService.displayShoppingCart("Andalus").getVal();
-        int prodAmount = systemService.getProductAmount("Mega", "Bamba");
+        int prodAmount = systemService.getProductAmount("Mega", "Bamba").getVal();
         systemService.addProductToShoppingCart("Andalus", "Bamba", "Mega", 200);
         systemService.purchase("Andalus", 123, LocalTime.MAX, 776,
                 "Beer-Sheva", "Andalus", 7, 7);
         Assert.assertEquals(cart, systemService.displayShoppingCart("Andalus").getVal());
-        Assert.assertEquals(prodAmount, systemService.getProductAmount("Mega", "Bamba"));
+        Assert.assertEquals(prodAmount, systemService.getProductAmount("Mega", "Bamba").getVal());
     }
 }

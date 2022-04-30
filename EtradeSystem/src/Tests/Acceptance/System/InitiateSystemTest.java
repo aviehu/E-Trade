@@ -20,13 +20,13 @@ public class InitiateSystemTest {
     @Test
     public void atLeastOneAdmin(){
         systemService.init();
-        Assert.assertTrue(systemService.getAdmins().size() > 0);
+        Assert.assertTrue(systemService.hasAdmin().getVal());
     }
 
     @Test
     public void externalServicesConnected(){
         systemService.init();
-        Assert.assertTrue(systemService.supplyServiceExists());
-        Assert.assertTrue(systemService.paymentServiceExists());
+        Assert.assertTrue(systemService.supplyServiceExists().getVal());
+        Assert.assertTrue(systemService.paymentServiceExists().getVal());
     }
 }

@@ -13,8 +13,7 @@ public class AppointNewManagerTest {
     @Before
     public void setUp() throws Exception {
         systemService = new SystemService();
-        systemService.enterSystem();
-        String guestName = systemService.getOnline().getVal();
+        String guestName = systemService.enterSystem().getVal();
         systemService.signUp(guestName, "Mira", "200");
         systemService.signUp(guestName, "Andalus", "100");
         systemService.login(guestName, "Andalus", "100");
@@ -27,14 +26,11 @@ public class AppointNewManagerTest {
 
     @Test
     public void AppointNewManagerSuccessTest(){
-        systemService.logOut("Andalus");
-        systemService.enterSystem();
-        String guestName = systemService.getOnline().getVal();
+        String guestName = systemService.enterSystem().getVal();
         systemService.login(guestName, "Mira", "200");
         Assert.assertFalse(systemService.addProductToStore("Mira", "Mega", "Bamba", 20, 5, "snacks").isSuccess());
         systemService.logOut("Mira");
-        systemService.enterSystem();
-        guestName = systemService.getOnline().getVal();
+        guestName = systemService.enterSystem().getVal();
         systemService.login(guestName, "Andalus", "100");
         systemService.appointStoreManager("Andalus", "Mega", "Mira");
         Assert.assertTrue(systemService.addProductToStore("Mira", "Mega", "Bamba", 20, 5, "snacks").isSuccess());
