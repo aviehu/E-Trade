@@ -387,4 +387,7 @@ public class Store {
         }
         return false;
     }
+    public int getProductAmount(String prodName){
+        return inventory.getProductByName(prodName).getAmount();
+    }
 }

@@ -7,6 +7,7 @@ import Domain.Users.ExternalService.Supply.SupplyAdaptee;
 import Domain.purchaseOption;
 import Service.ResultPackge.ResultBool;
 import Service.ResultPackge.ResultMsg;
+import Service.ResultPackge.ResultNum;
 
 import java.time.LocalTime;
 
@@ -225,5 +226,8 @@ public class SystemService implements ServiceInterface {
 
     public String getOnline() {
         return facade.getOnline();
+    }
+    public ResultNum getProductAmount(String storeName, String prodName){
+        return facade.getProductAmount(storeName,prodName);
     }
 }
