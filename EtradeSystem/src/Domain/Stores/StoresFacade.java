@@ -208,4 +208,13 @@ public class StoresFacade {
         }
         return false;
     }
+
+    public boolean addKeyword(String userName, String storeName, String productName, String keyWord) {
+        Store store = getStoreByName(storeName);
+        if(store != null) {
+            return store.addKeywordToProduct(userName, productName, keyWord);
+        }
+        return false;
+    }
+
 }
