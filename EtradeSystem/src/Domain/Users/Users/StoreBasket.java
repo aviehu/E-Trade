@@ -56,7 +56,7 @@ public class StoreBasket {
         display += "**"+store.getName()+"**\n\n";
         display += "\tProduct\tQuantity\tTotal Price\n";
         for(String p : prods.keySet()){
-            //display += "\t"+p+"\t"+prods.get(p)+"\t"+ (store.getProd(p).getPrice()*prods.get(p))+"\n";
+            display += "\t"+p+"\t"+prods.get(p)+"\t"+"\n";
         }
         return display;
     }
