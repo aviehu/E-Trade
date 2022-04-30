@@ -131,8 +131,11 @@ public class Store {
         return false;
     }
 
-    public String getHistory() {
-        return storeHistory.getHistory();
+    public String getHistory(String userName) {
+        if(hasLowPermission(userName)) {
+            return storeHistory.getHistory();
+        }
+        return null;
     }
 
     public boolean startAuction(double startingPrice, LocalDate auctionEnd, String productName) {
@@ -230,8 +233,7 @@ public class Store {
 
     public boolean addProduct(String userName, String productName, int amount, double price, String category) {
         if(hasHighPermission(userName)) {
-            inventory.addProduct(productName, amount, price, category);
-            return true;
+            return inventory.addProduct(productName, amount, price, category);
         }
         return false;
     }
