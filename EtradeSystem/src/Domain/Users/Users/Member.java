@@ -67,6 +67,7 @@ public class Member extends User{
             }
             myShopCart.finishPurchase();
             return true;
+
         }
         else
             return false;
