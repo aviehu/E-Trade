@@ -33,10 +33,11 @@ public class Store {
     public Store(String storeName, String founderName,int card) {
         name = storeName;
         inventory = new Inventory();
-        founderName = founderName;
+        this.founderName = founderName;
         ownersAppointments = new HashMap<>();
         ownersAppointments.put(founderName, new LinkedList<>());
         managersAppointments = new HashMap<>();
+        managersAppointments.put(founderName, new LinkedList<>());
         policyManager = new PolicyManager();
         this.card = card;
         bids = new LinkedList<>();
@@ -320,9 +321,8 @@ public class Store {
     }
 
     public boolean addKeywordToProduct(String ownerName, String productName, String keyword) {
-        if(isOwner(ownerName)) {
-            inventory.addKeyWordToProduct(productName, keyword);
-            return true;
+        if(hasMidPermission(ownerName)) {
+            return inventory.addKeyWordToProduct(productName, keyword);
         }
         return false;
     }
@@ -399,4 +399,5 @@ public class Store {
     public String getHistory() {
         return storeHistory.getHistory();
     }
+
 }
