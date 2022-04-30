@@ -350,7 +350,7 @@ public class Facade implements SystemFacade {
 
     @Override
     public ResultBool changePurchaseOption(String userName, String storeName, String productName, purchaseOption newOption) {
-        if(userController.isConnected(userName)){
+        if(userController.isConnected(userName) && userController.isUserNameExist(userName)){
             if(storesFacade.changePurchaseOption(userName, storeName, productName, newOption)) {
                 return new ResultBool(true, null);
             }
@@ -361,7 +361,7 @@ public class Facade implements SystemFacade {
 
     @Override
     public ResultBool appointStoreOwner(String userName, String storeName, String newOwner) {
-        if(userController.isConnected(userName)){
+        if(userController.isConnected(userName) && userController.isUserNameExist(userName)){
             if(storesFacade.appointStoreOwner(userName, storeName, newOwner)) {
                 return new ResultBool(true, null);
             }

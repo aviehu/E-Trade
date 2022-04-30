@@ -43,7 +43,7 @@ public class Product {
     }
 
     public boolean addKeyword(String keyword) {
-        if(!keyword.contains(keyword)) {
+        if(!keywords.contains(keyword)) {
             keywords.add(keyword);
             return true;
         }
@@ -51,7 +51,7 @@ public class Product {
     }
 
     public boolean removeKeyword(String keyword) {
-        if(keyword.contains(keyword)) {
+        if(keywords.contains(keyword)) {
             keywords.remove(keyword);
             return true;
         }
