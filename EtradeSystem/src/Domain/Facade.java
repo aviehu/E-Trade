@@ -13,6 +13,7 @@ import Service.ResultPackge.ResultBool;
 import Service.ResultPackge.ResultMsg;
 import Service.ResultPackge.ResultNum;
 
+import java.sql.ResultSet;
 import java.time.LocalTime;
 
 public class Facade implements SystemFacade {
@@ -382,17 +383,30 @@ public class Facade implements SystemFacade {
 
     @Override
     public ResultBool changeStoreManagersPermission(String userName, String storeName, String managerName, managersPermission newPermission) {
-        return new ResultBool(false, null);
+        if(storesFacade.changeStoreManagersPermission(userName, storeName, managerName, newPermission) && userController.isConnected(userName)){
+            return new ResultBool(true, null);
+        }
+        return new ResultBool(false , "Cannot Close Store");
     }
 
     @Override
     public ResultBool closeStore(String userName, String storeName) {
-        return new ResultBool(false, null);
+        if(storesFacade.closeStore(storeName, userName) && userController.isConnected(userName)){
+            return new ResultBool(true, null);
+        }
+        return new ResultBool(false , "Cannot Close Store");
     }
 
     @Override
     public ResultMsg getStoresManagement(String userName, String storeName) {
-        return new ResultMsg("", null);
+        if(userController.isConnected(userName)) {
+            String result = storesFacade.getStoresManagement(userName, storeName);
+            if(result != null) {
+                return new ResultMsg(result, null);
+            }
+            return new ResultMsg("", "Could Not Get Stores Management");
+        }
+        return new ResultMsg("", "User is Not Connected");
     }
 
     @Override
@@ -417,13 +431,24 @@ public class Facade implements SystemFacade {
 
     @Override
     public ResultBool adminTerminateUser(String adminName, String userToTerminate) {
-        return new ResultBool(false, null);
+        if(userController.removeMember(adminName, userToTerminate)) {
+            return new ResultBool(true, null);
+        }
+        return new ResultBool(false, "Could not remove member");
     }
 
     @Override
-    public ResultBool adminGetStoresPurchaseHistory(String adminName, String storeName) {
-        return new ResultBool(false, null);
+    public ResultMsg adminGetStoresPurchaseHistory(String adminName, String storeName) {
+        if(userController.isUserSysManager(adminName)) {
+            String result = storesFacade.adminGetStorePurchaseHistory(storeName);
+            if(result != null) {
+                return new ResultMsg(result, null);
+            }
+            return new ResultMsg("", "Could Not Get Stores Purchase History");
+        }
+        return new ResultMsg("", "User is not admin");
     }
+
     public ResultBool supplyServiceExists() {
         if(this.externalSys.isExistSupply())
             return new ResultBool(true, null);
