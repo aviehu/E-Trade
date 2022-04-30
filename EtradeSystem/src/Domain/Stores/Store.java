@@ -28,7 +28,6 @@ public class Store {
     private List<Raffle> raffles;
     private List<Bid> bids;
     private List<Auction> auctions;
-    private Lock invLock;
 
     public Store(String storeName, String founderName,int card) {
         name = storeName;
@@ -48,8 +47,6 @@ public class Store {
         auctionId = 1;
         bidId = 1;
         raffleId = 1;
-        ReadWriteLock lock = new ReentrantReadWriteLock();
-        invLock = lock.writeLock();
         managersPermissions = new ConcurrentHashMap<>();
         closedByAdmin = false;
     }
@@ -116,9 +113,8 @@ public class Store {
         return false;
     }
 
-    public boolean purchase(Map<String,Integer> prods, String buyer){
+    public synchronized boolean purchase(Map<String,Integer> prods, String buyer){
         if(policyManager.canPurchase(prods) && inventory.canPurchase(prods)) {
-            invLock.lock();
             inventory.purchase(prods);
             Map<Product, Integer> products = new HashMap<>();
             for(String productName : prods.keySet()) {
@@ -126,7 +122,6 @@ public class Store {
                 products.put(product, prods.get(productName));
             }
             storeHistory.addPurchase(policyManager.getTotalPrice(products), products, buyer);
-            invLock.unlock();
             return true;
         }
         return false;
