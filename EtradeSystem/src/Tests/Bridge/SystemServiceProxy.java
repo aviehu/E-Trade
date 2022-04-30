@@ -239,56 +239,78 @@ public class SystemServiceProxy implements ServiceInterface {
 
     @Override
     public ResultBool editProductQuantity(String userName, String storeName, String ProductName, int newQuantity) {
-        return null;
+        if (real == null)
+            throw new NotImplementedException();
+        return real.editProductQuantity(userName, storeName, ProductName, newQuantity);
     }
 
     @Override
     public ResultBool changePurchaseOption(String userName, String storeName, String ProductName, purchaseOption newOption) {
-        return null;
+        if (real == null)
+            throw new NotImplementedException();
+        return real.changePurchaseOption(userName, storeName, ProductName, newOption);
     }
 
     @Override
     public ResultBool appointStoreOwner(String userName, String storeName, String newOwner) {
-        return null;
+        if (real == null)
+            throw new NotImplementedException();
+        return real.appointStoreOwner(userName, storeName, newOwner);
     }
 
     @Override
     public ResultBool appointStoreManager(String userName, String storeName, String newManager) {
-        return null;
+        if (real == null)
+            throw new NotImplementedException();
+        return real.appointStoreManager(userName, storeName, newManager);
     }
 
     @Override
     public ResultBool changeStoreManagersPermission(String userName, String storeName, String managerName, managersPermission newPermission) {
-        return null;
+        if (real == null)
+            throw new NotImplementedException();
+        return real.changeStoreManagersPermission(userName, storeName, managerName, newPermission);
     }
 
     @Override
     public ResultBool closeStore(String userName, String storeName) {
-        return null;
+        if (real == null)
+            throw new NotImplementedException();
+        return real.closeStore(userName, storeName);
     }
 
     @Override
     public ResultMsg getStoresManagement(String userName, String storeName) {
-        return null;
+        if (real == null)
+            throw new NotImplementedException();
+        return real.getStoresManagement(userName, storeName);
     }
 
     @Override
     public ResultMsg getStoresPurchaseHistory(String userName, String storeName) {
-        return null;
+        if (real == null)
+            throw new NotImplementedException();
+        return real.getStoresPurchaseHistory(userName, storeName);
     }
 
     @Override
     public ResultBool adminCloseStorePermanently(String adminName, String storeName) {
-        return null;
+        if (real == null)
+            throw new NotImplementedException();
+        return real.adminCloseStorePermanently(adminName, storeName);
     }
 
     @Override
     public ResultBool adminTerminateUser(String adminName, String userToTerminate) {
-        return null;
+        if (real == null)
+            throw new NotImplementedException();
+        return real.adminTerminateUser(adminName, userToTerminate);
     }
 
     @Override
     public ResultBool adminGetStoresPurchaseHistory(String adminName, String storeName) {
-        return null;
+        if (real == null)
+            throw new NotImplementedException();
+        return real.adminGetStoresPurchaseHistory(adminName, storeName);
     }
 }

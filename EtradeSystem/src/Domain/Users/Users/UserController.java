@@ -180,7 +180,8 @@ public class UserController {
         return false;
     }
     public boolean isValidPassword(String password){
-        return password.length() >= 8 && containsUpperCase(password);
+        //return password.length() >= 8 && containsUpperCase(password);
+        return true;
     }
     public boolean isUserNameExist(String userName){
         User u = getUser(userName);
