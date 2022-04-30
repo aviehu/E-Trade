@@ -33,7 +33,8 @@ public class ShoppingCart {
 
             for(StoreBasket b : baskets){
                 extSystems.pay(cardFrom,expDate,cvv,b.getTotalPrice(),b.getStore().getCard());
-                b.purchase(userName);
+                if(!b.purchase(userName))
+                    return false;
                 }
             return true;
             }
