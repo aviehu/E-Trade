@@ -165,4 +165,7 @@ public class StoresFacade {
         }
         return null;
     }
+    public int getProductAmount(String storeName,String prodName){
+        return getStore(storeName).getProductAmount(prodName);
+    }
 }

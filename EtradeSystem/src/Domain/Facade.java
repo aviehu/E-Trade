@@ -11,6 +11,7 @@ import Domain.Users.Users.UserController;
 import Service.ResultPackge.Result;
 import Service.ResultPackge.ResultBool;
 import Service.ResultPackge.ResultMsg;
+import Service.ResultPackge.ResultNum;
 
 import java.time.LocalTime;
 
@@ -435,7 +436,10 @@ public class Facade implements SystemFacade {
         return this.myUserName;
     }
 
-
+    public ResultNum getProductAmount(String storeName, String prodName){
+        int amount = this.storesFacade.getProductAmount(storeName,prodName);
+        return new ResultNum(amount,null);
+    }
 
 
 }
