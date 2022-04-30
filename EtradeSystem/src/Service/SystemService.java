@@ -39,7 +39,7 @@ public class SystemService implements ServiceInterface {
     }
 
     @Override
-    public ResultBool enterSystem() {
+    public ResultMsg enterSystem() {
         return facade.enterSystem();
     }
 
@@ -139,7 +139,7 @@ public class SystemService implements ServiceInterface {
     }
 
     @Override
-    public ResultBool logOut(String userName) {
+    public ResultMsg logOut(String userName) {
         return facade.logOut(userName);
     }
 

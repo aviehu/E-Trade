@@ -20,7 +20,7 @@ public interface ServiceInterface {
 
     public ResultBool removeMember(String userName, String memberToRemove);
 
-    public ResultBool enterSystem();
+    public ResultMsg enterSystem();
 
     public ResultBool addSystemManager(String userName, String managerToAdd);
 
@@ -64,7 +64,7 @@ public interface ServiceInterface {
 
     public ResultBool purchase(String userName, int card, LocalTime expDate, int cvv, String city, String street, int stNum, int apartmentNum);
 
-    public ResultBool logOut(String userName);
+    public ResultMsg logOut(String userName);
 
     public ResultBool openStore(String founderName, String storeName, int card);
 
