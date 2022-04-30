@@ -12,8 +12,7 @@ public class StoreInfoTest {
     @Before
     public void setUp() throws Exception {
         systemService = new SystemService();
-        systemService.enterSystem();
-        String guestName1 = systemService.getOnline().getVal();
+        String guestName1 = systemService.enterSystem().getVal();
         systemService.signUp(guestName1,"Andalus", "100");
         systemService.login(guestName1,"Andalus", "100");
         systemService.openStore("Andalus", "Mega", 123);

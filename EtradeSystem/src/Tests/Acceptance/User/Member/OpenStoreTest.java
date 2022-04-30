@@ -12,8 +12,7 @@ public class OpenStoreTest {
     @org.junit.Before
     public void setUp() throws Exception {
         systemService = new SystemService();
-        systemService.enterSystem();
-        String guestName = systemService.getOnline().getVal();
+        String guestName = systemService.enterSystem().getVal();
         systemService.signUp(guestName, "Andalus", "100");
         systemService.login(guestName, "Andalus", "100");
     }

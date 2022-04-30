@@ -7,7 +7,7 @@ public class Driver {
 
     public ServiceInterface getService(){
         SystemServiceProxy proxy = new SystemServiceProxy();
-        //proxy.setReal(new SystemService());
+        proxy.setReal(new SystemService());
         return proxy;
     }
 }

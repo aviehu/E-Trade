@@ -13,8 +13,7 @@ public class AppointNewOwnerTest {
     @Before
     public void setUp() throws Exception {
         systemService = new SystemService();
-        systemService.enterSystem();
-        String guestName = systemService.getOnline().getVal();
+        String guestName = systemService.enterSystem().getVal();
         systemService.signUp(guestName, "Mira", "200");
         systemService.signUp(guestName, "Andalus", "100");
         systemService.signUp(guestName, "Andalus2", "102");
@@ -30,13 +29,11 @@ public class AppointNewOwnerTest {
     @Test
     public void AppointNewOwnerSuccessTest(){
         systemService.logOut("Andalus");
-        systemService.enterSystem();
-        String guestName = systemService.getOnline().getVal();
+        String guestName = systemService.enterSystem().getVal();
         systemService.login(guestName, "Mira", "200");
         Assert.assertFalse(systemService.appointStoreOwner("Mira", "Mega", "Andalus1").isSuccess());
         systemService.logOut("Mira");
-        systemService.enterSystem();
-        guestName = systemService.getOnline().getVal();
+        guestName = systemService.enterSystem().getVal();
         systemService.login(guestName, "Andalus", "100");
         systemService.appointStoreOwner("Andalus", "Mega", "Mira");
         Assert.assertTrue(systemService.appointStoreOwner("Mira", "Mega", "Andalus1").isSuccess());

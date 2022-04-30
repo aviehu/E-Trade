@@ -1,6 +1,7 @@
 package Tests.Acceptance.User.Member;
 
 import Service.SystemService;
+import Tests.Bridge.Driver;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -14,8 +15,7 @@ public class LogoutTest {
     @Before
     public void setUp() throws Exception {
         systemService = new SystemService();
-        systemService.enterSystem();
-        guestName = systemService.getOnline().getVal();
+        guestName = systemService.enterSystem().getVal();
         systemService.signUp(guestName, "newMember", "123").getVal();
         systemService.login(guestName, "newMember", "123");
     }
@@ -26,20 +26,13 @@ public class LogoutTest {
 
     @Test
     public void logoutSuccessTest() {
-        List<String> loggedInMembers = systemService.getLoggedMembers().getVal();
-        int numOfLoggedIn = loggedInMembers.size();
-        systemService.logOut("newMember");
-        Assert.assertTrue(numOfLoggedIn - 1 == systemService.getLoggedMembers().getVal().size());
-        Assert.assertFalse(systemService.getLoggedMembers().getVal().contains("newMember"));
+        Assert.assertTrue(systemService.logOut("newMember").isSuccess());
     }
 
     @Test
     public void logoutFailTest() {
-        systemService.login(systemService.getOnline().getVal(), "newMember", "123");
-        List<String> loggedInMembers = systemService.getLoggedMembers().getVal();
-        int numOfLoggedIn = loggedInMembers.size();
-        systemService.logOut("Andalus");
-        Assert.assertTrue(numOfLoggedIn == systemService.getLoggedMembers().getVal().size());
-        Assert.assertTrue(systemService.getLoggedMembers().getVal().contains("newMember"));
+        Assert.assertFalse(systemService.logOut("Andalus").isSuccess());
+        Assert.assertTrue(systemService.logOut("newMember").isSuccess());
+        Assert.assertFalse(systemService.logOut("newMember").isSuccess());
     }
 }
