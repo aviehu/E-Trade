@@ -397,12 +397,22 @@ public class Facade implements SystemFacade {
 
     @Override
     public ResultMsg getStoresPurchaseHistory(String userName, String storeName) {
-        return new ResultMsg("", null);
+        if(userController.isConnected(userName)) {
+            String result = storesFacade.getStorePurchaseHistory(userName, storeName);
+            if(result != null) {
+                return new ResultMsg(result, null);
+            }
+            return new ResultMsg("", "Cannot Get Stores Purchase History");
+        }
+        return new ResultMsg("", "User Is Not Connected");
     }
 
     @Override
     public ResultBool adminCloseStorePermanently(String adminName, String storeName) {
-        return new ResultBool(false, null);
+        if(storesFacade.adminCloseStore(storeName) && userController.isUserSysManager(adminName)){
+            return new ResultBool(true, null);
+        }
+        return new ResultBool(false , "Cannot Close Store Permanently");
     }
 
     @Override

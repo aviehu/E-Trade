@@ -168,4 +168,12 @@ public class StoresFacade {
     public int getProductAmount(String storeName,String prodName){
         return getStore(storeName).getProductAmount(prodName);
     }
+
+    public String getStorePurchaseHistory(String userName, String storeName) {
+        Store store = getStoreByName(storeName);
+        if(store != null) {
+            return store.getHistory(userName);
+        }
+        return null;
+    }
 }
