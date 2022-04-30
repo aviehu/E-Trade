@@ -308,9 +308,16 @@ public class SystemServiceProxy implements ServiceInterface {
     }
 
     @Override
-    public ResultBool adminGetStoresPurchaseHistory(String adminName, String storeName) {
+    public ResultMsg adminGetStoresPurchaseHistory(String adminName, String storeName) {
         if (real == null)
             throw new NotImplementedException();
         return real.adminGetStoresPurchaseHistory(adminName, storeName);
+    }
+
+    @Override
+    public ResultBool addKeyword(String userName, String productName, String storeName, String keyWord) {
+        if (real == null)
+            throw new NotImplementedException();
+        return real.addKeyword(userName, productName, storeName, keyWord);
     }
 }

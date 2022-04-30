@@ -290,8 +290,7 @@ public class Store {
 
     public boolean removeProduct(String userName, String productName) {
         if(hasHighPermission(userName)) {
-            inventory.removeProduct(productName);
-            return true;
+            return inventory.removeProduct(productName);
         }
         return false;
     }

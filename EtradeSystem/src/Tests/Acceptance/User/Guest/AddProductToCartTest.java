@@ -28,6 +28,7 @@ public class AddProductToCartTest {
         String cartInfo = systemService.displayShoppingCart("Andalus").getVal();
         Assert.assertFalse(cartInfo.contains("Bamba"));
         systemService.addProductToShoppingCart("Andalus", "Bamba", "Mega", 5);
+        System.out.println(systemService.displayShoppingCart("Andalus").getVal());
         Assert.assertTrue(systemService.displayShoppingCart("Andalus").getVal().contains("Bamba"));
     }
 

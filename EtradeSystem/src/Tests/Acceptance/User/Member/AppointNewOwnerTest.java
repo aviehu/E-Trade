@@ -28,15 +28,10 @@ public class AppointNewOwnerTest {
 
     @Test
     public void AppointNewOwnerSuccessTest(){
-        systemService.logOut("Andalus");
-        String guestName = systemService.enterSystem().getVal();
+        Assert.assertTrue(systemService.appointStoreOwner("Andalus", "Mega", "Mira").isSuccess());
+        String guestName = systemService.logOut("Andalus").getVal();
         systemService.login(guestName, "Mira", "200");
-        Assert.assertFalse(systemService.appointStoreOwner("Mira", "Mega", "Andalus1").isSuccess());
-        systemService.logOut("Mira");
-        guestName = systemService.enterSystem().getVal();
-        systemService.login(guestName, "Andalus", "100");
-        systemService.appointStoreOwner("Andalus", "Mega", "Mira");
-        Assert.assertTrue(systemService.appointStoreOwner("Mira", "Mega", "Andalus1").isSuccess());
+        Assert.assertTrue(systemService.appointStoreOwner("Mira", "Mega", "Andalus2").isSuccess());
     }
 
     @Test

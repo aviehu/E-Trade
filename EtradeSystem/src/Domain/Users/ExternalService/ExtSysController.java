@@ -19,6 +19,7 @@ public class ExtSysController {
     private ExtSysController() {
         payment = new MyPaymentSys();
         supply = new mySupplySys();
+        security = new mySecuritySys();
     }
 
     public static ExtSysController getInstance(){

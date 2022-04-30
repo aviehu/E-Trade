@@ -31,7 +31,7 @@ public class CloseStoreTest {
 
     @Test
     public void closeStoreFailTest(){
-        Assert.assertFalse(systemService.getStoreInfo("Andalus", "Mega").isSuccess());
+        Assert.assertTrue(systemService.getStoreInfo("Andalus", "Mega").isSuccess());
         systemService.closeStore("Andalus", "Mega");
         Assert.assertFalse(systemService.getStoreInfo("Andalus", "Mega").isSuccess());
     }

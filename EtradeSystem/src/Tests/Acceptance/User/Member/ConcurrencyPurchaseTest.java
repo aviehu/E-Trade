@@ -17,21 +17,15 @@ public class ConcurrencyPurchaseTest {
     public void setUp() throws Exception {
         t1 = new Thread(){
             public void run(){
-                String guestName = systemService.enterSystem().getVal();
-                systemService.login(guestName, "Andalus", "100");
-                systemService.addProductToShoppingCart("Andalus", "Bamba", "Mega", 10);
                 systemService.purchase("Andalus", 123, LocalTime.MAX, 776,
-                        "Beer-Sheva", "Andalus", 7, 7);
+                        "BeerSheva", "Andalusia", 7, 7);
             }
         };
 
         t2 = new Thread(){
             public void run(){
-                String guestName = systemService.enterSystem().getVal();
-                systemService.login(guestName, "Andalus2", "200");
-                systemService.addProductToShoppingCart("Andalus", "Bamba", "Mega", 10);
                 systemService.purchase("Andalus2", 123, LocalTime.MAX, 776,
-                        "Beer-Sheva", "Andalus", 7, 7);
+                        "BeerSheva", "Andalusia", 7, 7);
             }
         };
         systemService = new SystemService();
@@ -43,6 +37,10 @@ public class ConcurrencyPurchaseTest {
         systemService.openStore("Seller", "Mega", 123);
         systemService.addProductToStore("Seller", "Mega",
                 "Bamba", 10, 5,"snacks");
+        systemService.login("Seller", "Andalus", "100");
+        systemService.addProductToShoppingCart("Andalus", "Bamba", "Mega", 10);
+        systemService.login("Seller", "Andalus2", "200");
+        systemService.addProductToShoppingCart("Andalus2", "Bamba", "Mega", 10);
     }
 
     @After
@@ -56,11 +54,13 @@ public class ConcurrencyPurchaseTest {
         try {
             t1.join();
             t2.join();
-        } catch (InterruptedException ignored) {
-        }
-        Assert.assertEquals(systemService.getProductAmount("Mega", "Bamba"), 0);
-        Assert.assertTrue(systemService.displayShoppingCart("Andalus").getVal().equals("") ^
-                          systemService.displayShoppingCart("Andalus2").getVal().equals(""));
+
+        } catch (InterruptedException ignored) {}
+        Assert.assertEquals(0, systemService.getProductAmount("Mega", "Bamba").getVal());
+        System.out.println(systemService.displayShoppingCart("Andalus").getVal());
+        System.out.println(systemService.displayShoppingCart("Andalus2").getVal());
+        Assert.assertTrue(systemService.displayShoppingCart("Andalus").getVal().contains("Bamba") ^
+                          systemService.displayShoppingCart("Andalus2").getVal().contains("Bamba"));
     }
 
 }

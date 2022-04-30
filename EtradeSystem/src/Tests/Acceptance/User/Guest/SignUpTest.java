@@ -24,7 +24,7 @@ public class SignUpTest {
     @Test
     public void signUpSuccessTest(){
         Assert.assertFalse(systemService.login(guestName0, "Andalus", "100").isSuccess());
-        systemService.signUp(guestName0, "Andalus", "123");
+        systemService.signUp(guestName0, "Andalus", "100");
         Assert.assertTrue(systemService.login(guestName0, "Andalus", "100").isSuccess());
     }
 
@@ -33,7 +33,6 @@ public class SignUpTest {
         guestName0 = systemService.enterSystem().getVal();
         systemService.signUp(guestName0,"Andalus", "100").getVal();
         Assert.assertTrue(systemService.login(guestName0, "Andalus", "100").isSuccess());
-        systemService.signUp(guestName0,"Andalus", "90").getVal();
-        Assert.assertTrue(systemService.login(guestName0, "Andalus", "90").isSuccess());
+        Assert.assertFalse(systemService.signUp(guestName0,"Andalus", "90").isSuccess());
     }
 }
