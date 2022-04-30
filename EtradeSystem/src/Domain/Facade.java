@@ -8,6 +8,7 @@ import Domain.Users.ExternalService.Payment.PaymentAdaptee;
 import Domain.Users.ExternalService.Supply.SupplyAdaptee;
 import Domain.Users.Users.SystemManager;
 import Domain.Users.Users.UserController;
+import Service.ResultPackge.Result;
 import Service.ResultPackge.ResultBool;
 import Service.ResultPackge.ResultMsg;
 
@@ -17,12 +18,12 @@ public class Facade implements SystemFacade {
     private StoresFacade storesFacade;
     private UserController userController;
     private ExtSysController externalSys;
+    private String myUserName;
 
     public Facade() {
         storesFacade = new StoresFacade();
         userController = new UserController();
         externalSys = ExtSysController.getInstance();
-
     }
 
 
@@ -38,10 +39,13 @@ public class Facade implements SystemFacade {
     }
 
     @Override
-    public ResultBool enterSystem() {
-        if(userController.enterSystem())
-            return new ResultBool(true,null);
-        return new ResultBool(false,"Cant enter System");
+    public ResultMsg enterSystem() {
+        String userName = userController.enterSystem();
+        if(userName != null) {
+            this.myUserName = userName;
+            return new ResultMsg(userName, null);
+        }
+        return new ResultMsg(null,"Cant enter System");
     }
 
     @Override
@@ -144,8 +148,11 @@ public class Facade implements SystemFacade {
         if(userController.isConnected(userName)) {
             if (!userController.isUserNameExist(memberUserName))
                 return new ResultBool(false, "Wrong user name");
-            if (userController.logIn(memberUserName, password))
+            if (userController.logIn(memberUserName, password)){
+                this.myUserName = memberUserName;
                 return new ResultBool(true, null);
+            }
+
             return new ResultBool(false, "Wrong password");
         }
         return new ResultBool(false, "User is not connected\n");
@@ -262,8 +269,12 @@ public class Facade implements SystemFacade {
     @Override
     public ResultBool logOut(String userName) {
         if (userController.isConnected(userName)){
-            if(userController.logOut(userName))
+            String us = userController.logOut(userName);
+            if(us != null){
+                this.myUserName = us;
                 return new ResultBool(true,null);
+            }
+
             return new ResultBool(false,"Logout failed");
         }
         return new ResultBool(false, "User is not connected");
@@ -402,9 +413,28 @@ public class Facade implements SystemFacade {
     public ResultBool adminGetStoresPurchaseHistory(String adminName, String storeName) {
         return new ResultBool(false, null);
     }
-    public String getOnline(){
-        return userController.getOnline();
+    public ResultBool supplyServiceExists() {
+        if(this.externalSys.isExistSupply())
+            return new ResultBool(true, null);
+        return new ResultBool(false,"Supply not exist");
     }
+    public ResultBool paymentServiceExists(){
+        if(this.externalSys.isExistPayment())
+            return new ResultBool(true, null);
+        return new ResultBool(false,"Payment not exist");
+
+    }
+    public ResultBool hasAdmin(){
+        if(this.userController.hasAdmin())
+            return new ResultBool(true, null);
+        return new ResultBool(false,"has no admins");
+
+    }
+
+    public String getOnline(){
+        return this.myUserName;
+    }
+
 
 
 

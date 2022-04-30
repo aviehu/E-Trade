@@ -32,8 +32,9 @@ public class UserController {
     public void init(){
         //load from database
         SystemManager systemManager = new SystemManager("domain","domain");
-        Member member = new Member("member","member");
-        members.add(member);
+//        Member member = new Member("member","member");
+//        members.add(member);
+        members.add(systemManager);
         systemManagers.add(systemManager);
         users.addAll(members);
         users.addAll(guests);
@@ -71,13 +72,13 @@ public class UserController {
         users.add(m);
         return true;
     }
-    public boolean enterSystem(){
+    public String enterSystem(){
         online = new Guest("guest"+guestId);
         online.setConnected(true);
         this.guests.add(online);
         this.users.add(online);
         guestId++;
-        return true;
+        return online.getUserName();
     }
     public boolean logIn(String userName,String password){
         for(Member m : members){
@@ -99,14 +100,14 @@ public class UserController {
         }
         return false;
     }
-    public boolean logOut(String userName){
+    public String logOut(String userName){
         Member m = getMember(userName);
         if(m != null){
             //save to date base
             m.setConnected(false);
-            enterSystem();
+            return enterSystem();
         }
-        return false;
+        return null;
 
     }
     public boolean isConnected(String userName){
@@ -243,5 +244,10 @@ public class UserController {
 
     public String  getOnline() {
         return online.getUserName();
+    }
+    public boolean hasAdmin(){
+        if(this.systemManagers.size() > 0)
+            return true;
+        return false;
     }
 }
