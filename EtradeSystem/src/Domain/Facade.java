@@ -267,17 +267,17 @@ public class Facade implements SystemFacade {
     }
 
     @Override
-    public ResultBool logOut(String userName) {
+    public ResultMsg logOut(String userName) {
         if (userController.isConnected(userName)){
             String us = userController.logOut(userName);
             if(us != null){
                 this.myUserName = us;
-                return new ResultBool(true,null);
+                return new ResultMsg(us,null);
             }
 
-            return new ResultBool(false,"Logout failed");
+            return new ResultMsg(null,"Logout failed");
         }
-        return new ResultBool(false, "User is not connected");
+        return new ResultMsg(null, "User is not connected");
     }
 
     @Override
