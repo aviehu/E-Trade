@@ -91,7 +91,7 @@ public class StoresFacade {
             return store.toString();
         }
         else {
-            return "";
+            return null;
         }
     }
 

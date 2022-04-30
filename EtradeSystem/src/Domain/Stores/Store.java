@@ -342,6 +342,9 @@ public class Store {
     }
 
     public String toString() {
+        if(isClosed()){
+            return null;
+        }
         return inventory.toString();
     }
 
