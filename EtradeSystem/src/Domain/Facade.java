@@ -363,7 +363,7 @@ public class Facade implements SystemFacade {
 
     @Override
     public ResultBool appointStoreOwner(String userName, String storeName, String newOwner) {
-        if(userController.isConnected(userName) && userController.isUserNameExist(userName)){
+        if(userController.isConnected(userName) && userController.isUserNameExist(newOwner)){
             if(storesFacade.appointStoreOwner(userName, storeName, newOwner)) {
                 return new ResultBool(true, null);
             }

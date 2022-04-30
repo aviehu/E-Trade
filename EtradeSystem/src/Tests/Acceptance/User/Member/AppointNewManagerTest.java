@@ -9,15 +9,17 @@ import org.junit.Test;
 public class AppointNewManagerTest {
 
     private SystemService systemService;
+    private String guestName;
 
     @Before
     public void setUp() throws Exception {
         systemService = new SystemService();
-        String guestName = systemService.enterSystem().getVal();
+        guestName = systemService.enterSystem().getVal();
         systemService.signUp(guestName, "Mira", "200");
         systemService.signUp(guestName, "Andalus", "100");
         systemService.login(guestName, "Andalus", "100");
         systemService.openStore("Andalus", "Mega", 123);
+        guestName = systemService.logOut("Andalus").getVal();
     }
 
     @After
@@ -26,14 +28,14 @@ public class AppointNewManagerTest {
 
     @Test
     public void AppointNewManagerSuccessTest(){
-        String guestName = systemService.enterSystem().getVal();
         systemService.login(guestName, "Mira", "200");
-        Assert.assertFalse(systemService.addProductToStore("Mira", "Mega", "Bamba", 20, 5, "snacks").isSuccess());
-        systemService.logOut("Mira");
-        guestName = systemService.enterSystem().getVal();
+        Assert.assertFalse(systemService.getStoresPurchaseHistory("Mira", "Mega").isSuccess());
+        guestName = systemService.logOut("Mira").getVal();
         systemService.login(guestName, "Andalus", "100");
         systemService.appointStoreManager("Andalus", "Mega", "Mira");
-        Assert.assertTrue(systemService.addProductToStore("Mira", "Mega", "Bamba", 20, 5, "snacks").isSuccess());
+        guestName = systemService.logOut("Andalus").getVal();
+        systemService.login(guestName, "Mira", "200");
+        Assert.assertTrue(systemService.getStoresPurchaseHistory("Mira", "Mega").isSuccess());
     }
 
     @Test

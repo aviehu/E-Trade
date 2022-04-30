@@ -19,6 +19,7 @@ public class SearchProductTest {
         systemService.openStore("Andalus", "Mega", 123);
         systemService.addProductToStore("Andalus", "Mega",
                 "Bamba", 100, 5,"snacks");
+        systemService.addKeyword("Andalus", "Bamba", "Mega", "osem");
     }
 
     @After
@@ -36,7 +37,7 @@ public class SearchProductTest {
     }
     @Test
     public void searchProdByKeyWordSuccessTest(){
-        Assert.assertTrue(systemService.searchByKeyword("Andalus", "Bam").getVal().contains("Bamba"));
+        Assert.assertTrue(systemService.searchByKeyword("Andalus", "osem").getVal().contains("Bamba"));
     }
 
     @Test

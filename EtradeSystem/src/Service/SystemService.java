@@ -220,7 +220,7 @@ public class SystemService implements ServiceInterface {
     }
 
     @Override
-    public ResultBool adminGetStoresPurchaseHistory(String adminName, String storeName) {
+    public ResultMsg adminGetStoresPurchaseHistory(String adminName, String storeName) {
         return facade.adminGetStoresPurchaseHistory(adminName, storeName);
     }
 
@@ -230,4 +230,9 @@ public class SystemService implements ServiceInterface {
     public ResultNum getProductAmount(String storeName, String prodName){
         return facade.getProductAmount(storeName,prodName);
     }
+
+    public ResultBool addKeyword(String userName, String productName, String storeName, String keyWord) {
+        return facade.addKeyword(userName, productName, storeName, keyWord);
+    }
+
 }

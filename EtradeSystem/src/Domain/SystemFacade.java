@@ -90,8 +90,6 @@ public interface SystemFacade {
 
     public ResultBool addKeyword(String userName, String productName, String storeName, String keyWord);
 
-    public ResultBool addCategory(String userName, String productName, String storeName, String category);
-
 //    public ResultBool exitSystem();
 
 }

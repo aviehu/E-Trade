@@ -42,7 +42,7 @@ public class PurchaseCartTest {
         int prodAmount = systemService.getProductAmount("Mega", "Bamba").getVal();
         systemService.addProductToShoppingCart("Andalus", "Bamba", "Mega", 200);
         systemService.purchase("Andalus", 123, LocalTime.MAX, 776,
-                "Beer-Sheva", "Andalus", 7, 7);
+                "BeerSheva", "Andalus", 7, 7);
         Assert.assertEquals(cart, systemService.displayShoppingCart("Andalus").getVal());
         Assert.assertEquals(prodAmount, systemService.getProductAmount("Mega", "Bamba").getVal());
     }
