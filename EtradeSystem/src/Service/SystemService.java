@@ -22,15 +22,15 @@ public class SystemService implements ServiceInterface {
     }
 
     public ResultBool supplyServiceExists(){
-        facade.supplyServiceExists();
+        return facade.supplyServiceExists();
     }
 
     public ResultBool paymentServiceExists(){
-        facade.paymentServiceExists();
+        return facade.paymentServiceExists();
     }
 
     public ResultBool hasAdmin(){
-        facade.hasAdmin();
+        return facade.hasAdmin();
     }
 
     @Override
