@@ -86,7 +86,7 @@ public interface SystemFacade {
 
     public ResultBool adminTerminateUser(String adminName, String userToTerminate);
 
-    public ResultBool adminGetStoresPurchaseHistory(String adminName, String storeName);
+    public ResultMsg adminGetStoresPurchaseHistory(String adminName, String storeName);
 
 //    public ResultBool exitSystem();
 
