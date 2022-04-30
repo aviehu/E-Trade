@@ -1,193 +1,229 @@
 package Service;
 
+import Domain.Facade;
 import Domain.Stores.managersPermission;
+import Domain.Users.ExternalService.Payment.PaymentAdaptee;
+import Domain.Users.ExternalService.Supply.SupplyAdaptee;
 import Domain.purchaseOption;
 import Service.ResultPackge.ResultBool;
 import Service.ResultPackge.ResultMsg;
 
-public class SystemService implements ServiceInterface{
-    @Override
-    public ResultBool addExternalPaymentService() {
-        return null;
+import java.time.LocalTime;
+
+public class SystemService implements ServiceInterface {
+    private Facade facade;
+
+    public SystemService() {
+        init();
+    }
+
+    public void init(){
+        this.facade = new Facade();
+    }
+
+    public ResultBool supplyServiceExists(){
+        facade.supplyServiceExists();
+    }
+
+    public ResultBool paymentServiceExists(){
+        facade.paymentServiceExists();
+    }
+
+    public ResultBool hasAdmin(){
+        facade.hasAdmin();
     }
 
     @Override
-    public ResultBool changeExternalPaymentService() {
-        return null;
+    public ResultBool removeMember(String userName, String memberToRemove) {
+        return facade.removeMember(userName, memberToRemove);
+    }
+
+    @Override
+    public ResultBool enterSystem() {
+        return facade.enterSystem();
+    }
+
+    @Override
+    public ResultBool addSystemManager(String userName, String managerToAdd) {
+        return facade.addSystemManager(userName, managerToAdd);
+    }
+
+    @Override
+    public ResultBool removeSystemManager(String userName, String managerToRemove) {
+        return facade.removeSystemManager(userName, managerToRemove);
+    }
+
+    @Override
+    public ResultBool addExternalPaymentService(PaymentAdaptee paymentAdaptee) {
+        return facade.addExternalPaymentService(paymentAdaptee);
+    }
+
+    @Override
+    public ResultBool changeExternalPaymentService(String userName, PaymentAdaptee paymentAdaptee) {
+        return facade.changeExternalPaymentService(userName, paymentAdaptee);
     }
 
     @Override
     public ResultBool editExternalPaymentService() {
-        return null;
+        return facade.editExternalPaymentService();
     }
 
     @Override
-    public ResultBool addExternalSupplyService() {
-        return null;
+    public ResultBool addExternalSupplyService(SupplyAdaptee supplyAdaptee) {
+        return facade.addExternalSupplyService(supplyAdaptee);
     }
 
     @Override
-    public ResultBool changeExternalSupplyService() {
-        return null;
+    public ResultBool changeExternalSupplyService(String userName, SupplyAdaptee supplyAdaptee) {
+        return facade.changeExternalSupplyService(userName, supplyAdaptee);
     }
 
     @Override
     public ResultBool editExternalSupplyService() {
-        return null;
+        return facade.editExternalSupplyService();
     }
 
     @Override
-    public ResultBool exitSystem(String name) {
-        return null;
+    public ResultBool exitSystem(String userName) {
+        return facade.exitSystem(userName);
     }
 
     @Override
-    public ResultBool exitSystemAsGuest(String name) {
-        return null;
+    public ResultBool signUp(String userName, String newUserName, String password) {
+        return facade.signUp(userName, newUserName, password);
     }
 
     @Override
-    public ResultBool signUp(String userName, String password) {
-        return null;
-    }
-
-    @Override
-    public ResultBool login(String userName, String password) {
-        return null;
+    public ResultBool login(String userName, String memberUserName, String password) {
+        return facade.login(userName, memberUserName, password);
     }
 
     @Override
     public ResultMsg getStoreInfo(String userName, String storeName) {
-        return null;
+        return facade.getStoreInfo(userName, storeName);
     }
 
     @Override
     public ResultMsg searchByKeyword(String userName, String keyword) {
-        return null;
+        return facade.searchByKeyword(userName, keyword);
     }
 
     @Override
     public ResultMsg searchByCategory(String userName, String category) {
-        return null;
+        return facade.searchByCategory(userName, category);
     }
 
     @Override
     public ResultMsg searchByName(String userName, String productName) {
-        return null;
+        return facade.searchByName(userName, productName);
     }
 
     @Override
-    public ResultBool addProductToShoppingCart(String userName, String productName, String storeName, int quantity) {
-        return null;
+    public ResultMsg addProductToShoppingCart(String userName, String productName, String storeName, int quantity) {
+        return facade.addProductToShoppingCart(userName, productName, storeName, quantity);
     }
 
     @Override
     public ResultMsg displayShoppingCart(String userName) {
-        return null;
+        return facade.displayShoppingCart(userName);
     }
 
     @Override
-    public ResultMsg addProductToShoppingCart(String userName) {
-        return null;
+    public ResultMsg removeProductFromShoppingCart(String userName, String storeName, int quantity, String prodName) {
+        return facade.removeProductFromShoppingCart(userName, storeName, quantity, prodName);
     }
 
     @Override
-    public ResultMsg removeProductFromShoppingCart(String userName) {
-        return null;
-    }
-
-    @Override
-    public ResultBool purchase(String userName) {
-        return null;
+    public ResultBool purchase(String userName, int card, LocalTime expDate, int cvv, String city, String street, int stNum, int apartmentNum) {
+        return facade.purchase(userName, card, expDate, cvv, city, street, stNum, apartmentNum);
     }
 
     @Override
     public ResultBool logOut(String userName) {
-        return null;
+        return facade.logOut(userName);
     }
 
     @Override
     public ResultBool openStore(String founderName, String storeName, int card) {
-        return null;
+        return facade.openStore(founderName, storeName, card);
     }
 
     @Override
     public ResultBool addProductToStore(String userName, String storeName, String productName, int amount, double price, String category) {
-        return null;
+        return facade.addProductToStore(userName, storeName, productName, amount, price, category);
     }
 
     @Override
     public ResultBool removeProductFromStore(String userName, String storeName, String productName) {
-        return null;
+        return facade.removeProductFromStore(userName, storeName, productName);
     }
 
     @Override
     public ResultBool editProductName(String userName, String storeName, String oldProductName, String newProductName) {
-        return null;
+        return facade.editProductName(userName, storeName, oldProductName, newProductName);
     }
 
     @Override
-    public ResultBool editProductPrice(String userName, String storeName, String productName, double newPrice) {
-        return null;
+    public ResultBool editProductPrice(String userName, String storeName, String ProductName, double newPrice) {
+        return facade.editProductPrice(userName, storeName, ProductName, newPrice);
     }
 
     @Override
-    public ResultBool editProductQuantity(String userName, String storeName, String productName, int newQuantity) {
-        return null;
+    public ResultBool editProductQuantity(String userName, String storeName, String ProductName, int newQuantity) {
+        return facade.editProductQuantity(userName, storeName, ProductName, newQuantity);
     }
 
     @Override
-    public ResultBool changePurchaseOption(String userName, String storeName, String productName, purchaseOption newOption) {
-        return null;
+    public ResultBool changePurchaseOption(String userName, String storeName, String ProductName, purchaseOption newOption) {
+        return facade.changePurchaseOption(userName, storeName, ProductName, newOption);
     }
 
     @Override
     public ResultBool appointStoreOwner(String userName, String storeName, String newOwner) {
-        return null;
+        return facade.appointStoreOwner(userName, storeName, newOwner);
     }
 
     @Override
     public ResultBool appointStoreManager(String userName, String storeName, String newManager) {
-        return null;
+        return facade.appointStoreManager(userName, storeName, newManager);
     }
 
     @Override
     public ResultBool changeStoreManagersPermission(String userName, String storeName, String managerName, managersPermission newPermission) {
-        return null;
+        return facade.changeStoreManagersPermission(userName, storeName, managerName, newPermission);
     }
 
     @Override
     public ResultBool closeStore(String userName, String storeName) {
-        return null;
+        return facade.closeStore(userName, storeName);
     }
 
     @Override
     public ResultMsg getStoresManagement(String userName, String storeName) {
-        return null;
+        return facade.getStoresManagement(userName, storeName);
     }
 
     @Override
     public ResultMsg getStoresPurchaseHistory(String userName, String storeName) {
-        return null;
+        return facade.getStoresPurchaseHistory(userName, storeName);
     }
 
     @Override
     public ResultBool adminCloseStorePermanently(String adminName, String storeName) {
-        return null;
+        return facade.adminCloseStorePermanently(adminName, storeName);
     }
 
     @Override
     public ResultBool adminTerminateUser(String adminName, String userToTerminate) {
-        return null;
+        return facade.adminTerminateUser(adminName, userToTerminate);
     }
 
     @Override
     public ResultBool adminGetStoresPurchaseHistory(String adminName, String storeName) {
-        return null;
+        return facade.adminGetStoresPurchaseHistory(adminName, storeName);
     }
 
-    @Override
-    public ResultBool exitSystem() {
-        return null;
+    public String getOnline() {
+        return facade.getOnline();
     }
 }
