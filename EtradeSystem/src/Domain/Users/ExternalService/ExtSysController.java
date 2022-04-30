@@ -2,6 +2,7 @@ package Domain.Users.ExternalService;
 
 import Domain.Users.ExternalService.Payment.MyPaymentSys;
 import Domain.Users.ExternalService.Payment.PaymentAdaptee;
+import Domain.Users.ExternalService.Security.mySecuritySys;
 import Domain.Users.ExternalService.Supply.SupplyAdaptee;
 import Domain.Users.ExternalService.Supply.mySupplySys;
 import Domain.Users.Users.ShoppingCart;
@@ -13,6 +14,7 @@ public class ExtSysController {
     private static ExtSysController myInstance = null;
     private mySupplySys supply;
     private MyPaymentSys payment;
+    private mySecuritySys security;
 
     private ExtSysController() {
         payment = new MyPaymentSys();
@@ -47,5 +49,16 @@ public class ExtSysController {
     public boolean changeSupply(SupplyAdaptee supplyAdaptee){
         return this.supply.changeSupply(supplyAdaptee);
     }
+
+    public String encode(String pass){
+        return security.encode(pass);
+    }
+    public String decode(String pass){
+        return security.decode(pass);
+    }
+    public boolean isExistSecurity(){
+        return security.isExist();
+    }
+
 
 }

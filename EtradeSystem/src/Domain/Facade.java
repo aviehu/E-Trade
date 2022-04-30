@@ -217,7 +217,7 @@ public class Facade implements SystemFacade {
                 result = userController.addProductToShoppingCart(userName, productName, s, quantity);
 
                 if (result == null)
-                    return new ResultMsg(null, "Could not remove product from your shopping cart\n");
+                    return new ResultMsg(null, "Could not add product from your shopping cart\n");
                 else
                     return new ResultMsg(result, null);
             }
@@ -422,6 +422,12 @@ public class Facade implements SystemFacade {
         if(this.externalSys.isExistPayment())
             return new ResultBool(true, null);
         return new ResultBool(false,"Payment not exist");
+
+    }
+    public ResultBool securityServiceExists(){
+        if(this.externalSys.isExistSecurity())
+            return new ResultBool(true, null);
+        return new ResultBool(false,"security not exist");
 
     }
     public ResultBool hasAdmin(){
