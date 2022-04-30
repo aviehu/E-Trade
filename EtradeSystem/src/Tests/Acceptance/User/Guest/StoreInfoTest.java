@@ -31,6 +31,6 @@ public class StoreInfoTest {
 
     @Test
     public void StoreInfoFailTest(){
-        Assert.assertTrue(systemService.getStoreInfo("Andalus", "Shufer").getVal().contains("Bamba"));
+        Assert.assertFalse(systemService.getStoreInfo("Andalus", "Shufer").isSuccess());
     }
 }
