@@ -158,7 +158,7 @@ public class UserController {
             return user.displayCart();
         return null;
     }
-    public boolean purchase(String userName, int creditCard, LocalTime expDate,int cvv,String city,String street,int stNum,int apartmentNum){
+    public synchronized boolean purchase(String userName, int creditCard, LocalTime expDate,int cvv,String city,String street,int stNum,int apartmentNum){
         User user = getUser(userName);
         SupplyAddress sa;
         if(user != null) {

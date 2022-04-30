@@ -57,8 +57,6 @@ public class ConcurrencyPurchaseTest {
 
         } catch (InterruptedException ignored) {}
         Assert.assertEquals(0, systemService.getProductAmount("Mega", "Bamba").getVal());
-        System.out.println(systemService.displayShoppingCart("Andalus").getVal());
-        System.out.println(systemService.displayShoppingCart("Andalus2").getVal());
         Assert.assertTrue(systemService.displayShoppingCart("Andalus").getVal().contains("Bamba") ^
                           systemService.displayShoppingCart("Andalus2").getVal().contains("Bamba"));
     }
