@@ -111,7 +111,11 @@ public class Inventory {
     }
 
     public String searchByName(String name) {
-        return getProductByName(name).toString();
+        Product product = getProductByName(name);
+        if(product == null) {
+            return null;
+        }
+        return product.toString();
     }
 
     public String searchByCategory(String category) {
