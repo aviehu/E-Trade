@@ -54,7 +54,7 @@ public interface SystemFacade {
 
     public ResultBool purchase(String userName, int card, LocalTime expDate, int cvv, String city, String street, int stNum, int apartmentNum);
 
-    public ResultBool logOut(String userName);
+    public ResultMsg logOut(String userName);
 
     public ResultBool openStore(String founderName, String storeName, int card);
 
