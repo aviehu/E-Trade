@@ -10,4 +10,7 @@ public class PaymentAdaptee {
     public boolean canPay(int cardFrom, LocalTime expDate, int cvv,double price){
         return false;
     }
+    public int getBalance(int card, LocalTime exp, int cvv) {
+        return 0;
+    }
 }

@@ -14,7 +14,7 @@ public class UserController {
     public static int memberDiscount;
 
     private List<Guest> guests;
-    private List<SystemManager> systemManagers;
+    private List<Member> systemManagers;
     private List<User> users;
     private Guest online;
 
@@ -31,7 +31,7 @@ public class UserController {
     }
     public void init(){
         //load from database
-        SystemManager systemManager = new SystemManager("domain","domain");
+        Member systemManager = new Member("domain","domain");
 //        Member member = new Member("member","member");
 //        members.add(member);
         members.add(systemManager);
@@ -199,22 +199,22 @@ public class UserController {
 
         return false;
     }
-    public SystemManager getSysManager(String userName){
-        for(SystemManager sm : systemManagers){
+    public Member getSysManager(String userName){
+        for(Member sm : systemManagers){
             if(sm.getUserName() == userName)
                 return sm;
         }
         return null;
     }
     public boolean removeSystemManager(String userName,String managerToRemove){
-        SystemManager sm1 = getSysManager(userName);
-        SystemManager sm2 = getSysManager(managerToRemove);
+        if(systemManagers.size() < 1)
+            return false;
+        Member sm1 = getSysManager(userName);
+        Member sm2 = getSysManager(managerToRemove);
         if(sm1 != null && sm2 != null){
             Member m = new Member(sm2.getUserName(),sm2.getPassword());
             members.add(m);
             systemManagers.remove(sm2);
-            users.remove(sm2);
-            users.add(m);
             return true;
         }
         return false;
@@ -222,7 +222,7 @@ public class UserController {
 
     }
     public boolean removeMember(String userName,String memberToRemove){
-        SystemManager sm = getSysManager(userName);
+        Member sm = getSysManager(userName);
         Member m = getMember(memberToRemove);
         if(sm != null && m != null){
             members.remove(m);
@@ -232,7 +232,7 @@ public class UserController {
         return false;
     }
     public boolean isUserSysManager(String userName){
-        SystemManager sm = getSysManager(userName);
+        Member sm = getSysManager(userName);
         return sm != null;
     }
     public int getSystemManagerCount(){

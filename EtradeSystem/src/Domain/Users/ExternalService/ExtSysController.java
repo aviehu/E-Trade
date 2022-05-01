@@ -60,6 +60,9 @@ public class ExtSysController {
     public boolean isExistSecurity(){
         return security.isExist();
     }
+    public int getBalance(int card, LocalTime exp, int cvv) {
+        return payment.getBalance(card, exp, cvv);
+    }
 
 
 }

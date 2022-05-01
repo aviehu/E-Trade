@@ -22,4 +22,7 @@ public class MyPaymentSys {
         this.realPaymentSys = new PaymentAdapter(paymentAdaptee);
         return true;
     }
+    public int getBalance(int card, LocalTime exp, int cvv) {
+        return this.realPaymentSys.getBalance(card, exp, cvv);
+    }
 }
