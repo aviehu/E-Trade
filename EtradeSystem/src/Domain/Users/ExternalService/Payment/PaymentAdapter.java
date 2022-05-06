@@ -32,6 +32,13 @@ public class PaymentAdapter implements IPay {
     }
 
     @Override
+    public int getBalance(int card, LocalTime exp, int cvv) {
+        if(paymentAdaptee == null)
+            return 0;
+        return paymentAdaptee.getBalance(card, exp, cvv);
+    }
+
+    @Override
     public boolean isExist() {
         if(paymentAdaptee == null)
             return false;
