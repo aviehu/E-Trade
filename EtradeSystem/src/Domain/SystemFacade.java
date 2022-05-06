@@ -34,7 +34,7 @@ public interface SystemFacade {
 
     public ResultBool signUp(String userName,String newUserName, String password);
 
-    public ResultBool login(String userName,String memberUserName, String password);
+    public ResultMsg login(String userName,String memberUserName, String password);
 
     public ResultMsg getStoreInfo(String userName, String storeName);
 

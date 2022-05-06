@@ -17,24 +17,33 @@ public class StoreBasket {
         this.store = store;
     }
 
-    public void addProd(int quantity,String prodName){
+    public String addProd(int quantity,String prodName){
         if(store.canPurchase(prodName,quantity)) {
             if (prods.isEmpty() || !prods.containsKey(prodName))
                 prods.put(prodName, quantity);
             else {
                 prods.computeIfPresent(prodName, (k, v) -> v + quantity);
             }
+            return quantity +" " + prodName + " successfully added to your shopping cart\n";
         }
+        else
+            return "Can't add "+quantity+ " "+ prodName+ " from " + getStoreName();
     }
-    public boolean removeProd(int quantity,String prodName){
-        if (prods.isEmpty() || !prods.containsKey(prodName))
-            return false;
-        else if(prods.get(prodName) - quantity <= 0) {
+    public String removeProd(int quantity,String prodName){
+        if (prods.isEmpty())
+            return "Can't remove " + prodName + ", your basket is empty\n";
+        else if (!prods.containsKey(prodName))
+            return "Can't remove " + prodName + ", your basket does not contain it\n";
+        else if(prods.get(prodName) - quantity == 0) {
             prods.remove(prodName);
-            return true;
-        }else{
+            return null;
+        }else if(prods.get(prodName) - quantity < 0) {
+            int currAmount = getProds().get(prodName);
+            return "Can't remove " + quantity + " " + prodName + ", you currently have " +currAmount+ " "+ prodName+"\n";
+        }
+        else{
                 prods.computeIfPresent(prodName, (k, v) -> v - quantity);
-                return true;
+                return null;
             }
     }
 
@@ -68,12 +77,12 @@ public class StoreBasket {
         return true;
     }
 
-    public boolean canPurchase(){
+    public String canPurchase(){
         for (String prod : prods.keySet()){
             if (!store.canPurchase(prod,prods.get(prod)))
-                return false;
+                return store.getName()+" refused to deliver " + prods.get(prod)+ " "+prod+"\n" ;
         }
-        return true;
+        return null;
     }
     public void finishPurchase(){
         prods.clear();

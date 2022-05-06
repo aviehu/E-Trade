@@ -48,23 +48,29 @@ public class UserController {
 //        return true;
 //    }
 
-    public boolean addSystemManager(String userName,String managerToAdd){
-        if(systemManagers.contains(userName)){
+    public String addSystemManager(String userName,String managerToAdd){
+        Member u = getMember(userName);
+        if(systemManagers.contains(u)){
             Member m = getMember(managerToAdd);
-            if(!systemManagers.contains(managerToAdd)&& m != null){
-                SystemManager sm = new SystemManager(m.getUserName(),m.getPassword());
-                members.remove(m);
-                systemManagers.add(sm);
-                users.add(sm);
-                return true;
-            }
-            return false;
+            if(!systemManagers.contains(m)){
+                if(m != null){
+                    SystemManager sm = new SystemManager(m.getUserName(), m.getPassword());
+                    members.remove(m);
+                    systemManagers.add(sm);
+                    users.add(sm);
+                    return null;
+                }
+                else
+                    return managerToAdd+ " is not a registered member\n";
+            }else
+                return managerToAdd+" is already a system manager\n";
         }
-        return false;
+        else
+            return "You don't have permission to add system manager\n";
     }
     public boolean signUp(String userName,String password) {
         for (Member m : members) {
-            if (m.getUserName() == userName)
+            if (userName.equals(m.getUserName()))
                 return false;
         }
         Member m = new Member(userName, password);
@@ -80,14 +86,18 @@ public class UserController {
         guestId++;
         return online.getUserName();
     }
-    public boolean logIn(String userName,String password){
+    public String logIn(String userName,String password){
         for(Member m : members){
-            if(m.getUserName().equals(userName) && m.getPassword().equals(password)) {
-                m.setConnected(true);
-                return true;
+            if(m.getUserName().equals(userName)) {
+                if (m.getPassword().equals(password)) {
+                    m.setConnected(true);
+                    return null;
+                }
+                else
+                    return "Wrong password\n";
             }
         }
-        return false;
+        return "Wrong user-name\n";
     }
     public boolean exitSystem(String userName){
         User u = getUser(userName);
@@ -144,21 +154,21 @@ public class UserController {
        User user = getUser(userName);
        if(user != null)
            return user.addProdToCart(storeName,quantity,productName);
-       return null;
+       return "User "+userName+" does not exist\n";
     }
     public String removeProductFromShoppingCart(String userName,Store s,int quantity,String prodName){
         User user = getUser(userName);
         if(user != null)
             return user.removeProd(s,quantity,prodName);
-        return null;
+        return "User: "+userName+" does not exist\n";
     }
     public String displayShoppingCart(String userName){
         User user = getUser(userName);
         if(user != null)
             return user.displayCart();
-        return null;
+        return "User: "+userName+" does not exist\n";
     }
-    public synchronized boolean purchase(String userName, int creditCard, LocalTime expDate,int cvv,String city,String street,int stNum,int apartmentNum){
+    public synchronized String purchase(String userName, int creditCard, LocalTime expDate,int cvv,String city,String street,int stNum,int apartmentNum){
         User user = getUser(userName);
         SupplyAddress sa;
         if(user != null) {
@@ -177,17 +187,15 @@ public class UserController {
             } else
                 return user.purchase(user.getCard(), user.getAddress());
         }
-        return false;
+        return "User: "+userName+" does not exist\n";
     }
     public boolean isValidPassword(String password){
+        return password != null && !password.equals("");
         //return password.length() >= 8 && containsUpperCase(password);
-        return true;
     }
     public boolean isUserNameExist(String userName){
         User u = getUser(userName);
-        if(u != null)
-            return true;
-        return false;
+        return u != null;
     }
 
     public boolean containsUpperCase(String pass) {
@@ -221,15 +229,21 @@ public class UserController {
 
 
     }
-    public boolean removeMember(String userName,String memberToRemove){
+    public String removeMember(String userName,String memberToRemove){
         Member sm = getSysManager(userName);
         Member m = getMember(memberToRemove);
-        if(sm != null && m != null){
-            members.remove(m);
-            users.remove(m);
-            return true;
+        if(sm != null){
+            if(m != null){
+                members.remove(m);
+                users.remove(m);
+                //return "Successfully removed "+ memberToRemove+" from the system\n";
+                return null;
+            }
+            else
+                return "Failed, "+memberToRemove + " is already not a member\n";
         }
-        return false;
+        else
+            return "You don't have permission to remove a member\n";
     }
     public boolean isUserSysManager(String userName){
         Member sm = getSysManager(userName);

@@ -33,9 +33,7 @@ public abstract class User {
 //    public abstract void exitSystem();
 
     public String addProdToCart(Store s, int quantity, String prodName){
-        if(s.canPurchase(prodName,quantity))
             return myShopCart.addProd(s,quantity,prodName);
-        return null;
     }
 
 
@@ -46,7 +44,7 @@ public abstract class User {
         return myShopCart.displayCart();
     }
 
-    public abstract boolean purchase(CreditCard card,SupplyAddress address);
+    public abstract String purchase(CreditCard card,SupplyAddress address);
 
     //getStoreInfo:
     //input:store -> output: store info and store's items info(2.1)
