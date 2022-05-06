@@ -145,20 +145,20 @@ public class Facade implements SystemFacade {
     }
 
     @Override
-    public ResultMsg login(String userName,String memberUserName, String password) {
+    public ResultBool login(String userName,String memberUserName, String password) {
         if(userController.isConnected(userName)) {
             if (!userController.isUserNameExist(memberUserName))
-                return new ResultMsg(null, "Wrong user name\n");
+                return new ResultBool(false, "Wrong user name\n");
             String pass = this.externalSys.encode(password); //SECURITY
             String ret = userController.logIn(memberUserName, pass);
             if (ret == null){
                 this.myUserName = memberUserName;
-                return new ResultMsg("Welcome " + memberUserName + "\n", null);
+                return new ResultBool(true, null);
             }
             else
-                return new ResultMsg(null,ret);
+                return new ResultBool(false,ret);
         }
-        return new ResultMsg(null, "User is not connected\n");
+        return new ResultBool(false, "User is not connected\n");
     }
 
     @Override
