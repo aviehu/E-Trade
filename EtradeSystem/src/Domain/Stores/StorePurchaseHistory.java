@@ -11,7 +11,7 @@ public class StorePurchaseHistory {
         purchaseId = 1;
     }
 
-    public boolean addPurchase(double totalPrice, Map<Product, int> products, String buyer) {
+    public boolean addPurchase(double totalPrice, Map<Product, Integer> products, String buyer) {
         Purchase purchase = new Purchase(totalPrice, products, buyer, purchaseId);
         purchaseId++;
         return true;

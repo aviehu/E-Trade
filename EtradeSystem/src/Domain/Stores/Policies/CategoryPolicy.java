@@ -26,7 +26,7 @@ public class CategoryPolicy implements Policy {
     }
 
     @Override
-    public boolean canPurchase(Map<Product, int> amounts) {
+    public boolean canPurchase(Map<Product, Integer> amounts) {
         List<Product> products = new LinkedList<>();
         for(Product product : amounts.keySet()) {
             if(product.getCategory().equals(categoryName)) {

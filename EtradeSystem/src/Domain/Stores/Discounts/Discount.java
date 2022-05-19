@@ -38,11 +38,11 @@ public class Discount {
         return calculator;
     }
 
-    public Map<Product, double> calculatePrices(Map<Product, double> prices , Map<Product, int> amounts) {
+    public Map<Product, Double> calculatePrices(Map<Product, Double> prices , Map<Product, Integer> amounts) {
         return calculator.calcPrices(prices);
     }
 
-    public boolean shouldApply(Map<Product, int> amounts) {
+    public boolean shouldApply(Map<Product, Integer> amounts) {
         return true;
     }
 

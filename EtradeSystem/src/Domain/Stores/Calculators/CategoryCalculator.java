@@ -15,7 +15,7 @@ public class CategoryCalculator extends Calculator {
         this.discountPercent = discountPercent;
     }
 
-    private List<Product> getProductsFromPrices(Map<Product, double> prices) {
+    private List<Product> getProductsFromPrices(Map<Product, Double> prices) {
         List<Product> products = new LinkedList<>();
         for(Product product : prices.keySet()) {
             if(product.getCategory().equals(category)) {
@@ -26,8 +26,8 @@ public class CategoryCalculator extends Calculator {
     }
 
     @Override
-    public Map<Product, double> calcPrices(Map<Product, double> prices) {
-        Map<Product, double> newPrices = copyPrices(prices);
+    public Map<Product, Double> calcPrices(Map<Product, Double> prices) {
+        Map<Product, Double> newPrices = copyPrices(prices);
         List<Product> products = getProductsFromPrices(newPrices);
         for(Product product : products) {
             newPrices.computeIfPresent(product, (K, V) -> V = V * discountPercent);
