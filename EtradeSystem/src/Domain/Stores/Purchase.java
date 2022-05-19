@@ -5,12 +5,12 @@ import java.util.Map;
 
 public class Purchase {
     private double price;
-    private Map<Product, Integer> prods;
+    private Map<Product, int> prods;
     private String buyer;
     private LocalDate purchaseTime;
     private int purchaseId;
 
-    public Purchase(double price, Map<Product, Integer> prods, String buyer, int purchaseId) {
+    public Purchase(double price, Map<Product, int> prods, String buyer, int purchaseId) {
         this.price = price;
         this.buyer = buyer;
         this.purchaseTime = LocalDate.now();
