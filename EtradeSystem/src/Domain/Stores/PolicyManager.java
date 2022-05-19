@@ -77,8 +77,8 @@ public class PolicyManager {
         return true;
     }
 
-    private Map<Product, double> getOriginalPrices(Map<Product, int> amounts) {
-        Map<Product, double> prices = new HashMap<Product, double>();
+    private Map<Product, Double> getOriginalPrices(Map<Product, Integer> amounts) {
+        Map<Product, Double> prices = new HashMap<Product, Double>();
         Set<Product> products = amounts.keySet();
         for(Product product : products) {
             prices.put(product, product.getPrice() * amounts.get(product));
@@ -86,16 +86,16 @@ public class PolicyManager {
         return prices;
     }
 
-    private Map<Product, double> applyDiscounts(Map<Product, double> prices, Map<Product, int> amounts) {
+    private Map<Product, Double> applyDiscounts(Map<Product, Double> prices, Map<Product, Integer> amounts) {
         for(Discount discount : discounts) {
             prices = discount.calculatePrices(prices, amounts);
         }
         return prices;
     }
 
-    public double getTotalPrice(Map<Product, int> amounts) {
+    public double getTotalPrice(Map<Product, Integer> amounts) {
         double totalAmount = 0;
-        Map<Product, double> prices = getOriginalPrices(amounts);
+        Map<Product, Double> prices = getOriginalPrices(amounts);
         prices = applyDiscounts(prices, amounts);
         for(Product product : prices.keySet()) {
             totalAmount += prices.get(product);
@@ -103,7 +103,7 @@ public class PolicyManager {
         return totalAmount;
     }
 
-    public boolean canPurchase(Map<Product, int> amounts) {
+    public boolean canPurchase(Map<Product, Integer> amounts) {
         boolean result = true;
         for(Policy policy : policies) {
             result = result && policy.canPurchase(amounts);

@@ -14,7 +14,7 @@ public class PredicateDiscount extends Discount {
         this.operatorComponent = operatorComponent;
     }
 
-    public Map<Product, double> calculatePrices(Map<Product, double> prices, Map<Product, int> amounts) {
+    public Map<Product, Double> calculatePrices(Map<Product, Double> prices, Map<Product, Integer> amounts) {
         Calculator calculator = getCalculator();
         if(operatorComponent.shouldApply(amounts)) {
             calculator.calcPrices(prices);
@@ -23,7 +23,7 @@ public class PredicateDiscount extends Discount {
     }
 
     @Override
-    public boolean shouldApply(Map<Product, int> amounts) {
+    public boolean shouldApply(Map<Product, Integer> amounts) {
         return operatorComponent.shouldApply(amounts);
     }
 }

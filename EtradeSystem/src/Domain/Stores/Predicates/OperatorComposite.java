@@ -14,7 +14,7 @@ public class OperatorComposite extends OperatorComponent {
     }
 
     @Override
-    public boolean shouldApply(Map<Product, int> amounts) {
+    public boolean shouldApply(Map<Product, Integer> amounts) {
         boolean ans = true;
         if(getType().equals("and")) {
             for(OperatorComponent operatorComponent : components) {

@@ -8,10 +8,10 @@ import java.util.Map;
 
 public abstract class Calculator {
 
-    abstract public Map<Product, double> calcPrices(Map<Product, double> prices);
+    abstract public Map<Product, Double> calcPrices(Map<Product, Double> prices);
 
-    public Map<Product, double> copyPrices(Map<Product, double> prices) {
-        Map<Product, double> newPrices = new HashMap<Product, double>();
+    public Map<Product, Double> copyPrices(Map<Product, Double> prices) {
+        Map<Product, Double> newPrices = new HashMap<Product, Double>();
         for(Product product : prices.keySet()) {
             newPrices.put(product, prices.get(product));
         }

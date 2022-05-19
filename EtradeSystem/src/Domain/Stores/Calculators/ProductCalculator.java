@@ -15,7 +15,7 @@ public class ProductCalculator extends Calculator{
         this.discountPercent = discountPercent;
     }
 
-    private Product getProduct(Map<Product, double> prices) {
+    private Product getProduct(Map<Product, Double> prices) {
         for(Product product : prices.keySet()) {
             if(product.getName().equals(productName)){
                 return product;
@@ -25,8 +25,8 @@ public class ProductCalculator extends Calculator{
     }
 
     @Override
-    public Map<Product, double> calcPrices(Map<Product, double> prices) {
-        Map<Product, double> newPrices = copyPrices(prices);
+    public Map<Product, Double> calcPrices(Map<Product, Double> prices) {
+        Map<Product, Double> newPrices = copyPrices(prices);
         Product product = getProduct(newPrices);
         if(product != null) {
             newPrices.computeIfPresent(product, (K, V) -> V = V * discountPercent);

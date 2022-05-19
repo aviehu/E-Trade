@@ -8,5 +8,5 @@ public interface Policy {
 
     public int getId();
 
-    public boolean canPurchase(Map<Product, int> amounts);
+    public boolean canPurchase(Map<Product, Integer> amounts);
 }

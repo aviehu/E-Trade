@@ -136,11 +136,11 @@ public class Store {
         return false;
     }
 
-    public synchronized boolean purchase(Map<String,int> prods, String buyer){
-        Map<Product,int> amounts = inventory.getAmountsFromNames(prods);
+    public synchronized boolean purchase(Map<String,Integer> prods, String buyer){
+        Map<Product,Integer> amounts = inventory.getAmountsFromNames(prods);
         if(policyManager.canPurchase(amounts) && inventory.canPurchase(prods)) {
             inventory.purchase(prods);
-            Map<Product, int> products = new HashMap<Product, int>();
+            Map<Product, Integer> products = new HashMap<Product, Integer>();
             for(String productName : prods.keySet()) {
                 Product product = inventory.getProductByName(productName);
                 products.put(product, prods.get(productName));
@@ -242,9 +242,9 @@ public class Store {
         return false;
     }
 
-    public double getPrice(Map<String, int> items) {
+    public double getPrice(Map<String, Integer> items) {
         List<Product> products = inventory.getProductsByListOfNames(items.keySet());
-        Map<Product, int> productsAmounts = new HashMap<Product, int>();
+        Map<Product, Integer> productsAmounts = new HashMap<Product, Integer>();
         for(Product product : products) {
             productsAmounts.put(product, items.get(product.getName()));
         }

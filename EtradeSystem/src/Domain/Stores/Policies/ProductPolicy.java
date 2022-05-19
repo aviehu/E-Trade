@@ -25,7 +25,7 @@ public class ProductPolicy implements Policy{
     }
 
     @Override
-    public boolean canPurchase(Map<Product, int> amounts) {
+    public boolean canPurchase(Map<Product, Integer> amounts) {
         Product product = null;
         for(Product p : amounts.keySet()){
             if(p.getName().equals(productName)) {

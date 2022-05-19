@@ -5,5 +5,5 @@ import Domain.Stores.Product;
 import java.util.Map;
 
 public interface Predicate {
-    boolean shouldApply(Map<Product, int> products);
+    boolean shouldApply(Map<Product, Integer> products);
 }

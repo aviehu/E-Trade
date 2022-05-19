@@ -14,7 +14,7 @@ public class BasketValuePredicate implements Predicate{
     }
 
     @Override
-    public boolean shouldApply(Map<Product, int> products) {
+    public boolean shouldApply(Map<Product, Integer> products) {
         double total = 0;
         for(Product product : products.keySet()) {
             total += product.getPrice();

@@ -15,7 +15,7 @@ public class ProductAmountPredicate implements Predicate{
         this.productName = productName;
     }
 
-    private Product getProduct(Map<Product, int> products){
+    private Product getProduct(Map<Product, Integer> products){
         for(Product product : products.keySet()) {
             if(product.getName().equals(productName)) {
                 return product;
@@ -25,7 +25,7 @@ public class ProductAmountPredicate implements Predicate{
     }
 
     @Override
-    public boolean shouldApply(Map<Product, int> products) {
+    public boolean shouldApply(Map<Product, Integer> products) {
         Product product = getProduct(products);
         if(product != null) {
             int amount = products.get(product);

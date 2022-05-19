@@ -18,7 +18,7 @@ public class TimePredicate implements Predicate{
     }
 
     @Override
-    public boolean shouldApply(Map<Product, int> products) {
+    public boolean shouldApply(Map<Product, Integer> products) {
         LocalDate now = LocalDate.now();
         if(include) {
             return now.isAfter(startTime) && now.isBefore(endTime);

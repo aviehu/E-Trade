@@ -12,8 +12,8 @@ public class Inventory {
         products = Collections.synchronizedList(new ArrayList<Product>());
     }
 
-    public Map<Product, int> getAmountsFromNames(Map<String, int> amounts) {
-        Map<Product, int> productAmounts = new HashMap<Product, int>();
+    public Map<Product, Integer> getAmountsFromNames(Map<String, Integer> amounts) {
+        Map<Product, Integer> productAmounts = new HashMap<Product, Integer>();
         for(String productName : amounts.keySet()) {
             productAmounts.put(getProductByName(productName), amounts.get(productName));
         }
@@ -160,7 +160,7 @@ public class Inventory {
         return products;
     }
 
-    public boolean canPurchase(Map<String, int> prods) {
+    public boolean canPurchase(Map<String, Integer> prods) {
         boolean result = true;
         for(String productName : prods.keySet()) {
             result = result && canPurchase(productName, prods.get(productName));
@@ -168,7 +168,7 @@ public class Inventory {
         return result;
     }
 
-    public boolean purchase(Map<String, int> prods) {
+    public boolean purchase(Map<String, Integer> prods) {
         for(String productName : prods.keySet()) {
             Product product = getProductByName(productName);
             if(product == null || !product.setAmount(product.getAmount() - prods.get(productName))) {

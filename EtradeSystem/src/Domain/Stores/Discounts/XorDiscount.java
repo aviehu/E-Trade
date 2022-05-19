@@ -16,7 +16,7 @@ public class XorDiscount extends Discount {
     }
 
     @Override
-    public Map<Product, double> calculatePrices(Map<Product, double> prices , Map<Product, int> amounts) {
+    public Map<Product, Double> calculatePrices(Map<Product, Double> prices , Map<Product, Integer> amounts) {
         if(discount1.shouldApply(amounts)) {
             discount1.calculatePrices(prices, amounts);
         } else if(discount2.shouldApply(amounts)) {
@@ -26,7 +26,7 @@ public class XorDiscount extends Discount {
     }
 
     @Override
-    public boolean shouldApply(Map<Product, int> amounts) {
+    public boolean shouldApply(Map<Product, Integer> amounts) {
         return (discount1.shouldApply(amounts) || discount2.shouldApply(amounts));
     }
 }

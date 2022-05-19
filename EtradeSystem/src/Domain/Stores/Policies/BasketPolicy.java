@@ -23,7 +23,7 @@ public class BasketPolicy implements Policy {
     }
 
     @Override
-    public boolean canPurchase(Map<Product, int> amounts) {
+    public boolean canPurchase(Map<Product, Integer> amounts) {
         return operatorComponent.shouldApply(amounts);
     }
 }

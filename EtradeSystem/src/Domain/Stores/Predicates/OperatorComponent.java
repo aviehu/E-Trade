@@ -18,6 +18,6 @@ public abstract class OperatorComponent {
         return type;
     }
 
-    abstract public boolean shouldApply(Map<Product, int> amounts);
+    abstract public boolean shouldApply(Map<Product, Integer> amounts);
 
 }
