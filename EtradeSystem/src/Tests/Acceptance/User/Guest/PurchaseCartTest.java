@@ -40,10 +40,16 @@ public class PurchaseCartTest {
     public void purchaseCartFailTest(){
         String cart = systemService.displayShoppingCart("Andalus").getVal();
         int prodAmount = systemService.getProductAmount("Mega", "Bamba").getVal();
+        String storePurchaseHistory = systemService.getStoresPurchaseHistory("Andalus", "Mega").getVal();
         systemService.addProductToShoppingCart("Andalus", "Bamba", "Mega", 200);
         systemService.purchase("Andalus", 123, LocalTime.MAX, 776,
                 "BeerSheva", "Andalus", 7, 7);
+        // the cart didn't change
         Assert.assertEquals(cart, systemService.displayShoppingCart("Andalus").getVal());
+        // the amount in the store didn't change
         Assert.assertEquals(prodAmount, systemService.getProductAmount("Mega", "Bamba").getVal());
+        // store purchase history didn't change
+        Assert.assertEquals(storePurchaseHistory, systemService.getProductAmount("Mega", "Bamba").getVal());
+
     }
 }

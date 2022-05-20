@@ -1,4 +1,4 @@
-package Tests.Acceptance.User.Member;
+package Tests.Acceptance.Concurrency;
 
 import Service.SystemService;
 import org.junit.After;
