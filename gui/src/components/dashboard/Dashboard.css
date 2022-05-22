@@ -1,0 +1,38 @@
+.stores {
+  margin: 0;
+  padding: 0;
+}
+.stores .store {
+  width: 100%;
+  flex-shrink: 0;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 6px 1px #e1e5e8;
+  margin-bottom: 14px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #fff;
+  padding: 10px 20px;
+  transition: box-shadow 0.2s ease-in-out;
+  position: relative;
+}
+.stores .store:hover {
+  box-shadow: 0 2px 6px 1px #d3d7da;
+}
+.stores .store .store-footer {
+  display: flex;
+  justify-content: space-between;
+}
+.stores .store .store-footer .meta-data {
+  color: #7a92a5;
+  font-size: 12px;
+  margin: 20px 0px 10px 0px;
+  flex-shrink: 0;
+}
+.stores .store .title {
+  margin: 0px 0;
+  font-size: 16px;
+  font-weight: 600;
+  font-style: normal;
+  color: #20455e;
+}

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { FC } from "react";
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
@@ -17,24 +17,61 @@ import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { mainListItems, secondaryListItems } from './listItems';
-import Deposits from './Deposits';
-import Orders from './Orders';
+import { mainListItems } from './listItems';
+import './Dashboard.css';
 
-function Copyright(props: any) {
-    return (
-        <Typography variant="body2" color="text.secondary" align="center" {...props}>
-            {'Copyright © '}
-            <Link color="inherit" href="https://mui.com/">
-                Your Website
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
 
-const drawerWidth: number = 240;
+const stores = [
+    {
+        "id": "1",
+        "title": "Store name",
+        "content": "link to this stores",
+        "userEmail": "user@etade.com",
+        "creationTime": 1542111235544,
+    },
+    {
+        "id": "2",
+        "title": "Store name",
+        "content": "link to this stores",
+        "userEmail": "user@etade.com",
+        "creationTime": 1542111235544,
+    },
+    {
+        "id": "3",
+        "title": "Store name",
+        "content": "link to this stores",
+        "userEmail": "user@etade.com",
+        "creationTime": 1542111235544,
+    },
+    {
+        "id": "4",
+        "title": "Store name",
+        "content": "link to this stores",
+        "userEmail": "user@etade.com",
+        "creationTime": 1542111235544,
+    },
+    {
+        "id": "1",
+        "title": "Store name",
+        "content": "link to this stores",
+        "userEmail": "user@etade.com",
+        "creationTime": 1542111235544,
+    },
+    {
+        "id": "2",
+        "title": "Store name",
+        "content": "link to this stores",
+        "userEmail": "user@etade.com",
+        "creationTime": 1542111235544,
+    },
+    {
+        "id": "3",
+        "title": "Store name",
+        "content": "link to this stores",
+        "userEmail": "user@etade.com",
+        "creationTime": 1542111235544,
+    }
+]
 
 interface AppBarProps extends MuiAppBarProps {
     open?: boolean;
@@ -84,13 +121,52 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
 );
 
+const drawerWidth: number = 240;
+
 const mdTheme = createTheme();
 
-function DashboardContent() {
+export type Store = {
+    id: string,
+    title: string;
+    content: string;
+    creationTime: number;
+    userEmail: string;
+}
+
+const DashboardContent: React.FC = () => {
     const [open, setOpen] = React.useState(true);
     const toggleDrawer = () => {
         setOpen(!open);
     };
+
+    // const [searchBar, setSearch] = React.useState('');
+    // const setSearchBar = (key: string) => {
+    //     setSearch(key);
+    // };
+    //
+    // const [storesState, newStoresState] = React.useState(stores);
+    // const setSearchBar = (stores: Store[]) => {
+    //     newStoresState(stores);
+    // };
+
+    const renderStores = (stores: Store[]) => {
+        // @ts-ignore
+        // @ts-ignore
+        return (<ul className='stores'>
+            {stores.map((store,index) => (<li key={store.id} className='store'>
+
+                <div className='topStore'>
+                    <div>
+                        <h5 className='title'>{store.title}</h5>
+                    </div>
+                </div>
+
+                <div className="store-footer">
+                    <div className='meta-data'>By {store.userEmail} | { new Date(store.creationTime).toLocaleString()}</div>
+                </div>
+            </li>))}
+        </ul>);
+    }
 
     return (
         <ThemeProvider theme={mdTheme}>
@@ -121,7 +197,7 @@ function DashboardContent() {
                             noWrap
                             sx={{ flexGrow: 1 }}
                         >
-                            Dashboard
+                            E-Trade
                         </Typography>
                         <IconButton color="inherit">
                             <Badge badgeContent={4} color="secondary">
@@ -147,7 +223,6 @@ function DashboardContent() {
                     <List component="nav">
                         {mainListItems}
                         <Divider sx={{ my: 1 }} />
-                        {secondaryListItems}
                     </List>
                 </Drawer>
                 <Box
@@ -165,39 +240,20 @@ function DashboardContent() {
                     <Toolbar />
                     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
                         <Grid container spacing={3}>
-                            {/* Chart */}
-                            <Grid item xs={12} md={8} lg={9}>
-                                <Paper
-                                    sx={{
-                                        p: 2,
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        height: 240,
-                                    }}
-                                >
-                                </Paper>
-                            </Grid>
-                            {/* Recent Deposits */}
-                            <Grid item xs={12} md={4} lg={3}>
-                                <Paper
-                                    sx={{
-                                        p: 2,
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        height: 240,
-                                    }}
-                                >
-                                    <Deposits />
-                                </Paper>
-                            </Grid>
-                            {/* Recent Orders */}
+                            {/* upper box */}
                             <Grid item xs={12}>
-                                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                                    <Orders />
-                                </Paper>
+                                <main>
+                                    {stores ? renderStores(stores) : <h2>Loading...</h2>}
+                                </main>
                             </Grid>
+
+                            {/* second box */}
+                            {/*<Grid item xs={12}>*/}
+                            {/*    <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>*/}
+                            {/*        <Orders />*/}
+                            {/*    </Paper>*/}
+                            {/*</Grid>*/}
                         </Grid>
-                        <Copyright sx={{ pt: 4 }} />
                     </Container>
                 </Box>
             </Box>
@@ -208,3 +264,4 @@ function DashboardContent() {
 export default function Dashboard() {
     return <DashboardContent />;
 }
+
