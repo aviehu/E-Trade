@@ -24,15 +24,15 @@ public class SignUpTest {
     @Test
     public void signUpSuccessTest(){
         Assert.assertFalse(systemService.login(guestName0, "Andalus", "100").isSuccess());
-        systemService.signUp(guestName0, "Andalus", "100");
+        systemService.signUp(guestName0, "Andalus", "100","Andalus","Andalus");
         Assert.assertTrue(systemService.login(guestName0, "Andalus", "100").isSuccess());
     }
 
     @Test
     public void signUpFailTest(){
         guestName0 = systemService.enterSystem().getVal();
-        systemService.signUp(guestName0,"Andalus", "100").getVal();
+        systemService.signUp(guestName0,"Andalus", "100","Andalus","Andalus").getVal();
         Assert.assertTrue(systemService.login(guestName0, "Andalus", "100").isSuccess());
-        Assert.assertFalse(systemService.signUp(guestName0,"Andalus", "90").isSuccess());
+        Assert.assertFalse(systemService.signUp(guestName0,"Andalus", "90","Andalus","Andalus").isSuccess());
     }
 }

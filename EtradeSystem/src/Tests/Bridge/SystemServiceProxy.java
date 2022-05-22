@@ -28,6 +28,21 @@ public class SystemServiceProxy implements ServiceInterface {
     }
 
     @Override
+    public ResultMsg getOnlineMembers(String userName) {
+        if (real == null)
+            throw new NotImplementedException();
+        return real.getOnlineMembers(userName);
+
+    }
+
+    @Override
+    public ResultMsg getOfflineMembers(String userName) {
+        if (real == null)
+            throw new NotImplementedException();
+        return real.getOfflineMembers(userName);
+    }
+
+    @Override
     public ResultBool supplyServiceExists() {
         if (real == null)
             throw new NotImplementedException();
@@ -126,10 +141,10 @@ public class SystemServiceProxy implements ServiceInterface {
     }
 
     @Override
-    public ResultBool signUp(String userName, String newUserName, String password) {
+    public ResultBool signUp(String userName, String newUserName, String password, String name, String lastName) {
         if (real == null)
             throw new NotImplementedException();
-        return real.signUp(userName, newUserName, password);
+        return real.signUp(userName, newUserName, password,name,lastName);
     }
 
     @Override
