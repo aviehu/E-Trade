@@ -5,12 +5,21 @@ import Domain.purchaseOption;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.FileHandler;
+import java.util.logging.Handler;
+import java.util.logging.Logger;
 
 public class StoresFacade {
+    Logger logger = Logger.getLogger("stores");
     private List<Store> stores;
 
     public StoresFacade(){
         stores = Collections.synchronizedList(new ArrayList<Store>());
+        try {
+            Handler fileHandler = new FileHandler(System.getProperty("user.dir") + "/stores.log", 2000, 5);
+        } catch (Exception e) {
+            System.out.println("error while creating logger for stores");
+        }
     }
 
     public boolean addStore(String storeName, String founderName,int card) {
@@ -19,6 +28,7 @@ public class StoresFacade {
             return false;
         }
         stores.add(new Store(storeName, founderName, card));
+        logger.info("store - " + storeName + "added by - " + founderName);
         return true;
     }
 
@@ -33,7 +43,10 @@ public class StoresFacade {
     public boolean adminCloseStore(String storeName) {
         Store store = getStoreByName(storeName);
         if(store != null) {
-            return store.adminCloseStore();
+            if(store.adminCloseStore()) {
+                logger.info("store - " + storeName + "closed by admin");
+                return true;
+            }
         }
         return false;
     }
@@ -100,7 +113,11 @@ public class StoresFacade {
         if(store == null) {
             return false;
         }
-        return store.addProduct(ownerName,productName,amount,price,category);
+        if(store.addProduct(ownerName,productName,amount,price,category)) {
+            logger.info("product - " + productName + " was added to store");
+            return true;
+        }
+        return false;
     }
 
     public boolean removeProductFromStore(String userName, String storeName, String productName) {
@@ -108,7 +125,11 @@ public class StoresFacade {
         if(store == null) {
             return false;
         }
-        return store.removeProduct(userName ,productName);
+        if(store.removeProduct(userName ,productName)) {
+            logger.info("product - " + productName + " was removed from store");
+            return true;
+        }
+        return false;
     }
 
     public boolean editProductName(String userName, String storeName, String oldProductName, String newProductName) {
@@ -116,7 +137,10 @@ public class StoresFacade {
         if(store == null) {
             return false;
         }
-        return store.changeProductName(userName ,oldProductName, newProductName);
+        if(store.changeProductName(userName ,oldProductName, newProductName)) {
+            logger.info("product - " + oldProductName + " is now called - " + newProductName + " in store - " + storeName);
+        }
+        return false;
     }
 
     public boolean editProductPrice(String userName, String storeName, String productName, double newPrice) {
@@ -124,7 +148,11 @@ public class StoresFacade {
         if(store == null) {
             return false;
         }
-        return store.changeProductPrice(userName ,productName, newPrice);
+        if(store.changeProductPrice(userName ,productName, newPrice)) {
+            logger.info("product - " + productName + " now costs - " + newPrice + " in store - " + storeName);
+            return true;
+        }
+        return false;
     }
 
     public boolean editProductQuantity(String userName, String storeName, String productName, int newQuantity) {
@@ -140,7 +168,11 @@ public class StoresFacade {
         if(store == null) {
             return false;
         }
-        return store.setPurchaseOption(userName, productName ,newOption);
+        if(store.setPurchaseOption(userName, productName ,newOption)) {
+            logger.info("new purchase option for store - " + storeName);
+            return true;
+        }
+        return false;
     }
 
     public boolean appointStoreOwner(String userName, String storeName, String newOwner) {
@@ -148,7 +180,11 @@ public class StoresFacade {
         if(store == null) {
             return false;
         }
-        return store.addOwner(userName, newOwner);
+        if(store.addOwner(userName, newOwner)) {
+            logger.info("new store owner for store - " + storeName);
+            return true;
+        }
+        return false;
     }
 
     public boolean appointStoreManager(String userName, String storeName, String newManager) {
@@ -156,7 +192,11 @@ public class StoresFacade {
         if(store == null) {
             return false;
         }
-        return store.addManager(userName, newManager);
+        if(store.addManager(userName, newManager)) {
+            logger.info("new store manager for store - " + storeName);
+            return true;
+        }
+        return false;
     }
     public Store getStore(String storeName){
         for(Store s : stores){
@@ -196,7 +236,10 @@ public class StoresFacade {
     public boolean closeStore(String storeName, String userName) {
         Store store = getStoreByName(storeName);
         if(store != null) {
-            return store.closeStore(userName);
+            if(store.closeStore(userName)) {
+                logger.info("store - " + storeName + " is now closed");
+                return true;
+            }
         }
         return false;
     }
@@ -204,7 +247,10 @@ public class StoresFacade {
     public boolean changeStoreManagersPermission(String userName, String storeName, String managerName, managersPermission newPermission) {
         Store store = getStoreByName(storeName);
         if(store != null) {
-            return store.changeStoreManagersPermission(userName, managerName, newPermission);
+            if(store.changeStoreManagersPermission(userName, managerName, newPermission)) {
+                logger.info("changed permission for manger - " + managerName);
+                return true;
+            }
         }
         return false;
     }
