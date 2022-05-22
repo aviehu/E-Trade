@@ -21,24 +21,29 @@ public class ShoppingCart {
         extSystems = ExtSysController.getInstance();
     }
 
-    public boolean purchaseCart(CreditCard card,SupplyAddress address,String userName){
+    public String purchaseCart(CreditCard card,SupplyAddress address,String userName){
         int cardFrom = card.getCardNumber();
         LocalTime expDate = card.getExpDate();
         int cvv = card.getCvv();
         boolean payment = extSystems.canPay(cardFrom, expDate, cvv, getTotalPrice());
         //payment
-        if(payment && canPurchase()) {
-            if(!extSystems.supply(this,address))
-                return false;
+        if(payment) {//can charge payment
+            String ret = canPurchase();
+            if (ret == null) { //can purchase
+                if (!extSystems.supply(this, address))
+                    return "Failed to supply your shopping cart\n";
 
-            for(StoreBasket b : baskets){
-                extSystems.pay(cardFrom,expDate,cvv,b.getTotalPrice(),b.getStore().getCard());
-                if(!b.purchase(userName))
-                    return false;
+                for (StoreBasket b : baskets) {
+                    extSystems.pay(cardFrom, expDate, cvv, b.getTotalPrice(), b.getStore().getCard());
+                    if (!b.purchase(userName))
+                        return "Failed to purchase product from " + b.getStoreName() + "\n";
                 }
-            return true;
+                return null;
             }
-        return false;
+            else
+                return ret;
+        }else
+            return "Failed to charge your credit card\n";
     }
 
     public String displayCart(){
@@ -56,13 +61,14 @@ public class ShoppingCart {
         price = price - ((price*discount)/100);
         return price;
     }
-    public boolean canPurchase(){
+    public String canPurchase(){
         List<StoreBasket> bas = new ArrayList<>();
         for(StoreBasket b : baskets){
-            if(!b.canPurchase())
-                return false;
+            String ret = b.canPurchase();
+            if(ret != null)
+                return ret;
         }
-        return true;
+        return null;
     }
     public StoreBasket getBasketByStore(Store s){
         for(StoreBasket b : baskets){
@@ -73,25 +79,30 @@ public class ShoppingCart {
     }
     public String addProd(Store s,int quantity,String prodName){
         StoreBasket b = getBasketByStore(s);
+        String ret;
         if(b == null){
             b = new StoreBasket(s);
-            b.addProd(quantity,prodName);
+            ret = b.addProd(quantity,prodName);
             baskets.add(b);
         }
         else
-            b.addProd(quantity,prodName);
-        return displayCart();
+            ret = b.addProd(quantity,prodName);
+        if(ret.contains("successfully"))
+            return ret+displayCart();
+        else
+            return ret;
     }
     public String removeProd(Store s,int quantity,String prodName){
         StoreBasket b = getBasketByStore(s);
         if(b == null){
-            return null;
+            return "Can't remove " + prodName + ", your basket is empty\n";
         }
         else {
-            if (b.removeProd(quantity, prodName))
-                return displayCart();
+            String ret = b.removeProd(quantity,prodName);
+            if (ret == null)
+                return "Successfully added "+quantity+" "+prodName+".\n"+displayCart();
             else
-                return null;
+                return ret;
         }
     }
 

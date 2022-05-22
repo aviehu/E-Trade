@@ -59,18 +59,19 @@ public class Member extends User{
     }
 
     @Override
-    public boolean purchase(CreditCard card,SupplyAddress address) {
-        if(myShopCart.purchaseCart(card,address,userName)){
+    public String purchase(CreditCard card,SupplyAddress address) {
+        String ret = myShopCart.purchaseCart(card,address,userName);
+        if(ret == null){
             for (StoreBasket b : myShopCart.getBaskets()){
                 StoreBasket copy = b;
                 pHistory.addToHistory(copy);
             }
             myShopCart.finishPurchase();
-            return true;
+            return null;
 
         }
         else
-            return false;
+            return ret;
     }
 
     @Override

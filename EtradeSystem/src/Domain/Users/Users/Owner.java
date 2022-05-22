@@ -66,7 +66,7 @@ public class Owner extends Member {
     }
 
     @Override
-    public boolean purchase(CreditCard card, SupplyAddress address) {
+    public String purchase(CreditCard card, SupplyAddress address) {
         return super.purchase(card, address);
     }
 

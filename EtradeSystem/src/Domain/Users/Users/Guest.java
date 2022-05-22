@@ -42,13 +42,14 @@ public class Guest extends User {
     }
 
     @Override
-    public boolean purchase(CreditCard card,SupplyAddress address) {
-        if(myShopCart.purchaseCart(card,address,userName)) {
+    public String purchase(CreditCard card,SupplyAddress address) {
+        String ret = myShopCart.purchaseCart(card,address,userName);
+        if(ret == null) {
             myShopCart.finishPurchase();
-            return true;
+            return null;
         }
         else
-            return false;
+            return ret;
     }
 
     @Override
