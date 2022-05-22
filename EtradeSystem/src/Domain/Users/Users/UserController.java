@@ -31,7 +31,7 @@ public class UserController {
     }
     public void init(){
         //load from database
-        Member systemManager = new Member("domain","domain");
+        Member systemManager = new Member("domain","domain", "domain","domain");
 //        Member member = new Member("member","member");
 //        members.add(member);
         members.add(systemManager);
@@ -54,7 +54,7 @@ public class UserController {
             Member m = getMember(managerToAdd);
             if(!systemManagers.contains(m)){
                 if(m != null){
-                    SystemManager sm = new SystemManager(m.getUserName(), m.getPassword());
+                    Member sm = new Member(m.getUserName(), m.getPassword(),m.getName(),m.getLastName());
                     members.remove(m);
                     systemManagers.add(sm);
                     users.add(sm);
@@ -68,12 +68,12 @@ public class UserController {
         else
             return "You don't have permission to add system manager\n";
     }
-    public boolean signUp(String userName,String password) {
+    public boolean signUp(String userName,String password,String name,String lastName) {
         for (Member m : members) {
             if (userName.equals(m.getUserName()))
                 return false;
         }
-        Member m = new Member(userName, password);
+        Member m = new Member(userName, password,name,lastName);
         members.add(m);
         users.add(m);
         return true;
@@ -220,7 +220,7 @@ public class UserController {
         Member sm1 = getSysManager(userName);
         Member sm2 = getSysManager(managerToRemove);
         if(sm1 != null && sm2 != null){
-            Member m = new Member(sm2.getUserName(),sm2.getPassword());
+            Member m = new Member(sm2.getUserName(),sm2.getPassword(),sm2.getName(),sm2.getLastName());
             members.add(m);
             systemManagers.remove(sm2);
             return true;
@@ -264,5 +264,31 @@ public class UserController {
         if(this.systemManagers.size() > 0)
             return true;
         return false;
+    }
+    public String  getOnlineMembers(String userName) {
+        if(!isUserSysManager(userName)){
+            return null;
+        }
+        String ret = "";
+        for(Member m : members){
+            if(isConnected(m.getUserName())){
+                String s = m.getUserName() +"\t"+ m.getName()+ "\t"+ m.getLastName()+"\n";
+                ret+=s;
+            }
+        }
+        return ret;
+    }
+    public String  getOfflineMembers(String userName) {
+        if(!isUserSysManager(userName)){
+            return null;
+        }
+        String ret = "";
+        for(Member m : members){
+            if(!isConnected(m.getUserName())){
+                String s = m.getUserName() +"\t"+ m.getName()+ "\t"+ m.getLastName()+"\n";
+                ret+=s;
+            }
+        }
+        return ret;
     }
 }

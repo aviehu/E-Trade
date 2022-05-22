@@ -3,8 +3,8 @@ package Domain.Users.Users;
 import Domain.Stores.Store;
 
 public class SystemManager extends Member{
-    public SystemManager(String userName, String password) {
-        super(userName, password);
+    public SystemManager(String userName, String password,String name,String lastName) {
+        super(userName, password,name,lastName);
     }
 
     @Override
@@ -43,8 +43,28 @@ public class SystemManager extends Member{
     }
 
     @Override
-    public Member signIn(String userName, String password, int age, String mail, String city, String street, int streetNum, int apartementNum) {
-        return super.signIn(userName, password, age, mail, city, street, streetNum, apartementNum);
+    public void setName(String name) {
+        super.setName(name);
+    }
+
+    @Override
+    public void setLastName(String lastName) {
+        super.setLastName(lastName);
+    }
+
+    @Override
+    public String getName() {
+        return super.getName();
+    }
+
+    @Override
+    public String getLastName() {
+        return super.getLastName();
+    }
+
+    @Override
+    public Member signUp(String userName, String password, String name, String lastName) {
+        return super.signUp(userName, password, name, lastName);
     }
 
     @Override

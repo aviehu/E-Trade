@@ -58,8 +58,8 @@ public class Guest extends User {
     }
 
     @Override
-    public Member signIn(String userName, String password, int age, String mail,String city,String street,int streetNum,int apartementNum) {
-        return super.signIn(userName, password, age, mail,city,street,streetNum,apartementNum);
+    public Member signUp(String userName, String password, String name, String lastName) {
+        return super.signUp(userName, password, name, lastName);
     }
 
     @Override

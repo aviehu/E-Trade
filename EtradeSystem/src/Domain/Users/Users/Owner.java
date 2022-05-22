@@ -12,8 +12,8 @@ import java.util.List;
 public class Owner extends Member {
 
 
-    public Owner(String userName, String password) {
-        super(userName, password);
+    public Owner(String userName, String password,String name,String lastName) {
+        super(userName, password,name,lastName);
         //this.isFounder = isFounder;
     }
 

@@ -14,12 +14,23 @@ import java.time.LocalTime;
 public class SystemService implements ServiceInterface {
     private Facade facade;
 
+
     public SystemService() {
         init();
     }
 
     public void init(){
         this.facade = new Facade();
+    }
+
+    @Override
+    public ResultMsg getOnlineMembers(String userName) {
+        return facade.getOnlineMembers(userName);
+    }
+
+    @Override
+    public ResultMsg getOfflineMembers(String userName) {
+        return facade.getOfflineMembers(userName);
     }
 
     public ResultBool supplyServiceExists(){
@@ -90,8 +101,8 @@ public class SystemService implements ServiceInterface {
     }
 
     @Override
-    public ResultBool signUp(String userName, String newUserName, String password) {
-        return facade.signUp(userName, newUserName, password);
+    public ResultBool signUp(String userName, String newUserName, String password, String name, String lastName) {
+        return facade.signUp(userName, newUserName, password, name, lastName);
     }
 
     @Override

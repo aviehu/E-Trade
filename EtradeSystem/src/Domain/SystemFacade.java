@@ -11,6 +11,8 @@ import Service.ResultPackge.ResultMsg;
 import java.time.LocalTime;
 
 public interface SystemFacade {
+    public ResultMsg getOnlineMembers(String userName);
+    public ResultMsg getOfflineMembers(String userName);
     public ResultBool removeMember(String userName,String memberToRemove);
     public ResultMsg enterSystem();
     public ResultBool addSystemManager(String userName,String managerToAdd);
@@ -32,7 +34,7 @@ public interface SystemFacade {
 
 //    public ResultBool exitSystemAsGuest(String name);
 
-    public ResultBool signUp(String userName,String newUserName, String password);
+    public ResultBool signUp(String userName,String newUserName, String password,String name,String lastName);
 
     public ResultBool login(String userName,String memberUserName, String password);
 
