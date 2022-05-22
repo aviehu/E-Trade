@@ -15,8 +15,8 @@ public class RemoveMemberTest {
 
         systemService = new SystemService();
         guestName = systemService.enterSystem().getVal();
-        systemService.signUp(guestName, "Andalus", "100");
-        systemService.signUp(guestName, "Andalus1", "200");
+        systemService.signUp(guestName, "Andalus", "100","Andalus","Andalus");
+        systemService.signUp(guestName, "Andalus1", "200","Andalus1","Andalus1");
     }
 
     @After

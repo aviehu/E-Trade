@@ -16,7 +16,7 @@ public class LogoutTest {
     public void setUp() throws Exception {
         systemService = new SystemService();
         guestName = systemService.enterSystem().getVal();
-        systemService.signUp(guestName, "newMember", "123").getVal();
+        systemService.signUp(guestName, "newMember", "123","newMember","newMember").getVal();
         systemService.login(guestName, "newMember", "123");
     }
 

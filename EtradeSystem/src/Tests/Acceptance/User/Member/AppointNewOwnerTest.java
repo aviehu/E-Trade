@@ -14,9 +14,9 @@ public class AppointNewOwnerTest {
     public void setUp() throws Exception {
         systemService = new SystemService();
         String guestName = systemService.enterSystem().getVal();
-        systemService.signUp(guestName, "Mira", "200");
-        systemService.signUp(guestName, "Andalus", "100");
-        systemService.signUp(guestName, "Andalus2", "102");
+        systemService.signUp(guestName, "Mira", "200","Mira","Mira");
+        systemService.signUp(guestName, "Andalus", "100","Andalus","Andalus");
+        systemService.signUp(guestName, "Andalus2", "102","Andalus2","Andalus2");
         systemService.login(guestName, "Andalus", "100");
         systemService.openStore("Andalus", "Mega", 123);
         systemService.appointStoreManager("Andalus", "Mega", "Mira");

@@ -15,8 +15,8 @@ public class AppointNewManagerTest {
     public void setUp() throws Exception {
         systemService = new SystemService();
         guestName = systemService.enterSystem().getVal();
-        systemService.signUp(guestName, "Mira", "200");
-        systemService.signUp(guestName, "Andalus", "100");
+        systemService.signUp(guestName, "Mira", "200","Mira","Mira");
+        systemService.signUp(guestName, "Andalus", "100","Andalus","Andalus");
         systemService.login(guestName, "Andalus", "100");
         systemService.openStore("Andalus", "Mega", 123);
         guestName = systemService.logOut("Andalus").getVal();

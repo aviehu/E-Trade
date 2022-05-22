@@ -30,9 +30,9 @@ public class ConcurrencyPurchaseTest {
         };
         systemService = new SystemService();
         String guestName = systemService.enterSystem().getVal();
-        systemService.signUp(guestName, "Andalus", "100");
-        systemService.signUp(guestName, "Andalus2", "200");
-        systemService.signUp(guestName, "Seller", "123");
+        systemService.signUp(guestName, "Andalus", "100","Andalus","Andalus");
+        systemService.signUp(guestName, "Andalus2", "200","Andalus","Andalus");
+        systemService.signUp(guestName, "Seller", "123","sell","seller");
         systemService.login(guestName, "Seller", "123");
         systemService.openStore("Seller", "Mega", 123);
         systemService.addProductToStore("Seller", "Mega",
