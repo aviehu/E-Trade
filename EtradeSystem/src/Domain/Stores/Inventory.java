@@ -12,6 +12,14 @@ public class Inventory {
         products = Collections.synchronizedList(new ArrayList<Product>());
     }
 
+    public Map<Product, Integer> getAmountsFromNames(Map<String, Integer> amounts) {
+        Map<Product, Integer> productAmounts = new HashMap<Product, Integer>();
+        for(String productName : amounts.keySet()) {
+            productAmounts.put(getProductByName(productName), amounts.get(productName));
+        }
+        return productAmounts;
+    }
+
     public boolean addProduct(String name, int amount, double price, String category){
         if(getProductByName(name) == null) {
             products.add(new Product(name, amount, price, category));

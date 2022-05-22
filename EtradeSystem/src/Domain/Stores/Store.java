@@ -1,5 +1,8 @@
 package Domain.Stores;
 
+import Domain.Stores.Discounts.DiscountType;
+import Domain.Stores.Policies.PolicyType;
+import Domain.Stores.Predicates.OperatorComponent;
 import Domain.purchaseOption;
 
 import java.time.LocalDate;
@@ -49,6 +52,26 @@ public class Store {
         raffleId = 1;
         managersPermissions = new ConcurrentHashMap<>();
         closedByAdmin = false;
+    }
+
+    public int addDiscount(String discountOn, int discountPercentage, String description, DiscountType discountType) {
+        return policyManager.addDiscount(discountOn, discountPercentage, description, discountType);
+    }
+
+    public int addPredicateDiscount(String discountOn, int discountPercentage, String description, DiscountType discountType, OperatorComponent operatorComponent) {
+        return policyManager.addPredicateDiscount(discountOn, discountPercentage, description, discountType, operatorComponent);
+    }
+
+    public int addPolicy(String policyOn, String description, PolicyType policyType, OperatorComponent operatorComponent) {
+        return policyManager.addPolicy(policyOn, description, policyType, operatorComponent);
+    }
+
+    public boolean removeDiscount(int discountId) {
+        return policyManager.removeDiscount(discountId);
+    }
+
+    public boolean removePolicy(int policyId) {
+        return policyManager.removePolicy(policyId);
     }
 
     public boolean hasLowPermission(String userName) {
@@ -114,9 +137,10 @@ public class Store {
     }
 
     public synchronized boolean purchase(Map<String,Integer> prods, String buyer){
-        if(policyManager.canPurchase(prods) && inventory.canPurchase(prods)) {
+        Map<Product,Integer> amounts = inventory.getAmountsFromNames(prods);
+        if(policyManager.canPurchase(amounts) && inventory.canPurchase(prods)) {
             inventory.purchase(prods);
-            Map<Product, Integer> products = new HashMap<>();
+            Map<Product, Integer> products = new HashMap<Product, Integer>();
             for(String productName : prods.keySet()) {
                 Product product = inventory.getProductByName(productName);
                 products.put(product, prods.get(productName));
@@ -220,7 +244,7 @@ public class Store {
 
     public double getPrice(Map<String, Integer> items) {
         List<Product> products = inventory.getProductsByListOfNames(items.keySet());
-        Map<Product, Integer> productsAmounts = new HashMap<>();
+        Map<Product, Integer> productsAmounts = new HashMap<Product, Integer>();
         for(Product product : products) {
             productsAmounts.put(product, items.get(product.getName()));
         }
