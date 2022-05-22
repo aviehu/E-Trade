@@ -7,6 +7,9 @@ import Service.ResultPackge.ResultMsg;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.FileHandler;
+import java.util.logging.Handler;
+import java.util.logging.Logger;
 
 public class UserController {
     public static int guestId;
@@ -17,6 +20,7 @@ public class UserController {
     private List<Member> systemManagers;
     private List<User> users;
     private Guest online;
+    private Logger logger = Logger.getLogger("users");
 
     public UserController() {
         guestId = 0;
@@ -25,8 +29,12 @@ public class UserController {
         this.guests = new ArrayList<>();
         this.systemManagers = new ArrayList<>();
         users = new ArrayList<>();
-
-
+        try {
+            Handler fileHandler = new FileHandler(System.getProperty("user.dir") + "/users.log", 2000, 5);
+            logger.addHandler(fileHandler);
+        } catch (Exception e) {
+            System.out.println("error while creating logger for users");
+        }
         init();
     }
     public void init(){
@@ -58,6 +66,7 @@ public class UserController {
                     members.remove(m);
                     systemManagers.add(sm);
                     users.add(sm);
+                    logger.info("new system manager - " + managerToAdd);
                     return null;
                 }
                 else
@@ -76,6 +85,7 @@ public class UserController {
         Member m = new Member(userName, password,name,lastName);
         members.add(m);
         users.add(m);
+        logger.info("new user - " + userName);
         return true;
     }
     public String enterSystem(){
@@ -83,6 +93,7 @@ public class UserController {
         online.setConnected(true);
         this.guests.add(online);
         this.users.add(online);
+        logger.info("new guest - guest" + guestId);
         guestId++;
         return online.getUserName();
     }
@@ -91,7 +102,9 @@ public class UserController {
             if(m.getUserName().equals(userName)) {
                 if (m.getPassword().equals(password)) {
                     m.setConnected(true);
+                    logger.info(userName + " has logged in");
                     return null;
+
                 }
                 else
                     return "Wrong password\n";
@@ -152,8 +165,10 @@ public class UserController {
     }
     public String addProductToShoppingCart(String userName, String productName, Store storeName, int quantity){
        User user = getUser(userName);
-       if(user != null)
+       if(user != null) {
+           logger.info("product - " + productName + " has been added to cart");
            return user.addProdToCart(storeName,quantity,productName);
+       }
        return "User "+userName+" does not exist\n";
     }
     public String removeProductFromShoppingCart(String userName,Store s,int quantity,String prodName){
@@ -172,6 +187,7 @@ public class UserController {
         User user = getUser(userName);
         SupplyAddress sa;
         if(user != null) {
+            logger.info("new purchase by - " + userName);
             if(user.getCard() == null) {
                 CreditCard card = new CreditCard(creditCard, expDate, cvv);
                 if (user.getAddress() == null) {
@@ -223,6 +239,7 @@ public class UserController {
             Member m = new Member(sm2.getUserName(),sm2.getPassword(),sm2.getName(),sm2.getLastName());
             members.add(m);
             systemManagers.remove(sm2);
+            logger.info("removed system manager - " + managerToRemove);
             return true;
         }
         return false;
@@ -237,6 +254,7 @@ public class UserController {
                 members.remove(m);
                 users.remove(m);
                 //return "Successfully removed "+ memberToRemove+" from the system\n";
+                logger.info("removed member - " + memberToRemove);
                 return null;
             }
             else
