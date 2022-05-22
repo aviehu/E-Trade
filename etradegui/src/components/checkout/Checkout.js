@@ -15,6 +15,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AddressForm from './AddressForm';
 import PaymentForm from './PaymentForm';
 import Review from './Review';
+import {useNavigate} from 'react-router-dom';
+
 
 const steps = ['Your cart','Shipping address', 'Payment details'];
 
@@ -38,12 +40,16 @@ const theme = createTheme();
 
 export default function Checkout() {
     const [activeStep, setActiveStep] = React.useState(0);
+    const navigate = useNavigate();
 
     const handleNext = () => {
         setActiveStep(activeStep + 1);
     };
 
     const handleBack = () => {
+        if(activeStep === 0){
+            navigate("/etrade");
+        }
         setActiveStep(activeStep - 1);
     };
 
@@ -92,7 +98,7 @@ export default function Checkout() {
                             <React.Fragment>
                                 {getStepContent(activeStep)}
                                 <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                    {activeStep !== 0 && (
+                                    {(
                                         <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
                                             Back
                                         </Button>

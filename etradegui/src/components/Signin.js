@@ -3,28 +3,28 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import imageLogo from './logo.jpg'
+import {useNavigate} from 'react-router-dom';
 
 const theme = createTheme();
 
-// todo: why do not use React.Component?
 export default function SignIn() {
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const navigate = useNavigate();
+    const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
+        //todo: check if the DB contain this email, if yes check for password.
+        //todo: if all is ok redirect to Dashboard.
         console.log({
             email: data.get('email'),
             password: data.get('password'),
         });
+        navigate("/etrade");
     };
 
     return (
@@ -39,7 +39,7 @@ export default function SignIn() {
                         alignItems: 'center',
                     }}
                 >
-                    <Avatar variant="square" sx={{ width: 100, height: 100 }} alt="eTradeLogo" src={imageLogo} />
+                    <Avatar variant="square" sx={{width: 100, height: 100}} alt="eTradeLogo" src={imageLogo}/>
                     <Box component="form" onSubmit={handleSubmit} noValidate sx={{mt: 1}}>
                         <TextField
                             margin="normal"
@@ -70,7 +70,7 @@ export default function SignIn() {
                             Sign In
                         </Button>
                         <Grid container justifyContent="flex-start">
-                            <Link href="#" variant="body2">
+                            <Link href="/signup" variant="body2">
                                 {"Don't have an account? sign up to E-Trade"}
                             </Link>
                         </Grid>
