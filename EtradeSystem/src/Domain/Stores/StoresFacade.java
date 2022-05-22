@@ -10,13 +10,14 @@ import java.util.logging.Handler;
 import java.util.logging.Logger;
 
 public class StoresFacade {
-    Logger logger = Logger.getLogger("stores");
+    private Logger logger = Logger.getLogger("stores");
     private List<Store> stores;
 
     public StoresFacade(){
         stores = Collections.synchronizedList(new ArrayList<Store>());
         try {
             Handler fileHandler = new FileHandler(System.getProperty("user.dir") + "/stores.log", 2000, 5);
+            logger.addHandler(fileHandler);
         } catch (Exception e) {
             System.out.println("error while creating logger for stores");
         }
