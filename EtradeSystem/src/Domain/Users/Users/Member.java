@@ -10,6 +10,8 @@ public class Member extends User{
     protected String userName;
     protected String password;
     protected int age;
+    protected String name;
+    protected String lastName;
     protected String mail;
     private MemberPurchaseHistory pHistory;
     protected int securityLvl;
@@ -18,13 +20,28 @@ public class Member extends User{
     protected CreditCard card;
     protected int discount;
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
     @Override
     public boolean exitSystem() {
         return super.exitSystem();
     }
 
-    public Member(String userName, String password) {
+    public String getName() {
+        return name;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public Member(String userName, String password, String name, String lastName) {
         super();
         this.discount = 10;
         this.myShopCart.setDiscount(discount);
@@ -33,6 +50,8 @@ public class Member extends User{
         this.pHistory = new MemberPurchaseHistory();
         this.userName = userName;
         this.password = password;
+        this.name = name;
+        this.lastName = lastName;
         this.age = 0;
         this.mail = "";
         this.address = null;
@@ -127,8 +146,8 @@ public class Member extends User{
 //    }
 
     @Override
-    public Member signIn(String userName, String password, int age, String mail,String city,String street,int streetNum,int apartementNum) {
-        return super.signIn(userName, password, age, mail,city,street,streetNum,apartementNum);
+    public Member signUp(String userName, String password, String name,String lastName) {
+        return super.signUp(userName, password,name,lastName);
     }
 
     public void addSecurityQuest(String quest,String ans){

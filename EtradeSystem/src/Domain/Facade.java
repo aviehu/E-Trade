@@ -25,6 +25,29 @@ public class Facade implements SystemFacade {
     }
 
 
+
+    public ResultMsg getOnlineMembers(String userName){
+        String ret =  this.userController.getOnlineMembers(userName);
+        if(ret == null){
+            return  new ResultMsg(null,"PERMISSION DENIED\n");
+        }
+        if (ret.equals("")){
+            return  new ResultMsg("There are no connected members in the market\n",null);
+        }
+        return  new ResultMsg(ret,null);
+
+    }
+    public ResultMsg getOfflineMembers(String userName){
+        String ret =  this.userController.getOfflineMembers(userName);
+        if(ret == null){
+            return  new ResultMsg(null,"PERMISSION DENIED\n");
+        }
+        if (ret.equals("")){
+            return  new ResultMsg("There are no members in the market\n",null);
+        }
+        return  new ResultMsg(ret,null);
+
+    }
     @Override
     public ResultBool removeMember(String userName, String memberToRemove) {
         if(userController.isConnected(userName)){
@@ -131,14 +154,14 @@ public class Facade implements SystemFacade {
 //    }
 
     @Override
-    public ResultBool signUp(String userName,String newUserName, String password) {
+    public ResultBool signUp(String userName,String newUserName, String password, String name,String lastName) {
         if(userController.isConnected(userName)) {
             if (!this.userController.isValidPassword(password))
                 return new ResultBool(false, "Invalid password\n password must be at least 8 characters and contain uppercase character\n");
             if (this.userController.isUserNameExist(newUserName))
                 return new ResultBool(false, "User name not available\n");
             String pass = this.externalSys.encode(password);
-            userController.signUp(newUserName, pass);
+            userController.signUp(newUserName, pass,name,lastName);
             return new ResultBool(true, null);
         }
         return new ResultBool(false, "User is not connected\n");

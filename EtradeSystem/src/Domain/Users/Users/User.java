@@ -59,8 +59,8 @@ public abstract class User {
 //    }
     //signIn:
     //create new Member object return it to controller to save it.
-    public Member signIn(String userName,String password,int age,String mail,String city,String street,int streetNum,int apartementNum){
-        return new Member(userName,password);
+    public Member signUp(String userName,String password,String name,String lastName){
+        return new Member(userName,password,name,lastName);
     }
 
     //logIn:

@@ -11,7 +11,8 @@ import java.time.LocalTime;
 
 public interface ServiceInterface {
     public void init();
-
+    public ResultMsg getOnlineMembers(String userName);
+    public ResultMsg getOfflineMembers(String userName);
     public ResultBool supplyServiceExists();
 
     public ResultBool paymentServiceExists();
@@ -42,7 +43,7 @@ public interface ServiceInterface {
 
 //    public ResultBool exitSystemAsGuest(String name);
 
-    public ResultBool signUp(String userName, String newUserName, String password);
+    public ResultBool signUp(String userName, String newUserName, String password,String name,String lastName);
 
     public ResultBool login(String userName, String memberUserName, String password);
 
