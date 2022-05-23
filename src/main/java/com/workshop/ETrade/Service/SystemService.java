@@ -9,9 +9,11 @@ import com.workshop.ETrade.Domain.purchaseOption;
 import com.workshop.ETrade.Service.ResultPackge.ResultBool;
 import com.workshop.ETrade.Service.ResultPackge.ResultMsg;
 import com.workshop.ETrade.Service.ResultPackge.ResultNum;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
 
+@Service
 public class SystemService implements ServiceInterface {
     private Facade facade;
 

@@ -6,6 +6,7 @@ import com.workshop.ETrade.Domain.Users.ExternalService.Supply.SupplyAdaptee;
 import com.workshop.ETrade.Domain.purchaseOption;
 import com.workshop.ETrade.Service.ResultPackge.ResultBool;
 import com.workshop.ETrade.Service.ResultPackge.ResultMsg;
+import com.workshop.ETrade.Service.ResultPackge.ResultNum;
 import com.workshop.ETrade.Service.ServiceInterface;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -334,5 +335,19 @@ public class SystemServiceProxy implements ServiceInterface {
         if (real == null)
             throw new NotImplementedException();
         return real.addKeyword(userName, productName, storeName, keyWord);
+    }
+
+    @Override
+    public ResultNum getProductAmount(String storeName, String prodName) {
+        if(real == null)
+            throw new NotImplementedException();
+        return real.getProductAmount(storeName, prodName);
+    }
+
+    @Override
+    public String getOnline() {
+        if(real == null)
+            throw new NotImplementedException();
+        return real.getOnline();
     }
 }
