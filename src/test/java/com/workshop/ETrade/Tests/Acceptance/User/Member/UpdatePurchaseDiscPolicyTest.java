@@ -30,9 +30,9 @@ public class UpdatePurchaseDiscPolicyTest {
     @Test
     public void UpdatePurchaseDiscPolicySuccessTest(){
         systemService.addProductToShoppingCart("Andalus", "Bamba", "Mega", 20);
-        int prevPrice = systemService.getCartPrice("Andalus").getVal();
+        double prevPrice = systemService.getCartPrice("Andalus").getVal();
         Assert.assertTrue(systemService.addDiscount("Andalus", "Mega", "Bamba", 10, "", DiscountType.PRODUCT).getVal() > 0);
-        int updatePrice = systemService.getCartPrice("Andalus").getVal();
+        double updatePrice = systemService.getCartPrice("Andalus").getVal();
         Assert.assertTrue(prevPrice >= updatePrice);
 
 
