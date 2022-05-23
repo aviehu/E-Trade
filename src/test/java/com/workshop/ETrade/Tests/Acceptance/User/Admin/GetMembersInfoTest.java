@@ -10,6 +10,7 @@ public class GetMembersInfoTest {
     private Thread t1;
     private Thread t2;
     private SystemService systemService;
+    private String guestName;
 
     @Before
     public void setUp() throws Exception {
@@ -27,7 +28,7 @@ public class GetMembersInfoTest {
             }
         };
         systemService = new SystemService();
-        String guestName = systemService.enterSystem().getVal();
+        guestName = systemService.enterSystem().getVal();
         systemService.signUp(guestName, "Andalus", "100","Anda","lus");
     }
 
@@ -48,5 +49,17 @@ public class GetMembersInfoTest {
     }
 
     @Test
-    public void GetOfflineMembersInfoTest(){}
+    public void GetOfflineMembersInfoTest(){
+        systemService.signUp(guestName, "Andalus", "100","Anda","lus");
+        systemService.signUp(guestName, "Andalus1", "200","Anda","lus1");
+        t1.start();
+        t2.start();
+        try {
+            t1.join();
+            t2.join();
+
+        } catch (InterruptedException ignored) {}
+        Assert.assertTrue(systemService.getOfflineMembers("admin").getVal().contains("Andalus1"));
+        Assert.assertFalse(systemService.getOfflineMembers("admin").getVal().contains("Andalus"));
+    }
 }
