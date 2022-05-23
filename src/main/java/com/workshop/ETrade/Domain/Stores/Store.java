@@ -296,13 +296,13 @@ public class Store {
     }
 
     public Set<String> getAllManagement(String name) {
-        Set<String> managers = getManagers(name);
-        Set<String> owners = getOwners(name);
-        if(managers == null || owners == null) {
-            return null;
+        Set<String> management = new HashSet();
+        for(String owner : ownersAppointments.keySet()) {
+            management.add(owner);
+            for(String manager : managersAppointments.get(owner)) {
+                management.add(manager);
+            }
         }
-        Set<String> management = managers;
-        management.addAll(owners);
         return management;
     }
 
@@ -421,4 +421,7 @@ public class Store {
         return storeHistory.getHistory();
     }
 
+    public List<String> getProducts() {
+        return inventory.getProducts();
+    }
 }

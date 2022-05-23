@@ -5,32 +5,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Grid from '@mui/material/Grid';
 
-const totalSum = "$34.06"
-const products = [
-    {
-        name: 'Product 1',
-        desc: 'description',
-        price: '$9.99',
-    },
-    {
-        name: 'Product 2',
-        desc: 'description',
-        price: '$3.45',
-    },
-    {
-        name: 'Product 3',
-        desc: 'description',
-        price: '$6.51',
-    },
-    {
-        name: 'Product 4',
-        desc: 'description',
-        price: '$14.11',
-    },
-    { name: 'Shipping', desc: '', price: 'Free' },
-];
-
-export default function Review() {
+export default function Review({products, totalPrice}) {
     return (
         <React.Fragment>
             <Typography variant="h6" gutterBottom>
@@ -46,7 +21,7 @@ export default function Review() {
                 <ListItem sx={{ py: 1, px: 0 }}>
                     <ListItemText primary="Total" />
                     <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-                        {totalSum}
+                        {totalPrice}
                     </Typography>
                 </ListItem>
             </List>

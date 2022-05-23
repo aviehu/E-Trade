@@ -3,6 +3,8 @@ package com.workshop.ETrade.Domain.Users.Users;
 import com.workshop.ETrade.Domain.Stores.Store;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 
 //is paying and supply is known to store or the market responsible to supply?
@@ -58,14 +60,12 @@ public class StoreBasket {
         return store;
     }
 
-    public String displayBasket(){
-        String display = "";
-        display += "**"+store.getName()+"**\n\n";
-        display += "\tProduct\tQuantity\t\n";
+    public List<String> displayBasket(){
+        List<String> items = new LinkedList<>();
         for(String p : prods.keySet()){
-            display += "\t"+p+"\t"+prods.get(p)+"\t"+"\n";
+            items.add(p);
         }
-        return display;
+        return items;
     }
     public String getStoreName(){
         return store.getName();
