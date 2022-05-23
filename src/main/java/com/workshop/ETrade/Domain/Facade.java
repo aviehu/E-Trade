@@ -1,5 +1,8 @@
 package com.workshop.ETrade.Domain;
 
+import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
+import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
+import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
 import com.workshop.ETrade.Domain.Stores.Store;
 import com.workshop.ETrade.Domain.Stores.StoresFacade;
 import com.workshop.ETrade.Domain.Stores.managersPermission;
@@ -12,6 +15,7 @@ import com.workshop.ETrade.Service.ResultPackge.ResultMsg;
 import com.workshop.ETrade.Service.ResultPackge.ResultNum;
 
 import java.time.LocalTime;
+import java.util.Set;
 
 public class Facade implements SystemFacade {
     private StoresFacade storesFacade;
@@ -26,6 +30,13 @@ public class Facade implements SystemFacade {
     }
 
 
+    @Override
+    public ResultNum getCartPrice(String userName) {
+        int p = this.userController.getCartPrice(userName);
+        if(p == -1)
+            return new ResultNum(-1,"no such user\n");
+        return new ResultNum(p,null);
+    }
 
     public ResultMsg getOnlineMembers(String userName){
         String ret =  this.userController.getOnlineMembers(userName);
@@ -52,6 +63,12 @@ public class Facade implements SystemFacade {
     @Override
     public ResultBool removeMember(String userName, String memberToRemove) {
         if(userController.isConnected(userName)){
+            if(!userController.isUserSysManager(userName)){
+                return new ResultBool(false,"PERMISSION DENIED\n");
+            }
+            if(isInManagment(userName,memberToRemove)){
+                return new ResultBool(false,"Can't remove " + memberToRemove+ ", "+ memberToRemove+" is in Management\n");
+            }
             String ret = userController.removeMember(userName, memberToRemove);
             if(ret == null)
                 return new ResultBool(true,null);
@@ -59,6 +76,13 @@ public class Facade implements SystemFacade {
 
         }
         return new ResultBool(false, "User is not connected");
+    }
+    public boolean isInManagment(String admin,String memberToRemove){
+        for(Store s : this.storesFacade.getStores()){
+            if(this.storesFacade.getStoresManagement(s.getName(),admin).contains(memberToRemove))
+                return true;
+        }
+        return false;
     }
 
     @Override
@@ -426,7 +450,7 @@ public class Facade implements SystemFacade {
     @Override
     public ResultMsg getStoresManagement(String userName, String storeName) {
         if(userController.isConnected(userName)) {
-            String result = storesFacade.getStoresManagement(userName, storeName);
+            String result = storesFacade.getStoresManagement(userName, storeName).toString();
             if(result != null) {
                 return new ResultMsg(result, null);
             }
@@ -455,14 +479,14 @@ public class Facade implements SystemFacade {
         return new ResultBool(false , "Cannot Close Store Permanently");
     }
 
-    @Override
-    public ResultBool adminTerminateUser(String adminName, String userToTerminate) {
-        String ret = userController.removeMember(adminName, userToTerminate);
-        if(ret == null) {
-            return new ResultBool(true, null);
-        }
-        return new ResultBool(false, ret);
-    }
+//    @Override
+//    public ResultBool adminTerminateUser(String adminName, String userToTerminate) {
+//        String ret = userController.removeMember(adminName, userToTerminate);
+//        if(ret == null) {
+//            return new ResultBool(true, null);
+//        }
+//        return new ResultBool(false, ret);
+//    }
 
     @Override
     public ResultMsg adminGetStoresPurchaseHistory(String adminName, String storeName) {
@@ -485,6 +509,20 @@ public class Facade implements SystemFacade {
             return new ResultBool(false, "Cannot add keyword");
         }
         return new ResultBool(false, "User Is Not Connected");
+    }
+
+    @Override
+    public ResultNum addPolicy(String userName,String store, String policyOn, String description, PolicyType policyType, OperatorComponent operatorComponent) {
+        int ret = this.storesFacade.addPolicy(userName,store, policyOn, description, policyType, operatorComponent);
+        return new ResultNum(ret,null);
+    }
+
+    @Override
+    public ResultNum addDiscount(String userName,String store, String discountOn, int discountPercentage, String description, DiscountType discountType) {
+        int ret = this.storesFacade.addDiscount(userName,store, discountOn, discountPercentage, description, discountType);
+        if(ret == -1)
+            return new ResultNum(-1,"ERROR\n");
+        return new ResultNum(ret,null);
     }
 
     public ResultBool supplyServiceExists() {

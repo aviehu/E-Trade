@@ -1,5 +1,8 @@
 package com.workshop.ETrade.Tests.Bridge;
 
+import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
+import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
+import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
 import com.workshop.ETrade.Domain.Stores.managersPermission;
 import com.workshop.ETrade.Domain.Users.ExternalService.Payment.PaymentAdaptee;
 import com.workshop.ETrade.Domain.Users.ExternalService.Supply.SupplyAdaptee;
@@ -27,6 +30,27 @@ public class SystemServiceProxy implements ServiceInterface {
             throw new NotImplementedException();
         real.init();
     }
+
+    @Override
+    public ResultNum getCartPrice(String userName) {
+        if (real == null)
+            throw new NotImplementedException();
+        return real.getCartPrice(userName);
+    }
+
+    @Override
+    public ResultNum addPolicy(String userName, String store, String policyOn, String description, PolicyType policyType, OperatorComponent operatorComponent) {
+        if (real == null)
+            throw new NotImplementedException();
+        return real.addPolicy(userName, store, policyOn, description, policyType, operatorComponent);
+    }
+    @Override
+    public ResultNum addDiscount(String userName, String store, String discountOn, int discountPercentage, String description, DiscountType discountType) {
+        if (real == null)
+            throw new NotImplementedException();
+        return real.addDiscount(userName, store, discountOn, discountPercentage, description, discountType);
+    }
+
 
     @Override
     public ResultMsg getOnlineMembers(String userName) {
@@ -350,4 +374,6 @@ public class SystemServiceProxy implements ServiceInterface {
             throw new NotImplementedException();
         return real.getOnline();
     }
+
+
 }
