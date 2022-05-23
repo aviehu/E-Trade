@@ -9,17 +9,22 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import imageLogo from "./logo.jpg";
+import post from './post'
 
 const theme = createTheme();
 
 export default function SignUp() {
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
+        const body = {
             email: data.get('email'),
             password: data.get('password'),
-        });
+            firstName: data.get('firstName'),
+            lastName: data.get('lastName')
+        }
+        console.log(body);
+        const res = await post(body, 'users/signup');
     };
 
     return (

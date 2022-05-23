@@ -22,7 +22,7 @@ import '../../css/Dashboard.css';
 const stores = [
     {
         "id": "1",
-        "title": "Store name",
+        "title": "Mega",
         "content": "link to this stores",
         "userEmail": "user@etade.com",
         "creationTime": 1542111235544,
