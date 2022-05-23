@@ -5,12 +5,14 @@ import com.workshop.ETrade.Domain.purchaseOption;
 import com.workshop.ETrade.Service.ResultPackge.ResultBool;
 import com.workshop.ETrade.Service.ResultPackge.ResultMsg;
 import com.workshop.ETrade.Service.ResultPackge.ResultNum;
+import com.workshop.ETrade.Service.ResultPackge.newResult;
 import com.workshop.ETrade.Service.ServiceInterface;
 import com.workshop.ETrade.Service.SystemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalTime;
+import java.util.List;
 
 
 @RestController
@@ -23,13 +25,23 @@ public class StoresController {
 
 
     @GetMapping("/info/{store}")
-    public ResultMsg getStoreInfo(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName) {
+    public newResult<List<String>> getStoreInfo(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName) {
         return systemService.getStoreInfo(userName, storeName);
+    }
+
+    @GetMapping("/")
+    public newResult<List<String>> getAllStores(@RequestHeader("Authorization") String userName) {
+        return systemService.getAllStores(userName);
     }
 
     @GetMapping("/searchbykw/{word}")
     public ResultMsg searchByKeyword(String userName,@PathVariable("word") String keyword) {
         return systemService.searchByKeyword(userName, keyword);
+    }
+
+    @GetMapping("/ofuser")
+    public newResult<List<String>> storesOfUser(@RequestHeader("Authorization") String userName) {
+        return systemService.getStoresOfUser(userName);
     }
 
     @GetMapping("/searchbycat/{cat}")
@@ -43,12 +55,12 @@ public class StoresController {
     }
 
     @PostMapping("/addproducttocart")
-    public ResultMsg addProductToShoppingCart(String userName, ProductForm form) {
+    public ResultMsg addProductToShoppingCart(@RequestHeader("Authorization") String userName, @RequestBody ProductForm form) {
         return systemService.addProductToShoppingCart(userName, form.productName, form.storeName, form.quantity);
     }
 
     @GetMapping("/displaycart")
-    public ResultMsg displayShoppingCart(String userName) {
+    public newResult<List<String>> displayShoppingCart(@RequestHeader("Authorization") String userName) {
         return systemService.displayShoppingCart(userName);
     }
 
@@ -68,7 +80,7 @@ public class StoresController {
     }
 
     @PostMapping("/addproducttostore")
-    public ResultBool addProductToStore(String userName, NewProductForm form) {
+    public ResultBool addProductToStore(@RequestHeader("Authorization") String userName,@RequestBody NewProductForm form) {
         return systemService.addProductToStore(userName, form.storeName, form.productName, form.amount, form.price, form.category);
     }
 
@@ -80,6 +92,11 @@ public class StoresController {
     @PostMapping("/editproductname/{name}")
     public ResultBool editProductName(String userName, EditProductForm form,@PathVariable("name") String newProductName) {
         return systemService.editProductName(userName, form.storeName, form.productName, newProductName);
+    }
+
+    @GetMapping("/getcartprice")
+    public newResult<Double> getCartPrice(@RequestHeader("Authorization") String userName) {
+        return systemService.getCartPrice(userName);
     }
 
     @PostMapping("/editproductprice/{price}")

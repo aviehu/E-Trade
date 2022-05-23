@@ -3,6 +3,7 @@ package com.workshop.ETrade.Domain.Users.Users;
 import com.workshop.ETrade.Domain.Stores.Store;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class Member extends User{
     protected String userName;
@@ -71,7 +72,7 @@ public class Member extends User{
     }
 
     @Override
-    public String displayCart() {
+    public List<String> displayCart() {
         return super.displayCart();
     }
 

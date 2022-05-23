@@ -2,6 +2,8 @@ package com.workshop.ETrade.Domain.Users.Users;
 
 import com.workshop.ETrade.Domain.Stores.Store;
 
+import java.util.List;
+
 public class SystemManager extends Member{
     public SystemManager(String userName, String password,String name,String lastName) {
         super(userName, password,name,lastName);
@@ -28,7 +30,7 @@ public class SystemManager extends Member{
     }
 
     @Override
-    public String displayCart() {
+    public List<String> displayCart() {
         return super.displayCart();
     }
 

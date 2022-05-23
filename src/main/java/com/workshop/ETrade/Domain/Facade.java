@@ -13,8 +13,12 @@ import com.workshop.ETrade.Domain.Users.Users.UserController;
 import com.workshop.ETrade.Service.ResultPackge.ResultBool;
 import com.workshop.ETrade.Service.ResultPackge.ResultMsg;
 import com.workshop.ETrade.Service.ResultPackge.ResultNum;
+import com.workshop.ETrade.Service.ResultPackge.newResult;
 
 import java.time.LocalTime;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 public class Facade implements SystemFacade {
@@ -31,11 +35,11 @@ public class Facade implements SystemFacade {
 
 
     @Override
-    public ResultNum getCartPrice(String userName) {
-        int p = this.userController.getCartPrice(userName);
+    public newResult<Double> getCartPrice(String userName) {
+        Double p = this.userController.getCartPrice(userName);
         if(p == -1)
-            return new ResultNum(-1,"no such user\n");
-        return new ResultNum(p,null);
+            return new newResult<>(null,"no such user\n");
+        return new newResult<>(p,null);
     }
 
     public ResultMsg getOnlineMembers(String userName){
@@ -210,15 +214,15 @@ public class Facade implements SystemFacade {
     }
 
     @Override
-    public ResultMsg getStoreInfo(String userName, String storeName) {
+    public newResult<List<String>> getStoreInfo(String userName, String storeName) {
         if(userController.isConnected(userName)){
-            String ans = storesFacade.displayStore(storeName);
+            List<String> ans = storesFacade.displayStore(storeName);
             if(ans != null) {
-                return new ResultMsg(ans, null);
+                return new newResult<>(ans, null);
             }
-            return new ResultMsg("", "No Such Store" + storeName);
+            return new newResult<>(null, "No Such Store" + storeName);
         }
-        return new ResultMsg("", "User Is Not Connected");
+        return new newResult<>(null, "User Is Not Connected");
     }
 
     @Override
@@ -277,10 +281,10 @@ public class Facade implements SystemFacade {
     }
 
     @Override
-    public ResultMsg displayShoppingCart(String userName) {
+    public newResult<List<String>> displayShoppingCart(String userName) {
         if(userController.isConnected(userName))
-            return new ResultMsg(userController.displayShoppingCart(userName),null);
-        return new ResultMsg(null,"User is not connected");
+            return new newResult<>(userController.displayShoppingCart(userName),null);
+        return new newResult<>(null,"User is not connected");
     }
 
 //    @Override
@@ -559,4 +563,23 @@ public class Facade implements SystemFacade {
     }
 
 
+    public newResult<List<String>> getAllStores(String userName) {
+        if(userController.isConnected(userName)) {
+            List<String> res = new LinkedList<>();
+            List<Store> stores = storesFacade.getStores();
+            for(Store store : stores) {
+                res.add(store.getName());
+            }
+            return new newResult<>(res, null);
+        }
+        return new newResult<>(null, "user is not connected");
+    }
+
+    public newResult<List<String>> getStoresOfUser(String userName) {
+        if(userController.isConnected(userName)) {
+            List<String> stores = storesFacade.getStoresOfUser(userName);
+            return new newResult<>(stores, null);
+        }
+        return new newResult<>(null, "user is not connected");
+    }
 }

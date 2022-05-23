@@ -16,10 +16,14 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import {mainListItems} from '../listItems';
-import Link from "@mui/material/Link";
 import '../../css/Dashboard.css';
-import {useState} from "react";
-import get from "../get";
+import Avatar from "@mui/material/Avatar";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Link from "@mui/material/Link";
+import {Card} from "@mui/material";
+import {useNavigate, useParams} from 'react-router-dom';
+import post from "../post";
 
 const drawerWidth = 240;
 
@@ -70,52 +74,33 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
 const mdTheme = createTheme();
 
 const DashboardContent: React.FC = () => {
-
-    const [stores, setStores] = useState(null);
+    const { name } = useParams()
     const [open, setOpen] = React.useState(true);
     const toggleDrawer = () => {
         setOpen(!open);
     };
 
-    useState(() => {
-        async function getStores() {
-            const res = await get('stores/');
-            const ans = await res.json()
-            const storesName = ans.val
-            if(storesName) {
-                const stores = storesName.map((store, id) => {
-                    return {
-                        "id": id,
-                        "title": store
-                    }
-                })
-                setStores(stores);
-                console.log(stores)
-            }
+    const navigate = useNavigate();
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
+        const body = {
+            storeName: name,
+            productName: data.get("productName"),
+            amount: data.get("amount"),
+            price: data.get("price"),
+            category: data.get("category")
         }
-        getStores()
-    }, [])
+        try {
+            const res = await post(body, 'stores/addproducttostore')
+            const boolRes = await res.json()
+            if(boolRes.val) {
+                navigate("/etrade");
+            }
+        } catch (e) {
 
-    const renderStores = (stores) => {
-        return (<ul className='stores'>
-            {stores.map((store, index) => (
-                <li key={store.id} className='store'>
-                    <div className='topStore'>
-                        <div>
-                            <Link href={`/store/${store.title}`}>
-                                <h5 className='title'>{store.title}</h5>
-                            </Link>
-                        </div>
-                    </div>
-
-                    {/*<div className="store-footer">*/}
-                    {/*    <div*/}
-                    {/*        className='meta-data'>By {store.userEmail} | {new Date(store.creationTime).toLocaleString()}</div>*/}
-                    {/*</div>*/}
-                </li>
-            ))}
-        </ul>);
-    }
+        }
+    };
 
     return (
         <ThemeProvider theme={mdTheme}>
@@ -188,12 +173,74 @@ const DashboardContent: React.FC = () => {
                 >
                     <Toolbar/>
                     <Container maxWidth="lg" sx={{mt: 4, mb: 4}}>
+                        {/*Here the form of the create store*/}
                         <Grid container spacing={3}>
-                            <Grid item xs={12}>
-                                <main>
-                                    {stores ? renderStores(stores) : <h2>Loading...</h2>}
-                                </main>
-                            </Grid>
+                            <ThemeProvider theme={mdTheme}>
+                                <Container component="main" maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+                                    <CssBaseline/>
+                                    <Box
+                                        sx={{
+                                            marginTop: 8,
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            alignItems: 'center',
+                                        }}
+                                    >
+                                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{mt: 3}}>
+                                            <Grid container spacing={2}>
+                                                <Grid item xl={12}>
+                                                    <TextField
+                                                        required
+                                                        fullWidth
+                                                        id="productName"
+                                                        label="Product Name"
+                                                        name="productName"
+                                                        autoComplete="productName"
+                                                    />
+                                                </Grid>
+                                                <Grid item xl={12}>
+                                                    <TextField
+                                                        required
+                                                        fullWidth
+                                                        name="amount"
+                                                        label="Amount"
+                                                        id="amount"
+                                                        autoComplete="amount"
+                                                    />
+                                                </Grid>
+                                                <Grid item xl={12}>
+                                                    <TextField
+                                                        required
+                                                        fullWidth
+                                                        name="price"
+                                                        label="Price"
+                                                        id="price"
+                                                        autoComplete="price"
+                                                    />
+                                                </Grid>
+                                                <Grid item xl={12}>
+                                                    <TextField
+                                                        required
+                                                        fullWidth
+                                                        name="category"
+                                                        label="Category"
+                                                        id="category"
+                                                        autoComplete="category"
+                                                    />
+                                                </Grid>
+                                            </Grid>
+                                            <Button
+                                                type="submit"
+                                                fullWidth
+                                                variant="contained"
+                                                sx={{mt: 3, mb: 2}}
+                                            >
+                                                Add Product
+                                            </Button>
+                                        </Box>
+                                    </Box>
+                                </Container>
+                            </ThemeProvider>
                         </Grid>
                     </Container>
                 </Box>

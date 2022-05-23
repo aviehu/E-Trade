@@ -17,26 +17,12 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import {mainListItems} from '../listItems';
 import '../../css/Dashboard.css';
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
+import AddProductDialog from './AddProductDialog';
 import get from "../get";
-
-const products = [
-    {
-        "id": "1",
-        "title": "Product name",
-        "content": "link to this products",
-        "userEmail": "user@etade.com",
-        "creationTime": 1542111235544,
-    },
-    {
-        "id": "2",
-        "title": "Product name",
-        "content": "link to this products",
-        "userEmail": "user@etade.com",
-        "creationTime": 1542111235544,
-    }
-]
+import Button from "@mui/material/Button";
+import post from "../post";
 
 const drawerWidth = 240;
 
@@ -87,36 +73,66 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 const mdTheme = createTheme();
 
 const DashboardContent: React.FC = () => {
-    const storeName = useParams();
-
+    const { name } = useParams();
+    const navigate = useNavigate();
     const [open, setOpen] = React.useState(true);
+    const [openDialog, setOpenDialog] = React.useState(false);
+    const [amount, setAmount] = React.useState(0);
+    const [product, setProduct] = React.useState("");
+    const [products, setProducts] = useState(null);
     const toggleDrawer = () => {
         setOpen(!open);
     };
 
-    const [products, setProducts] = useState(null);
+
 
     useEffect(() => {
         async function getStore() {
-            const res = await get(`stores/info/${storeName}`)
-            const products = res.json()
-            setProducts(products)
+            const res = await get(`stores/info/${name}`)
+            const ans = await res.json()
+            const products = ans.val
+            const fixedProducts = products.map((productName, id) => {
+                return {
+                    "id": id,
+                    "title": productName
+                }
+            })
+            setProducts(fixedProducts)
         }
         getStore()
     }, [])
+
+    async function handleAdding(){
+        const body = {
+            productName: product,
+            storeName: name,
+            quantity: amount
+        }
+        const res = await post(body, 'stores/addproducttocart')
+        const ans = await res.json()
+        if(ans.val) {
+            navigate("/etrade");
+            setOpenDialog(false);
+        }
+    }
+
+    function handleProduct(product){
+        setProduct(product.title)
+        setOpenDialog(true);
+    }
 
     const renderStores = (stores) => {
         return (<ul className='stores'>
             {stores.map((store,index) => (<li key={store.id} className='store'>
 
-                <div className='topStore'>
+                <div className='topStore' >
                     <div>
-                        <h5 className='title'>{store.title}</h5>
+                        <h5 className='title' >{store.title}</h5>
                     </div>
                 </div>
 
                 <div className="store-footer">
-                    <div className='meta-data'>By {store.userEmail} | { new Date(store.creationTime).toLocaleString()}</div>
+                    <Button onClick={() => handleProduct(store)}>Buy</Button>
                 </div>
             </li>))}
         </ul>);
@@ -203,6 +219,7 @@ const DashboardContent: React.FC = () => {
                     </Container>
                 </Box>
             </Box>
+            {openDialog ? <AddProductDialog open={openDialog} handleAdding={handleAdding} setAmount={setAmount}/> : null}
         </ThemeProvider>
     );
 }

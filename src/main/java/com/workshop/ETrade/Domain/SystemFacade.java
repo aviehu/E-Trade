@@ -9,11 +9,14 @@ import com.workshop.ETrade.Domain.Users.ExternalService.Supply.SupplyAdaptee;
 import com.workshop.ETrade.Service.ResultPackge.ResultBool;
 import com.workshop.ETrade.Service.ResultPackge.ResultMsg;
 import com.workshop.ETrade.Service.ResultPackge.ResultNum;
+import com.workshop.ETrade.Service.ResultPackge.newResult;
 
 import java.time.LocalTime;
+import java.util.HashMap;
+import java.util.List;
 
 public interface SystemFacade {
-    public ResultNum getCartPrice(String userName);
+    public newResult<Double> getCartPrice(String userName);
     public ResultMsg getOnlineMembers(String userName);
     public ResultMsg getOfflineMembers(String userName);
     public ResultBool removeMember(String userName,String memberToRemove);
@@ -41,7 +44,7 @@ public interface SystemFacade {
 
     public ResultBool login(String userName,String memberUserName, String password);
 
-    public ResultMsg getStoreInfo(String userName, String storeName);
+    public newResult<List<String>> getStoreInfo(String userName, String storeName);
 
     public ResultMsg searchByKeyword(String userName, String keyword);
 
@@ -49,9 +52,10 @@ public interface SystemFacade {
 
     public ResultMsg searchByName(String userName, String productName);
 
+    public newResult<List<String>> getStoresOfUser(String userName);
     public ResultMsg addProductToShoppingCart(String userName, String productName, String storeName, int quantity);
 
-    public ResultMsg displayShoppingCart(String userName);
+    public newResult<List<String>>  displayShoppingCart(String userName);
 
 //    public ResultMsg addProductToShoppingCart(String userName, Store s, int quantity, String prodName);
 

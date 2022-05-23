@@ -2,6 +2,8 @@ package com.workshop.ETrade.Domain.Users.Users;
 
 import com.workshop.ETrade.Domain.Stores.Store;
 
+import java.util.List;
+
 public class Guest extends User {
     int id;
     String userName;
@@ -37,7 +39,7 @@ public class Guest extends User {
     }
 
     @Override
-    public String displayCart() {
+    public List<String> displayCart() {
         return super.displayCart();
     }
 

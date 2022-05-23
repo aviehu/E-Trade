@@ -3,6 +3,7 @@ package com.workshop.ETrade.Service;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
 import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
+import com.workshop.ETrade.Domain.Stores.Product;
 import com.workshop.ETrade.Domain.Stores.Store;
 import com.workshop.ETrade.Domain.Stores.managersPermission;
 import com.workshop.ETrade.Domain.Users.ExternalService.Payment.PaymentAdaptee;
@@ -11,12 +12,15 @@ import com.workshop.ETrade.Domain.purchaseOption;
 import com.workshop.ETrade.Service.ResultPackge.ResultBool;
 import com.workshop.ETrade.Service.ResultPackge.ResultMsg;
 import com.workshop.ETrade.Service.ResultPackge.ResultNum;
+import com.workshop.ETrade.Service.ResultPackge.newResult;
 
 import java.time.LocalTime;
+import java.util.HashMap;
+import java.util.List;
 
 public interface ServiceInterface {
     public void init();
-    public ResultNum getCartPrice(String userName);
+    public newResult<Double> getCartPrice(String userName);
     public ResultNum addPolicy(String userName,String store, String policyOn, String description, PolicyType policyType, OperatorComponent operatorComponent);
     public ResultMsg getOnlineMembers(String userName);
     public ResultMsg getOfflineMembers(String userName);
@@ -25,6 +29,8 @@ public interface ServiceInterface {
     public ResultBool paymentServiceExists();
 
     public ResultBool hasAdmin();
+
+    public newResult<List<String>> getAllStores(String userName);
 
     public ResultBool removeMember(String userName, String memberToRemove);
 
@@ -54,7 +60,7 @@ public interface ServiceInterface {
 
     public ResultBool login(String userName, String memberUserName, String password);
 
-    public ResultMsg getStoreInfo(String userName, String storeName);
+    public newResult<List<String>> getStoreInfo(String userName, String storeName);
 
     public ResultMsg searchByKeyword(String userName, String keyword);
 
@@ -64,7 +70,7 @@ public interface ServiceInterface {
 
     public ResultMsg addProductToShoppingCart(String userName, String productName, String storeName, int quantity);
 
-    public ResultMsg displayShoppingCart(String userName);
+    public newResult<List<String>> displayShoppingCart(String userName);
 
 //    public ResultMsg addProductToShoppingCart(String userName, Store s, int quantity, String prodName);
 
@@ -103,6 +109,8 @@ public interface ServiceInterface {
     public ResultBool adminCloseStorePermanently(String adminName, String storeName);
 
 //    public ResultBool adminTerminateUser(String adminName, String userToTerminate);
+
+    public newResult<List<String>> getStoresOfUser(String userName);
 
     public ResultMsg adminGetStoresPurchaseHistory(String adminName, String storeName);
 
