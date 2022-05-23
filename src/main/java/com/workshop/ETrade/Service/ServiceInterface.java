@@ -1,5 +1,8 @@
 package com.workshop.ETrade.Service;
 
+import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
+import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
+import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
 import com.workshop.ETrade.Domain.Stores.Store;
 import com.workshop.ETrade.Domain.Stores.managersPermission;
 import com.workshop.ETrade.Domain.Users.ExternalService.Payment.PaymentAdaptee;
@@ -13,6 +16,8 @@ import java.time.LocalTime;
 
 public interface ServiceInterface {
     public void init();
+    public ResultNum getCartPrice(String userName);
+    public ResultNum addPolicy(String userName,String store, String policyOn, String description, PolicyType policyType, OperatorComponent operatorComponent);
     public ResultMsg getOnlineMembers(String userName);
     public ResultMsg getOfflineMembers(String userName);
     public ResultBool supplyServiceExists();
@@ -97,7 +102,7 @@ public interface ServiceInterface {
 
     public ResultBool adminCloseStorePermanently(String adminName, String storeName);
 
-    public ResultBool adminTerminateUser(String adminName, String userToTerminate);
+//    public ResultBool adminTerminateUser(String adminName, String userToTerminate);
 
     public ResultMsg adminGetStoresPurchaseHistory(String adminName, String storeName);
 
@@ -106,6 +111,7 @@ public interface ServiceInterface {
     public ResultNum getProductAmount(String storeName, String prodName);
 
     public String getOnline();
+    public ResultNum addDiscount(String userName,String store,String discountOn, int discountPercentage, String description, DiscountType discountType);
 
 
 //    public ResultBool exitSystem();
