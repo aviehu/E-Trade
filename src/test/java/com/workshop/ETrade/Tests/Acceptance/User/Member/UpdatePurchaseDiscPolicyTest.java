@@ -1,5 +1,6 @@
 package com.workshop.ETrade.Tests.Acceptance.User.Member;
 
+import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Service.SystemService;
 import org.junit.After;
 import org.junit.Assert;
@@ -16,6 +17,7 @@ public class UpdatePurchaseDiscPolicyTest {
     public void setUp() throws Exception {
         systemService = new SystemService();
         guestName = systemService.enterSystem().getVal();
+        systemService.signUp(guestName, "Andalus", "100", "Anda", "lus");
         systemService.login(guestName, "Andalus", "100");
         systemService.openStore("Andalus", "Mega", 123);
         systemService.addProductToStore("Andalus", "Mega", "Bamba", 200, 5, "snacks");
@@ -28,7 +30,12 @@ public class UpdatePurchaseDiscPolicyTest {
     @Test
     public void UpdatePurchaseDiscPolicySuccessTest(){
         systemService.addProductToShoppingCart("Andalus", "Bamba", "Mega", 20);
-        //int price = getTotalPrice();
+        int prevPrice = systemService.getCartPrice("Andalus").getVal();
+        Assert.assertTrue(systemService.addDiscount("Andalus", "Mega", "Bamba", 10, "", DiscountType.PRODUCT).getVal() > 0);
+        int updatePrice = systemService.getCartPrice("Andalus").getVal();
+        Assert.assertTrue(prevPrice >= updatePrice);
+
+
         //להוסיף מדיניות הנחה
         //Assert.assertNotEquals(price, getTotal());
        

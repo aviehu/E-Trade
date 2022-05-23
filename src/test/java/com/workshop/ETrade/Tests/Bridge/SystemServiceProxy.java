@@ -340,12 +340,12 @@ public class SystemServiceProxy implements ServiceInterface {
         return real.adminCloseStorePermanently(adminName, storeName);
     }
 
-    @Override
-    public ResultBool adminTerminateUser(String adminName, String userToTerminate) {
-        if (real == null)
-            throw new NotImplementedException();
-        return real.adminTerminateUser(adminName, userToTerminate);
-    }
+//    @Override
+//    public ResultBool adminTerminateUser(String adminName, String userToTerminate) {
+//        if (real == null)
+//            throw new NotImplementedException();
+//        return real.adminTerminateUser(adminName, userToTerminate);
+//    }
 
     @Override
     public ResultMsg adminGetStoresPurchaseHistory(String adminName, String storeName) {

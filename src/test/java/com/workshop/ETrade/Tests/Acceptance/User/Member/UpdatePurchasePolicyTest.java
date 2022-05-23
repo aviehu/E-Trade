@@ -1,5 +1,7 @@
 package com.workshop.ETrade.Tests.Acceptance.User.Member;
 
+import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
+import com.workshop.ETrade.Domain.Stores.Predicates.OperatorLeaf;
 import com.workshop.ETrade.Domain.Stores.Predicates.Predicate;
 import com.workshop.ETrade.Domain.Stores.Predicates.PredicateBuilder;
 import com.workshop.ETrade.Service.SystemService;
@@ -41,17 +43,18 @@ public class UpdatePurchasePolicyTest {
 
     @Test
     public void UpdatePurchasePolicySuccessTest() {
+        Assert.assertTrue(systemService.purchase("Andalus", 123, LocalTime.MAX, 123, "BeerSheva", "Masada", 12, 4).getVal());
+        Assert.assertTrue(systemService.addPolicy("Andalus","Mega", "", "", PolicyType.CATEGORY, new OperatorLeaf("and", l)).getVal() > 0);
         systemService.addProductToShoppingCart("Andalus", "Bamba", "Mega", 20);
-        Assert.assertTrue(systemService.purchase("Andalus", 123, LocalTime.MAX, 123, "Beer-Sheva", "Masada", 12, 4).getVal());
-
-        // systemService.addPolicy("Andalus, "", "", CATEGORY, new OperatorLeaf("and", l));
-        Assert.assertFalse(systemService.purchase("Andalus", 123, LocalTime.MAX, 123, "Beer-Sheva", "Masada", 12, 4).getVal());
+//        systemService.purchase("Andalus", 123, LocalTime.MAX, 123, "BeerSheva", "Masada", 12, 4);
+        Assert.assertFalse(systemService.purchase("Andalus", 123, LocalTime.MAX, 123, "BeerSheva", "Masada", 12, 4).getVal());
     }
 
     @Test
     public void UpdatePurchasePolicyFailTest() { //not founder
         name = systemService.logOut("Andalus").getVal();
         systemService.signUp(name, "Andalus1", "200", "Anda", "lus1");
-        //  Assert.assertEquals(-1, systemService.addPolicy("Andalus, "", "", CATEGORY, new OperatorLeaf("and", l)));
+        systemService.login(name, "Andalus1", "200");
+        Assert.assertEquals(-1, systemService.addPolicy("Andalus1", "Mega", "", "", PolicyType.CATEGORY, new OperatorLeaf("and", l)).getVal());
     }
 }
