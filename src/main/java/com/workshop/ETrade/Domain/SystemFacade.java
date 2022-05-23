@@ -94,8 +94,8 @@ public interface SystemFacade {
     public ResultMsg adminGetStoresPurchaseHistory(String adminName, String storeName);
 
     public ResultBool addKeyword(String userName, String productName, String storeName, String keyWord);
-    public ResultNum addPolicy(String store, String policyOn, String description, PolicyType policyType, OperatorComponent operatorComponent);
-    public ResultNum addDiscount(String store,String discountOn, int discountPercentage, String description, DiscountType discountType);
+    public ResultNum addPolicy(String userName,String store, String policyOn, String description, PolicyType policyType, OperatorComponent operatorComponent);
+    public ResultNum addDiscount(String userName,String store,String discountOn, int discountPercentage, String description, DiscountType discountType);
 
 //    public ResultBool exitSystem();
 

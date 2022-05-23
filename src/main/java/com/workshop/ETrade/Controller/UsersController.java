@@ -71,9 +71,9 @@ public class UsersController {
         return systemService.logOut(systemService.getOnline());
     }
 
-    @GetMapping("/terminate/{user}")
-    public ResultBool adminTerminateUser(String adminName, @PathVariable("user") String userToTerminate) {
-        return systemService.adminTerminateUser(adminName, userToTerminate);
-    }
+//    @GetMapping("/terminate/{user}")
+//    public ResultBool adminTerminateUser(String adminName, @PathVariable("user") String userToTerminate) {
+//        return systemService.adminTerminateUser(adminName, userToTerminate);
+//    }
 
 }

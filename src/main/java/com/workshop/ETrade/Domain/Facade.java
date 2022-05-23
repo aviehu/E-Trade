@@ -512,14 +512,14 @@ public class Facade implements SystemFacade {
     }
 
     @Override
-    public ResultNum addPolicy(String store, String policyOn, String description, PolicyType policyType, OperatorComponent operatorComponent) {
-        int ret = this.storesFacade.addPolicy(store, policyOn, description, policyType, operatorComponent);
+    public ResultNum addPolicy(String userName,String store, String policyOn, String description, PolicyType policyType, OperatorComponent operatorComponent) {
+        int ret = this.storesFacade.addPolicy(userName,store, policyOn, description, policyType, operatorComponent);
         return new ResultNum(ret,null);
     }
 
     @Override
-    public ResultNum addDiscount(String store, String discountOn, int discountPercentage, String description, DiscountType discountType) {
-        int ret = this.storesFacade.addDiscount(store, discountOn, discountPercentage, description, discountType);
+    public ResultNum addDiscount(String userName,String store, String discountOn, int discountPercentage, String description, DiscountType discountType) {
+        int ret = this.storesFacade.addDiscount(userName,store, discountOn, discountPercentage, description, discountType);
         if(ret == -1)
             return new ResultNum(-1,"ERROR\n");
         return new ResultNum(ret,null);

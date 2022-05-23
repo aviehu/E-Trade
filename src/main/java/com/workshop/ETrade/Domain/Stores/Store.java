@@ -51,16 +51,22 @@ public class Store {
         closedByAdmin = false;
     }
 
-    public int addDiscount(String discountOn, int discountPercentage, String description, DiscountType discountType) {
-        return policyManager.addDiscount(discountOn, discountPercentage, description, discountType);
+    public int addDiscount(String userName,String discountOn, int discountPercentage, String description, DiscountType discountType) {
+        if(isOwner(userName)) {
+            return policyManager.addDiscount(discountOn, discountPercentage, description, discountType);
+        }
+        return -1;
     }
 
     public int addPredicateDiscount(String discountOn, int discountPercentage, String description, DiscountType discountType, OperatorComponent operatorComponent) {
         return policyManager.addPredicateDiscount(discountOn, discountPercentage, description, discountType, operatorComponent);
     }
 
-    public int addPolicy(String policyOn, String description, PolicyType policyType, OperatorComponent operatorComponent) {
-        return policyManager.addPolicy(policyOn, description, policyType, operatorComponent);
+    public int addPolicy(String userName,String policyOn, String description, PolicyType policyType, OperatorComponent operatorComponent) {
+        if(isOwner(userName)) {
+            return policyManager.addPolicy(policyOn, description, policyType, operatorComponent);
+        }
+        return -1;
     }
 
     public boolean removeDiscount(int discountId) {

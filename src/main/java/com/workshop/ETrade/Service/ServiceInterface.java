@@ -17,7 +17,7 @@ import java.time.LocalTime;
 public interface ServiceInterface {
     public void init();
     public ResultNum getCartPrice(String userName);
-    public ResultNum addPolicy(String store, String policyOn, String description, PolicyType policyType, OperatorComponent operatorComponent);
+    public ResultNum addPolicy(String userName,String store, String policyOn, String description, PolicyType policyType, OperatorComponent operatorComponent);
     public ResultMsg getOnlineMembers(String userName);
     public ResultMsg getOfflineMembers(String userName);
     public ResultBool supplyServiceExists();
@@ -111,7 +111,7 @@ public interface ServiceInterface {
     public ResultNum getProductAmount(String storeName, String prodName);
 
     public String getOnline();
-    public ResultNum addDiscount(String store,String discountOn, int discountPercentage, String description, DiscountType discountType);
+    public ResultNum addDiscount(String userName,String store,String discountOn, int discountPercentage, String description, DiscountType discountType);
 
 
 //    public ResultBool exitSystem();

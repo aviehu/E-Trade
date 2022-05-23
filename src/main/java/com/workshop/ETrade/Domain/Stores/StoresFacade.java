@@ -26,9 +26,9 @@ public class StoresFacade {
             System.out.println("error while creating logger for stores");
         }
     }
-    public int addPolicy(String store,String policyOn, String description, PolicyType policyType, OperatorComponent operatorComponent){
+    public int addPolicy(String userName,String store,String policyOn, String description, PolicyType policyType, OperatorComponent operatorComponent){
         Store s = getStore(store);
-        return s.addPolicy(policyOn, description, policyType, operatorComponent);
+        return s.addPolicy(userName,policyOn, description, policyType, operatorComponent);
     }
     public boolean addStore(String storeName, String founderName,int card) {
         Store store = getStoreByName(storeName);
@@ -270,11 +270,11 @@ public class StoresFacade {
         }
         return false;
     }
-    public int addDiscount(String store,String discountOn, int discountPercentage, String description, DiscountType discountType){
+    public int addDiscount(String userName,String store,String discountOn, int discountPercentage, String description, DiscountType discountType){
         Store s = getStoreByName(store);
         if(s == null)
             return -1;
-        return s.addDiscount(discountOn, discountPercentage, description, discountType);
+        return s.addDiscount(userName,discountOn, discountPercentage, description, discountType);
     }
 
     public List<Store> getStores() {

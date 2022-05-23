@@ -35,8 +35,8 @@ public class SystemService implements ServiceInterface {
     }
 
     @Override
-    public ResultNum addPolicy(String store, String policyOn, String description, PolicyType policyType, OperatorComponent operatorComponent) {
-        return facade.addPolicy(store,policyOn,description,policyType,operatorComponent);
+    public ResultNum addPolicy(String userName,String store, String policyOn, String description, PolicyType policyType, OperatorComponent operatorComponent) {
+        return facade.addPolicy(userName,store,policyOn,description,policyType,operatorComponent);
     }
 
     @Override
@@ -256,8 +256,8 @@ public class SystemService implements ServiceInterface {
     }
 
     @Override
-    public ResultNum addDiscount(String store, String discountOn, int discountPercentage, String description, DiscountType discountType) {
-        return facade.addDiscount(store, discountOn, discountPercentage, description, discountType);
+    public ResultNum addDiscount(String userName,String store, String discountOn, int discountPercentage, String description, DiscountType discountType) {
+        return facade.addDiscount(userName,store, discountOn, discountPercentage, description, discountType);
     }
 
     public ResultNum getProductAmount(String storeName, String prodName){
