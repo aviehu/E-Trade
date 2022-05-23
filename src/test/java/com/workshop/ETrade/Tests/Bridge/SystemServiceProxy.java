@@ -10,6 +10,7 @@ import com.workshop.ETrade.Domain.purchaseOption;
 import com.workshop.ETrade.Service.ResultPackge.ResultBool;
 import com.workshop.ETrade.Service.ResultPackge.ResultMsg;
 import com.workshop.ETrade.Service.ResultPackge.ResultNum;
+import com.workshop.ETrade.Service.ResultPackge.newResult;
 import com.workshop.ETrade.Service.ServiceInterface;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -32,7 +33,7 @@ public class SystemServiceProxy implements ServiceInterface {
     }
 
     @Override
-    public ResultNum getCartPrice(String userName) {
+    public newResult<Double> getCartPrice(String userName) {
         if (real == null)
             throw new NotImplementedException();
         return real.getCartPrice(userName);

@@ -16,16 +16,18 @@ import AddressForm from './AddressForm';
 import PaymentForm from './PaymentForm';
 import Review from './Review';
 import {useNavigate} from 'react-router-dom';
+import {useEffect} from "react";
+import get from "../get";
 
 
 const steps = ['Your cart','Shipping address', 'Payment details'];
 
 const orderNumber = 10; //todo
 
-function getStepContent(step: number) {
+function getStepContent(step, products, totalPrice) {
     switch (step) {
         case 0:
-            return <Review />;
+            return <Review products={products} totalPrice={totalPrice}/>;
 
         case 1:
             return <AddressForm />;
@@ -40,7 +42,29 @@ const theme = createTheme();
 
 export default function Checkout() {
     const [activeStep, setActiveStep] = React.useState(0);
+    const [totalPrice, setTotalPrice] = React.useState(0);
+    const [products, setProducts] = React.useState([]);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        async function getMyBasket() {
+            const res = await get("stores/displaycart")
+            const ans = await res.json();
+            const products = ans.val
+            const fixed = products.map((prod) => {
+                return {
+                    name: prod
+                }
+            })
+            setProducts(fixed)
+
+            const res2 = await get("stores/getcartprice")
+            const ans2 = await res2.json();
+            const val = ans2.val
+            setTotalPrice(val);
+        }
+        getMyBasket()
+    }, [])
 
     const handleNext = () => {
         setActiveStep(activeStep + 1);
@@ -96,7 +120,7 @@ export default function Checkout() {
                             </React.Fragment>
                         ) : (
                             <React.Fragment>
-                                {getStepContent(activeStep)}
+                                {getStepContent(activeStep, products, totalPrice)}
                                 <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                                     {(
                                         <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>

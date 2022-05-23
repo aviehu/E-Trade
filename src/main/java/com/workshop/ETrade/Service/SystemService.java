@@ -12,9 +12,12 @@ import com.workshop.ETrade.Domain.purchaseOption;
 import com.workshop.ETrade.Service.ResultPackge.ResultBool;
 import com.workshop.ETrade.Service.ResultPackge.ResultMsg;
 import com.workshop.ETrade.Service.ResultPackge.ResultNum;
+import com.workshop.ETrade.Service.ResultPackge.newResult;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
+import java.util.HashMap;
+import java.util.List;
 
 @Service
 public class SystemService implements ServiceInterface {
@@ -30,7 +33,7 @@ public class SystemService implements ServiceInterface {
     }
 
     @Override
-    public ResultNum getCartPrice(String userName) {
+    public newResult<Double> getCartPrice(String userName) {
         return facade.getCartPrice(userName);
     }
 
@@ -59,6 +62,11 @@ public class SystemService implements ServiceInterface {
 
     public ResultBool hasAdmin(){
         return facade.hasAdmin();
+    }
+
+    @Override
+    public newResult<List<String>> getAllStores(String userName) {
+        return facade.getAllStores(userName);
     }
 
     @Override
@@ -127,7 +135,7 @@ public class SystemService implements ServiceInterface {
     }
 
     @Override
-    public ResultMsg getStoreInfo(String userName, String storeName) {
+    public newResult<List<String>> getStoreInfo(String userName, String storeName) {
         return facade.getStoreInfo(userName, storeName);
     }
 
@@ -152,7 +160,7 @@ public class SystemService implements ServiceInterface {
     }
 
     @Override
-    public ResultMsg displayShoppingCart(String userName) {
+    public newResult<List<String>> displayShoppingCart(String userName) {
         return facade.displayShoppingCart(userName);
     }
 
@@ -239,6 +247,11 @@ public class SystemService implements ServiceInterface {
     @Override
     public ResultBool adminCloseStorePermanently(String adminName, String storeName) {
         return facade.adminCloseStorePermanently(adminName, storeName);
+    }
+
+    @Override
+    public newResult<List<String>> getStoresOfUser(String userName) {
+        return facade.getStoresOfUser(userName);
     }
 
 //    @Override

@@ -2,6 +2,8 @@ package com.workshop.ETrade.Domain.Users.Users;
 
 import com.workshop.ETrade.Domain.Stores.Store;
 
+import java.util.List;
+
 public abstract class User {
     protected ShoppingCart myShopCart;
     protected SupplyAddress address;
@@ -40,7 +42,7 @@ public abstract class User {
     public String removeProd(Store s,int quantity,String prodName){
         return myShopCart.removeProd(s,quantity,prodName);
     }
-    public String displayCart(){
+    public List<String> displayCart(){
         return myShopCart.displayCart();
     }
 
