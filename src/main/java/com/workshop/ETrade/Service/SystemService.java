@@ -1,6 +1,9 @@
 package com.workshop.ETrade.Service;
 
 import com.workshop.ETrade.Domain.Facade;
+import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
+import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
+import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
 import com.workshop.ETrade.Domain.Stores.Store;
 import com.workshop.ETrade.Domain.Stores.managersPermission;
 import com.workshop.ETrade.Domain.Users.ExternalService.Payment.PaymentAdaptee;
@@ -24,6 +27,16 @@ public class SystemService implements ServiceInterface {
 
     public void init(){
         this.facade = new Facade();
+    }
+
+    @Override
+    public ResultNum getCartPrice(String userName) {
+        return facade.getCartPrice(userName);
+    }
+
+    @Override
+    public ResultNum addPolicy(String store, String policyOn, String description, PolicyType policyType, OperatorComponent operatorComponent) {
+        return facade.addPolicy(store,policyOn,description,policyType,operatorComponent);
     }
 
     @Override
@@ -228,10 +241,10 @@ public class SystemService implements ServiceInterface {
         return facade.adminCloseStorePermanently(adminName, storeName);
     }
 
-    @Override
-    public ResultBool adminTerminateUser(String adminName, String userToTerminate) {
-        return facade.adminTerminateUser(adminName, userToTerminate);
-    }
+//    @Override
+//    public ResultBool adminTerminateUser(String adminName, String userToTerminate) {
+//        return facade.adminTerminateUser(adminName, userToTerminate);
+//    }
 
     @Override
     public ResultMsg adminGetStoresPurchaseHistory(String adminName, String storeName) {
@@ -241,6 +254,12 @@ public class SystemService implements ServiceInterface {
     public String getOnline() {
         return facade.getOnline();
     }
+
+    @Override
+    public ResultNum addDiscount(String store, String discountOn, int discountPercentage, String description, DiscountType discountType) {
+        return facade.addDiscount(store, discountOn, discountPercentage, description, discountType);
+    }
+
     public ResultNum getProductAmount(String storeName, String prodName){
         return facade.getProductAmount(storeName,prodName);
     }

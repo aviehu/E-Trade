@@ -1,14 +1,19 @@
 package com.workshop.ETrade.Domain;
 
+import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
+import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
+import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
 import com.workshop.ETrade.Domain.Stores.managersPermission;
 import com.workshop.ETrade.Domain.Users.ExternalService.Payment.PaymentAdaptee;
 import com.workshop.ETrade.Domain.Users.ExternalService.Supply.SupplyAdaptee;
 import com.workshop.ETrade.Service.ResultPackge.ResultBool;
 import com.workshop.ETrade.Service.ResultPackge.ResultMsg;
+import com.workshop.ETrade.Service.ResultPackge.ResultNum;
 
 import java.time.LocalTime;
 
 public interface SystemFacade {
+    public ResultNum getCartPrice(String userName);
     public ResultMsg getOnlineMembers(String userName);
     public ResultMsg getOfflineMembers(String userName);
     public ResultBool removeMember(String userName,String memberToRemove);
@@ -84,11 +89,13 @@ public interface SystemFacade {
 
     public ResultBool adminCloseStorePermanently(String adminName, String storeName);
 
-    public ResultBool adminTerminateUser(String adminName, String userToTerminate);
+//    public ResultBool adminTerminateUser(String adminName, String userToTerminate);
 
     public ResultMsg adminGetStoresPurchaseHistory(String adminName, String storeName);
 
     public ResultBool addKeyword(String userName, String productName, String storeName, String keyWord);
+    public ResultNum addPolicy(String store, String policyOn, String description, PolicyType policyType, OperatorComponent operatorComponent);
+    public ResultNum addDiscount(String store,String discountOn, int discountPercentage, String description, DiscountType discountType);
 
 //    public ResultBool exitSystem();
 

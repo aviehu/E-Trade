@@ -1,10 +1,14 @@
 package com.workshop.ETrade.Domain.Stores;
 
+import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
+import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
+import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
 import com.workshop.ETrade.Domain.purchaseOption;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Logger;
@@ -22,7 +26,10 @@ public class StoresFacade {
             System.out.println("error while creating logger for stores");
         }
     }
-
+    public int addPolicy(String store,String policyOn, String description, PolicyType policyType, OperatorComponent operatorComponent){
+        Store s = getStore(store);
+        return s.addPolicy(policyOn, description, policyType, operatorComponent);
+    }
     public boolean addStore(String storeName, String founderName,int card) {
         Store store = getStoreByName(storeName);
         if(store != null) {
@@ -226,10 +233,10 @@ public class StoresFacade {
         return null;
     }
 
-    public String getStoresManagement(String userName, String storeName) {
+    public Set<String> getStoresManagement(String userName, String storeName) {
         Store store = getStoreByName(storeName);
         if(store != null) {
-            return store.getAllManagement(userName).toString();
+            return store.getAllManagement(userName);
         }
         return null;
     }
@@ -263,5 +270,14 @@ public class StoresFacade {
         }
         return false;
     }
+    public int addDiscount(String store,String discountOn, int discountPercentage, String description, DiscountType discountType){
+        Store s = getStoreByName(store);
+        if(s == null)
+            return -1;
+        return s.addDiscount(discountOn, discountPercentage, description, discountType);
+    }
 
+    public List<Store> getStores() {
+        return stores;
+    }
 }
