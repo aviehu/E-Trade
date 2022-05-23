@@ -47,12 +47,12 @@ public class UserController {
         users.addAll(systemManagers);
     }
 
-   //unique userName
-
-//    public boolean openStore(String storeName,int card){
-//        Store s = new Store(storeName,this.userName,card);
-//        return true;
-//    }
+   public int getCartPrice(String userName){
+       User u = getUser(userName);
+       if (u == null)
+           return -1;
+      return u.getMyShopCart().getTotalPrice();
+   }
 
     public String addSystemManager(String userName,String managerToAdd){
         Member u = getMember(userName);
@@ -223,7 +223,7 @@ public class UserController {
     }
     public Member getSysManager(String userName){
         for(Member sm : systemManagers){
-            if(sm.getUserName() == userName)
+            if(sm.getUserName().equals(userName))
                 return sm;
         }
         return null;

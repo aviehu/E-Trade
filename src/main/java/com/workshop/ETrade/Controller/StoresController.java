@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalTime;
 
+
 @RestController
 @RequestMapping("/stores")
+@CrossOrigin
 public class StoresController {
 
     @Autowired
@@ -21,7 +23,7 @@ public class StoresController {
 
 
     @GetMapping("/info/{store}")
-    public ResultMsg getStoreInfo(String userName,@PathVariable("store") String storeName) {
+    public ResultMsg getStoreInfo(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName) {
         return systemService.getStoreInfo(userName, storeName);
     }
 
@@ -61,8 +63,8 @@ public class StoresController {
     }
 
     @PostMapping("/openstore")
-    public ResultBool openStore(String founderName, String storeName, int card) {
-        return systemService.openStore(founderName, storeName, card);
+    public ResultBool openStore(@RequestHeader("Authorization") String userName, @RequestBody OpenStoreForm form) {
+        return systemService.openStore(userName, form.storeName, form.card);
     }
 
     @PostMapping("/addproducttostore")

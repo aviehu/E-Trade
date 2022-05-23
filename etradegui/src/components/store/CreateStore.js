@@ -23,6 +23,7 @@ import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 import {Card} from "@mui/material";
 import {useNavigate} from 'react-router-dom';
+import post from "../post";
 
 const drawerWidth = 240;
 
@@ -79,11 +80,22 @@ const DashboardContent: React.FC = () => {
     };
 
     const navigate = useNavigate();
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        //todo: add store to db or throw error
-        navigate("/etrade");
+        const body = {
+            storeName: data.get("storeName"),
+            card: data.get("cardNumber")
+        }
+        try {
+            const res = await post(body, 'stores/openstore')
+            const boolRes = await res.json()
+            if(boolRes.val) {
+                navigate("/etrade");
+            }
+        } catch (e) {
+
+        }
     };
 
     return (
