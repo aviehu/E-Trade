@@ -4,6 +4,8 @@ import com.workshop.ETrade.Service.SystemService;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.List;
+
 public class AddProductToCartTest {
 
     private SystemService systemService;
@@ -25,7 +27,7 @@ public class AddProductToCartTest {
 
     @Test
     public void addProductToCartSuccessTest(){
-        String cartInfo = systemService.displayShoppingCart("Andalus").getVal();
+        List<String> cartInfo = systemService.displayShoppingCart("Andalus").getVal();
         Assert.assertFalse(cartInfo.contains("Bamba"));
         systemService.addProductToShoppingCart("Andalus", "Bamba", "Mega", 5);
         System.out.println(systemService.displayShoppingCart("Andalus").getVal());

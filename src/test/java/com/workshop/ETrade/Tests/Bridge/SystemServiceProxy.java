@@ -15,6 +15,7 @@ import com.workshop.ETrade.Service.ServiceInterface;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.time.LocalTime;
+import java.util.List;
 
 public class SystemServiceProxy implements ServiceInterface {
 
@@ -87,6 +88,11 @@ public class SystemServiceProxy implements ServiceInterface {
         if (real == null)
             throw new NotImplementedException();
         return real.hasAdmin();
+    }
+
+    @Override
+    public newResult<List<String>> getAllStores(String userName) {
+        return null;
     }
 
     @Override
@@ -181,7 +187,7 @@ public class SystemServiceProxy implements ServiceInterface {
     }
 
     @Override
-    public ResultMsg getStoreInfo(String userName, String storeName) {
+    public newResult<List<String>> getStoreInfo(String userName, String storeName) {
         if (real == null)
             throw new NotImplementedException();
         return real.getStoreInfo(userName, storeName);
@@ -216,7 +222,7 @@ public class SystemServiceProxy implements ServiceInterface {
     }
 
     @Override
-    public ResultMsg displayShoppingCart(String userName) {
+    public newResult<List<String>> displayShoppingCart(String userName) {
         if (real == null)
             throw new NotImplementedException();
         return real.displayShoppingCart(userName);
@@ -342,10 +348,8 @@ public class SystemServiceProxy implements ServiceInterface {
     }
 
     @Override
-    public ResultBool adminTerminateUser(String adminName, String userToTerminate) {
-        if (real == null)
-            throw new NotImplementedException();
-        return real.adminTerminateUser(adminName, userToTerminate);
+    public newResult<List<String>> getStoresOfUser(String userName) {
+        return null;
     }
 
     @Override
