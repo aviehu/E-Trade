@@ -7,6 +7,7 @@ import com.workshop.ETrade.Domain.Users.ExternalService.Supply.SupplyAdaptee;
 import com.workshop.ETrade.Domain.purchaseOption;
 import com.workshop.ETrade.Service.ResultPackge.ResultBool;
 import com.workshop.ETrade.Service.ResultPackge.ResultMsg;
+import com.workshop.ETrade.Service.ResultPackge.ResultNum;
 
 import java.time.LocalTime;
 
@@ -101,6 +102,10 @@ public interface ServiceInterface {
     public ResultMsg adminGetStoresPurchaseHistory(String adminName, String storeName);
 
     public ResultBool addKeyword(String userName, String productName, String storeName, String keyWord);
+
+    public ResultNum getProductAmount(String storeName, String prodName);
+
+    public String getOnline();
 
 
 //    public ResultBool exitSystem();
