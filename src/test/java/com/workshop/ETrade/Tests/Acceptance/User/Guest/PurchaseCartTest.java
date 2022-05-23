@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.time.LocalTime;
+import java.util.List;
 
 public class PurchaseCartTest {
 
@@ -38,7 +39,7 @@ public class PurchaseCartTest {
 
     @Test
     public void purchaseCartFailTest(){
-        String cart = systemService.displayShoppingCart("Andalus").getVal();
+        List<String> cart = systemService.displayShoppingCart("Andalus").getVal();
         int prodAmount = systemService.getProductAmount("Mega", "Bamba").getVal();
         String storePurchaseHistory = systemService.getStoresPurchaseHistory("Andalus", "Mega").getVal();
         systemService.addProductToShoppingCart("Andalus", "Bamba", "Mega", 200);
