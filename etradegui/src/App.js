@@ -8,6 +8,7 @@ import Checkout from "./components/checkout/Checkout";
 import CreateStore from "./components/store/CreateStore";
 import Mystores from "./components/store/Mystores";
 import Store from "./components/store/Store";
+import AddProduct from './components/store/AddProduct'
 
 
 
@@ -22,6 +23,7 @@ function App() {
                <Route path="/createstore" element={<CreateStore />} />
                <Route path="/mystores" element={<Mystores />} />
                <Route path="/store/:name" element={<Store />} />
+               <Route path="/store/edit/:name" element={<AddProduct/>} />
            </Routes>
        </Router>
     )

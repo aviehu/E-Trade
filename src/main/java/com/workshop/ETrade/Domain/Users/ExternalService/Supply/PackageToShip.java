@@ -4,9 +4,9 @@ import java.util.HashMap;
 
 public class PackageToShip {
     HashMap<String,Integer> prods;
-    int price;
+    Double price;
 
-    public PackageToShip(HashMap<String, Integer> prods, int price) {
+    public PackageToShip(HashMap<String, Integer> prods, Double price) {
         this.prods = prods;
         this.price = price;
     }
@@ -15,7 +15,7 @@ public class PackageToShip {
         return prods;
     }
 
-    public int getPrice() {
+    public Double getPrice() {
         return price;
     }
 
@@ -23,7 +23,7 @@ public class PackageToShip {
         this.prods = prods;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 }
