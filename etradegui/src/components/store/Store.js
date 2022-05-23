@@ -18,6 +18,8 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import {mainListItems} from '../listItems';
 import '../../css/Dashboard.css';
 import {useParams} from "react-router-dom";
+import {useEffect, useState} from "react";
+import get from "../get";
 
 const products = [
     {
@@ -91,6 +93,17 @@ const DashboardContent: React.FC = () => {
     const toggleDrawer = () => {
         setOpen(!open);
     };
+
+    const [products, setProducts] = useState(null);
+
+    useEffect(() => {
+        async function getStore() {
+            const res = await get(`stores/info/${storeName}`)
+            const products = res.json()
+            setProducts(products)
+        }
+        getStore()
+    }, [])
 
     const renderStores = (stores) => {
         return (<ul className='stores'>
