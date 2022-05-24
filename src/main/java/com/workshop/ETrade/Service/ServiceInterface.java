@@ -1,5 +1,6 @@
 package com.workshop.ETrade.Service;
 
+import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
 import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
@@ -127,5 +128,8 @@ public interface ServiceInterface {
 
     public newResult<Double> getProdPrice(String store,String prod);
     public newResult<Integer> getProdAmount(String store,String prod);
+
+    public newResult<List<Notification>> getMessages(String userName);
 //    public ResultBool exitSystem();
+
 }

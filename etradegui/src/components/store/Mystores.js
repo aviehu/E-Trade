@@ -69,7 +69,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 const mdTheme = createTheme();
 
-const DashboardContent: React.FC = () => {
+const DashboardContent = () => {
     const [stores, setStores] = React.useState(null);
     const [open, setOpen] = React.useState(true);
     const toggleDrawer = () => {
@@ -142,11 +142,6 @@ const DashboardContent: React.FC = () => {
                         >
                             E-Trade
                         </Typography>
-                        <IconButton color="inherit">
-                            <Badge badgeContent={4} color="secondary">
-                                <NotificationsIcon />
-                            </Badge>
-                        </IconButton>
                     </Toolbar>
                 </AppBar>
                 <Drawer variant="permanent" open={open}>

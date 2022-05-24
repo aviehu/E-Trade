@@ -1,5 +1,6 @@
 package com.workshop.ETrade.Domain;
 
+import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
 import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
@@ -52,6 +53,7 @@ public interface SystemFacade {
 
     public ResultMsg searchByName(String userName, String productName);
 
+    public newResult<List<Notification>> getMessages(String userName);
     public newResult<List<String>> getStoresOfUser(String userName);
     public ResultMsg addProductToShoppingCart(String userName, String productName, String storeName, int quantity);
 

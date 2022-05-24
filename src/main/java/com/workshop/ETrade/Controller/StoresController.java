@@ -30,6 +30,11 @@ public class StoresController {
     @Autowired
     private SimpMessagingTemplate smt;
 
+
+    public void sendMessage(Notification notification) {
+        smt.convertAndSend("/topic/" + notification.getSentTo(), notification);
+    }
+
     @GetMapping("/info/{store}")
     public newResult<List<String>> getStoreInfo(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName) {
         return systemService.getStoreInfo(userName, storeName);
