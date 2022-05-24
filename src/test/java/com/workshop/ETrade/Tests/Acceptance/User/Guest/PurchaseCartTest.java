@@ -1,5 +1,6 @@
 package com.workshop.ETrade.Tests.Acceptance.User.Guest;
 
+import com.workshop.ETrade.Service.ResultPackge.newResult;
 import com.workshop.ETrade.Service.SystemService;
 import org.junit.After;
 import org.junit.Assert;
@@ -7,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PurchaseCartTest {
@@ -31,9 +33,14 @@ public class PurchaseCartTest {
     @Test
     public void purchaseCartSuccessTest(){
         systemService.addProductToShoppingCart("Andalus", "Bamba", "Mega", 10);
+        //assert total price is working
+        Assert.assertEquals(systemService.getCartPrice("Andalus").getVal(), 50.0,0);
         Assert.assertTrue(systemService.purchase("Andalus", 123, LocalTime.MAX, 776,
                 "BeerSheva", "Andalus", 7, 7).isSuccess());
-        Assert.assertEquals("", systemService.displayShoppingCart("Andalus").getVal());
+        //assert cart is an empty list after purchase
+        List<String> cart = systemService.displayShoppingCart("Andalus").getVal();
+        List<String> expected = new ArrayList<>();
+        Assert.assertEquals(expected, cart);
         Assert.assertEquals(90, systemService.getProductAmount("Mega", "Bamba").getVal());
     }
 

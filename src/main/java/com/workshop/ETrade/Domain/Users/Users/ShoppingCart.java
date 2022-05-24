@@ -56,7 +56,7 @@ public class ShoppingCart {
         for(StoreBasket b : baskets){
             price += b.getTotalPrice();
         }
-        price = price - ((price*discount)/100);
+        price = price - (price*(discount/100));
         return price;
     }
     public String canPurchase(){
