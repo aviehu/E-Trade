@@ -2,10 +2,11 @@ import * as React from 'react';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
-export default function PaymentForm() {
+export default function PaymentForm({setExpDate, setCardNum, setCcv, expDate}) {
     return (
         <React.Fragment>
             <Typography variant="h6" gutterBottom>
@@ -15,16 +16,7 @@ export default function PaymentForm() {
                 <Grid item xs={12} md={6}>
                     <TextField
                         required
-                        id="cardName"
-                        label="Name on card"
-                        fullWidth
-                        autoComplete="cc-name"
-                        variant="standard"
-                    />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                    <TextField
-                        required
+                        onChange={event => {setCardNum(event.target.value)}}
                         id="cardNumber"
                         label="Card number"
                         fullWidth
@@ -35,22 +27,25 @@ export default function PaymentForm() {
                 <Grid item xs={12} md={6}>
                     <TextField
                         required
-                        id="expDate"
-                        label="Expiry date"
-                        fullWidth
-                        autoComplete="cc-exp"
-                        variant="standard"
-                    />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                    <TextField
-                        required
+                        onChange={(event) => { setCcv(event.target.value)}}
                         id="cvv"
                         label="CVV"
                         fullWidth
                         autoComplete="cc-csc"
                         variant="standard"
                     />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                        <DesktopDatePicker
+                            label="exp date"
+                            value={expDate}
+                            onChange={(newValue) => {
+                                setExpDate(newValue);
+                            }}
+                            renderInput={(params) => <TextField {...params} />}
+                        />
+                    </LocalizationProvider>
                 </Grid>
             </Grid>
         </React.Fragment>

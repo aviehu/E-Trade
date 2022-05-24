@@ -16,12 +16,14 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import {mainListItems} from '../listItems';
-import Link from "@mui/material/Link";
 import '../../css/Dashboard.css';
-import {useEffect, useState} from "react";
-import get from "../get";
-import SocketProvider from "../SocketProvider";
-import MessageDialog from '../MessageDialog'
+import Avatar from "@mui/material/Avatar";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Link from "@mui/material/Link";
+import {Card} from "@mui/material";
+import {useNavigate, useParams} from 'react-router-dom';
+import post from "../post";
 
 const drawerWidth = 240;
 
@@ -72,63 +74,34 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
 const mdTheme = createTheme();
 
 const DashboardContent = () => {
-    const [message, setMessage] = useState(null);
-    const [stores, setStores] = useState(null);
+    const { name } = useParams()
     const [open, setOpen] = React.useState(true);
-    useEffect(() => {
-        async function getStores() {
-            const { createSocket } = SocketProvider(setMessage);
-            createSocket(localStorage.getItem("userName"))
-
-            const res = await get('stores/');
-            const ans = await res.json()
-            const storesName = ans.val
-            if(storesName) {
-                const stores = storesName.map((store, id) => {
-                    return {
-                        "id": id,
-                        "title": store
-                    }
-                })
-                setStores(stores);
-            }
-        }
-        getStores()
-
-    }, [])
-
-
-
     const toggleDrawer = () => {
         setOpen(!open);
     };
 
-    const renderStores = (stores) => {
-        return (<ul className='stores'>
-            {stores.map((store, index) => (
-                <li key={store.id} className='store'>
-                    <div className='topStore'>
-                        <div>
-                            <Link href={`/store/${store.title}`}>
-                                <h5 className='title'>{store.title}</h5>
-                            </Link>
-                        </div>
-                    </div>
+    const navigate = useNavigate();
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
+        const body = {
+            appointee: data.get("newManager")
+        }
+        try {
+            const res = await post(body, `stores/removemanager/${name}`)
+            const boolRes = await res.json()
+            if(boolRes.val) {
+                navigate(`/store/edit/${name}`);
+            }
+        } catch (e) {
 
-                    {/*<div className="store-footer">*/}
-                    {/*    <div*/}
-                    {/*        className='meta-data'>By {store.userEmail} | {new Date(store.creationTime).toLocaleString()}</div>*/}
-                    {/*</div>*/}
-                </li>
-            ))}
-        </ul>);
-    }
+        }
+    };
 
     return (
         <ThemeProvider theme={mdTheme}>
             <Box sx={{display: 'flex'}}>
                 <CssBaseline/>
-                <MessageDialog message={message} open={message !== null} handleClose={() => setMessage(null)}/>
                 <AppBar position="absolute" open={open}>
                     <Toolbar
                         sx={{
@@ -154,7 +127,7 @@ const DashboardContent = () => {
                             noWrap
                             sx={{flexGrow: 1}}
                         >
-                            E-Trade
+                            {name}
                         </Typography>
                         <IconButton color="inherit">
                             <Badge badgeContent={4} color="secondary">
@@ -196,12 +169,44 @@ const DashboardContent = () => {
                 >
                     <Toolbar/>
                     <Container maxWidth="lg" sx={{mt: 4, mb: 4}}>
+                        {/*Here the form of the create store*/}
                         <Grid container spacing={3}>
-                            <Grid item xs={12}>
-                                <main>
-                                    {stores ? renderStores(stores) : <h2>Loading...</h2>}
-                                </main>
-                            </Grid>
+                            <ThemeProvider theme={mdTheme}>
+                                <Container component="main" maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+                                    <CssBaseline/>
+                                    <Box
+                                        sx={{
+                                            marginTop: 8,
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            alignItems: 'center',
+                                        }}
+                                    >
+                                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{mt: 3}}>
+                                            <Grid container spacing={2}>
+                                                <Grid item xl={12}>
+                                                    <TextField
+                                                        required
+                                                        fullWidth
+                                                        id="newManager"
+                                                        label="Manager To Remove"
+                                                        name="newManager"
+                                                        autoComplete="newManager"
+                                                    />
+                                                </Grid>
+                                            </Grid>
+                                            <Button
+                                                type="submit"
+                                                fullWidth
+                                                variant="contained"
+                                                sx={{mt: 3, mb: 2}}
+                                            >
+                                                Remove Manager
+                                            </Button>
+                                        </Box>
+                                    </Box>
+                                </Container>
+                            </ThemeProvider>
                         </Grid>
                     </Container>
                 </Box>
@@ -211,6 +216,6 @@ const DashboardContent = () => {
 }
 
 export default function Dashboard() {
-    return <DashboardContent />;
+    return <DashboardContent/>;
 }
 

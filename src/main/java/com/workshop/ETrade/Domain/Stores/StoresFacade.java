@@ -290,4 +290,20 @@ public class StoresFacade {
         }
         return res;
     }
+
+    public boolean removeStoreOwner(String userName, String storeName, String ownerToRemove) {
+        Store store = getStoreByName(storeName);
+        if(store == null) {
+            return false;
+        }
+        return store.removeOwner(userName, ownerToRemove);
+    }
+
+    public boolean removeStoreManager(String userName, String storeName, String managerToRemove) {
+        Store store = getStoreByName(storeName);
+        if(store == null) {
+            return false;
+        }
+        return store.removeManager(userName, managerToRemove);
+    }
 }

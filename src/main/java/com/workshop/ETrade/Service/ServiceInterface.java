@@ -96,7 +96,11 @@ public interface ServiceInterface {
 
     public ResultBool appointStoreOwner(String userName, String storeName, String newOwner);
 
+    public newResult<Boolean> removeStoreOwner(String userName, String storeName, String ownerToRemove);
+
     public ResultBool appointStoreManager(String userName, String storeName, String newManager);
+
+    public newResult<Boolean> removeStoreManager(String userName, String storeName, String managerToRemove);
 
     public ResultBool changeStoreManagersPermission(String userName, String storeName, String managerName, managersPermission newPermission);
 
