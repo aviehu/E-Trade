@@ -1,5 +1,6 @@
 package com.workshop.ETrade.Domain;
 
+import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
 import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
@@ -9,12 +10,17 @@ import com.workshop.ETrade.Domain.Stores.managersPermission;
 import com.workshop.ETrade.Domain.Users.ExternalService.ExtSysController;
 import com.workshop.ETrade.Domain.Users.ExternalService.Payment.PaymentAdaptee;
 import com.workshop.ETrade.Domain.Users.ExternalService.Supply.SupplyAdaptee;
+import com.workshop.ETrade.Domain.Users.Users.Member;
 import com.workshop.ETrade.Domain.Users.Users.UserController;
 import com.workshop.ETrade.Service.ResultPackge.ResultBool;
 import com.workshop.ETrade.Service.ResultPackge.ResultMsg;
 import com.workshop.ETrade.Service.ResultPackge.ResultNum;
+import com.workshop.ETrade.Service.ResultPackge.newResult;
 
 import java.time.LocalTime;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 public class Facade implements SystemFacade {
@@ -31,33 +37,33 @@ public class Facade implements SystemFacade {
 
 
     @Override
-    public ResultNum getCartPrice(String userName) {
-        int p = this.userController.getCartPrice(userName);
+    public newResult<Double> getCartPrice(String userName) {
+        Double p = this.userController.getCartPrice(userName);
         if(p == -1)
-            return new ResultNum(-1,"no such user\n");
-        return new ResultNum(p,null);
+            return new newResult<>(null,"no such user\n");
+        return new newResult<>(p,null);
     }
 
-    public ResultMsg getOnlineMembers(String userName){
-        String ret =  this.userController.getOnlineMembers(userName);
+    public newResult<List<String>> getOnlineMembers(String userName){
+        List<String> ret =  this.userController.getOnlineMembers(userName);
         if(ret == null){
-            return  new ResultMsg(null,"PERMISSION DENIED\n");
+            return new newResult<>(null,"PERMISSION DENIED\n");
         }
-        if (ret.equals("")){
-            return  new ResultMsg("There are no connected members in the market\n",null);
-        }
-        return  new ResultMsg(ret,null);
+//        if (ret.size() == 0){
+//            return new newResult<>(null, "There are no connected members in the market\n");
+//        }
+        return new newResult<>(ret,null);
 
     }
-    public ResultMsg getOfflineMembers(String userName){
-        String ret =  this.userController.getOfflineMembers(userName);
+    public newResult<List<String>> getOfflineMembers(String userName){
+        List<String> ret = this.userController.getOfflineMembers(userName);
         if(ret == null){
-            return  new ResultMsg(null,"PERMISSION DENIED\n");
+            return  new newResult<>(null,"PERMISSION DENIED\n");
         }
-        if (ret.equals("")){
-            return  new ResultMsg("There are no members in the market\n",null);
-        }
-        return  new ResultMsg(ret,null);
+//        if (ret.equals("")){
+//            return new ResultMsg("There are no members in the market\n",null);
+//        }
+        return new newResult<>(ret,null);
 
     }
     @Override
@@ -79,7 +85,7 @@ public class Facade implements SystemFacade {
     }
     public boolean isInManagment(String admin,String memberToRemove){
         for(Store s : this.storesFacade.getStores()){
-            if(this.storesFacade.getStoresManagement(s.getName(),admin).contains(memberToRemove))
+            if(this.storesFacade.getStoresManagement(admin,s.getName()).contains(memberToRemove))
                 return true;
         }
         return false;
@@ -210,51 +216,68 @@ public class Facade implements SystemFacade {
     }
 
     @Override
-    public ResultMsg getStoreInfo(String userName, String storeName) {
+    public newResult<List<String>> getStoreInfo(String userName, String storeName) {
         if(userController.isConnected(userName)){
-            String ans = storesFacade.displayStore(storeName);
+            List<String> ans = storesFacade.displayStore(storeName);
             if(ans != null) {
-                return new ResultMsg(ans, null);
+                return new newResult<>(ans, null);
             }
-            return new ResultMsg("", "No Such Store" + storeName);
+            return new newResult<>(null, "No Such Store" + storeName);
         }
-        return new ResultMsg("", "User Is Not Connected");
+        return new newResult<>(null, "User Is Not Connected");
     }
 
     @Override
-    public ResultMsg searchByKeyword(String userName, String keyword) {
+    public newResult<List<String>> searchByKeyword(String userName, String keyword) {
         if(userController.isConnected(userName)){
-            String ans = storesFacade.searchByKeyword(keyword);
+            List<String> ans = storesFacade.searchByKeyword(keyword);
             if(ans != null) {
-                return new ResultMsg(ans, null);
+                return new newResult<>(ans, null);
             }
-            return new ResultMsg("", "No Items Matched Your Search");
+            return new newResult<>(null, "No Items Matched Your Search");
         }
-        return new ResultMsg("", "User Is Not Connected");
+        return new newResult<>(null, "User Is Not Connected");
     }
 
     @Override
-    public ResultMsg searchByCategory(String userName, String category) {
+    public newResult<List<String>> searchByCategory(String userName, String category) {
         if(userController.isConnected(userName)){
-            String ans = storesFacade.searchByCategory(category);
+            List<String> ans = storesFacade.searchByCategory(category);
             if(ans != null) {
-                return new ResultMsg(ans, null);
+                return new newResult<>(ans, null);
             }
-            return new ResultMsg("", "No Items Matched Your Search");
+            return new newResult<>(null, "No Items Matched Your Search");
         }
-        return new ResultMsg("", "User Is Not Connected");
+        return new newResult<>(null, "User Is Not Connected");
     }
 
     @Override
-    public ResultMsg searchByName(String userName, String productName) {
+    public newResult<Boolean> isAdmin(String userName) {
+        return new newResult<>(userController.isUserSysManager(userName), null);
+    }
+
+    @Override
+    public newResult<List<String>> searchByName(String userName, String productName) {
         if(userController.isConnected(userName)){
-            String ans = storesFacade.searchByName(productName);
+            List<String> ans = storesFacade.searchByName(productName);
             if(ans != null) {
-                return new ResultMsg(ans, null);
+                return new newResult<>(ans, null);
             }
-            return new ResultMsg("", "No Items Matched Your Search");
+            return new newResult<>(null, "No Items Matched Your Search");
         }
-        return new ResultMsg("", "User Is Not Connected");
+        return new newResult<>(null, "User Is Not Connected");
+    }
+
+    @Override
+    public newResult<List<Notification>> getMessages(String userName) {
+        if(userController.isConnected(userName)){
+            List<Notification> ans = userController.getMessages(userName);
+            if(ans != null) {
+                return new newResult<>(ans, null);
+            }
+            return new newResult<>(null, "No Items Matched Your Search");
+        }
+        return new newResult<>(null, "User Is Not Connected");
     }
 
     @Override
@@ -277,10 +300,10 @@ public class Facade implements SystemFacade {
     }
 
     @Override
-    public ResultMsg displayShoppingCart(String userName) {
+    public newResult<List<String>> displayShoppingCart(String userName) {
         if(userController.isConnected(userName))
-            return new ResultMsg(userController.displayShoppingCart(userName),null);
-        return new ResultMsg(null,"User is not connected");
+            return new newResult<>(userController.displayShoppingCart(userName),null);
+        return new newResult<>(null,"User is not connected");
     }
 
 //    @Override
@@ -336,6 +359,10 @@ public class Facade implements SystemFacade {
     public ResultBool openStore(String founderName, String storeName, int card) {
         if(userController.isConnected(founderName)){
             if(storesFacade.addStore(storeName, founderName, card)) {
+                //subscribe new founder
+                Store s = this.storesFacade.getStore(storeName);
+                Member m = this.userController.getMember(founderName);
+                s.attach(m);
                 return new ResultBool(true, null);
             }
             return new ResultBool(false, "Store With A Name - " + storeName + " exists");
@@ -413,6 +440,11 @@ public class Facade implements SystemFacade {
     public ResultBool appointStoreOwner(String userName, String storeName, String newOwner) {
         if(userController.isConnected(userName) && userController.isUserNameExist(newOwner)){
             if(storesFacade.appointStoreOwner(userName, storeName, newOwner)) {
+                //subscribe new owner
+                Store s = this.storesFacade.getStore(storeName);
+                Member m = this.userController.getMember(newOwner);
+                s.attach(m);
+
                 return new ResultBool(true, null);
             }
             return new ResultBool(false, "Could Not Appoint Store Owner");
@@ -421,14 +453,48 @@ public class Facade implements SystemFacade {
     }
 
     @Override
+    public newResult<Boolean> removeStoreOwner(String userName, String storeName, String ownerToRemove) {
+        if(userController.isConnected(userName) && userController.isUserNameExist(ownerToRemove)){
+            if(storesFacade.removeStoreOwner(userName, storeName, ownerToRemove)) {
+                //subscribe new owner
+                Store s = this.storesFacade.getStore(storeName);
+                Member m = this.userController.getMember(ownerToRemove);
+                s.detach(m);
+                return new newResult<>(true, null);
+            }
+            return new newResult<>(false, "Could Not Remove Store Owner");
+        }
+        return new newResult<>(false, "User Is Not Connected");
+    }
+
+    @Override
     public ResultBool appointStoreManager(String userName, String storeName, String newManager) {
         if(userController.isConnected(userName)){
             if(storesFacade.appointStoreManager(userName, storeName, newManager)) {
+                //subscribe new manager
+                Store s = this.storesFacade.getStore(storeName);
+                Member m = this.userController.getMember(newManager);
+                s.attach(m);
                 return new ResultBool(true, null);
             }
             return new ResultBool(false, "Could Not Appoint Store Manager");
         }
         return new ResultBool(false, "User Is Not Connected");
+    }
+
+    @Override
+    public newResult<Boolean> removeStoreManager(String userName, String storeName, String managerToRemove) {
+        if(userController.isConnected(userName) && userController.isUserNameExist(managerToRemove)){
+            if(storesFacade.removeStoreManager(userName, storeName, managerToRemove)) {
+                //subscribe new owner
+                Store s = this.storesFacade.getStore(storeName);
+                Member m = this.userController.getMember(managerToRemove);
+                s.detach(m);
+                return new newResult<>(true, null);
+            }
+            return new newResult<>(false, "Could Not Appoint Store Owner");
+        }
+        return new newResult<>(false, "User Is Not Connected");
     }
 
     @Override
@@ -558,5 +624,41 @@ public class Facade implements SystemFacade {
         return new ResultNum(amount,null);
     }
 
+
+    public newResult<List<String>> getAllStores(String userName) {
+        if(userController.isConnected(userName)) {
+            List<String> res = new LinkedList<>();
+            List<Store> stores = storesFacade.getStores();
+            for(Store store : stores) {
+                res.add(store.getName());
+            }
+            return new newResult<>(res, null);
+        }
+        return new newResult<>(null, "user is not connected");
+    }
+
+    public newResult<List<String>> getStoresOfUser(String userName) {
+        if(userController.isConnected(userName)) {
+            List<String> stores = storesFacade.getStoresOfUser(userName);
+            return new newResult<>(stores, null);
+        }
+        return new newResult<>(null, "user is not connected");
+    }
+    public newResult<Double> getProdPrice(String storeName,String prod){
+        Store s = this.storesFacade.getStore(storeName);
+        if (s == null){
+            return new newResult<>(null,"No such store\n");
+        }
+        double price = s.getProductPrice(prod);
+        return  new newResult<>(price,null);
+
+    }
+    public newResult<Integer> getProdAmount(String storeName,String prod){
+        int amount = this.storesFacade.getProductAmount(storeName,prod);
+        if(amount == -1)
+            return new newResult<>(null,"no such store\n");
+        return  new newResult<>(amount,null);
+
+    }
 
 }

@@ -1,5 +1,6 @@
 package com.workshop.ETrade.Domain.Users.Users;
 
+import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Stores.Store;
 
 import java.time.LocalTime;
@@ -47,10 +48,10 @@ public class UserController {
         users.addAll(systemManagers);
     }
 
-   public int getCartPrice(String userName){
+   public Double getCartPrice(String userName){
        User u = getUser(userName);
        if (u == null)
-           return -1;
+           return -1.0;
       return u.getMyShopCart().getTotalPrice();
    }
 
@@ -175,11 +176,11 @@ public class UserController {
             return user.removeProd(s,quantity,prodName);
         return "User: "+userName+" does not exist\n";
     }
-    public String displayShoppingCart(String userName){
+    public List<String> displayShoppingCart(String userName){
         User user = getUser(userName);
         if(user != null)
             return user.displayCart();
-        return "User: "+userName+" does not exist\n";
+        return null;
     }
     public synchronized String purchase(String userName, int creditCard, LocalTime expDate,int cvv,String city,String street,int stNum,int apartmentNum){
         User user = getUser(userName);
@@ -281,30 +282,36 @@ public class UserController {
             return true;
         return false;
     }
-    public String  getOnlineMembers(String userName) {
+    public List<String>  getOnlineMembers(String userName) {
         if(!isUserSysManager(userName)){
             return null;
         }
-        String ret = "";
+        List<String> ret = new ArrayList<>();
         for(Member m : members){
             if(isConnected(m.getUserName())){
-                String s = m.getUserName() +"\t"+ m.getName()+ "\t"+ m.getLastName()+"\n";
-                ret+=s;
+                ret.add(m.getUserName());
             }
         }
         return ret;
     }
-    public String  getOfflineMembers(String userName) {
+    public List<String> getOfflineMembers(String userName) {
         if(!isUserSysManager(userName)){
             return null;
         }
-        String ret = "";
+        List<String> ret = new ArrayList<>();
         for(Member m : members){
             if(!isConnected(m.getUserName())){
-                String s = m.getUserName() +"\t"+ m.getName()+ "\t"+ m.getLastName()+"\n";
-                ret+=s;
+                ret.add(m.getUserName());
             }
         }
         return ret;
+    }
+
+    public List<Notification> getMessages(String userName) {
+        Member member = getMember(userName);
+        if(member == null) {
+            return null;
+        }
+        return member.getMessages();
     }
 }

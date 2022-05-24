@@ -5,6 +5,7 @@ import com.workshop.ETrade.Domain.Users.ExternalService.ExtSysController;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class ShoppingCart {
@@ -43,19 +44,19 @@ public class ShoppingCart {
             return "Failed to charge your credit card\n";
     }
 
-    public String displayCart(){
-        String display = "";
+    public List<String> displayCart(){
+        List<String> items = new LinkedList<>();
         for(StoreBasket basket : baskets){
-            display += basket.displayBasket();
+            items.addAll(basket.displayBasket());
         }
-        return display;
+        return items;
     }
-    public int getTotalPrice(){
-        int price = 0;
+    public Double getTotalPrice(){
+        Double price = 0.0;
         for(StoreBasket b : baskets){
             price += b.getTotalPrice();
         }
-        price = price - ((price*discount)/100);
+        price = price - (price*(discount/100));
         return price;
     }
     public String canPurchase(){

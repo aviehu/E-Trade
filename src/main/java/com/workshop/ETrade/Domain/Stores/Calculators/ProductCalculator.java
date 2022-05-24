@@ -27,7 +27,7 @@ public class ProductCalculator extends Calculator{
         Map<Product, Double> newPrices = copyPrices(prices);
         Product product = getProduct(newPrices);
         if(product != null) {
-            newPrices.computeIfPresent(product, (K, V) -> V = V * discountPercent);
+            newPrices.computeIfPresent(product, (K, V) -> V = (V - (V * discountPercent)/100));
         }
         return newPrices;
     }

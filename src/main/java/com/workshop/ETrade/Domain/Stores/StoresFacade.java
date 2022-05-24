@@ -3,12 +3,11 @@ package com.workshop.ETrade.Domain.Stores;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
 import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
+import com.workshop.ETrade.Domain.SystemFacade;
 import com.workshop.ETrade.Domain.purchaseOption;
+import com.workshop.ETrade.Service.ResultPackge.newResult;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Logger;
@@ -73,26 +72,26 @@ public class StoresFacade {
         return true;
     }
 
-    public String searchByKeyword(String keyword) {
-        String result = "";
+    public List<String> searchByKeyword(String keyword) {
+        List<String> result = new LinkedList<>();
         for(Store store : stores) {
-            result = result + store.searchByKeyword(keyword);
+            result.add(store.searchByKeyword(keyword));
         }
         return result;
     }
 
-    public String searchByName(String name) {
-        String result = "";
+    public List<String> searchByName(String name) {
+        List<String> ans = new LinkedList<>();
         for(Store store : stores) {
-            result = result + store.searchByName(name);
+            ans.add(store.searchByName(name));
         }
-        return result;
+        return ans;
     }
 
-    public String searchByCategory(String category) {
-        String result = "";
+    public List<String> searchByCategory(String category) {
+        List<String> result = new LinkedList<>();
         for(Store store : stores) {
-            result = result + store.searchByCategory(category);
+            result.addAll(store.searchByCategory(category));
         }
         return result;
     }
@@ -106,10 +105,10 @@ public class StoresFacade {
         return null;
     }
 
-    public String displayStore(String storeName) {
+    public List<String> displayStore(String storeName) {
         Store store = getStoreByName(storeName);
-        if(store != null) {
-            return store.toString();
+        if(store != null && !store.isClosed()) {
+            return store.getProducts();
         }
         else {
             return null;
@@ -208,7 +207,7 @@ public class StoresFacade {
     }
     public Store getStore(String storeName){
         for(Store s : stores){
-            if(s.getName() == storeName)
+            if(s.getName().equals(storeName))
                 return s;
         }
         return null;
@@ -279,5 +278,38 @@ public class StoresFacade {
 
     public List<Store> getStores() {
         return stores;
+    }
+
+    public List<String> getStoresOfUser(String userName) {
+        List<String> res = new LinkedList<>();
+        for(Store store : stores) {
+            Set<String> management = store.getAllManagement(userName);
+            if(management != null && management.contains(userName)) {
+                res.add(store.getName());
+            }
+        }
+        return res;
+    }
+    public int getProdQuantity(String store,String prod){
+        Store s = getStore(store);
+        if(s == null)
+            return -1;
+        return s.getProductAmount(prod);
+    }
+
+    public boolean removeStoreOwner(String userName, String storeName, String ownerToRemove) {
+        Store store = getStoreByName(storeName);
+        if(store == null) {
+            return false;
+        }
+        return store.removeOwner(userName, ownerToRemove);
+    }
+
+    public boolean removeStoreManager(String userName, String storeName, String managerToRemove) {
+        Store store = getStoreByName(storeName);
+        if(store == null) {
+            return false;
+        }
+        return store.removeManager(userName, managerToRemove);
     }
 }

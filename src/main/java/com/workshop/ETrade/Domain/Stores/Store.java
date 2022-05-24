@@ -1,15 +1,18 @@
 package com.workshop.ETrade.Domain.Stores;
 
+import com.workshop.ETrade.Domain.Notifications.NotificationManager;
+import com.workshop.ETrade.Domain.Observable;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
 import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
+import com.workshop.ETrade.Domain.Users.Users.Member;
 import com.workshop.ETrade.Domain.purchaseOption;
 
 import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class Store {
+public class Store implements Observable {
 
     private boolean closedByAdmin;
     private String name;
@@ -28,6 +31,8 @@ public class Store {
     private List<Raffle> raffles;
     private List<Bid> bids;
     private List<Auction> auctions;
+    private List<Member> subscribers;
+    private NotificationManager notificationManager;
 
     public Store(String storeName, String founderName,int card) {
         name = storeName;
@@ -49,6 +54,8 @@ public class Store {
         raffleId = 1;
         managersPermissions = new ConcurrentHashMap<>();
         closedByAdmin = false;
+        notificationManager = new NotificationManager();
+        subscribers = new ArrayList<>();
     }
 
     public int addDiscount(String userName,String discountOn, int discountPercentage, String description, DiscountType discountType) {
@@ -125,6 +132,7 @@ public class Store {
     public boolean closeStore(String name) {
         if(isFounder(name) && !closed) {
             closed = true;
+            notifySubscribers(name+" has closed the store "+ getName()+"\n",name);
             return true;
         }
         return false;
@@ -149,6 +157,7 @@ public class Store {
                 products.put(product, prods.get(productName));
             }
             storeHistory.addPurchase(policyManager.getTotalPrice(products), products, buyer);
+            purchased(prods.keySet().stream().toList(),buyer);
             return true;
         }
         return false;
@@ -261,13 +270,14 @@ public class Store {
         return false;
     }
 
-    public String getProductPrice(String productName) {
-        return  inventory.getProductByName(productName).getName();
+    public double getProductPrice(String productName) {
+        return  inventory.getProductByName(productName).getPrice();
     }
 
     public boolean removeOwner(String ownersName, String ownerToRemove) {
         if(isOwner(ownersName) && ownersAppointments.get(ownersName).contains(ownerToRemove)) {
             ownersAppointments.get(ownersName).remove(ownerToRemove);
+            notifyOne("You are no longer Owner at " + getName(),ownersName,ownerToRemove);
             return true;
         }
         return false;
@@ -276,6 +286,7 @@ public class Store {
     public boolean removeManager(String ownersName ,String managerName) {
         if(isOwner(ownersName) && managersAppointments.get(ownersName).contains(managerName)) {
             managersAppointments.get(ownersName).remove(managerName);
+            notifyOne("You are no longer Manager at " + getName()+"\n",ownersName,managerName);
             return true;
         }
         return false;
@@ -296,13 +307,15 @@ public class Store {
     }
 
     public Set<String> getAllManagement(String name) {
-        Set<String> managers = getManagers(name);
-        Set<String> owners = getOwners(name);
-        if(managers == null || owners == null) {
-            return null;
+        Set<String> management = new HashSet();
+        for(String owner : ownersAppointments.keySet()) {
+            management.add(owner);
+            for(String manager : managersAppointments.get(owner)) {
+                management.add(manager);
+            }
         }
-        Set<String> management = managers;
-        management.addAll(owners);
+//        Set<String> management = managers;
+//        management.addAll(owners);
         return management;
     }
 
@@ -360,7 +373,7 @@ public class Store {
         return inventory.searchByName(name);
     }
 
-    public String searchByCategory(String category) {
+    public List<String> searchByCategory(String category) {
         return inventory.searchByCategory(category);
     }
 
@@ -421,4 +434,44 @@ public class Store {
         return storeHistory.getHistory();
     }
 
+    public void purchased(List<String> products,String userNamePurchased){
+        String mess = "";
+        for(String p : products){
+            mess+=p+"\n";
+        }
+        notifySubscribers(mess,userNamePurchased);
+
+    }
+
+    @Override
+    public void attach(Member user) {
+        if(!subscribers.contains(user))
+            subscribers.add(user);
+
+    }
+
+    @Override
+    public void detach(Member user) {
+        if(subscribers.contains(user))
+            subscribers.remove(user);
+    }
+
+    @Override
+    public void notifySubscribers(String message,String sendFrom) {
+        //
+        for(Member user: subscribers) {
+            if(!user.getUserName().equals(sendFrom))
+                user.update(message, sendFrom);
+        }
+    }
+    public void notifyOne(String message,String sendFrom,String sendTo) {
+        //
+        for(Member user: subscribers) {
+            if(user.getUserName().equals(sendTo))
+                user.update(message, sendFrom);
+        }
+    }
+    public List<String> getProducts() {
+        return inventory.getProducts();
+    }
 }

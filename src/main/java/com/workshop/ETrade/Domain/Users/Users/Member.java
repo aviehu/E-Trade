@@ -1,10 +1,17 @@
 package com.workshop.ETrade.Domain.Users.Users;
 
+import com.workshop.ETrade.Domain.Notifications.Notification;
+import com.workshop.ETrade.Domain.Notifications.NotificationManager;
+import com.workshop.ETrade.Domain.Observer;
 import com.workshop.ETrade.Domain.Stores.Store;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
-public class Member extends User{
+public class Member extends User implements Observer {
+    protected NotificationManager notificationManager;
+    protected List<Notification> awaitingNotification;
     protected String userName;
     protected String password;
     protected int age;
@@ -41,7 +48,7 @@ public class Member extends User{
 
     public Member(String userName, String password, String name, String lastName) {
         super();
-        this.discount = 10;
+        this.discount = 0;
         this.myShopCart.setDiscount(discount);
         this.securityLvl = 0;
         this.securityQuests = new HashMap<>();
@@ -53,6 +60,8 @@ public class Member extends User{
         this.age = 0;
         this.mail = "";
         this.address = null;
+        this.notificationManager = new NotificationManager();
+        this.awaitingNotification = new ArrayList<>();
     }
 
     @Override
@@ -71,7 +80,7 @@ public class Member extends User{
     }
 
     @Override
-    public String displayCart() {
+    public List<String> displayCart() {
         return super.displayCart();
     }
 
@@ -247,4 +256,16 @@ public class Member extends User{
         super.addAddress(city, street, streetNum, apartmentNum);
     }
 
+    @Override
+    public void update(String message, String from) {
+        notificationManager.sendNotification(this,message,from);
+    }
+
+    public void addToAwaitingNotification(Notification notification) {
+        this.awaitingNotification.add(notification);
+    }
+
+    public List<Notification> getMessages() {
+        return awaitingNotification;
+    }
 }

@@ -12,10 +12,13 @@ import imageLogo from './logo.jpg'
 import {useNavigate} from 'react-router-dom';
 import {useEffect} from "react";
 import post from './post'
+import MyError from "./MyError";
 
 const theme = createTheme();
 
 export default function SignIn() {
+    const [error, setError] = React.useState("")
+    const [hasError, setHasError] = React.useState(false)
     const navigate = useNavigate();
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -31,6 +34,9 @@ export default function SignIn() {
             if(boolRes.val) {
                 localStorage.setItem("userName", email)
                 navigate("/etrade")
+            } else {
+                setError(boolRes.err)
+                setHasError(true)
             }
         } catch (e) {
 
@@ -52,6 +58,7 @@ export default function SignIn() {
         <ThemeProvider theme={theme}>
             <Container component="main" maxWidth="xs">
                 <CssBaseline/>
+                <MyError open={hasError} setOpen={setHasError} error={error}/>
                 <Box
                     sx={{
                         marginTop: 8,

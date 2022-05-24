@@ -1,6 +1,7 @@
 package com.workshop.ETrade.Service;
 
 import com.workshop.ETrade.Domain.Facade;
+import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
 import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
@@ -12,15 +13,19 @@ import com.workshop.ETrade.Domain.purchaseOption;
 import com.workshop.ETrade.Service.ResultPackge.ResultBool;
 import com.workshop.ETrade.Service.ResultPackge.ResultMsg;
 import com.workshop.ETrade.Service.ResultPackge.ResultNum;
+import com.workshop.ETrade.Service.ResultPackge.newResult;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
+import java.util.HashMap;
+import java.util.List;
 
 @Service
 public class SystemService implements ServiceInterface {
     private Facade facade;
 
-
+    private static SystemService myInstance = null;
     public SystemService() {
         init();
     }
@@ -30,7 +35,7 @@ public class SystemService implements ServiceInterface {
     }
 
     @Override
-    public ResultNum getCartPrice(String userName) {
+    public newResult<Double> getCartPrice(String userName) {
         return facade.getCartPrice(userName);
     }
 
@@ -40,12 +45,12 @@ public class SystemService implements ServiceInterface {
     }
 
     @Override
-    public ResultMsg getOnlineMembers(String userName) {
+    public newResult<List<String>> getOnlineMembers(String userName) {
         return facade.getOnlineMembers(userName);
     }
 
     @Override
-    public ResultMsg getOfflineMembers(String userName) {
+    public newResult<List<String>> getOfflineMembers(String userName) {
         return facade.getOfflineMembers(userName);
     }
 
@@ -59,6 +64,11 @@ public class SystemService implements ServiceInterface {
 
     public ResultBool hasAdmin(){
         return facade.hasAdmin();
+    }
+
+    @Override
+    public newResult<List<String>> getAllStores(String userName) {
+        return facade.getAllStores(userName);
     }
 
     @Override
@@ -127,22 +137,22 @@ public class SystemService implements ServiceInterface {
     }
 
     @Override
-    public ResultMsg getStoreInfo(String userName, String storeName) {
+    public newResult<List<String>> getStoreInfo(String userName, String storeName) {
         return facade.getStoreInfo(userName, storeName);
     }
 
     @Override
-    public ResultMsg searchByKeyword(String userName, String keyword) {
+    public newResult<List<String>> searchByKeyword(String userName, String keyword) {
         return facade.searchByKeyword(userName, keyword);
     }
 
     @Override
-    public ResultMsg searchByCategory(String userName, String category) {
+    public newResult<List<String>> searchByCategory(String userName, String category) {
         return facade.searchByCategory(userName, category);
     }
 
     @Override
-    public ResultMsg searchByName(String userName, String productName) {
+    public newResult<List<String>> searchByName(String userName, String productName) {
         return facade.searchByName(userName, productName);
     }
 
@@ -152,8 +162,9 @@ public class SystemService implements ServiceInterface {
     }
 
     @Override
-    public ResultMsg displayShoppingCart(String userName) {
-        return facade.displayShoppingCart(userName);
+    public newResult<List<String>> displayShoppingCart(String userName) {
+        newResult<List<String>> res = facade.displayShoppingCart(userName);
+        return res;
     }
 
     @Override
@@ -212,8 +223,18 @@ public class SystemService implements ServiceInterface {
     }
 
     @Override
+    public newResult<Boolean> removeStoreOwner(String userName, String storeName, String ownerToRemove) {
+        return facade.removeStoreOwner(userName, storeName, ownerToRemove);
+    }
+
+    @Override
     public ResultBool appointStoreManager(String userName, String storeName, String newManager) {
         return facade.appointStoreManager(userName, storeName, newManager);
+    }
+
+    @Override
+    public newResult<Boolean> removeStoreManager(String userName, String storeName, String managerToRemove) {
+        return facade.removeStoreManager(userName, storeName, managerToRemove);
     }
 
     @Override
@@ -241,6 +262,11 @@ public class SystemService implements ServiceInterface {
         return facade.adminCloseStorePermanently(adminName, storeName);
     }
 
+    @Override
+    public newResult<List<String>> getStoresOfUser(String userName) {
+        return facade.getStoresOfUser(userName);
+    }
+
 //    @Override
 //    public ResultBool adminTerminateUser(String adminName, String userToTerminate) {
 //        return facade.adminTerminateUser(adminName, userToTerminate);
@@ -258,6 +284,26 @@ public class SystemService implements ServiceInterface {
     @Override
     public ResultNum addDiscount(String userName,String store, String discountOn, int discountPercentage, String description, DiscountType discountType) {
         return facade.addDiscount(userName,store, discountOn, discountPercentage, description, discountType);
+    }
+
+    @Override
+    public newResult<Double> getProdPrice(String store, String prod) {
+        return facade.getProdPrice(store, prod);
+    }
+
+    @Override
+    public newResult<Integer> getProdAmount(String store, String prod) {
+        return facade.getProdAmount(store, prod);
+    }
+
+    @Override
+    public newResult<List<Notification>> getMessages(String userName) {
+        return facade.getMessages(userName);
+    }
+
+    @Override
+    public newResult<Boolean> isAdmin(String userName) {
+        return facade.isAdmin(userName);
     }
 
     public ResultNum getProductAmount(String storeName, String prodName){

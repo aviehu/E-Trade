@@ -10,10 +10,15 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import imageLogo from "./logo.jpg";
 import post from './post'
+import {useNavigate} from 'react-router-dom';
+import MyError from "./MyError";
 
 const theme = createTheme();
 
 export default function SignUp() {
+    const navigate = useNavigate();
+    const [error, setError] = React.useState("")
+    const [hasError, setHasError] = React.useState(false)
     const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -25,12 +30,20 @@ export default function SignUp() {
         }
         console.log(body);
         const res = await post(body, 'users/signup');
+        const boolRes = await res.json();
+        if(boolRes.val) {
+            navigate("/")
+        } else {
+            setError(boolRes.err)
+            setHasError(true)
+        }
     };
 
     return (
         <ThemeProvider theme={theme}>
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
+                <MyError open={hasError} setOpen={setHasError} error={error}/>
                 <Box
                     sx={{
                         marginTop: 8,

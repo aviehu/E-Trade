@@ -1,13 +1,19 @@
 package com.workshop.ETrade.Controller;
 
+import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Stores.Store;
 import com.workshop.ETrade.Service.ResultPackge.ResultBool;
 import com.workshop.ETrade.Service.ResultPackge.ResultMsg;
+import com.workshop.ETrade.Service.ResultPackge.newResult;
 import com.workshop.ETrade.Service.ServiceInterface;
 import com.workshop.ETrade.Service.SystemService;
 import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.util.List;
 
 
 @RestController
@@ -17,25 +23,26 @@ public class UsersController {
 
     @Autowired
     private ServiceInterface systemService;
+    @Autowired
+    private SimpMessagingTemplate smt;
 
+//    @GetMapping("/onlinemembers")
+//    public ResultMsg getOnlineMembers(@RequestHeader("Authorization") String userName) {
+//        return systemService.getOnlineMembers(systemService.getOnline());
+//    }
 
-    @GetMapping("/onlinemembers")
-    public ResultMsg getOnlineMembers(@RequestHeader("Authorization") String userName) {
-        return systemService.getOnlineMembers(systemService.getOnline());
-    }
-
-    @GetMapping("/offlinemembers")
-    public ResultMsg getOfflineMembers(@RequestHeader("Authorization") String userName) {
-        return systemService.getOfflineMembers(userName);
-    }
+//    @GetMapping("/offlinemembers")
+//    public ResultMsg getOfflineMembers(@RequestHeader("Authorization") String userName) {
+//        return systemService.getOfflineMembers(userName);
+//    }
 
 //    public ResultBool hasAdmin(){
 //        return systemService.hasAdmin();
 //    }
 
-    @GetMapping("/removemember/{member}")
-    public ResultBool removeMember(@RequestHeader("Authorization") String userName, @PathVariable("member") String memberToRemove) {
-        return systemService.removeMember(userName, memberToRemove);
+    @PostMapping("/remove")
+    public ResultBool removeMember(@RequestHeader("Authorization") String userName, @RequestBody AppointForm form) {
+        return systemService.removeMember(userName, form.appointee);
     }
 
     @GetMapping("/entersystem")
@@ -68,9 +75,19 @@ public class UsersController {
         return systemService.login(userName, form.email, form.password);
     }
 
+    @GetMapping("/messages")
+    public newResult<List<Notification>> getMessages(@RequestHeader("Authorization") String userName) {
+        return systemService.getMessages(userName);
+    }
+
+    @GetMapping("/isadmin")
+    public newResult<Boolean> isAdmin(@RequestHeader("Authorization") String userName) {
+        return systemService.isAdmin(userName);
+    }
+
     @GetMapping("/logout")
-    public ResultMsg logOut() {
-        return systemService.logOut(systemService.getOnline());
+    public ResultMsg logOut(@RequestHeader("Authorization") String userName) {
+        return systemService.logOut(userName);
     }
 
 //    @GetMapping("/terminate/{user}")

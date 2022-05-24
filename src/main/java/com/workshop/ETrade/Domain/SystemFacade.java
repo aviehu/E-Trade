@@ -1,5 +1,6 @@
 package com.workshop.ETrade.Domain;
 
+import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
 import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
@@ -9,13 +10,16 @@ import com.workshop.ETrade.Domain.Users.ExternalService.Supply.SupplyAdaptee;
 import com.workshop.ETrade.Service.ResultPackge.ResultBool;
 import com.workshop.ETrade.Service.ResultPackge.ResultMsg;
 import com.workshop.ETrade.Service.ResultPackge.ResultNum;
+import com.workshop.ETrade.Service.ResultPackge.newResult;
 
 import java.time.LocalTime;
+import java.util.HashMap;
+import java.util.List;
 
 public interface SystemFacade {
-    public ResultNum getCartPrice(String userName);
-    public ResultMsg getOnlineMembers(String userName);
-    public ResultMsg getOfflineMembers(String userName);
+    public newResult<Double> getCartPrice(String userName);
+    public newResult<List<String>> getOnlineMembers(String userName);
+    public newResult<List<String>> getOfflineMembers(String userName);
     public ResultBool removeMember(String userName,String memberToRemove);
     public ResultMsg enterSystem();
     public ResultBool addSystemManager(String userName,String managerToAdd);
@@ -41,17 +45,19 @@ public interface SystemFacade {
 
     public ResultBool login(String userName,String memberUserName, String password);
 
-    public ResultMsg getStoreInfo(String userName, String storeName);
+    public newResult<List<String>> getStoreInfo(String userName, String storeName);
 
-    public ResultMsg searchByKeyword(String userName, String keyword);
+    public newResult<List<String>> searchByKeyword(String userName, String keyword);
 
-    public ResultMsg searchByCategory(String userName, String category);
+    public newResult<List<String>> searchByCategory(String userName, String category);
+    public newResult<Boolean> isAdmin(String userName);
+    public newResult<List<String>> searchByName(String userName, String productName);
 
-    public ResultMsg searchByName(String userName, String productName);
-
+    public newResult<List<Notification>> getMessages(String userName);
+    public newResult<List<String>> getStoresOfUser(String userName);
     public ResultMsg addProductToShoppingCart(String userName, String productName, String storeName, int quantity);
 
-    public ResultMsg displayShoppingCart(String userName);
+    public newResult<List<String>>  displayShoppingCart(String userName);
 
 //    public ResultMsg addProductToShoppingCart(String userName, Store s, int quantity, String prodName);
 
@@ -77,7 +83,11 @@ public interface SystemFacade {
 
     public ResultBool appointStoreOwner(String userName, String storeName, String newOwner);
 
+    public newResult<Boolean> removeStoreOwner(String userName, String storeName, String ownerToRemove);
+
     public ResultBool appointStoreManager(String userName, String storeName, String newManager);
+
+    public newResult<Boolean> removeStoreManager(String userName, String storeName, String managerToRemove);
 
     public ResultBool changeStoreManagersPermission(String userName, String storeName, String managerName, managersPermission newPermission);
 

@@ -1,5 +1,6 @@
 package com.workshop.ETrade.Tests.Bridge;
 
+import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
 import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
@@ -10,10 +11,12 @@ import com.workshop.ETrade.Domain.purchaseOption;
 import com.workshop.ETrade.Service.ResultPackge.ResultBool;
 import com.workshop.ETrade.Service.ResultPackge.ResultMsg;
 import com.workshop.ETrade.Service.ResultPackge.ResultNum;
+import com.workshop.ETrade.Service.ResultPackge.newResult;
 import com.workshop.ETrade.Service.ServiceInterface;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.time.LocalTime;
+import java.util.List;
 
 public class SystemServiceProxy implements ServiceInterface {
 
@@ -32,7 +35,7 @@ public class SystemServiceProxy implements ServiceInterface {
     }
 
     @Override
-    public ResultNum getCartPrice(String userName) {
+    public newResult<Double> getCartPrice(String userName) {
         if (real == null)
             throw new NotImplementedException();
         return real.getCartPrice(userName);
@@ -51,17 +54,44 @@ public class SystemServiceProxy implements ServiceInterface {
         return real.addDiscount(userName, store, discountOn, discountPercentage, description, discountType);
     }
 
-
     @Override
-    public ResultMsg getOnlineMembers(String userName) {
+    public newResult<Double> getProdPrice(String store, String prod) {
         if (real == null)
             throw new NotImplementedException();
-        return real.getOnlineMembers(userName);
-
+        return real.getProdPrice(store,prod);
     }
 
     @Override
-    public ResultMsg getOfflineMembers(String userName) {
+    public newResult<Integer> getProdAmount(String store, String prod) {
+        if (real == null)
+            throw new NotImplementedException();
+        return real.getProdAmount(store, prod);
+    }
+
+    @Override
+    public newResult<List<Notification>> getMessages(String userName) {
+        if (real == null)
+            throw new NotImplementedException();
+        return real.getMessages(userName);
+    }
+
+    @Override
+    public newResult<Boolean> isAdmin(String userName) {
+        if (real == null)
+            throw new NotImplementedException();
+        return real.isAdmin(userName);
+    }
+
+
+    @Override
+    public newResult<List<String>> getOnlineMembers(String userName) {
+        if (real == null)
+            throw new NotImplementedException();
+        return real.getOnlineMembers(userName);
+    }
+
+    @Override
+    public newResult<List<String>> getOfflineMembers(String userName) {
         if (real == null)
             throw new NotImplementedException();
         return real.getOfflineMembers(userName);
@@ -86,6 +116,13 @@ public class SystemServiceProxy implements ServiceInterface {
         if (real == null)
             throw new NotImplementedException();
         return real.hasAdmin();
+    }
+
+    @Override
+    public newResult<List<String>> getAllStores(String userName) {
+        if (real == null)
+            throw new NotImplementedException();
+        return real.getAllStores(userName);
     }
 
     @Override
@@ -180,28 +217,28 @@ public class SystemServiceProxy implements ServiceInterface {
     }
 
     @Override
-    public ResultMsg getStoreInfo(String userName, String storeName) {
+    public newResult<List<String>> getStoreInfo(String userName, String storeName) {
         if (real == null)
             throw new NotImplementedException();
         return real.getStoreInfo(userName, storeName);
     }
 
     @Override
-    public ResultMsg searchByKeyword(String userName, String keyword) {
+    public newResult<List<String>> searchByKeyword(String userName, String keyword) {
         if (real == null)
             throw new NotImplementedException();
         return real.searchByKeyword(userName, keyword);
     }
 
     @Override
-    public ResultMsg searchByCategory(String userName, String category) {
+    public newResult<List<String>> searchByCategory(String userName, String category) {
         if (real == null)
             throw new NotImplementedException();
         return real.searchByCategory(userName, category);
     }
 
     @Override
-    public ResultMsg searchByName(String userName, String productName) {
+    public newResult<List<String>> searchByName(String userName, String productName) {
         if (real == null)
             throw new NotImplementedException();
         return real.searchByName(userName, productName);
@@ -215,7 +252,7 @@ public class SystemServiceProxy implements ServiceInterface {
     }
 
     @Override
-    public ResultMsg displayShoppingCart(String userName) {
+    public newResult<List<String>> displayShoppingCart(String userName) {
         if (real == null)
             throw new NotImplementedException();
         return real.displayShoppingCart(userName);
@@ -299,10 +336,24 @@ public class SystemServiceProxy implements ServiceInterface {
     }
 
     @Override
+    public newResult<Boolean> removeStoreOwner(String userName, String storeName, String ownerToRemove) {
+        if (real == null)
+            throw new NotImplementedException();
+        return real.removeStoreOwner(userName, storeName, ownerToRemove);
+    }
+
+    @Override
     public ResultBool appointStoreManager(String userName, String storeName, String newManager) {
         if (real == null)
             throw new NotImplementedException();
         return real.appointStoreManager(userName, storeName, newManager);
+    }
+
+    @Override
+    public newResult<Boolean> removeStoreManager(String userName, String storeName, String managerToRemove) {
+        if (real == null)
+            throw new NotImplementedException();
+        return real.removeStoreManager(userName, storeName, managerToRemove);
     }
 
     @Override
@@ -341,10 +392,10 @@ public class SystemServiceProxy implements ServiceInterface {
     }
 
     @Override
-    public ResultBool adminTerminateUser(String adminName, String userToTerminate) {
+    public newResult<List<String>> getStoresOfUser(String userName) {
         if (real == null)
             throw new NotImplementedException();
-        return real.adminTerminateUser(adminName, userToTerminate);
+        return real.getStoresOfUser(userName);
     }
 
     @Override
