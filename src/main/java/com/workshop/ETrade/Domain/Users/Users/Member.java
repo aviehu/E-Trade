@@ -48,7 +48,7 @@ public class Member extends User implements Observer {
 
     public Member(String userName, String password, String name, String lastName) {
         super();
-        this.discount = 10;
+        this.discount = 0;
         this.myShopCart.setDiscount(discount);
         this.securityLvl = 0;
         this.securityQuests = new HashMap<>();
