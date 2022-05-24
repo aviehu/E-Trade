@@ -1,27 +1,13 @@
 import * as React from 'react';
 import {styled, createTheme, ThemeProvider} from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import MuiDrawer from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
-import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import MenuIcon from '@mui/icons-material/Menu';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import {mainListItems} from '../listItems';
 import '../../css/Dashboard.css';
-import Avatar from "@mui/material/Avatar";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import Link from "@mui/material/Link";
-import {Card} from "@mui/material";
 import {useNavigate} from 'react-router-dom';
 import post from "../post";
 import MyAppBar from "../dashboard/MyAppBar";
@@ -40,14 +26,13 @@ const DashboardContent = () => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         const body = {
-            storeName: data.get("storeName"),
-            card: data.get("cardNumber")
+            appointee: data.get("member")
         }
         try {
-            const res = await post(body, 'stores/openstore')
+            const res = await post(body, `users/remove`)
             const boolRes = await res.json()
             if(boolRes.val) {
-                navigate("/etrade");
+                navigate(`/etrade`);
             } else {
                 setError(boolRes.err)
                 setHasError(true)
@@ -62,7 +47,7 @@ const DashboardContent = () => {
             <Box sx={{display: 'flex'}}>
                 <CssBaseline/>
                 <MyError open={hasError} setOpen={setHasError} error={error}/>
-                <MyAppBar title={"Create Store"} open={open} toggleDrawer={() => {setOpen(!open)}}/>
+                <MyAppBar title={"Remove Member"} open={open} toggleDrawer={() => {setOpen(!open)}}/>
                 <MyDrawer open={open} setOpen={setOpen}/>
                 <Box
                     component="main"
@@ -91,39 +76,28 @@ const DashboardContent = () => {
                                             alignItems: 'center',
                                         }}
                                     >
-                                            <Box component="form" noValidate onSubmit={handleSubmit} sx={{mt: 3}}>
-                                                <Grid container spacing={2}>
-                                                    <Grid item xl={22}>
-                                                        <TextField
-                                                            required
-                                                            fullWidth
-                                                            id="storeName"
-                                                            label="Store Name"
-                                                            name="storeName"
-                                                            autoComplete="storeName"
-                                                        />
-                                                    </Grid>
-                                                    <Grid item xl={22}>
-                                                        <TextField
-                                                            required
-                                                            fullWidth
-                                                            name="cardNumber"
-                                                            label="Credit Card Number"
-                                                            type="cardNumber"
-                                                            id="cardNumber"
-                                                            autoComplete="cardNumber"
-                                                        />
-                                                    </Grid>
+                                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{mt: 3}}>
+                                            <Grid container spacing={2}>
+                                                <Grid item xl={12}>
+                                                    <TextField
+                                                        required
+                                                        fullWidth
+                                                        id="member"
+                                                        label="Member To Remove"
+                                                        name="member"
+                                                        autoComplete="member"
+                                                    />
                                                 </Grid>
-                                                <Button
-                                                    type="submit"
-                                                    fullWidth
-                                                    variant="contained"
-                                                    sx={{mt: 3, mb: 2}}
-                                                >
-                                                    Open Store
-                                                </Button>
-                                            </Box>
+                                            </Grid>
+                                            <Button
+                                                type="submit"
+                                                fullWidth
+                                                variant="contained"
+                                                sx={{mt: 3, mb: 2}}
+                                            >
+                                                Remove Member
+                                            </Button>
+                                        </Box>
                                     </Box>
                                 </Container>
                             </ThemeProvider>

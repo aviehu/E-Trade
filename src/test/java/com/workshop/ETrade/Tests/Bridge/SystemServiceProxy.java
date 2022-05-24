@@ -205,21 +205,21 @@ public class SystemServiceProxy implements ServiceInterface {
     }
 
     @Override
-    public ResultMsg searchByKeyword(String userName, String keyword) {
+    public newResult<List<String>> searchByKeyword(String userName, String keyword) {
         if (real == null)
             throw new NotImplementedException();
         return real.searchByKeyword(userName, keyword);
     }
 
     @Override
-    public ResultMsg searchByCategory(String userName, String category) {
+    public newResult<List<String>> searchByCategory(String userName, String category) {
         if (real == null)
             throw new NotImplementedException();
         return real.searchByCategory(userName, category);
     }
 
     @Override
-    public ResultMsg searchByName(String userName, String productName) {
+    public newResult<List<String>> searchByName(String userName, String productName) {
         if (real == null)
             throw new NotImplementedException();
         return real.searchByName(userName, productName);

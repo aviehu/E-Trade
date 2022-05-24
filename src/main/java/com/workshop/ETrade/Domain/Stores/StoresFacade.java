@@ -72,26 +72,26 @@ public class StoresFacade {
         return true;
     }
 
-    public String searchByKeyword(String keyword) {
-        String result = "";
+    public List<String> searchByKeyword(String keyword) {
+        List<String> result = new LinkedList<>();
         for(Store store : stores) {
-            result = result + store.searchByKeyword(keyword);
+            result.add(store.searchByKeyword(keyword));
         }
         return result;
     }
 
-    public String searchByName(String name) {
-        String result = "";
+    public List<String> searchByName(String name) {
+        List<String> ans = new LinkedList<>();
         for(Store store : stores) {
-            result = result + store.searchByName(name);
+            ans.add(store.searchByName(name));
         }
-        return result;
+        return ans;
     }
 
-    public String searchByCategory(String category) {
-        String result = "";
+    public List<String> searchByCategory(String category) {
+        List<String> result = new LinkedList<>();
         for(Store store : stores) {
-            result = result + store.searchByCategory(category);
+            result.addAll(store.searchByCategory(category));
         }
         return result;
     }

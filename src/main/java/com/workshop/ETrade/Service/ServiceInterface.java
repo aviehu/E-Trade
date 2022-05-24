@@ -63,11 +63,11 @@ public interface ServiceInterface {
 
     public newResult<List<String>> getStoreInfo(String userName, String storeName);
 
-    public ResultMsg searchByKeyword(String userName, String keyword);
+    public newResult<List<String>> searchByKeyword(String userName, String keyword);
 
-    public ResultMsg searchByCategory(String userName, String category);
+    public newResult<List<String>> searchByCategory(String userName, String category);
 
-    public ResultMsg searchByName(String userName, String productName);
+    public newResult<List<String>> searchByName(String userName, String productName);
 
     public ResultMsg addProductToShoppingCart(String userName, String productName, String storeName, int quantity);
 
@@ -130,6 +130,8 @@ public interface ServiceInterface {
     public newResult<Integer> getProdAmount(String store,String prod);
 
     public newResult<List<Notification>> getMessages(String userName);
+
+    public newResult<Boolean> isAdmin(String userName);
 //    public ResultBool exitSystem();
 
 }
