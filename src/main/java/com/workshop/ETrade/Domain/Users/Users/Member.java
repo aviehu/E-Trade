@@ -264,4 +264,8 @@ public class Member extends User implements Observer {
     public void addToAwaitingNotification(Notification notification) {
         this.awaitingNotification.add(notification);
     }
+
+    public List<Notification> getMessages() {
+        return awaitingNotification;
+    }
 }

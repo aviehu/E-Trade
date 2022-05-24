@@ -1,5 +1,6 @@
 package com.workshop.ETrade.Domain;
 
+import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
 import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
@@ -260,6 +261,18 @@ public class Facade implements SystemFacade {
             return new ResultMsg("", "No Items Matched Your Search");
         }
         return new ResultMsg("", "User Is Not Connected");
+    }
+
+    @Override
+    public newResult<List<Notification>> getMessages(String userName) {
+        if(userController.isConnected(userName)){
+            List<Notification> ans = userController.getMessages(userName);
+            if(ans != null) {
+                return new newResult<>(ans, null);
+            }
+            return new newResult<>(null, "No Items Matched Your Search");
+        }
+        return new newResult<>(null, "User Is Not Connected");
     }
 
     @Override

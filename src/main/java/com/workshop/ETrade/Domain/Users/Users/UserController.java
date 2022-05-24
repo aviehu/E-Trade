@@ -1,5 +1,6 @@
 package com.workshop.ETrade.Domain.Users.Users;
 
+import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Stores.Store;
 
 import java.time.LocalTime;
@@ -304,5 +305,13 @@ public class UserController {
             }
         }
         return ret;
+    }
+
+    public List<Notification> getMessages(String userName) {
+        Member member = getMember(userName);
+        if(member == null) {
+            return null;
+        }
+        return member.getMessages();
     }
 }

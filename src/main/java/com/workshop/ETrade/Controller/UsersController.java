@@ -4,6 +4,7 @@ import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Stores.Store;
 import com.workshop.ETrade.Service.ResultPackge.ResultBool;
 import com.workshop.ETrade.Service.ResultPackge.ResultMsg;
+import com.workshop.ETrade.Service.ResultPackge.newResult;
 import com.workshop.ETrade.Service.ServiceInterface;
 import com.workshop.ETrade.Service.SystemService;
 import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
@@ -12,6 +13,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 
 @RestController
@@ -71,6 +73,11 @@ public class UsersController {
     @PostMapping("/login")
     public ResultBool login(@RequestHeader("Authorization") String userName, @RequestBody LoginForm form) {
         return systemService.login(userName, form.email, form.password);
+    }
+
+    @GetMapping("/messages")
+    public newResult<List<Notification>> getMessages(@RequestHeader("Authorization") String userName) {
+        return systemService.getMessages(userName);
     }
 
     @GetMapping("/logout")

@@ -12,10 +12,10 @@ import java.util.List;
 
 public class NotificationManager {
     List<Notification> awaitingNotifications;
-    @Autowired
-    private SimpMessagingTemplate smt;
+
     public NotificationManager(){
         awaitingNotifications = Collections.synchronizedList(new ArrayList<Notification>());
+
     }
 
     public boolean sendNotification(Member user, String message, String sentFrom) {

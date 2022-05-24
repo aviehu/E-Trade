@@ -1,6 +1,7 @@
 package com.workshop.ETrade.Service;
 
 import com.workshop.ETrade.Domain.Facade;
+import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
 import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
@@ -13,6 +14,7 @@ import com.workshop.ETrade.Service.ResultPackge.ResultBool;
 import com.workshop.ETrade.Service.ResultPackge.ResultMsg;
 import com.workshop.ETrade.Service.ResultPackge.ResultNum;
 import com.workshop.ETrade.Service.ResultPackge.newResult;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
@@ -23,7 +25,7 @@ import java.util.List;
 public class SystemService implements ServiceInterface {
     private Facade facade;
 
-
+    private static SystemService myInstance = null;
     public SystemService() {
         init();
     }
@@ -292,6 +294,11 @@ public class SystemService implements ServiceInterface {
     @Override
     public newResult<Integer> getProdAmount(String store, String prod) {
         return facade.getProdAmount(store, prod);
+    }
+
+    @Override
+    public newResult<List<Notification>> getMessages(String userName) {
+        return facade.getMessages(userName);
     }
 
     public ResultNum getProductAmount(String storeName, String prodName){

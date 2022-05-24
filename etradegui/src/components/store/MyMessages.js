@@ -22,7 +22,6 @@ import {useEffect, useState} from "react";
 import get from "../get";
 import SocketProvider from "../SocketProvider";
 import MessageDialog from '../MessageDialog'
-import {useNavigate} from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -73,27 +72,12 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
 const mdTheme = createTheme();
 
 const DashboardContent = () => {
-    const [message, setMessage] = useState(null);
-    const [stores, setStores] = useState(null);
-    const [open, setOpen] = React.useState(true);
+
     const [notifications, setNotifications] = useState([]);
-    const navigate = useNavigate();
+    const [open, setOpen] = useState(true);
+
     useEffect(() => {
-        async function getStores() {
-            const { createSocket } = SocketProvider(setMessage);
-            createSocket(localStorage.getItem("userName"))
-            const res = await get('stores/');
-            const ans = await res.json()
-            const storesName = ans.val
-            if(storesName) {
-                const stores = storesName.map((store, id) => {
-                    return {
-                        "id": id,
-                        "title": store
-                    }
-                })
-                setStores(stores);
-            }
+        async function getNotifications() {
             const note = await get('users/messages')
             const notes = await note.json()
             if(notes.val) {
@@ -101,7 +85,7 @@ const DashboardContent = () => {
                 setNotifications(notes.val)
             }
         }
-        getStores()
+        getNotifications()
 
     }, [])
 
@@ -111,22 +95,21 @@ const DashboardContent = () => {
         setOpen(!open);
     };
 
-    const renderStores = (stores) => {
+    const renderNotifications = (notifications) => {
         return (<ul className='stores'>
-            {stores.map((store, index) => (
-                <li key={store.id} className='store'>
+            {notifications.map((notification, index) => (
+                <li key={notification.id} className='store'>
                     <div className='topStore'>
                         <div>
-                            <Link href={`/store/${store.title}`}>
-                                <h5 className='title'>{store.title}</h5>
-                            </Link>
+                            <h5 className='title'>From: {notification.sentFrom}</h5>
+                            <h5 className='title'>{notification.message}</h5>
                         </div>
                     </div>
 
-                    {/*<div className="store-footer">*/}
-                    {/*    <div*/}
-                    {/*        className='meta-data'>By {store.userEmail} | {new Date(store.creationTime).toLocaleString()}</div>*/}
-                    {/*</div>*/}
+                    <div className="store-footer">
+                        <div
+                            className='meta-data'>Sent At {notification.sentAt} </div>
+                    </div>
                 </li>
             ))}
         </ul>);
@@ -136,7 +119,6 @@ const DashboardContent = () => {
         <ThemeProvider theme={mdTheme}>
             <Box sx={{display: 'flex'}}>
                 <CssBaseline/>
-                <MessageDialog message={message} open={message !== null} handleClose={() => setMessage(null)}/>
                 <AppBar position="absolute" open={open}>
                     <Toolbar
                         sx={{
@@ -164,11 +146,6 @@ const DashboardContent = () => {
                         >
                             E-Trade
                         </Typography>
-                        <IconButton color="inherit">
-                            <Badge badgeContent={notifications.length} color="secondary">
-                                <NotificationsIcon onClick={() => navigate('/mymessages')}/>
-                            </Badge>
-                        </IconButton>
                     </Toolbar>
                 </AppBar>
                 <Drawer variant="permanent" open={open}>
@@ -207,7 +184,7 @@ const DashboardContent = () => {
                         <Grid container spacing={3}>
                             <Grid item xs={12}>
                                 <main>
-                                    {stores ? renderStores(stores) : <h2>Loading...</h2>}
+                                    {notifications ? renderNotifications(notifications) : <h2>Loading...</h2>}
                                 </main>
                             </Grid>
                         </Grid>
