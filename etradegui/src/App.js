@@ -8,9 +8,10 @@ import Checkout from "./components/checkout/Checkout";
 import CreateStore from "./components/store/CreateStore";
 import Mystores from "./components/store/Mystores";
 import Store from "./components/store/Store";
+import EditStore from './components/store/EditStore'
 import AddProduct from './components/store/AddProduct'
-
-
+import AddOwner from './components/store/AddOwner'
+import AddManager from './components/store/AddManager'
 
 function App() {
     return (
@@ -23,7 +24,10 @@ function App() {
                <Route path="/createstore" element={<CreateStore />} />
                <Route path="/mystores" element={<Mystores />} />
                <Route path="/store/:name" element={<Store />} />
-               <Route path="/store/edit/:name" element={<AddProduct/>} />
+               <Route path="/store/edit/:name" element={<EditStore/>} />
+               <Route path="/store/edit/:name/addproduct" element={<AddProduct/>} />
+               <Route path="/store/edit/:name/addowner" element={<AddOwner/>} />
+               <Route path="/store/edit/:name/addmanager" element={<AddManager/>} />
            </Routes>
        </Router>
     )

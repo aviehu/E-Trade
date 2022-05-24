@@ -31,6 +31,7 @@ export default function SignIn() {
             if(boolRes.val) {
                 localStorage.setItem("userName", email)
                 navigate("/etrade")
+
             }
         } catch (e) {
 

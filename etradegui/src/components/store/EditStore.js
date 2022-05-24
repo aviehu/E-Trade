@@ -24,6 +24,8 @@ import Link from "@mui/material/Link";
 import {Card} from "@mui/material";
 import {useNavigate, useParams} from 'react-router-dom';
 import post from "../post";
+import get from "../get";
+import {useEffect, useState} from "react";
 
 const drawerWidth = 240;
 
@@ -75,32 +77,59 @@ const mdTheme = createTheme();
 
 const DashboardContent: React.FC = () => {
     const { name } = useParams()
+    const [products, setProducts] = useState(null);
     const [open, setOpen] = React.useState(true);
     const toggleDrawer = () => {
         setOpen(!open);
     };
 
-    const navigate = useNavigate();
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        const body = {
-            storeName: name,
-            productName: data.get("productName"),
-            amount: data.get("amount"),
-            price: data.get("price"),
-            category: data.get("category")
-        }
-        try {
-            const res = await post(body, 'stores/addproducttostore')
-            const boolRes = await res.json()
-            if(boolRes.val) {
-                navigate("/etrade");
+    async function getStore() {
+        const res = await get(`stores/info/${name}`)
+        const ans = await res.json()
+        const products = ans.val
+        const fixedProducts = products.map((productName, id) => {
+            return {
+                "id": id,
+                "title": productName
             }
-        } catch (e) {
+        })
+        setProducts(fixedProducts)
+    }
 
+    useEffect(() => {
+        getStore()
+    }, [])
+
+
+    const navigate = useNavigate();
+
+    async function handleProduct(product) {
+        const body = {
+            productName: product.title,
         }
-    };
+        const res = await post(body, `stores/removeproductfromstore/${name}`)
+        const ans = await res.json()
+        if(ans.val) {
+            await getStore()
+        }
+    }
+
+    const renderProducts = (products) => {
+        return (<ul className='stores'>
+            {products.map((product,index) => (<li key={product.id} className='store'>
+
+                <div className='topStore' >
+                    <div>
+                        <h5 className='title' >{product.title}</h5>
+                    </div>
+                </div>
+
+                <div className="store-footer">
+                    <Button onClick={async () => await handleProduct(product)}>Remove</Button>
+                </div>
+            </li>))}
+        </ul>);
+    }
 
     return (
         <ThemeProvider theme={mdTheme}>
@@ -131,7 +160,7 @@ const DashboardContent: React.FC = () => {
                             noWrap
                             sx={{flexGrow: 1}}
                         >
-                            {name}
+                            { name }
                         </Typography>
                         <IconButton color="inherit">
                             <Badge badgeContent={4} color="secondary">
@@ -186,57 +215,27 @@ const DashboardContent: React.FC = () => {
                                             alignItems: 'center',
                                         }}
                                     >
-                                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{mt: 3}}>
-                                            <Grid container spacing={2}>
-                                                <Grid item xl={12}>
-                                                    <TextField
-                                                        required
-                                                        fullWidth
-                                                        id="productName"
-                                                        label="Product Name"
-                                                        name="productName"
-                                                        autoComplete="productName"
-                                                    />
-                                                </Grid>
-                                                <Grid item xl={12}>
-                                                    <TextField
-                                                        required
-                                                        fullWidth
-                                                        name="amount"
-                                                        label="Amount"
-                                                        id="amount"
-                                                        autoComplete="amount"
-                                                    />
-                                                </Grid>
-                                                <Grid item xl={12}>
-                                                    <TextField
-                                                        required
-                                                        fullWidth
-                                                        name="price"
-                                                        label="Price"
-                                                        id="price"
-                                                        autoComplete="price"
-                                                    />
-                                                </Grid>
-                                                <Grid item xl={12}>
-                                                    <TextField
-                                                        required
-                                                        fullWidth
-                                                        name="category"
-                                                        label="Category"
-                                                        id="category"
-                                                        autoComplete="category"
-                                                    />
+                                        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+                                            <Grid container spacing={3}>
+                                                <Grid item xs={12}>
+                                                    <main>
+                                                        {products ? renderProducts(products) : <h2>Loading...</h2>}
+                                                    </main>
                                                 </Grid>
                                             </Grid>
-                                            <Button
-                                                type="submit"
-                                                fullWidth
-                                                variant="contained"
-                                                sx={{mt: 3, mb: 2}}
-                                            >
-                                                Add Product
-                                            </Button>
+                                        </Container>
+                                        <Box component="form" noValidate sx={{mt: 3}}>
+                                            <Grid container spacing={2}>
+                                                <Grid item xl={12}>
+                                                    <Button onClick={() => navigate(`/store/edit/${name}/addproduct`)}>Add Product</Button>
+                                                </Grid>
+                                                <Grid item xl={12}>
+                                                    <Button onClick={() => navigate(`/store/edit/${name}/addowner`)}>Add Store Owner</Button>
+                                                </Grid>
+                                                <Grid item xl={12}>
+                                                    <Button onClick={() => navigate(`/store/edit/${name}/addmanager`)}>Add Store Manager</Button>
+                                                </Grid>
+                                            </Grid>
                                         </Box>
                                     </Box>
                                 </Container>
