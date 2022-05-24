@@ -1,5 +1,6 @@
 package com.workshop.ETrade.Domain.Notifications;
 
+import com.workshop.ETrade.Domain.Users.Users.Member;
 import com.workshop.ETrade.Domain.Users.Users.User;
 
 import java.time.LocalDate;
@@ -14,12 +15,13 @@ public class NotificationManager {
         awaitingNotifications = Collections.synchronizedList(new ArrayList<Notification>());
     }
 
-    public boolean sendNotification(User user, String message, String sentFrom) {
+    public boolean sendNotification(Member user, String message, String sentFrom) {
         Notification notification = new Notification(LocalDate.now(), sentFrom, message, user.getUserName());
         if(user.isConnected()) {
 //            user.sendNotification(notification);
             return true;
         }
+        user.addToAwaitingNotification(notification);
         awaitingNotifications.add(notification);
         return false;
     }
