@@ -53,6 +53,18 @@ public class SystemServiceProxy implements ServiceInterface {
         return real.addDiscount(userName, store, discountOn, discountPercentage, description, discountType);
     }
 
+    @Override
+    public newResult<Double> getProdPrice(String store, String prod) {
+        if (real == null)
+            throw new NotImplementedException();
+        return real.getProdPrice(store,prod);
+    }
+
+    @Override
+    public newResult<Integer> getProdAmount(String store, String prod) {
+        return null;
+    }
+
 
     @Override
     public ResultMsg getOnlineMembers(String userName) {

@@ -596,4 +596,21 @@ public class Facade implements SystemFacade {
         }
         return new newResult<>(null, "user is not connected");
     }
+    public newResult<Double> getProdPrice(String storeName,String prod){
+        Store s = this.storesFacade.getStore(storeName);
+        if (s == null){
+            return new newResult<>(null,"No such store\n");
+        }
+        double price = s.getProductPrice(prod);
+        return  new newResult<>(price,null);
+
+    }
+    public newResult<Integer> getProdAmount(String storeName,String prod){
+        int amount = this.storesFacade.getProductAmount(storeName,prod);
+        if(amount == -1)
+            return new newResult<>(null,"no such store\n");
+        return  new newResult<>(amount,null);
+
+    }
+
 }
