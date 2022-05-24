@@ -24,15 +24,15 @@ public class UsersController {
     @Autowired
     private SimpMessagingTemplate smt;
 
-    @GetMapping("/onlinemembers")
-    public ResultMsg getOnlineMembers(@RequestHeader("Authorization") String userName) {
-        return systemService.getOnlineMembers(systemService.getOnline());
-    }
+//    @GetMapping("/onlinemembers")
+//    public ResultMsg getOnlineMembers(@RequestHeader("Authorization") String userName) {
+//        return systemService.getOnlineMembers(systemService.getOnline());
+//    }
 
-    @GetMapping("/offlinemembers")
-    public ResultMsg getOfflineMembers(@RequestHeader("Authorization") String userName) {
-        return systemService.getOfflineMembers(userName);
-    }
+//    @GetMapping("/offlinemembers")
+//    public ResultMsg getOfflineMembers(@RequestHeader("Authorization") String userName) {
+//        return systemService.getOfflineMembers(userName);
+//    }
 
 //    public ResultBool hasAdmin(){
 //        return systemService.hasAdmin();

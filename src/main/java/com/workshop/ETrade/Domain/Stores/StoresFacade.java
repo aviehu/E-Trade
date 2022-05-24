@@ -107,7 +107,7 @@ public class StoresFacade {
 
     public List<String> displayStore(String storeName) {
         Store store = getStoreByName(storeName);
-        if(store != null) {
+        if(store != null && !store.isClosed()) {
             return store.getProducts();
         }
         else {
@@ -289,6 +289,12 @@ public class StoresFacade {
             }
         }
         return res;
+    }
+    public int getProdQuantity(String store,String prod){
+        Store s = getStore(store);
+        if(s == null)
+            return -1;
+        return s.getProductAmount(prod);
     }
 
     public boolean removeStoreOwner(String userName, String storeName, String ownerToRemove) {

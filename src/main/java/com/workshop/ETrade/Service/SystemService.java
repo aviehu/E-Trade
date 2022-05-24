@@ -43,12 +43,12 @@ public class SystemService implements ServiceInterface {
     }
 
     @Override
-    public ResultMsg getOnlineMembers(String userName) {
+    public newResult<List<String>> getOnlineMembers(String userName) {
         return facade.getOnlineMembers(userName);
     }
 
     @Override
-    public ResultMsg getOfflineMembers(String userName) {
+    public newResult<List<String>> getOfflineMembers(String userName) {
         return facade.getOfflineMembers(userName);
     }
 
@@ -161,7 +161,8 @@ public class SystemService implements ServiceInterface {
 
     @Override
     public newResult<List<String>> displayShoppingCart(String userName) {
-        return facade.displayShoppingCart(userName);
+        newResult<List<String>> res = facade.displayShoppingCart(userName);
+        return res;
     }
 
     @Override
@@ -281,6 +282,16 @@ public class SystemService implements ServiceInterface {
     @Override
     public ResultNum addDiscount(String userName,String store, String discountOn, int discountPercentage, String description, DiscountType discountType) {
         return facade.addDiscount(userName,store, discountOn, discountPercentage, description, discountType);
+    }
+
+    @Override
+    public newResult<Double> getProdPrice(String store, String prod) {
+        return facade.getProdPrice(store, prod);
+    }
+
+    @Override
+    public newResult<Integer> getProdAmount(String store, String prod) {
+        return facade.getProdAmount(store, prod);
     }
 
     public ResultNum getProductAmount(String storeName, String prodName){

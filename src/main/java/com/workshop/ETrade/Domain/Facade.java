@@ -43,26 +43,26 @@ public class Facade implements SystemFacade {
         return new newResult<>(p,null);
     }
 
-    public ResultMsg getOnlineMembers(String userName){
-        String ret =  this.userController.getOnlineMembers(userName);
+    public newResult<List<String>> getOnlineMembers(String userName){
+        List<String> ret =  this.userController.getOnlineMembers(userName);
         if(ret == null){
-            return  new ResultMsg(null,"PERMISSION DENIED\n");
+            return new newResult<>(null,"PERMISSION DENIED\n");
         }
-        if (ret.equals("")){
-            return  new ResultMsg("There are no connected members in the market\n",null);
-        }
-        return  new ResultMsg(ret,null);
+//        if (ret.size() == 0){
+//            return new newResult<>(null, "There are no connected members in the market\n");
+//        }
+        return new newResult<>(ret,null);
 
     }
-    public ResultMsg getOfflineMembers(String userName){
-        String ret =  this.userController.getOfflineMembers(userName);
+    public newResult<List<String>> getOfflineMembers(String userName){
+        List<String> ret = this.userController.getOfflineMembers(userName);
         if(ret == null){
-            return  new ResultMsg(null,"PERMISSION DENIED\n");
+            return  new newResult<>(null,"PERMISSION DENIED\n");
         }
-        if (ret.equals("")){
-            return  new ResultMsg("There are no members in the market\n",null);
-        }
-        return  new ResultMsg(ret,null);
+//        if (ret.equals("")){
+//            return new ResultMsg("There are no members in the market\n",null);
+//        }
+        return new newResult<>(ret,null);
 
     }
     @Override
@@ -84,7 +84,7 @@ public class Facade implements SystemFacade {
     }
     public boolean isInManagment(String admin,String memberToRemove){
         for(Store s : this.storesFacade.getStores()){
-            if(this.storesFacade.getStoresManagement(s.getName(),admin).contains(memberToRemove))
+            if(this.storesFacade.getStoresManagement(admin,s.getName()).contains(memberToRemove))
                 return true;
         }
         return false;
@@ -626,4 +626,21 @@ public class Facade implements SystemFacade {
         }
         return new newResult<>(null, "user is not connected");
     }
+    public newResult<Double> getProdPrice(String storeName,String prod){
+        Store s = this.storesFacade.getStore(storeName);
+        if (s == null){
+            return new newResult<>(null,"No such store\n");
+        }
+        double price = s.getProductPrice(prod);
+        return  new newResult<>(price,null);
+
+    }
+    public newResult<Integer> getProdAmount(String storeName,String prod){
+        int amount = this.storesFacade.getProductAmount(storeName,prod);
+        if(amount == -1)
+            return new newResult<>(null,"no such store\n");
+        return  new newResult<>(amount,null);
+
+    }
+
 }

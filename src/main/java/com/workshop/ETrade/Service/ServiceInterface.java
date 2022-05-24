@@ -22,8 +22,8 @@ public interface ServiceInterface {
     public void init();
     public newResult<Double> getCartPrice(String userName);
     public ResultNum addPolicy(String userName,String store, String policyOn, String description, PolicyType policyType, OperatorComponent operatorComponent);
-    public ResultMsg getOnlineMembers(String userName);
-    public ResultMsg getOfflineMembers(String userName);
+    public newResult<List<String>> getOnlineMembers(String userName);
+    public newResult<List<String>> getOfflineMembers(String userName);
     public ResultBool supplyServiceExists();
 
     public ResultBool paymentServiceExists();
@@ -125,6 +125,7 @@ public interface ServiceInterface {
     public String getOnline();
     public ResultNum addDiscount(String userName,String store,String discountOn, int discountPercentage, String description, DiscountType discountType);
 
-
+    public newResult<Double> getProdPrice(String store,String prod);
+    public newResult<Integer> getProdAmount(String store,String prod);
 //    public ResultBool exitSystem();
 }
