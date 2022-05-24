@@ -435,6 +435,21 @@ public class Facade implements SystemFacade {
     }
 
     @Override
+    public newResult<Boolean> removeStoreOwner(String userName, String storeName, String ownerToRemove) {
+        if(userController.isConnected(userName) && userController.isUserNameExist(ownerToRemove)){
+            if(storesFacade.removeStoreOwner(userName, storeName, ownerToRemove)) {
+                //subscribe new owner
+                Store s = this.storesFacade.getStore(storeName);
+                Member m = this.userController.getMember(ownerToRemove);
+                s.detach(m);
+                return new newResult<>(true, null);
+            }
+            return new newResult<>(false, "Could Not Remove Store Owner");
+        }
+        return new newResult<>(false, "User Is Not Connected");
+    }
+
+    @Override
     public ResultBool appointStoreManager(String userName, String storeName, String newManager) {
         if(userController.isConnected(userName)){
             if(storesFacade.appointStoreManager(userName, storeName, newManager)) {
@@ -447,6 +462,21 @@ public class Facade implements SystemFacade {
             return new ResultBool(false, "Could Not Appoint Store Manager");
         }
         return new ResultBool(false, "User Is Not Connected");
+    }
+
+    @Override
+    public newResult<Boolean> removeStoreManager(String userName, String storeName, String managerToRemove) {
+        if(userController.isConnected(userName) && userController.isUserNameExist(managerToRemove)){
+            if(storesFacade.removeStoreManager(userName, storeName, managerToRemove)) {
+                //subscribe new owner
+                Store s = this.storesFacade.getStore(storeName);
+                Member m = this.userController.getMember(managerToRemove);
+                s.detach(m);
+                return new newResult<>(true, null);
+            }
+            return new newResult<>(false, "Could Not Appoint Store Owner");
+        }
+        return new newResult<>(false, "User Is Not Connected");
     }
 
     @Override

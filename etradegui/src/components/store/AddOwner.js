@@ -73,7 +73,7 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
 
 const mdTheme = createTheme();
 
-const DashboardContent: React.FC = () => {
+const DashboardContent = () => {
     const { name } = useParams()
     const [open, setOpen] = React.useState(true);
     const toggleDrawer = () => {
@@ -201,7 +201,7 @@ const DashboardContent: React.FC = () => {
                                                 variant="contained"
                                                 sx={{mt: 3, mb: 2}}
                                             >
-                                                Add Product
+                                                Add Owner
                                             </Button>
                                         </Box>
                                     </Box>

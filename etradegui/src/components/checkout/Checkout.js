@@ -16,23 +16,24 @@ import AddressForm from './AddressForm';
 import PaymentForm from './PaymentForm';
 import Review from './Review';
 import {useNavigate} from 'react-router-dom';
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import get from "../get";
+import post from "../post";
 
 
 const steps = ['Your cart','Shipping address', 'Payment details'];
 
 const orderNumber = 10; //todo
 
-function getStepContent(step, products, totalPrice) {
+function getStepContent(step, products, totalPrice, setAddress, setCity, setAptNum, setCardNum, setExpDate, setCcv, expDate, setStreetNum) {
     switch (step) {
         case 0:
             return <Review products={products} totalPrice={totalPrice}/>;
 
         case 1:
-            return <AddressForm />;
+            return <AddressForm setAddress={setAddress} setCity={setCity} setAptNum={setAptNum} setStreetNum={setStreetNum}/>;
         case 2:
-            return <PaymentForm />;
+            return <PaymentForm expDate={expDate} setCardNum={setCardNum} setExpDate={setExpDate} setCcv={setCcv} />;
         default:
             throw new Error('Unknown step');
     }
@@ -43,6 +44,13 @@ const theme = createTheme();
 export default function Checkout() {
     const [activeStep, setActiveStep] = React.useState(0);
     const [totalPrice, setTotalPrice] = React.useState(0);
+    const [streetNum, setStreetNum] = useState(0);
+    const [address, setAddress] = useState("")
+    const [city, setCity] = useState("")
+    const [aptNumber, setAptNum] = useState("")
+    const [cardNum, setCardNum] = useState(0);
+    const [expDate, setExpDate] = useState(new Date());
+    const [ccv, setCcv] = useState(0);
     const [products, setProducts] = React.useState([]);
     const navigate = useNavigate();
 
@@ -66,8 +74,26 @@ export default function Checkout() {
         getMyBasket()
     }, [])
 
-    const handleNext = () => {
-        setActiveStep(activeStep + 1);
+    const handleNext = async () => {
+        if(activeStep === steps.length - 1) {
+            const body = {
+                card: cardNum,
+                expDate: expDate,
+                cvv: ccv,
+                city: city,
+                street: address,
+                stNum: streetNum,
+                apartmentNum: aptNumber
+            }
+            console.log(body)
+            const ans = await post(body, "stores/purchase")
+            const res = await ans.json()
+            if(res.val) {
+                setActiveStep(activeStep + 1);
+            }
+        } else {
+            setActiveStep(activeStep + 1);
+        }
     };
 
     const handleBack = () => {
@@ -120,7 +146,7 @@ export default function Checkout() {
                             </React.Fragment>
                         ) : (
                             <React.Fragment>
-                                {getStepContent(activeStep, products, totalPrice)}
+                                {getStepContent(activeStep, products, totalPrice, setAddress, setCity, setAptNum, setCardNum, setExpDate, setCcv, expDate, setStreetNum)}
                                 <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                                     {(
                                         <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>

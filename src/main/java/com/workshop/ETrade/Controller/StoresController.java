@@ -1,5 +1,6 @@
 package com.workshop.ETrade.Controller;
 
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
 import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Stores.managersPermission;
 import com.workshop.ETrade.Domain.purchaseOption;
@@ -74,9 +75,9 @@ public class StoresController {
         return systemService.removeProductFromShoppingCart(userName, form.storeName, form.quantity, form.productName);
     }
 
-    @PostMapping("/puchase")
-    public ResultBool purchase(String userName, int card, LocalTime expDate, int cvv, String city, String street, int stNum, int apartmentNum) {
-        return systemService.purchase(userName, card, expDate, cvv, city, street, stNum, apartmentNum);
+    @PostMapping("/purchase")
+    public ResultBool purchase(@RequestHeader("Authorization") String userName,@RequestBody PurchaseForm form) {
+        return systemService.purchase(userName, form.card, LocalTime.now().plusHours(2), form.cvv, form.city, form.street, form.stNum, form.apartmentNum);
     }
 
     @PostMapping("/openstore")
@@ -126,11 +127,21 @@ public class StoresController {
         return systemService.appointStoreOwner(userName, storeName, form.appointee);
     }
 
+    @PostMapping("/removeowner/{store}")
+    public newResult<Boolean> removeStoreOwner(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName, @RequestBody AppointForm form) {
+        return systemService.removeStoreOwner(userName, storeName, form.appointee);
+    }
+
     @PostMapping("/appointmanager/{store}")
     public ResultBool appointStoreManager(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName,@RequestBody AppointForm form) {
         String msg = "you have been appointed to store manager at - " + storeName + " by - " + userName;
         smt.convertAndSend("/topic/" + form.appointee, new Notification(LocalDate.now(), "server", msg, userName));
         return systemService.appointStoreManager(userName, storeName, form.appointee);
+    }
+
+    @PostMapping("/removemanager/{store}")
+    public newResult<Boolean> removeStoreManager(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName, @RequestBody AppointForm form) {
+        return systemService.removeStoreManager(userName, storeName, form.appointee);
     }
 
     @GetMapping("/changePermission")//TODO:permission?

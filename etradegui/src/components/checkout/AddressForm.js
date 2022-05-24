@@ -5,7 +5,7 @@ import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 
-export default function AddressForm() {
+export default function AddressForm({setAddress, setStreetNum, setCity, setAptNum}) {
     return (
         <React.Fragment>
             <Typography variant="h6" gutterBottom>
@@ -16,9 +16,22 @@ export default function AddressForm() {
                 <Grid item xs={12}>
                     <TextField
                         required
-                        id="address"
-                        name="address"
-                        label="Your address"
+                        onChange={(event) => setAddress(event.target.value)}
+                        id="street"
+                        name="street"
+                        label="Your Street"
+                        fullWidth
+                        autoComplete="shipping address-line1"
+                        variant="standard"
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <TextField
+                        required
+                        onChange={(event) => setAddress(event.target.value)}
+                        id="streetNum"
+                        name="streetNum"
+                        label="Your Street Num"
                         fullWidth
                         autoComplete="shipping address-line1"
                         variant="standard"
@@ -26,6 +39,7 @@ export default function AddressForm() {
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <TextField
+                        onChange={(event) => setCity(event.target.value)}
                         required
                         id="city"
                         name="city"
@@ -38,9 +52,10 @@ export default function AddressForm() {
                 <Grid item xs={12} sm={6}>
                     <TextField
                         required
-                        id="country"
-                        name="country"
-                        label="Country"
+                        onChange={(event) => setAptNum(event.target.value)}
+                        id="aptNum"
+                        name="aptNum"
+                        label="Apartment Number"
                         fullWidth
                         autoComplete="shipping country"
                         variant="standard"

@@ -17,11 +17,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import {mainListItems} from '../listItems';
 import '../../css/Dashboard.css';
-import Avatar from "@mui/material/Avatar";
-import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import Link from "@mui/material/Link";
-import {Card} from "@mui/material";
 import {useNavigate, useParams} from 'react-router-dom';
 import post from "../post";
 import get from "../get";
@@ -75,7 +71,7 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
 
 const mdTheme = createTheme();
 
-const DashboardContent: React.FC = () => {
+const DashboardContent = () => {
     const { name } = useParams()
     const [products, setProducts] = useState(null);
     const [open, setOpen] = React.useState(true);
@@ -234,6 +230,12 @@ const DashboardContent: React.FC = () => {
                                                 </Grid>
                                                 <Grid item xl={12}>
                                                     <Button onClick={() => navigate(`/store/edit/${name}/addmanager`)}>Add Store Manager</Button>
+                                                </Grid>
+                                                <Grid item xl={12}>
+                                                    <Button onClick={() => navigate(`/store/edit/${name}/removeowner`)}>Remove Store Owner</Button>
+                                                </Grid>
+                                                <Grid item xl={12}>
+                                                    <Button onClick={() => navigate(`/store/edit/${name}/removemanager`)}>Remove Store Manager</Button>
                                                 </Grid>
                                             </Grid>
                                         </Box>

@@ -12,6 +12,8 @@ import EditStore from './components/store/EditStore'
 import AddProduct from './components/store/AddProduct'
 import AddOwner from './components/store/AddOwner'
 import AddManager from './components/store/AddManager'
+import RemoveOwner from './components/store/RemoveOwner'
+import RemoveManager from './components/store/RemoveManager'
 
 function App() {
     return (
@@ -28,6 +30,8 @@ function App() {
                <Route path="/store/edit/:name/addproduct" element={<AddProduct/>} />
                <Route path="/store/edit/:name/addowner" element={<AddOwner/>} />
                <Route path="/store/edit/:name/addmanager" element={<AddManager/>} />
+               <Route path="/store/edit/:name/removeowner" element={<RemoveOwner/>} />
+               <Route path="/store/edit/:name/removemanager" element={<RemoveManager/>} />
            </Routes>
        </Router>
     )

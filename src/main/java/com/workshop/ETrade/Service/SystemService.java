@@ -221,8 +221,18 @@ public class SystemService implements ServiceInterface {
     }
 
     @Override
+    public newResult<Boolean> removeStoreOwner(String userName, String storeName, String ownerToRemove) {
+        return facade.removeStoreOwner(userName, storeName, ownerToRemove);
+    }
+
+    @Override
     public ResultBool appointStoreManager(String userName, String storeName, String newManager) {
         return facade.appointStoreManager(userName, storeName, newManager);
+    }
+
+    @Override
+    public newResult<Boolean> removeStoreManager(String userName, String storeName, String managerToRemove) {
+        return facade.removeStoreManager(userName, storeName, managerToRemove);
     }
 
     @Override
