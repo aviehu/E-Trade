@@ -1,8 +1,11 @@
 package com.workshop.ETrade.Domain.Stores;
 
+import com.workshop.ETrade.Domain.Notifications.NotificationManager;
+import com.workshop.ETrade.Domain.Observable;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
 import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
+import com.workshop.ETrade.Domain.Users.Users.Member;
 import com.workshop.ETrade.Domain.purchaseOption;
 
 import java.time.LocalDate;
@@ -311,8 +314,8 @@ public class Store implements Observable {
                 management.add(manager);
             }
         }
-        Set<String> management = managers;
-        management.addAll(owners);
+//        Set<String> management = managers;
+//        management.addAll(owners);
         return management;
     }
 
