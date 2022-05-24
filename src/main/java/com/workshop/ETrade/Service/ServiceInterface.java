@@ -121,6 +121,7 @@ public interface ServiceInterface {
     public String getOnline();
     public ResultNum addDiscount(String userName,String store,String discountOn, int discountPercentage, String description, DiscountType discountType);
 
-
+    public newResult<Double> getProdPrice(String store,String prod);
+    public newResult<Integer> getProdAmount(String store,String prod);
 //    public ResultBool exitSystem();
 }

@@ -26,29 +26,30 @@ public class UpdateProductTest {
 
     @Test
     public void updateProductPriceSuccessTest(){
-        Assert.assertTrue(systemService.getStoreInfo("Andalus", "Mega").getVal().contains("5"));
+
+        Assert.assertEquals(5.0,systemService.getProdPrice("Mega","Bamba").getVal(),0);
         systemService.editProductPrice("Andalus", "Mega", "Bamba", 8);
-        Assert.assertTrue(systemService.getStoreInfo("Andalus", "Mega").getVal().contains("8"));
+        Assert.assertEquals(8.0,systemService.getProdPrice("Mega","Bamba").getVal(),0);
     }
 
     @Test
     public void updateProductPriceFailTest(){
-        Assert.assertTrue(systemService.getStoreInfo("Andalus", "Mega").getVal().contains("5"));
-        systemService.editProductPrice("Andalus", "Mega", "Bisly", 8);
-        Assert.assertTrue(systemService.getStoreInfo("Andalus", "Mega").getVal().contains("5"));
+        Assert.assertEquals(5.0,systemService.getProdPrice("Mega","Bamba").getVal(),0);
+        systemService.editProductPrice("Andalus", "Mega", "Bamba", 8);
+        Assert.assertNotEquals(5.0,systemService.getProdPrice("Mega","Bamba").getVal(),0);
     }
 
     @Test
     public void updateProductQuantitySuccessTest(){
-        Assert.assertTrue(systemService.getStoreInfo("Andalus", "Mega").getVal().contains("100"));
+        Assert.assertEquals(systemService.getProductAmount("Mega","Bamba").getVal(),100);
         systemService.editProductQuantity("Andalus", "Mega", "Bamba", 8);
-        Assert.assertTrue(systemService.getStoreInfo("Andalus", "Mega").getVal().contains("8"));
+        Assert.assertEquals(systemService.getProductAmount("Mega","Bamba").getVal(),8);
     }
 
     @Test
     public void updateProductQuantityFailTest(){
-        Assert.assertTrue(systemService.getStoreInfo("Andalus", "Mega").getVal().contains("5"));
-        systemService.editProductQuantity("Andalus", "Mega", "Bisly", 8);
-        Assert.assertTrue(systemService.getStoreInfo("Andalus", "Mega").getVal().contains("5"));
+        Assert.assertEquals(systemService.getProductAmount("Mega","Bamba").getVal(),100);
+        Assert.assertFalse(systemService.editProductQuantity("Andalus", "Mega", "Bisly", 8).getVal());
+        Assert.assertEquals(systemService.getProductAmount("Mega","Bamba").getVal(),100);
     }
 }

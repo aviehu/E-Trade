@@ -270,8 +270,8 @@ public class Store implements Observable {
         return false;
     }
 
-    public String getProductPrice(String productName) {
-        return  inventory.getProductByName(productName).getName();
+    public double getProductPrice(String productName) {
+        return  inventory.getProductByName(productName).getPrice();
     }
 
     public boolean removeOwner(String ownersName, String ownerToRemove) {

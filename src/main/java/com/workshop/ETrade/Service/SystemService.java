@@ -273,6 +273,16 @@ public class SystemService implements ServiceInterface {
         return facade.addDiscount(userName,store, discountOn, discountPercentage, description, discountType);
     }
 
+    @Override
+    public newResult<Double> getProdPrice(String store, String prod) {
+        return facade.getProdPrice(store, prod);
+    }
+
+    @Override
+    public newResult<Integer> getProdAmount(String store, String prod) {
+        return facade.getProdAmount(store, prod);
+    }
+
     public ResultNum getProductAmount(String storeName, String prodName){
         return facade.getProductAmount(storeName,prodName);
     }
