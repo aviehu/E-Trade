@@ -130,7 +130,11 @@ public class StoresController {
 
     @PostMapping("/removeowner/{store}")
     public newResult<Boolean> removeStoreOwner(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName, @RequestBody AppointForm form) {
-        return systemService.removeStoreOwner(userName, storeName, form.appointee);
+        newResult<Boolean> res = systemService.removeStoreOwner(userName, storeName, form.appointee);
+        String msg = "you have been removed from store Owner at - " + storeName + " by - " + userName;
+        if(res.isSuccess())
+            smt.convertAndSend("/topic/" + form.appointee, new Notification(LocalDate.now(), "server", msg, userName));
+        return res;
     }
 
     @PostMapping("/appointmanager/{store}")
@@ -142,7 +146,11 @@ public class StoresController {
 
     @PostMapping("/removemanager/{store}")
     public newResult<Boolean> removeStoreManager(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName, @RequestBody AppointForm form) {
-        return systemService.removeStoreManager(userName, storeName, form.appointee);
+        newResult<Boolean> res = systemService.removeStoreManager(userName, storeName, form.appointee);
+        String msg = "you have been removed from store manager at - " + storeName + " by - " + userName;
+        if(res.isSuccess())
+            smt.convertAndSend("/topic/" + form.appointee, new Notification(LocalDate.now(), "server", msg, userName));
+        return res;
     }
 
     @GetMapping("/changePermission")//TODO:permission?
