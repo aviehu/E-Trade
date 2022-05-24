@@ -8,7 +8,6 @@ async function get(path) {
         }
     };
     const result = await fetch(`http://localhost:8080/${path}`, requestOptions)
-    console.log(result)
     return result
 }
 

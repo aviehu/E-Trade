@@ -18,8 +18,10 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import {mainListItems} from '../listItems';
 import Link from "@mui/material/Link";
 import '../../css/Dashboard.css';
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import get from "../get";
+import SocketProvider from "../SocketProvider";
+import MessageDialog from '../MessageDialog'
 
 const drawerWidth = 240;
 
@@ -70,15 +72,14 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
 const mdTheme = createTheme();
 
 const DashboardContent: React.FC = () => {
-
+    const [message, setMessage] = useState(null);
     const [stores, setStores] = useState(null);
     const [open, setOpen] = React.useState(true);
-    const toggleDrawer = () => {
-        setOpen(!open);
-    };
-
-    useState(() => {
+    useEffect(() => {
         async function getStores() {
+            const { createSocket } = SocketProvider(setMessage);
+            createSocket(localStorage.getItem("userName"))
+
             const res = await get('stores/');
             const ans = await res.json()
             const storesName = ans.val
@@ -90,11 +91,17 @@ const DashboardContent: React.FC = () => {
                     }
                 })
                 setStores(stores);
-                console.log(stores)
             }
         }
         getStores()
+
     }, [])
+
+
+
+    const toggleDrawer = () => {
+        setOpen(!open);
+    };
 
     const renderStores = (stores) => {
         return (<ul className='stores'>
@@ -121,6 +128,7 @@ const DashboardContent: React.FC = () => {
         <ThemeProvider theme={mdTheme}>
             <Box sx={{display: 'flex'}}>
                 <CssBaseline/>
+                <MessageDialog message={message} open={message !== null} handleClose={() => setMessage(null)}/>
                 <AppBar position="absolute" open={open}>
                     <Toolbar
                         sx={{
@@ -203,6 +211,6 @@ const DashboardContent: React.FC = () => {
 }
 
 export default function Dashboard() {
-    return <DashboardContent/>;
+    return <DashboardContent />;
 }
 

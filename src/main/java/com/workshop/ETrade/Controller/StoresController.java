@@ -1,5 +1,6 @@
 package com.workshop.ETrade.Controller;
 
+import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Stores.managersPermission;
 import com.workshop.ETrade.Domain.purchaseOption;
 import com.workshop.ETrade.Service.ResultPackge.ResultBool;
@@ -9,10 +10,13 @@ import com.workshop.ETrade.Service.ResultPackge.newResult;
 import com.workshop.ETrade.Service.ServiceInterface;
 import com.workshop.ETrade.Service.SystemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 
 @RestController
@@ -22,7 +26,8 @@ public class StoresController {
 
     @Autowired
     private ServiceInterface systemService;
-
+    @Autowired
+    private SimpMessagingTemplate smt;
 
     @GetMapping("/info/{store}")
     public newResult<List<String>> getStoreInfo(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName) {
@@ -84,9 +89,9 @@ public class StoresController {
         return systemService.addProductToStore(userName, form.storeName, form.productName, form.amount, form.price, form.category);
     }
 
-    @GetMapping("/removeproductfromstore/{store}/{product}")
-    public ResultBool removeProductFromStore(String userName, @PathVariable("store") String storeName,@PathVariable("product") String productName) {
-        return systemService.removeProductFromStore(userName, storeName, productName);
+    @PostMapping("/removeproductfromstore/{store}")
+    public ResultBool removeProductFromStore(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName,@RequestBody RemoveProductForm form) {
+        return systemService.removeProductFromStore(userName, storeName, form.productName);
     }
 
     @PostMapping("/editproductname/{name}")
@@ -114,14 +119,18 @@ public class StoresController {
         return systemService.changePurchaseOption(userName, form.storeName, form.productName, newOption);
     }
 
-    @GetMapping("/appointowner/{store}/{user}")
-    public ResultBool appointStoreOwner(String userName,@PathVariable("store") String storeName,@PathVariable("user") String newOwner) {
-        return systemService.appointStoreOwner(userName, storeName, newOwner);
+    @PostMapping("/appointowner/{store}")
+    public ResultBool appointStoreOwner(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName,@RequestBody AppointForm form) {
+        String msg = "you have been appointed to store owner at - " + storeName + " by - " + userName;
+        smt.convertAndSend("/topic/" + form.appointee, new Notification(LocalDate.now(), "server", msg, userName));
+        return systemService.appointStoreOwner(userName, storeName, form.appointee);
     }
 
-    @GetMapping("/appointmanager/{store}/{user}")
-    public ResultBool appointStoreManager(String userName,@PathVariable("store") String storeName,@PathVariable("user") String newManager) {
-        return systemService.appointStoreManager(userName, storeName, newManager);
+    @PostMapping("/appointmanager/{store}")
+    public ResultBool appointStoreManager(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName,@RequestBody AppointForm form) {
+        String msg = "you have been appointed to store manager at - " + storeName + " by - " + userName;
+        smt.convertAndSend("/topic/" + form.appointee, new Notification(LocalDate.now(), "server", msg, userName));
+        return systemService.appointStoreManager(userName, storeName, form.appointee);
     }
 
     @GetMapping("/changePermission")//TODO:permission?

@@ -1,5 +1,6 @@
 package com.workshop.ETrade.Controller;
 
+import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Stores.Store;
 import com.workshop.ETrade.Service.ResultPackge.ResultBool;
 import com.workshop.ETrade.Service.ResultPackge.ResultMsg;
@@ -7,7 +8,10 @@ import com.workshop.ETrade.Service.ServiceInterface;
 import com.workshop.ETrade.Service.SystemService;
 import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 
 @RestController
@@ -17,7 +21,8 @@ public class UsersController {
 
     @Autowired
     private ServiceInterface systemService;
-
+    @Autowired
+    private SimpMessagingTemplate smt;
 
     @GetMapping("/onlinemembers")
     public ResultMsg getOnlineMembers(@RequestHeader("Authorization") String userName) {
