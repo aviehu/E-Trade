@@ -84,7 +84,7 @@ public class Facade implements SystemFacade {
     }
     public boolean isInManagment(String admin,String memberToRemove){
         for(Store s : this.storesFacade.getStores()){
-            if(this.storesFacade.getStoresManagement(s.getName(),admin).contains(memberToRemove))
+            if(this.storesFacade.getStoresManagement(admin,s.getName()).contains(memberToRemove))
                 return true;
         }
         return false;
