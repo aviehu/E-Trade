@@ -15,6 +15,9 @@ import AddManager from './components/store/AddManager'
 import RemoveOwner from './components/store/RemoveOwner'
 import RemoveManager from './components/store/RemoveManager'
 import MyMessages from './components/store/MyMessages'
+import RemoveMember from './components/Admin/RemoveMember'
+import CloseStore from './components/Admin/CloseStore'
+import SearchMarket from './components/store/SearchMarket'
 
 function App() {
     return (
@@ -27,6 +30,9 @@ function App() {
                <Route path="/createstore" element={<CreateStore />} />
                <Route path="/mystores" element={<Mystores />} />
                <Route path="/mymessages" element={<MyMessages />} />
+               <Route path="/search" element={<SearchMarket />} />
+               <Route path="/admin/removemember" element={<RemoveMember/>}/>
+               <Route path="/admin/closestore" element={<CloseStore/>}/>
                <Route path="/store/:name" element={<Store />} />
                <Route path="/store/edit/:name" element={<EditStore/>} />
                <Route path="/store/edit/:name/addproduct" element={<AddProduct/>} />

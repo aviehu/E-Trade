@@ -31,10 +31,6 @@ public class StoresController {
     private SimpMessagingTemplate smt;
 
 
-    public void sendMessage(Notification notification) {
-        smt.convertAndSend("/topic/" + notification.getSentTo(), notification);
-    }
-
     @GetMapping("/info/{store}")
     public newResult<List<String>> getStoreInfo(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName) {
         return systemService.getStoreInfo(userName, storeName);
@@ -45,8 +41,8 @@ public class StoresController {
         return systemService.getAllStores(userName);
     }
 
-    @GetMapping("/searchbykw/{word}")
-    public ResultMsg searchByKeyword(String userName,@PathVariable("word") String keyword) {
+    @PostMapping("/searchbykw")
+    public newResult<List<String>> searchByKeyword(@RequestHeader("Authorization") String userName,@RequestBody String keyword) {
         return systemService.searchByKeyword(userName, keyword);
     }
 
@@ -55,14 +51,14 @@ public class StoresController {
         return systemService.getStoresOfUser(userName);
     }
 
-    @GetMapping("/searchbycat/{cat}")
-    public ResultMsg searchByCategory(String userName,@PathVariable("cat") String category) {
-        return systemService.searchByCategory(userName, category);
+    @PostMapping("/searchbycat")
+    public newResult<List<String>> searchByCategory(@RequestHeader("Authorization") String userName,@RequestBody SearchForm form) {
+        return systemService.searchByCategory(userName, form.search);
     }
 
-    @GetMapping("/searchbyname/{name}")
-    public ResultMsg searchByName(String userName,@PathVariable("name") String productName) {
-        return systemService.searchByName(userName, productName);
+    @PostMapping("/searchbyname")
+    public newResult<List<String>> searchByName(@RequestHeader("Authorization") String userName, @RequestBody SearchForm form) {
+        return systemService.searchByName(userName, form.search);
     }
 
     @PostMapping("/addproducttocart")
@@ -170,8 +166,8 @@ public class StoresController {
     }
 
     @GetMapping("/admin/closepermanent/{store}")
-    public ResultBool adminCloseStorePermanently(String adminName,@PathVariable("store") String storeName) {
-        return systemService.adminCloseStorePermanently(adminName, storeName);
+    public ResultBool adminCloseStorePermanently(@RequestHeader("Authorization") String userName,@PathVariable("store") String storeName) {
+        return systemService.adminCloseStorePermanently(userName, storeName);
     }
 
     @GetMapping("/admin/gethistory/{store}")

@@ -13,44 +13,78 @@ import get from "../get";
 import {useEffect, useState} from "react";
 import MyAppBar from "../dashboard/MyAppBar";
 import MyDrawer from "../dashboard/MyDrawer";
+import {TextField} from "@mui/material";
+import MyError from "../MyError";
 
 const mdTheme = createTheme();
 
 const DashboardContent = () => {
     const { name } = useParams()
-    const [products, setProducts] = useState(null);
+    const [products, setProducts] = useState([]);
     const [open, setOpen] = React.useState(true);
-
-    async function getStore() {
-        const res = await get(`stores/info/${name}`)
-        const ans = await res.json()
-        const products = ans.val
-        const fixedProducts = products.map((productName, id) => {
-            return {
-                "id": id,
-                "title": productName
-            }
-        })
-        setProducts(fixedProducts)
-    }
-
-    useEffect(() => {
-        getStore()
-    }, [])
-
+    const [search, setSearch] = useState("")
+    const [error, setError] = React.useState("")
+    const [hasError, setHasError] = React.useState(false)
 
     const navigate = useNavigate();
 
-    async function handleProduct(product) {
+    async function handleKeyword() {
         const body = {
-            productName: product.title,
+            search: search
         }
-        const res = await post(body, `stores/removeproductfromstore/${name}`)
+        const res = await post(body, "stores/searchbykw")
         const ans = await res.json()
         if(ans.val) {
-            await getStore()
+            const fixed = ans.val.map(product => {
+                return {
+                    title: product
+                }
+            })
+            setProducts(fixed)
+        } else {
+            setError(ans.err)
+            setHasError(true)
         }
     }
+
+    async function handleCategory() {
+        const body = {
+            search: search
+        }
+        const res = await post(body, "stores/searchbycat")
+        const ans = await res.json()
+        if(ans.val) {
+            const fixed = ans.val.map(product => {
+                return {
+                    title: product
+                }
+            })
+            setProducts(fixed)
+        } else {
+            setError(ans.err)
+            setHasError(true)
+        }
+    }
+
+    async function handleName() {
+        const body = {
+            search: search
+        }
+        const res = await post(body, "stores/searchbyname")
+        const ans = await res.json()
+        if(ans.val) {
+            const fixed = ans.val.map(product => {
+                return {
+                    title: product
+                }
+            })
+            setProducts(fixed)
+        } else {
+            setError(ans.err)
+            setHasError(true)
+        }
+    }
+
 
     const renderProducts = (products) => {
         return (<ul className='stores'>
@@ -62,9 +96,9 @@ const DashboardContent = () => {
                     </div>
                 </div>
 
-                <div className="store-footer">
-                    <Button onClick={async () => await handleProduct(product)}>Remove</Button>
-                </div>
+                {/*<div className="store-footer">*/}
+                {/*    <Button onClick={async () => await handleProduct(product)}>Remove</Button>*/}
+                {/*</div>*/}
             </li>))}
         </ul>);
     }
@@ -73,6 +107,7 @@ const DashboardContent = () => {
         <ThemeProvider theme={mdTheme}>
             <Box sx={{display: 'flex'}}>
                 <CssBaseline/>
+                <MyError open={hasError} setOpen={setHasError} error={error}/>
                 <MyAppBar title={`${name} - Edit`} open={open} toggleDrawer={() => {setOpen(!open)}}/>
                 <MyDrawer open={open} setOpen={setOpen}/>
                 <Box
@@ -114,20 +149,18 @@ const DashboardContent = () => {
                                         <Box component="form" noValidate sx={{mt: 3}}>
                                             <Grid container spacing={2}>
                                                 <Grid item xl={12}>
-                                                    <Button onClick={() => navigate(`/store/edit/${name}/addproduct`)}>Add Product</Button>
+                                                    <TextField label={"Search Word"} onChange={(event) => {setSearch(event.target.value)}}></TextField>
                                                 </Grid>
                                                 <Grid item xl={12}>
-                                                    <Button onClick={() => navigate(`/store/edit/${name}/addowner`)}>Add Store Owner</Button>
+                                                    <Button onClick={handleName}>Search By Name</Button>
                                                 </Grid>
                                                 <Grid item xl={12}>
-                                                    <Button onClick={() => navigate(`/store/edit/${name}/addmanager`)}>Add Store Manager</Button>
+                                                    <Button onClick={handleKeyword}>Search By Keyword</Button>
                                                 </Grid>
                                                 <Grid item xl={12}>
-                                                    <Button onClick={() => navigate(`/store/edit/${name}/removeowner`)}>Remove Store Owner</Button>
+                                                    <Button onClick={handleCategory}>Search By Category</Button>
                                                 </Grid>
-                                                <Grid item xl={12}>
-                                                    <Button onClick={() => navigate(`/store/edit/${name}/removemanager`)}>Remove Store Manager</Button>
-                                                </Grid>
+
                                             </Grid>
                                         </Box>
                                     </Box>

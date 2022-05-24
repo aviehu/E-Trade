@@ -142,17 +142,17 @@ public class SystemService implements ServiceInterface {
     }
 
     @Override
-    public ResultMsg searchByKeyword(String userName, String keyword) {
+    public newResult<List<String>> searchByKeyword(String userName, String keyword) {
         return facade.searchByKeyword(userName, keyword);
     }
 
     @Override
-    public ResultMsg searchByCategory(String userName, String category) {
+    public newResult<List<String>> searchByCategory(String userName, String category) {
         return facade.searchByCategory(userName, category);
     }
 
     @Override
-    public ResultMsg searchByName(String userName, String productName) {
+    public newResult<List<String>> searchByName(String userName, String productName) {
         return facade.searchByName(userName, productName);
     }
 
@@ -299,6 +299,11 @@ public class SystemService implements ServiceInterface {
     @Override
     public newResult<List<Notification>> getMessages(String userName) {
         return facade.getMessages(userName);
+    }
+
+    @Override
+    public newResult<Boolean> isAdmin(String userName) {
+        return facade.isAdmin(userName);
     }
 
     public ResultNum getProductAmount(String storeName, String prodName){

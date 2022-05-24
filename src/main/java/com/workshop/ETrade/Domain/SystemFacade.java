@@ -47,11 +47,11 @@ public interface SystemFacade {
 
     public newResult<List<String>> getStoreInfo(String userName, String storeName);
 
-    public ResultMsg searchByKeyword(String userName, String keyword);
+    public newResult<List<String>> searchByKeyword(String userName, String keyword);
 
-    public ResultMsg searchByCategory(String userName, String category);
-
-    public ResultMsg searchByName(String userName, String productName);
+    public newResult<List<String>> searchByCategory(String userName, String category);
+    public newResult<Boolean> isAdmin(String userName);
+    public newResult<List<String>> searchByName(String userName, String productName);
 
     public newResult<List<Notification>> getMessages(String userName);
     public newResult<List<String>> getStoresOfUser(String userName);

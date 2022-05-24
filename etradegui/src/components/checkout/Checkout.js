@@ -90,6 +90,9 @@ export default function Checkout() {
             const res = await ans.json()
             if(res.val) {
                 setActiveStep(activeStep + 1);
+                setTimeout(() => {
+                    navigate('/etrade');
+                }, 5000)
             }
         } else {
             setActiveStep(activeStep + 1);

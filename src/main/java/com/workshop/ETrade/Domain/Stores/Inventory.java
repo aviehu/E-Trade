@@ -123,16 +123,16 @@ public class Inventory {
         if(product == null) {
             return null;
         }
-        return product.toString();
+        return product.getName();
     }
 
-    public String searchByCategory(String category) {
-        StringBuilder result = new StringBuilder();
+    public List<String> searchByCategory(String category) {
+        List<String> result = new LinkedList<>();
         List<Product> foundProducts = getProductsByCategory(category);
         for(Product product : foundProducts) {
-            result.append(product.toString());
+            result.add(product.getName());
         }
-        return result.toString();
+        return result;
     }
 
     public purchaseOption getPurchaseOption(String productName) {

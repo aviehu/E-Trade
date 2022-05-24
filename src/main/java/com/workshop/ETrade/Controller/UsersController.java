@@ -40,9 +40,9 @@ public class UsersController {
 //        return systemService.hasAdmin();
 //    }
 
-    @GetMapping("/removemember/{member}")
-    public ResultBool removeMember(@RequestHeader("Authorization") String userName, @PathVariable("member") String memberToRemove) {
-        return systemService.removeMember(userName, memberToRemove);
+    @PostMapping("/remove")
+    public ResultBool removeMember(@RequestHeader("Authorization") String userName, @RequestBody AppointForm form) {
+        return systemService.removeMember(userName, form.appointee);
     }
 
     @GetMapping("/entersystem")
@@ -80,9 +80,14 @@ public class UsersController {
         return systemService.getMessages(userName);
     }
 
+    @GetMapping("/isadmin")
+    public newResult<Boolean> isAdmin(@RequestHeader("Authorization") String userName) {
+        return systemService.isAdmin(userName);
+    }
+
     @GetMapping("/logout")
-    public ResultMsg logOut() {
-        return systemService.logOut(systemService.getOnline());
+    public ResultMsg logOut(@RequestHeader("Authorization") String userName) {
+        return systemService.logOut(userName);
     }
 
 //    @GetMapping("/terminate/{user}")

@@ -228,39 +228,44 @@ public class Facade implements SystemFacade {
     }
 
     @Override
-    public ResultMsg searchByKeyword(String userName, String keyword) {
+    public newResult<List<String>> searchByKeyword(String userName, String keyword) {
         if(userController.isConnected(userName)){
-            String ans = storesFacade.searchByKeyword(keyword);
+            List<String> ans = storesFacade.searchByKeyword(keyword);
             if(ans != null) {
-                return new ResultMsg(ans, null);
+                return new newResult<>(ans, null);
             }
-            return new ResultMsg("", "No Items Matched Your Search");
+            return new newResult<>(null, "No Items Matched Your Search");
         }
-        return new ResultMsg("", "User Is Not Connected");
+        return new newResult<>(null, "User Is Not Connected");
     }
 
     @Override
-    public ResultMsg searchByCategory(String userName, String category) {
+    public newResult<List<String>> searchByCategory(String userName, String category) {
         if(userController.isConnected(userName)){
-            String ans = storesFacade.searchByCategory(category);
+            List<String> ans = storesFacade.searchByCategory(category);
             if(ans != null) {
-                return new ResultMsg(ans, null);
+                return new newResult<>(ans, null);
             }
-            return new ResultMsg("", "No Items Matched Your Search");
+            return new newResult<>(null, "No Items Matched Your Search");
         }
-        return new ResultMsg("", "User Is Not Connected");
+        return new newResult<>(null, "User Is Not Connected");
     }
 
     @Override
-    public ResultMsg searchByName(String userName, String productName) {
+    public newResult<Boolean> isAdmin(String userName) {
+        return new newResult<>(userController.isUserSysManager(userName), null);
+    }
+
+    @Override
+    public newResult<List<String>> searchByName(String userName, String productName) {
         if(userController.isConnected(userName)){
-            String ans = storesFacade.searchByName(productName);
+            List<String> ans = storesFacade.searchByName(productName);
             if(ans != null) {
-                return new ResultMsg(ans, null);
+                return new newResult<>(ans, null);
             }
-            return new ResultMsg("", "No Items Matched Your Search");
+            return new newResult<>(null, "No Items Matched Your Search");
         }
-        return new ResultMsg("", "User Is Not Connected");
+        return new newResult<>(null, "User Is Not Connected");
     }
 
     @Override

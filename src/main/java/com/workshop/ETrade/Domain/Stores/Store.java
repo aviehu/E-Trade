@@ -373,7 +373,7 @@ public class Store implements Observable {
         return inventory.searchByName(name);
     }
 
-    public String searchByCategory(String category) {
+    public List<String> searchByCategory(String category) {
         return inventory.searchByCategory(category);
     }
 
