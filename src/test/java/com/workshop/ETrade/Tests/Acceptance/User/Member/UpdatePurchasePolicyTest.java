@@ -31,7 +31,7 @@ public class UpdatePurchasePolicyTest {
         systemService.openStore("Andalus", "Mega", 123);
         systemService.addProductToStore("Andalus", "Mega", "Bamba", 100, 5, "snacks");
         systemService.addProductToStore("Andalus", "Mega", "Bisly", 200, 5, "snacks");
-        p = new PredicateBuilder().getProductAmountPredicate("Bamda", 30, 100);
+        p = new PredicateBuilder().getProductAmountPredicate("Bamba", 30, 100);
         systemService.addProductToShoppingCart("Andalus", "Bamba", "Mega", 20);
         l = new ArrayList<>();
         l.add(p);
@@ -44,7 +44,7 @@ public class UpdatePurchasePolicyTest {
     @Test
     public void UpdatePurchasePolicySuccessTest() {
         Assert.assertTrue(systemService.purchase("Andalus", 123, LocalTime.MAX, 123, "BeerSheva", "Masada", 12, 4).getVal());
-        Assert.assertTrue(systemService.addPolicy("Andalus","Mega", "", "", PolicyType.CATEGORY, new OperatorLeaf("and", l)).getVal() > 0);
+        Assert.assertTrue(systemService.addPolicy("Andalus","Mega", "snacks", "", PolicyType.CATEGORY, new OperatorLeaf("and", l)).getVal() > 0);
         systemService.addProductToShoppingCart("Andalus", "Bamba", "Mega", 20);
 //        systemService.purchase("Andalus", 123, LocalTime.MAX, 123, "BeerSheva", "Masada", 12, 4);
         Assert.assertFalse(systemService.purchase("Andalus", 123, LocalTime.MAX, 123, "BeerSheva", "Masada", 12, 4).getVal());

@@ -71,8 +71,8 @@ public class StoreBasket {
         return store.getName();
     }
     public boolean purchase(String userName){
-        store.purchase(prods,userName);
-        return true;
+        return store.purchase(prods,userName);
+       // return true;
     }
 
     public String canPurchase(){

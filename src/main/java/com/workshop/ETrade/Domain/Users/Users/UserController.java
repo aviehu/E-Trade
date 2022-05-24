@@ -281,28 +281,26 @@ public class UserController {
             return true;
         return false;
     }
-    public String  getOnlineMembers(String userName) {
+    public List<String>  getOnlineMembers(String userName) {
         if(!isUserSysManager(userName)){
             return null;
         }
-        String ret = "";
+        List<String> ret = new ArrayList<>();
         for(Member m : members){
             if(isConnected(m.getUserName())){
-                String s = m.getUserName() +"\t"+ m.getName()+ "\t"+ m.getLastName()+"\n";
-                ret+=s;
+                ret.add(m.getUserName());
             }
         }
         return ret;
     }
-    public String  getOfflineMembers(String userName) {
+    public List<String> getOfflineMembers(String userName) {
         if(!isUserSysManager(userName)){
             return null;
         }
-        String ret = "";
+        List<String> ret = new ArrayList<>();
         for(Member m : members){
             if(!isConnected(m.getUserName())){
-                String s = m.getUserName() +"\t"+ m.getName()+ "\t"+ m.getLastName()+"\n";
-                ret+=s;
+                ret.add(m.getUserName());
             }
         }
         return ret;

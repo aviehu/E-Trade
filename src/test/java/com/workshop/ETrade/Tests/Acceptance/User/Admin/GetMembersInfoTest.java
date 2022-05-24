@@ -24,7 +24,7 @@ public class GetMembersInfoTest {
         t2 = new Thread(){
             public void run(){
                 String guestName2 = systemService.enterSystem().getVal();
-                systemService.login(guestName2, "admin", "admin");
+                systemService.login(guestName2, "domain", "domain");
             }
         };
         systemService = new SystemService();
@@ -45,12 +45,11 @@ public class GetMembersInfoTest {
             t2.join();
 
         } catch (InterruptedException ignored) {}
-        Assert.assertTrue(systemService.getOnlineMembers("admin").getVal().contains("Andalus"));
+        Assert.assertTrue(systemService.getOnlineMembers("domain").getVal().contains("Andalus"));
     }
 
     @Test
     public void GetOfflineMembersInfoTest(){
-        systemService.signUp(guestName, "Andalus", "100","Anda","lus");
         systemService.signUp(guestName, "Andalus1", "200","Anda","lus1");
         t1.start();
         t2.start();
@@ -59,7 +58,7 @@ public class GetMembersInfoTest {
             t2.join();
 
         } catch (InterruptedException ignored) {}
-        Assert.assertTrue(systemService.getOfflineMembers("admin").getVal().contains("Andalus1"));
-        Assert.assertFalse(systemService.getOfflineMembers("admin").getVal().contains("Andalus"));
+        Assert.assertTrue(systemService.getOfflineMembers("domain").getVal().contains("Andalus1"));
+        Assert.assertFalse(systemService.getOfflineMembers("domain").getVal().contains("Andalus"));
     }
 }

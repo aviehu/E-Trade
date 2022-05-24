@@ -18,6 +18,7 @@ public class CategoryPolicy implements Policy {
         this.id = id;
         this.description = description;
         this.categoryName = categoryName;
+        this.operatorComponent = operatorComponent;
     }
 
     @Override
