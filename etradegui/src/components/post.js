@@ -9,7 +9,6 @@ async function post(body, path) {
         body: JSON.stringify(body)
     };
     const result = await fetch(`http://localhost:8080/${path}`, requestOptions)
-    console.log(userName)
     return result
 }
 

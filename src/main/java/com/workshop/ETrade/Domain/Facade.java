@@ -9,6 +9,7 @@ import com.workshop.ETrade.Domain.Stores.managersPermission;
 import com.workshop.ETrade.Domain.Users.ExternalService.ExtSysController;
 import com.workshop.ETrade.Domain.Users.ExternalService.Payment.PaymentAdaptee;
 import com.workshop.ETrade.Domain.Users.ExternalService.Supply.SupplyAdaptee;
+import com.workshop.ETrade.Domain.Users.Users.Member;
 import com.workshop.ETrade.Domain.Users.Users.UserController;
 import com.workshop.ETrade.Service.ResultPackge.ResultBool;
 import com.workshop.ETrade.Service.ResultPackge.ResultMsg;
@@ -83,7 +84,7 @@ public class Facade implements SystemFacade {
     }
     public boolean isInManagment(String admin,String memberToRemove){
         for(Store s : this.storesFacade.getStores()){
-            if(this.storesFacade.getStoresManagement(s.getName(),admin).contains(memberToRemove))
+            if(this.storesFacade.getStoresManagement(admin,s.getName()).contains(memberToRemove))
                 return true;
         }
         return false;
@@ -340,6 +341,10 @@ public class Facade implements SystemFacade {
     public ResultBool openStore(String founderName, String storeName, int card) {
         if(userController.isConnected(founderName)){
             if(storesFacade.addStore(storeName, founderName, card)) {
+                //subscribe new founder
+                Store s = this.storesFacade.getStore(storeName);
+                Member m = this.userController.getMember(founderName);
+                s.attach(m);
                 return new ResultBool(true, null);
             }
             return new ResultBool(false, "Store With A Name - " + storeName + " exists");
@@ -417,6 +422,11 @@ public class Facade implements SystemFacade {
     public ResultBool appointStoreOwner(String userName, String storeName, String newOwner) {
         if(userController.isConnected(userName) && userController.isUserNameExist(newOwner)){
             if(storesFacade.appointStoreOwner(userName, storeName, newOwner)) {
+                //subscribe new owner
+                Store s = this.storesFacade.getStore(storeName);
+                Member m = this.userController.getMember(newOwner);
+                s.attach(m);
+
                 return new ResultBool(true, null);
             }
             return new ResultBool(false, "Could Not Appoint Store Owner");
@@ -428,6 +438,10 @@ public class Facade implements SystemFacade {
     public ResultBool appointStoreManager(String userName, String storeName, String newManager) {
         if(userController.isConnected(userName)){
             if(storesFacade.appointStoreManager(userName, storeName, newManager)) {
+                //subscribe new manager
+                Store s = this.storesFacade.getStore(storeName);
+                Member m = this.userController.getMember(newManager);
+                s.attach(m);
                 return new ResultBool(true, null);
             }
             return new ResultBool(false, "Could Not Appoint Store Manager");

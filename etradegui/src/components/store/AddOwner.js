@@ -85,17 +85,13 @@ const DashboardContent: React.FC = () => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         const body = {
-            storeName: name,
-            productName: data.get("productName"),
-            amount: data.get("amount"),
-            price: data.get("price"),
-            category: data.get("category")
+            appointee: data.get("newOwner")
         }
         try {
-            const res = await post(body, 'stores/addproducttostore')
+            const res = await post(body, `stores/appointowner/${name}`)
             const boolRes = await res.json()
             if(boolRes.val) {
-                navigate("/etrade");
+                navigate(`/store/edit/${name}`);
             }
         } catch (e) {
 
@@ -192,40 +188,10 @@ const DashboardContent: React.FC = () => {
                                                     <TextField
                                                         required
                                                         fullWidth
-                                                        id="productName"
-                                                        label="Product Name"
-                                                        name="productName"
-                                                        autoComplete="productName"
-                                                    />
-                                                </Grid>
-                                                <Grid item xl={12}>
-                                                    <TextField
-                                                        required
-                                                        fullWidth
-                                                        name="amount"
-                                                        label="Amount"
-                                                        id="amount"
-                                                        autoComplete="amount"
-                                                    />
-                                                </Grid>
-                                                <Grid item xl={12}>
-                                                    <TextField
-                                                        required
-                                                        fullWidth
-                                                        name="price"
-                                                        label="Price"
-                                                        id="price"
-                                                        autoComplete="price"
-                                                    />
-                                                </Grid>
-                                                <Grid item xl={12}>
-                                                    <TextField
-                                                        required
-                                                        fullWidth
-                                                        name="category"
-                                                        label="Category"
-                                                        id="category"
-                                                        autoComplete="category"
+                                                        id="newOwner"
+                                                        label="New Owner"
+                                                        name="newOwner"
+                                                        autoComplete="newOwner"
                                                     />
                                                 </Grid>
                                             </Grid>
