@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
+import {styled, createTheme, ThemeProvider} from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
@@ -17,18 +17,21 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import {mainListItems} from '../listItems';
 import '../../css/Dashboard.css';
-import {useNavigate, useParams} from "react-router-dom";
-import {useEffect, useState} from "react";
-import AddProductDialog from './AddProductDialog';
-import get from "../get";
+import Avatar from "@mui/material/Avatar";
+import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import Link from "@mui/material/Link";
+import {Card} from "@mui/material";
+import {useNavigate, useParams} from 'react-router-dom';
 import post from "../post";
+import get from "../get";
+import {useEffect, useState} from "react";
 
 const drawerWidth = 240;
 
 const AppBar = styled(MuiAppBar, {
     shouldForwardProp: (prop) => prop !== 'open',
-})(({ theme, open }) => ({
+})(({theme, open}) => ({
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
         easing: theme.transitions.easing.sharp,
@@ -44,8 +47,8 @@ const AppBar = styled(MuiAppBar, {
     }),
 }));
 
-const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
-    ({ theme, open }) => ({
+const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})(
+    ({theme, open}) => ({
         '& .MuiDrawer-paper': {
             position: 'relative',
             whiteSpace: 'nowrap',
@@ -73,66 +76,56 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 const mdTheme = createTheme();
 
 const DashboardContent: React.FC = () => {
-    const { name } = useParams();
-    const navigate = useNavigate();
-    const [open, setOpen] = React.useState(true);
-    const [openDialog, setOpenDialog] = React.useState(false);
-    const [amount, setAmount] = React.useState(0);
-    const [product, setProduct] = React.useState("");
+    const { name } = useParams()
     const [products, setProducts] = useState(null);
+    const [open, setOpen] = React.useState(true);
     const toggleDrawer = () => {
         setOpen(!open);
     };
 
-
+    async function getStore() {
+        const res = await get(`stores/info/${name}`)
+        const ans = await res.json()
+        const products = ans.val
+        const fixedProducts = products.map((productName, id) => {
+            return {
+                "id": id,
+                "title": productName
+            }
+        })
+        setProducts(fixedProducts)
+    }
 
     useEffect(() => {
-        async function getStore() {
-            const res = await get(`stores/info/${name}`)
-            const ans = await res.json()
-            const products = ans.val
-            const fixedProducts = products.map((productName, id) => {
-                return {
-                    "id": id,
-                    "title": productName
-                }
-            })
-            setProducts(fixedProducts)
-        }
         getStore()
     }, [])
 
-    async function handleAdding(){
+
+    const navigate = useNavigate();
+
+    async function handleProduct(product) {
         const body = {
-            productName: product,
-            storeName: name,
-            quantity: amount
+            productName: product.title,
         }
-        const res = await post(body, 'stores/addproducttocart')
+        const res = await post(body, `stores/removeproductfromstore/${name}`)
         const ans = await res.json()
         if(ans.val) {
-            navigate("/etrade");
-            setOpenDialog(false);
+            await getStore()
         }
     }
 
-    function handleProduct(product){
-        setProduct(product.title)
-        setOpenDialog(true);
-    }
-
-    const renderStores = (stores) => {
+    const renderProducts = (products) => {
         return (<ul className='stores'>
-            {stores.map((store,index) => (<li key={store.id} className='store'>
+            {products.map((product,index) => (<li key={product.id} className='store'>
 
                 <div className='topStore' >
                     <div>
-                        <h5 className='title' >{store.title}</h5>
+                        <h5 className='title' >{product.title}</h5>
                     </div>
                 </div>
 
                 <div className="store-footer">
-                    <Button onClick={() => handleProduct(store)}>Buy</Button>
+                    <Button onClick={async () => await handleProduct(product)}>Remove</Button>
                 </div>
             </li>))}
         </ul>);
@@ -140,8 +133,8 @@ const DashboardContent: React.FC = () => {
 
     return (
         <ThemeProvider theme={mdTheme}>
-            <Box sx={{ display: 'flex' }}>
-                <CssBaseline />
+            <Box sx={{display: 'flex'}}>
+                <CssBaseline/>
                 <AppBar position="absolute" open={open}>
                     <Toolbar
                         sx={{
@@ -155,23 +148,23 @@ const DashboardContent: React.FC = () => {
                             onClick={toggleDrawer}
                             sx={{
                                 marginRight: '36px',
-                                ...(open && { display: 'none' }),
+                                ...(open && {display: 'none'}),
                             }}
                         >
-                            <MenuIcon />
+                            <MenuIcon/>
                         </IconButton>
                         <Typography
                             component="h1"
                             variant="h6"
                             color="inherit"
                             noWrap
-                            sx={{ flexGrow: 1 }}
+                            sx={{flexGrow: 1}}
                         >
-                            E-Trade
+                            { name }
                         </Typography>
                         <IconButton color="inherit">
                             <Badge badgeContent={4} color="secondary">
-                                <NotificationsIcon />
+                                <NotificationsIcon/>
                             </Badge>
                         </IconButton>
                     </Toolbar>
@@ -186,13 +179,13 @@ const DashboardContent: React.FC = () => {
                         }}
                     >
                         <IconButton onClick={toggleDrawer}>
-                            <ChevronLeftIcon />
+                            <ChevronLeftIcon/>
                         </IconButton>
                     </Toolbar>
-                    <Divider />
+                    <Divider/>
                     <List component="nav">
                         {mainListItems}
-                        <Divider sx={{ my: 1 }} />
+                        <Divider sx={{my: 1}}/>
                     </List>
                 </Drawer>
                 <Box
@@ -207,24 +200,55 @@ const DashboardContent: React.FC = () => {
                         overflow: 'auto',
                     }}
                 >
-                    <Toolbar />
-                    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+                    <Toolbar/>
+                    <Container maxWidth="lg" sx={{mt: 4, mb: 4}}>
+                        {/*Here the form of the create store*/}
                         <Grid container spacing={3}>
-                            <Grid item xs={12}>
-                                <main>
-                                    {products ? renderStores(products) : <h2>Loading...</h2>}
-                                </main>
-                            </Grid>
+                            <ThemeProvider theme={mdTheme}>
+                                <Container component="main" maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+                                    <CssBaseline/>
+                                    <Box
+                                        sx={{
+                                            marginTop: 8,
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            alignItems: 'center',
+                                        }}
+                                    >
+                                        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+                                            <Grid container spacing={3}>
+                                                <Grid item xs={12}>
+                                                    <main>
+                                                        {products ? renderProducts(products) : <h2>Loading...</h2>}
+                                                    </main>
+                                                </Grid>
+                                            </Grid>
+                                        </Container>
+                                        <Box component="form" noValidate sx={{mt: 3}}>
+                                            <Grid container spacing={2}>
+                                                <Grid item xl={12}>
+                                                    <Button onClick={() => navigate(`/store/edit/${name}/addproduct`)}>Add Product</Button>
+                                                </Grid>
+                                                <Grid item xl={12}>
+                                                    <Button onClick={() => navigate(`/store/edit/${name}/addowner`)}>Add Store Owner</Button>
+                                                </Grid>
+                                                <Grid item xl={12}>
+                                                    <Button onClick={() => navigate(`/store/edit/${name}/addmanager`)}>Add Store Manager</Button>
+                                                </Grid>
+                                            </Grid>
+                                        </Box>
+                                    </Box>
+                                </Container>
+                            </ThemeProvider>
                         </Grid>
                     </Container>
                 </Box>
             </Box>
-            {openDialog ? <AddProductDialog open={openDialog} handleAdding={handleAdding} setAmount={setAmount}/> : null}
         </ThemeProvider>
     );
 }
 
 export default function Dashboard() {
-    return <DashboardContent />;
+    return <DashboardContent/>;
 }
 

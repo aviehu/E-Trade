@@ -80,7 +80,7 @@ public class Member extends User implements Observer {
     }
 
     @Override
-    public String displayCart() {
+    public List<String> displayCart() {
         return super.displayCart();
     }
 

@@ -22,7 +22,7 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 import {Card} from "@mui/material";
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import post from "../post";
 
 const drawerWidth = 240;
@@ -74,6 +74,7 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
 const mdTheme = createTheme();
 
 const DashboardContent: React.FC = () => {
+    const { name } = useParams()
     const [open, setOpen] = React.useState(true);
     const toggleDrawer = () => {
         setOpen(!open);
@@ -84,11 +85,14 @@ const DashboardContent: React.FC = () => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         const body = {
-            storeName: data.get("storeName"),
-            card: data.get("cardNumber")
+            storeName: name,
+            productName: data.get("productName"),
+            amount: data.get("amount"),
+            price: data.get("price"),
+            category: data.get("category")
         }
         try {
-            const res = await post(body, 'stores/openstore')
+            const res = await post(body, 'stores/addproducttostore')
             const boolRes = await res.json()
             if(boolRes.val) {
                 navigate("/etrade");
@@ -127,7 +131,7 @@ const DashboardContent: React.FC = () => {
                             noWrap
                             sx={{flexGrow: 1}}
                         >
-                            E-Trade
+                            {name}
                         </Typography>
                         <IconButton color="inherit">
                             <Badge badgeContent={4} color="secondary">
@@ -182,39 +186,58 @@ const DashboardContent: React.FC = () => {
                                             alignItems: 'center',
                                         }}
                                     >
-                                            <Box component="form" noValidate onSubmit={handleSubmit} sx={{mt: 3}}>
-                                                <Grid container spacing={2}>
-                                                    <Grid item xl={22}>
-                                                        <TextField
-                                                            required
-                                                            fullWidth
-                                                            id="storeName"
-                                                            label="Store Name"
-                                                            name="storeName"
-                                                            autoComplete="storeName"
-                                                        />
-                                                    </Grid>
-                                                    <Grid item xl={22}>
-                                                        <TextField
-                                                            required
-                                                            fullWidth
-                                                            name="cardNumber"
-                                                            label="Credit Card Number"
-                                                            type="cardNumber"
-                                                            id="cardNumber"
-                                                            autoComplete="cardNumber"
-                                                        />
-                                                    </Grid>
+                                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{mt: 3}}>
+                                            <Grid container spacing={2}>
+                                                <Grid item xl={12}>
+                                                    <TextField
+                                                        required
+                                                        fullWidth
+                                                        id="productName"
+                                                        label="Product Name"
+                                                        name="productName"
+                                                        autoComplete="productName"
+                                                    />
                                                 </Grid>
-                                                <Button
-                                                    type="submit"
-                                                    fullWidth
-                                                    variant="contained"
-                                                    sx={{mt: 3, mb: 2}}
-                                                >
-                                                    Open Store
-                                                </Button>
-                                            </Box>
+                                                <Grid item xl={12}>
+                                                    <TextField
+                                                        required
+                                                        fullWidth
+                                                        name="amount"
+                                                        label="Amount"
+                                                        id="amount"
+                                                        autoComplete="amount"
+                                                    />
+                                                </Grid>
+                                                <Grid item xl={12}>
+                                                    <TextField
+                                                        required
+                                                        fullWidth
+                                                        name="price"
+                                                        label="Price"
+                                                        id="price"
+                                                        autoComplete="price"
+                                                    />
+                                                </Grid>
+                                                <Grid item xl={12}>
+                                                    <TextField
+                                                        required
+                                                        fullWidth
+                                                        name="category"
+                                                        label="Category"
+                                                        id="category"
+                                                        autoComplete="category"
+                                                    />
+                                                </Grid>
+                                            </Grid>
+                                            <Button
+                                                type="submit"
+                                                fullWidth
+                                                variant="contained"
+                                                sx={{mt: 3, mb: 2}}
+                                            >
+                                                Add Product
+                                            </Button>
+                                        </Box>
                                     </Box>
                                 </Container>
                             </ThemeProvider>

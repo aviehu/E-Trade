@@ -1,12 +1,8 @@
 package com.workshop.ETrade.Domain.Stores;
 
-import com.workshop.ETrade.Domain.Notifications.NotificationManager;
-import com.workshop.ETrade.Domain.Observable;
-import com.workshop.ETrade.Domain.Observer;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
 import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
-import com.workshop.ETrade.Domain.Users.Users.Member;
 import com.workshop.ETrade.Domain.purchaseOption;
 
 import java.time.LocalDate;
@@ -308,10 +304,12 @@ public class Store implements Observable {
     }
 
     public Set<String> getAllManagement(String name) {
-        Set<String> managers = getManagers(name);
-        Set<String> owners = getOwners(name);
-        if(managers == null || owners == null) {
-            return null;
+        Set<String> management = new HashSet();
+        for(String owner : ownersAppointments.keySet()) {
+            management.add(owner);
+            for(String manager : managersAppointments.get(owner)) {
+                management.add(manager);
+            }
         }
         Set<String> management = managers;
         management.addAll(owners);
@@ -469,5 +467,8 @@ public class Store implements Observable {
             if(user.getUserName().equals(sendTo))
                 user.update(message, sendFrom);
         }
+    }
+    public List<String> getProducts() {
+        return inventory.getProducts();
     }
 }

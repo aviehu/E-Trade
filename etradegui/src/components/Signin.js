@@ -10,22 +10,44 @@ import Container from '@mui/material/Container';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import imageLogo from './logo.jpg'
 import {useNavigate} from 'react-router-dom';
+import {useEffect} from "react";
+import post from './post'
 
 const theme = createTheme();
 
 export default function SignIn() {
     const navigate = useNavigate();
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        //todo: check if the DB contain this email, if yes check for password.
-        //todo: if all is ok redirect to Dashboard.
-        console.log({
+        const email = data.get('email');
+        const body = {
             email: data.get('email'),
             password: data.get('password'),
-        });
-        navigate("/etrade");
+        }
+        try {
+            const res = await post(body, 'users/login')
+            const boolRes = await res.json()
+            if(boolRes.val) {
+                localStorage.setItem("userName", email)
+                navigate("/etrade")
+
+            }
+        } catch (e) {
+
+        }
+
     };
+
+    useEffect(() => {
+        async function getUserName() {
+            const res = await fetch('http://localhost:8080/users/entersystem')
+            const obj = await res.json()
+            const userName = obj.val
+            localStorage.setItem("userName", userName)
+        }
+        getUserName()
+    }, [])
 
     return (
         <ThemeProvider theme={theme}>

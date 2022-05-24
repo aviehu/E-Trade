@@ -16,24 +16,10 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import {mainListItems} from '../listItems';
+import Link from "@mui/material/Link";
 import '../../css/Dashboard.css';
-
-const stores = [
-    {
-        "id": "1",
-        "title": "Store name",
-        "content": "link to this stores",
-        "userEmail": "user@etade.com",
-        "creationTime": 1542111235544,
-    },
-    {
-        "id": "2",
-        "title": "Store name",
-        "content": "link to this stores",
-        "userEmail": "user@etade.com",
-        "creationTime": 1542111235544,
-    }
-]
+import {useEffect} from "react";
+import get from "../get";
 
 const drawerWidth = 240;
 
@@ -84,10 +70,27 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 const mdTheme = createTheme();
 
 const DashboardContent: React.FC = () => {
+    const [stores, setStores] = React.useState(null);
     const [open, setOpen] = React.useState(true);
     const toggleDrawer = () => {
         setOpen(!open);
     };
+
+    useEffect(() => {
+        async function getMyStores() {
+            const res = await get(`stores/ofuser`)
+            const ans = await res.json()
+            const stores = ans.val
+            const fixedStores = stores.map((storeName, id) => {
+                return {
+                    "id": id,
+                    "title": storeName
+                }
+            })
+            setStores(fixedStores)
+        }
+        getMyStores()
+    }, [])
 
     const renderStores = (stores) => {
         return (<ul className='stores'>
@@ -95,13 +98,15 @@ const DashboardContent: React.FC = () => {
 
                 <div className='topStore'>
                     <div>
-                        <h5 className='title'>{store.title}</h5>
+                        <Link href={`/store/edit/${store.title}`}>
+                            <h5 className='title'>{store.title}</h5>
+                        </Link>
                     </div>
                 </div>
 
-                <div className="store-footer">
-                    <div className='meta-data'>By {store.userEmail} | { new Date(store.creationTime).toLocaleString()}</div>
-                </div>
+                {/*<div className="store-footer">*/}
+                {/*    <div className='meta-data'>By {store.userEmail} | { new Date(store.creationTime).toLocaleString()}</div>*/}
+                {/*</div>*/}
             </li>))}
         </ul>);
     }

@@ -18,58 +18,10 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import {mainListItems} from '../listItems';
 import Link from "@mui/material/Link";
 import '../../css/Dashboard.css';
-
-const stores = [
-    {
-        "id": "1",
-        "title": "Store name",
-        "content": "link to this stores",
-        "userEmail": "user@etade.com",
-        "creationTime": 1542111235544,
-    },
-    {
-        "id": "2",
-        "title": "Store name",
-        "content": "link to this stores",
-        "userEmail": "user@etade.com",
-        "creationTime": 1542111235544,
-    },
-    {
-        "id": "3",
-        "title": "Store name",
-        "content": "link to this stores",
-        "userEmail": "user@etade.com",
-        "creationTime": 1542111235544,
-    },
-    {
-        "id": "4",
-        "title": "Store name",
-        "content": "link to this stores",
-        "userEmail": "user@etade.com",
-        "creationTime": 1542111235544,
-    },
-    {
-        "id": "1",
-        "title": "Store name",
-        "content": "link to this stores",
-        "userEmail": "user@etade.com",
-        "creationTime": 1542111235544,
-    },
-    {
-        "id": "2",
-        "title": "Store name",
-        "content": "link to this stores",
-        "userEmail": "user@etade.com",
-        "creationTime": 1542111235544,
-    },
-    {
-        "id": "3",
-        "title": "Store name",
-        "content": "link to this stores",
-        "userEmail": "user@etade.com",
-        "creationTime": 1542111235544,
-    }
-]
+import {useEffect, useState} from "react";
+import get from "../get";
+import SocketProvider from "../SocketProvider";
+import MessageDialog from '../MessageDialog'
 
 const drawerWidth = 240;
 
@@ -120,7 +72,33 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
 const mdTheme = createTheme();
 
 const DashboardContent: React.FC = () => {
+    const [message, setMessage] = useState(null);
+    const [stores, setStores] = useState(null);
     const [open, setOpen] = React.useState(true);
+    useEffect(() => {
+        async function getStores() {
+            const { createSocket } = SocketProvider(setMessage);
+            createSocket(localStorage.getItem("userName"))
+
+            const res = await get('stores/');
+            const ans = await res.json()
+            const storesName = ans.val
+            if(storesName) {
+                const stores = storesName.map((store, id) => {
+                    return {
+                        "id": id,
+                        "title": store
+                    }
+                })
+                setStores(stores);
+            }
+        }
+        getStores()
+
+    }, [])
+
+
+
     const toggleDrawer = () => {
         setOpen(!open);
     };
@@ -137,10 +115,10 @@ const DashboardContent: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="store-footer">
-                        <div
-                            className='meta-data'>By {store.userEmail} | {new Date(store.creationTime).toLocaleString()}</div>
-                    </div>
+                    {/*<div className="store-footer">*/}
+                    {/*    <div*/}
+                    {/*        className='meta-data'>By {store.userEmail} | {new Date(store.creationTime).toLocaleString()}</div>*/}
+                    {/*</div>*/}
                 </li>
             ))}
         </ul>);
@@ -150,6 +128,7 @@ const DashboardContent: React.FC = () => {
         <ThemeProvider theme={mdTheme}>
             <Box sx={{display: 'flex'}}>
                 <CssBaseline/>
+                <MessageDialog message={message} open={message !== null} handleClose={() => setMessage(null)}/>
                 <AppBar position="absolute" open={open}>
                     <Toolbar
                         sx={{
@@ -232,6 +211,6 @@ const DashboardContent: React.FC = () => {
 }
 
 export default function Dashboard() {
-    return <DashboardContent/>;
+    return <DashboardContent />;
 }
 
