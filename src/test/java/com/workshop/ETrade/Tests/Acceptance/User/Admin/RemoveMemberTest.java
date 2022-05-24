@@ -42,11 +42,12 @@ public class RemoveMemberTest {
     }
 
     @Test
-    public void RemoveManagerTest(){
+    public void RemoveManagerTest(){ //cant remove because manager
         systemService.login(guestName, "Andalus", "100");
         systemService.openStore("Andalus", "Mega", 123);
         guestName = systemService.logOut("Andalus").getVal();
         systemService.login(guestName, "domain", "domain");
+        systemService.removeMember("domain", "Andalus");
         Assert.assertFalse(systemService.removeMember("domain", "Andalus").getVal());
     }
 }

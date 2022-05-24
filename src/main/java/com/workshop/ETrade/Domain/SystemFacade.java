@@ -17,8 +17,8 @@ import java.util.List;
 
 public interface SystemFacade {
     public newResult<Double> getCartPrice(String userName);
-    public ResultMsg getOnlineMembers(String userName);
-    public ResultMsg getOfflineMembers(String userName);
+    public newResult<List<String>> getOnlineMembers(String userName);
+    public newResult<List<String>> getOfflineMembers(String userName);
     public ResultBool removeMember(String userName,String memberToRemove);
     public ResultMsg enterSystem();
     public ResultBool addSystemManager(String userName,String managerToAdd);

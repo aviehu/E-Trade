@@ -21,7 +21,7 @@ public class NotificationManager {
     public boolean sendNotification(Member user, String message, String sentFrom) {
         Notification notification = new Notification(LocalDate.now(), sentFrom, message, user.getUserName());
         if(user.isConnected()) {
-            smt.convertAndSend("/topic/" + user.getUserName(),notification);
+            //smt.convertAndSend("/topic/" + user.getUserName(),notification);
 //            user.sendNotification(notification);
             return true;
         }

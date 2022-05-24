@@ -67,15 +67,14 @@ public class SystemServiceProxy implements ServiceInterface {
 
 
     @Override
-    public ResultMsg getOnlineMembers(String userName) {
+    public newResult<List<String>> getOnlineMembers(String userName) {
         if (real == null)
             throw new NotImplementedException();
         return real.getOnlineMembers(userName);
-
     }
 
     @Override
-    public ResultMsg getOfflineMembers(String userName) {
+    public newResult<List<String>> getOfflineMembers(String userName) {
         if (real == null)
             throw new NotImplementedException();
         return real.getOfflineMembers(userName);
