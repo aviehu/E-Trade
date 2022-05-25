@@ -100,16 +100,19 @@ public class UserController {
         for(Member m : members){
             if(m.getUserName().equals(userName)) {
                 if (m.getPassword().equals(password)) {
+                    if(isConnected(m.userName)){
+                        return  "You are already connected\n";
+                    }
                     m.setConnected(true);
                     logger.info(userName + " has logged in");
                     return null;
 
                 }
                 else
-                    return "Wrong password\n";
+                    return "Invalid Username or Password\n";
             }
         }
-        return "Wrong user-name\n";
+        return "Invalid Username or Password\n";
     }
     public boolean exitSystem(String userName){
         User u = getUser(userName);

@@ -33,8 +33,15 @@ public class Facade implements SystemFacade {
         storesFacade = new StoresFacade();
         userController = new UserController();
         externalSys = ExtSysController.getInstance();
+        init();
     }
-
+    public void init(){
+        Member domain = userController.getMember("domain");
+        String guest = enterSystem().getVal();
+        login(guest,"domain","domain");
+        openStore("domain","Mega",123);
+        addProductToStore("domain","Mega","Bamba",200,5,"Snacks");
+    }
 
     @Override
     public newResult<Double> getCartPrice(String userName) {
@@ -202,7 +209,7 @@ public class Facade implements SystemFacade {
     public ResultBool login(String userName,String memberUserName, String password) {
         if(userController.isConnected(userName)) {
             if (!userController.isUserNameExist(memberUserName))
-                return new ResultBool(false, "Wrong user name\n");
+                return new ResultBool(false, "Invalid Username or Password \n");
             String pass = this.externalSys.encode(password); //SECURITY
             String ret = userController.logIn(memberUserName, pass);
             if (ret == null){
