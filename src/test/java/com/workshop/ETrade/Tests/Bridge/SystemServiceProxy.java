@@ -1,5 +1,6 @@
 package com.workshop.ETrade.Tests.Bridge;
 
+import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
 import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
@@ -62,7 +63,23 @@ public class SystemServiceProxy implements ServiceInterface {
 
     @Override
     public newResult<Integer> getProdAmount(String store, String prod) {
-        return null;
+        if (real == null)
+            throw new NotImplementedException();
+        return real.getProdAmount(store, prod);
+    }
+
+    @Override
+    public newResult<List<Notification>> getMessages(String userName) {
+        if (real == null)
+            throw new NotImplementedException();
+        return real.getMessages(userName);
+    }
+
+    @Override
+    public newResult<Boolean> isAdmin(String userName) {
+        if (real == null)
+            throw new NotImplementedException();
+        return real.isAdmin(userName);
     }
 
 
@@ -103,7 +120,9 @@ public class SystemServiceProxy implements ServiceInterface {
 
     @Override
     public newResult<List<String>> getAllStores(String userName) {
-        return null;
+        if (real == null)
+            throw new NotImplementedException();
+        return real.getAllStores(userName);
     }
 
     @Override
@@ -317,10 +336,24 @@ public class SystemServiceProxy implements ServiceInterface {
     }
 
     @Override
+    public newResult<Boolean> removeStoreOwner(String userName, String storeName, String ownerToRemove) {
+        if (real == null)
+            throw new NotImplementedException();
+        return real.removeStoreOwner(userName, storeName, ownerToRemove);
+    }
+
+    @Override
     public ResultBool appointStoreManager(String userName, String storeName, String newManager) {
         if (real == null)
             throw new NotImplementedException();
         return real.appointStoreManager(userName, storeName, newManager);
+    }
+
+    @Override
+    public newResult<Boolean> removeStoreManager(String userName, String storeName, String managerToRemove) {
+        if (real == null)
+            throw new NotImplementedException();
+        return real.removeStoreManager(userName, storeName, managerToRemove);
     }
 
     @Override
@@ -360,7 +393,9 @@ public class SystemServiceProxy implements ServiceInterface {
 
     @Override
     public newResult<List<String>> getStoresOfUser(String userName) {
-        return null;
+        if (real == null)
+            throw new NotImplementedException();
+        return real.getStoresOfUser(userName);
     }
 
     @Override

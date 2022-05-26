@@ -1,10 +1,13 @@
 package com.workshop.ETrade.Tests.Acceptance.User.Guest;
 
+import com.sun.jdi.request.StepRequest;
 import com.workshop.ETrade.Service.SystemService;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.List;
 
 public class SearchProductTest {
 
@@ -28,16 +31,13 @@ public class SearchProductTest {
 
     @Test
     public void searchProdByCategorySuccessTest(){
+        List<String> a = systemService.searchByCategory("Andalus", "snacks").getVal();
         Assert.assertTrue(systemService.searchByCategory("Andalus", "snacks").getVal().contains("Bamba"));
     }
 
     @Test
     public void searchProdByCategoryFailTest(){
         Assert.assertFalse(systemService.searchByCategory("Andalus", "drinks").getVal().contains("Bamba"));
-    }
-    @Test
-    public void searchProdByKeyWordSuccessTest(){
-        Assert.assertTrue(systemService.searchByKeyword("Andalus", "osem").getVal().contains("Bamba"));
     }
 
     @Test
