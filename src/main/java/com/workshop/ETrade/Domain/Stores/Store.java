@@ -471,6 +471,13 @@ public class Store implements Observable {
                 user.update(message, sendFrom);
         }
     }
+    public List<String> getSubscribers(){
+        List<String> subs = new ArrayList<>();
+        for (Member m: this.subscribers){
+            subs.add(m.getUserName());
+        }
+        return subs;
+    }
     public List<String> getProducts() {
         return inventory.getProducts();
     }

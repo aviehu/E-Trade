@@ -4,6 +4,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
 import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Stores.managersPermission;
 import com.workshop.ETrade.Domain.purchaseOption;
+import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Service.ResultPackge.ResultBool;
 import com.workshop.ETrade.Service.ResultPackge.ResultMsg;
 import com.workshop.ETrade.Service.ResultPackge.ResultNum;
@@ -123,17 +124,12 @@ public class StoresController {
 
     @PostMapping("/appointowner/{store}")
     public ResultBool appointStoreOwner(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName,@RequestBody AppointForm form) {
-        String msg = "you have been appointed to store owner at - " + storeName + " by - " + userName;
-        smt.convertAndSend("/topic/" + form.appointee, new Notification(LocalDate.now(), "server", msg, userName));
         return systemService.appointStoreOwner(userName, storeName, form.appointee);
     }
 
     @PostMapping("/removeowner/{store}")
     public newResult<Boolean> removeStoreOwner(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName, @RequestBody AppointForm form) {
         newResult<Boolean> res = systemService.removeStoreOwner(userName, storeName, form.appointee);
-        String msg = "you have been removed from store Owner at - " + storeName + " by - " + userName;
-        if(res.isSuccess())
-            smt.convertAndSend("/topic/" + form.appointee, new Notification(LocalDate.now(), "server", msg, userName));
         return res;
     }
 
@@ -147,9 +143,6 @@ public class StoresController {
     @PostMapping("/removemanager/{store}")
     public newResult<Boolean> removeStoreManager(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName, @RequestBody AppointForm form) {
         newResult<Boolean> res = systemService.removeStoreManager(userName, storeName, form.appointee);
-        String msg = "you have been removed from store manager at - " + storeName + " by - " + userName;
-        if(res.isSuccess())
-            smt.convertAndSend("/topic/" + form.appointee, new Notification(LocalDate.now(), "server", msg, userName));
         return res;
     }
 
