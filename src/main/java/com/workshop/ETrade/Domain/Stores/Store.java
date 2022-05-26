@@ -132,7 +132,7 @@ public class Store implements Observable {
     public boolean closeStore(String name) {
         if(isFounder(name) && !closed) {
             closed = true;
-            notifySubscribers(name+" has closed the store "+ getName()+"\n",name);
+            notifySubscribers(name+" closed the store "+ getName()+"\n",name);
             return true;
         }
         return false;
@@ -142,6 +142,7 @@ public class Store implements Observable {
         if(!closed) {
             closed = true;
             closedByAdmin = true;
+            notifySubscribers("A system manager closed the store "+ getName()+"\n",name);
             return true;
         }
         return false;
@@ -245,7 +246,7 @@ public class Store implements Observable {
     }
 
     public boolean addOwner(String ownersName, String nameToAdd){
-        if(isOwner(ownersName) && !isOwner(nameToAdd)){
+        if(isOwner(ownersName)  && !isOwner(nameToAdd)){
            ownersAppointments.get(ownersName).add(nameToAdd);
            ownersAppointments.put(nameToAdd, new LinkedList<>());
            managersAppointments.put(nameToAdd, new LinkedList<>());
@@ -277,6 +278,8 @@ public class Store implements Observable {
     public boolean removeOwner(String ownersName, String ownerToRemove) {
         if(isOwner(ownersName) && ownersAppointments.get(ownersName).contains(ownerToRemove)) {
             ownersAppointments.get(ownersName).remove(ownerToRemove);
+            ownersAppointments.remove(ownerToRemove);
+            //managersAppointments.get(ownersName).remove(ownerToRemove);
             notifyOne("You are no longer Owner at " + getName(),ownersName,ownerToRemove);
             return true;
         }
@@ -390,7 +393,7 @@ public class Store implements Observable {
                 return true;
             }
         }
-        return false;
+        return this.founderName.equals(nameToSearch);
     }
 
     public boolean writeReviewOnProduct(String productName, String review, String userName) {
@@ -458,11 +461,12 @@ public class Store implements Observable {
 
     @Override
     public void notifySubscribers(String message,String sendFrom) {
-        //
+
         for(Member user: subscribers) {
             if(!user.getUserName().equals(sendFrom))
                 user.update(message, sendFrom);
         }
+
     }
     public void notifyOne(String message,String sendFrom,String sendTo) {
         //

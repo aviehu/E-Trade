@@ -39,8 +39,9 @@ public class Facade implements SystemFacade {
         Member domain = userController.getMember("domain");
         String guest = enterSystem().getVal();
         login(guest,"domain","domain");
-        openStore("domain","Mega",123);
-        addProductToStore("domain","Mega","Bamba",200,5,"Snacks");
+        openStore("domain","SuperStore",123);
+        addProductToStore("domain","SuperStore","Bamba",200,5,"Snacks");
+        logOut("domain");
     }
 
     @Override
@@ -451,6 +452,7 @@ public class Facade implements SystemFacade {
                 Store s = this.storesFacade.getStore(storeName);
                 Member m = this.userController.getMember(newOwner);
                 s.attach(m);
+                s.notifyOne("You have been appointed to store Owner at " +storeName,userName,newOwner);
 
                 return new ResultBool(true, null);
             }
@@ -482,6 +484,7 @@ public class Facade implements SystemFacade {
                 Store s = this.storesFacade.getStore(storeName);
                 Member m = this.userController.getMember(newManager);
                 s.attach(m);
+                s.notifyOne("You have been appointed to store Manager at " +storeName,userName,newManager);
                 return new ResultBool(true, null);
             }
             return new ResultBool(false, "Could Not Appoint Store Manager");

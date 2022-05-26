@@ -135,8 +135,6 @@ public class StoresController {
 
     @PostMapping("/appointmanager/{store}")
     public ResultBool appointStoreManager(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName,@RequestBody AppointForm form) {
-        String msg = "you have been appointed to store manager at - " + storeName + " by - " + userName;
-        smt.convertAndSend("/topic/" + form.appointee, new Notification(LocalDate.now(), "server", msg, userName));
         return systemService.appointStoreManager(userName, storeName, form.appointee);
     }
 
