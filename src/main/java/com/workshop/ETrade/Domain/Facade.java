@@ -1,5 +1,6 @@
 package com.workshop.ETrade.Domain;
 
+import com.workshop.ETrade.Controller.Forms.Predicate;
 import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
@@ -588,17 +589,28 @@ public class Facade implements SystemFacade {
     }
 
     @Override
-    public ResultNum addPolicy(String userName,String store, String policyOn, String description, PolicyType policyType, OperatorComponent operatorComponent) {
-        int ret = this.storesFacade.addPolicy(userName,store, policyOn, description, policyType, operatorComponent);
-        return new ResultNum(ret,null);
+    public newResult<Integer> addPolicy(String userName,String store, String policyOn, String description, PolicyType policyType, List<Predicate> predicates, String connectionType) {
+        int ret = this.storesFacade.addPolicy(userName,store, policyOn, description, policyType, predicates, connectionType);
+        if(ret >= 0) {
+            return new newResult<>(ret,null);
+        }
+        return new newResult<>(null, "cannot add policy");
     }
 
     @Override
-    public ResultNum addDiscount(String userName,String store, String discountOn, int discountPercentage, String description, DiscountType discountType) {
+    public newResult<Integer> addDiscount(String userName,String store, String discountOn, int discountPercentage, String description, DiscountType discountType) {
         int ret = this.storesFacade.addDiscount(userName,store, discountOn, discountPercentage, description, discountType);
         if(ret == -1)
-            return new ResultNum(-1,"ERROR\n");
-        return new ResultNum(ret,null);
+            return new newResult<>(null,"ERROR\n");
+        return new newResult<>(ret,null);
+    }
+
+    @Override
+    public newResult<Integer> addPreDiscount(String userName, String storeName, String discountOn, int discountPercentage, String description, DiscountType discountType, List<Predicate> predicates, String connectionType) {
+        int ret = this.storesFacade.addPreDiscount(userName,storeName, discountOn, discountPercentage, description, discountType, predicates, connectionType);
+        if(ret == -1)
+            return new newResult<>(null,"ERROR\n");
+        return new newResult<>(ret,null);
     }
 
     public ResultBool supplyServiceExists() {

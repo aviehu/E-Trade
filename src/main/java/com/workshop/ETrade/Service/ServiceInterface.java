@@ -1,5 +1,6 @@
 package com.workshop.ETrade.Service;
 
+import com.workshop.ETrade.Controller.Forms.Predicate;
 import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
@@ -22,7 +23,7 @@ import java.util.List;
 public interface ServiceInterface {
     public void init();
     public newResult<Double> getCartPrice(String userName);
-    public ResultNum addPolicy(String userName,String store, String policyOn, String description, PolicyType policyType, OperatorComponent operatorComponent);
+    public newResult<Integer> addPolicy(String userName,String store, String policyOn, String description, PolicyType policyType, List<Predicate> predicates,  String connectionType);
     public newResult<List<String>> getOnlineMembers(String userName);
     public newResult<List<String>> getOfflineMembers(String userName);
     public ResultBool supplyServiceExists();
@@ -124,7 +125,7 @@ public interface ServiceInterface {
     public ResultNum getProductAmount(String storeName, String prodName);
 
     public String getOnline();
-    public ResultNum addDiscount(String userName,String store,String discountOn, int discountPercentage, String description, DiscountType discountType);
+    public newResult<Integer> addDiscount(String userName,String store,String discountOn, int discountPercentage, String description, DiscountType discountType);
 
     public newResult<Double> getProdPrice(String store,String prod);
     public newResult<Integer> getProdAmount(String store,String prod);
@@ -132,6 +133,8 @@ public interface ServiceInterface {
     public newResult<List<Notification>> getMessages(String userName);
 
     public newResult<Boolean> isAdmin(String userName);
+
+    newResult<Integer> addPreDiscount(String userName, String storeName, String discountOn, int discountPercentage, String description, DiscountType discountType, List<Predicate> predicates, String connectionType);
 //    public ResultBool exitSystem();
 
 }

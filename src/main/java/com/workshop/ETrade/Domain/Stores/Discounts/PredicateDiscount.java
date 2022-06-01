@@ -17,7 +17,7 @@ public class PredicateDiscount extends Discount {
     public Map<Product, Double> calculatePrices(Map<Product, Double> prices, Map<Product, Integer> amounts) {
         Calculator calculator = getCalculator();
         if(operatorComponent.shouldApply(amounts)) {
-            calculator.calcPrices(prices);
+            prices = calculator.calcPrices(prices);
         }
         return prices;
     }

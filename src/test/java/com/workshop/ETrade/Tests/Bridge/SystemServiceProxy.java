@@ -48,7 +48,7 @@ public class SystemServiceProxy implements ServiceInterface {
         return real.addPolicy(userName, store, policyOn, description, policyType, operatorComponent);
     }
     @Override
-    public ResultNum addDiscount(String userName, String store, String discountOn, int discountPercentage, String description, DiscountType discountType) {
+    public newResult<Integer> addDiscount(String userName, String store, String discountOn, int discountPercentage, String description, DiscountType discountType) {
         if (real == null)
             throw new NotImplementedException();
         return real.addDiscount(userName, store, discountOn, discountPercentage, description, discountType);

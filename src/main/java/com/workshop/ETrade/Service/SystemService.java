@@ -1,5 +1,6 @@
 package com.workshop.ETrade.Service;
 
+import com.workshop.ETrade.Controller.Forms.Predicate;
 import com.workshop.ETrade.Domain.Facade;
 import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
@@ -40,9 +41,10 @@ public class SystemService implements ServiceInterface {
     }
 
     @Override
-    public ResultNum addPolicy(String userName,String store, String policyOn, String description, PolicyType policyType, OperatorComponent operatorComponent) {
-        return facade.addPolicy(userName,store,policyOn,description,policyType,operatorComponent);
+    public newResult<Integer> addPolicy(String userName, String store, String policyOn, String description, PolicyType policyType, List<Predicate> predicates, String connectionType) {
+        return facade.addPolicy(userName, store, policyOn, description, policyType, predicates, connectionType);
     }
+
 
     @Override
     public newResult<List<String>> getOnlineMembers(String userName) {
@@ -282,7 +284,7 @@ public class SystemService implements ServiceInterface {
     }
 
     @Override
-    public ResultNum addDiscount(String userName,String store, String discountOn, int discountPercentage, String description, DiscountType discountType) {
+    public newResult<Integer> addDiscount(String userName,String store, String discountOn, int discountPercentage, String description, DiscountType discountType) {
         return facade.addDiscount(userName,store, discountOn, discountPercentage, description, discountType);
     }
 
@@ -304,6 +306,11 @@ public class SystemService implements ServiceInterface {
     @Override
     public newResult<Boolean> isAdmin(String userName) {
         return facade.isAdmin(userName);
+    }
+
+    @Override
+    public newResult<Integer> addPreDiscount(String userName, String storeName, String discountOn, int discountPercentage, String description, DiscountType discountType, List<Predicate> predicates, String connectionType) {
+        return facade.addPreDiscount(userName, storeName, discountOn, discountPercentage, description, discountType, predicates, connectionType);
     }
 
     public ResultNum getProductAmount(String storeName, String prodName){

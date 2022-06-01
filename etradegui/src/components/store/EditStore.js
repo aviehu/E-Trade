@@ -128,6 +128,12 @@ const DashboardContent = () => {
                                                 <Grid item xl={12}>
                                                     <Button onClick={() => navigate(`/store/edit/${name}/removemanager`)}>Remove Store Manager</Button>
                                                 </Grid>
+                                                <Grid item xl={12}>
+                                                    <Button onClick={() => navigate(`/store/edit/${name}/adddiscount`)}>Add Discount</Button>
+                                                </Grid>
+                                                <Grid item xl={12}>
+                                                    <Button onClick={() => navigate(`/store/edit/${name}/addpolicy`)}>Add Policy</Button>
+                                                </Grid>
                                             </Grid>
                                         </Box>
                                     </Box>
