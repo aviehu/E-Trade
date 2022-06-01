@@ -71,8 +71,8 @@ public abstract class User {
         return true;
     }
 
-    public void addAddress(String city,String street,int streetNum,int apartmentNum ){
-            this.address = new SupplyAddress(city,street,streetNum,apartmentNum);
+    public void addAddress(String country,String city, String street, int streetNum, int apartmentNum, int zip ){
+            this.address = new SupplyAddress(country, city, street, streetNum, apartmentNum, zip);
     }
     public boolean exitSystem(){
         this.isConnected = false;

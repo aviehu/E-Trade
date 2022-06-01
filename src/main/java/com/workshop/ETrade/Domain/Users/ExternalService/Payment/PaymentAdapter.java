@@ -11,11 +11,13 @@ public class PaymentAdapter implements IPay {
     }
 
     @Override
-    public boolean pay(int cardNumber, LocalTime expDate, int cvv, double price,int cardTo) {
+    public int pay(int cardNumber, int month,int year,String holder, int cvv, int id) {
         if(paymentAdaptee == null)
-            return false;
-        else
-            return paymentAdaptee.payment(cardNumber,expDate,cvv,price,cardTo);
+            return -1;
+        else {
+
+            return paymentAdaptee.payment(cardNumber, month,year,holder, cvv,id);
+        }
     }
 
     @Override
@@ -39,6 +41,13 @@ public class PaymentAdapter implements IPay {
     public boolean isExist() {
         if(paymentAdaptee == null)
             return false;
-        return true;
+        return paymentAdaptee.handShake();
+    }
+
+    @Override
+    public int cancelPayment(int transId) {
+        if(paymentAdaptee == null)
+            return -1;
+        return paymentAdaptee.cancelPayment(transId);
     }
 }

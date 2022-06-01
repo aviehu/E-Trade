@@ -4,6 +4,12 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class PurchaseForm {
+    public int month;
+    public int year;
+    public String holderName;
+    public int id;
+    public String country;
+    public int zip;
     public int card;
     public String expDate;
     public int cvv;

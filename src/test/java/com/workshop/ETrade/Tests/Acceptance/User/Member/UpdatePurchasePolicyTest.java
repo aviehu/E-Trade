@@ -43,11 +43,11 @@ public class UpdatePurchasePolicyTest {
 
     @Test
     public void UpdatePurchasePolicySuccessTest() {
-        Assert.assertTrue(systemService.purchase("Andalus", 123, LocalTime.MAX, 123, "BeerSheva", "Masada", 12, 4).getVal());
+        Assert.assertTrue(systemService.purchase("Andalus", 123, 4,2024,"Andalus Andalus", 123,200000000,"Israel", "BeerSheva", "Masada", 12, 4,400000).getVal());
         Assert.assertTrue(systemService.addPolicy("Andalus","Mega", "snacks", "", PolicyType.CATEGORY, new OperatorLeaf("and", l)).getVal() > 0);
         systemService.addProductToShoppingCart("Andalus", "Bamba", "Mega", 20);
 //        systemService.purchase("Andalus", 123, LocalTime.MAX, 123, "BeerSheva", "Masada", 12, 4);
-        Assert.assertFalse(systemService.purchase("Andalus", 123, LocalTime.MAX, 123, "BeerSheva", "Masada", 12, 4).getVal());
+        Assert.assertFalse(systemService.purchase("Andalus", 123, 4,2024,"Andalus Andalus", 123,200000000,"Israel", "BeerSheva", "Masada", 12, 4,400000).getVal());
     }
 
     @Test

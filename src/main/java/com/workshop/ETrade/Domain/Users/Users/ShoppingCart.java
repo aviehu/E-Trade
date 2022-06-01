@@ -21,20 +21,31 @@ public class ShoppingCart {
 
     public String purchaseCart(CreditCard card,SupplyAddress address,String userName){
         int cardFrom = card.getCardNumber();
-        LocalTime expDate = card.getExpDate();
+        int month = card.getMonth();
+        int year = card.getYear();
         int cvv = card.getCvv();
-        boolean payment = extSystems.canPay(cardFrom, expDate, cvv, getTotalPrice());
+        int id = card.getId();
+        String holderName = card.getHolderName();
+        int payTransactionId = extSystems.pay(cardFrom, month,year,holderName, cvv,id);
         //payment
-        if(payment) {//can charge payment
+        if(payTransactionId != -1) {//can charge payment
             String ret = canPurchase();
             if (ret == null) { //can purchase
-                if (!extSystems.supply(this, address))
+                int supTransactionId =extSystems.supply(userName, address);
+                if (supTransactionId == -1) {
+                    extSystems.cancelPayment(payTransactionId);
+                    extSystems.cancelSup(supTransactionId);
                     return "Failed to supply your shopping cart\n";
+                }
 
                 for (StoreBasket b : baskets) {
-                    extSystems.pay(cardFrom, expDate, cvv, b.getTotalPrice(), b.getStore().getCard());
-                    if (!b.purchase(userName))
+                    //extSystems.pay(cardFrom, month,year, cvv, id);
+                    if (!b.purchase(userName)){
+                        extSystems.cancelPayment(payTransactionId);
+                        extSystems.cancelSup(supTransactionId);
                         return "Failed to purchase product from " + b.getStoreName() + "\n";
+                    }
+
                 }
                 return null;
             }

@@ -25,21 +25,28 @@ public class SupplyAdapter implements ISupply{
     }
 
     @Override
-    public boolean supply(PackageToShip packageToShip, SupplyAddress address) {
+    public int supply(String name,String street,String city,String country,int zip) {
         if(supplyAdaptee == null) {
-            if (checkCity(address.getCity()) && packageToShip != null)
-                return true;
-            return false;
+            if (checkCity(city))
+                return 1;
+            return -1;
         }
         else
-            return supplyAdaptee.supply(packageToShip, address);
+            return supplyAdaptee.supply(name, street, city, country, zip);
     }
 
     @Override
     public boolean isExist() {
         if(supplyAdaptee != null)
-            return true;
+            return supplyAdaptee.handShake();
         return false;
+    }
+
+    @Override
+    public int cancelSupply(int transId) {
+        if(supplyAdaptee == null)
+            return -1;
+        return supplyAdaptee.cancelSupply(transId);
     }
 
 }

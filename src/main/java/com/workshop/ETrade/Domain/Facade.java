@@ -338,9 +338,9 @@ public class Facade implements SystemFacade {
     }
 
     @Override
-    public ResultBool purchase(String userName, int card, LocalTime expDate,int cvv,String city,String street,int stNum,int apartmentNum) {
+    public ResultBool purchase(String userName, int creditCard, int month,int year,String holderName,int cvv,int id,String country,String city,String street,int stNum,int apartmentNum, int zip) {
         if(userController.isConnected(userName)) {
-            String ret = userController.purchase(userName, card, expDate, cvv, city, street, stNum, apartmentNum);
+            String ret = userController.purchase(userName, creditCard, month, year,holderName, cvv, id, country, city, street, stNum, apartmentNum, zip);
             if (ret == null)
                 return new ResultBool(true, null);
             else

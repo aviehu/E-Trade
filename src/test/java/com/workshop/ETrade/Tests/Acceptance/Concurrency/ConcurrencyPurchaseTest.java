@@ -17,15 +17,15 @@ public class ConcurrencyPurchaseTest {
     public void setUp() throws Exception {
         t1 = new Thread(){
             public void run(){
-                systemService.purchase("Andalus", 123, LocalTime.MAX, 776,
-                        "BeerSheva", "Andalusia", 7, 7);
+                systemService.purchase("Andalus", 123, 4,2028,"Andalus Andalus", 776,202020202,"Israel",
+                        "BeerSheva", "Andalusia", 7, 7,4590011);
             }
         };
 
         t2 = new Thread(){
             public void run(){
-                systemService.purchase("Andalus2", 123, LocalTime.MAX, 776,
-                        "BeerSheva", "Andalusia", 7, 7);
+                systemService.purchase("Andalus2", 123,2,2024,"Andalus Andalus", 776,200000000,"Israel",
+                        "BeerSheva", "Andalusia", 7, 7,4333222);
             }
         };
         systemService = new SystemService();

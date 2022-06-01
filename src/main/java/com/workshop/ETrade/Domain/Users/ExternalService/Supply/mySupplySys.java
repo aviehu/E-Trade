@@ -9,17 +9,17 @@ import java.util.HashMap;
 public class mySupplySys {
     ISupply supplyAdapter;
 
-    public mySupplySys() {
-        this.supplyAdapter = new SupplyAdapter(null);
+    public mySupplySys(SupplyAdapter supplyAdapter) {
+        this.supplyAdapter = supplyAdapter;
     }
 
-    public boolean supply(ShoppingCart cart, SupplyAddress address) {
+    public int supply(String name,String street,String city,String country,int zip) {
         HashMap<String,Integer> prods = new HashMap<>();
-        for(StoreBasket b : cart.getBaskets()){
-            prods.putAll(b.getProds());
-        }
-        PackageToShip pack = new PackageToShip(prods,cart.getTotalPrice());
-        return supplyAdapter.supply(pack,address);
+//        for(StoreBasket b : cart.getBaskets()){
+//            prods.putAll(b.getProds());
+//        }
+       // PackageToShip pack = new PackageToShip(prods,cart.getTotalPrice());
+        return supplyAdapter.supply(name, street, city, country, zip);
     }
     public boolean isExist(){
         return supplyAdapter.isExist();
@@ -29,4 +29,7 @@ public class mySupplySys {
         return true;
     }
 
+    public int cancelSup(int transId) {
+        return this.supplyAdapter.cancelSupply(transId);
+    }
 }

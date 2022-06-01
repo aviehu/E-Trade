@@ -5,12 +5,16 @@ public class SupplyAddress {
     private String street;
     private int streetNum;
     private int apartmentNum;
+    private int zip;
+    private String country;
 
-    public SupplyAddress(String city, String street, int streetNum, int apartmentNum) {
+    public SupplyAddress(String country,String city, String street, int streetNum, int apartmentNum, int zip) {
         this.city = city;
         this.street = street;
         this.streetNum = streetNum;
         this.apartmentNum = apartmentNum;
+        this.zip = zip;
+        this.country = country;
     }
 
     public String getCity() {
@@ -18,7 +22,16 @@ public class SupplyAddress {
     }
 
     public String getStreet() {
-        return street;
+        String num = String.valueOf(getStreetNum());
+        return street+" "+num;
+    }
+
+    public int getZip() {
+        return zip;
+    }
+
+    public String getCountry() {
+        return country;
     }
 
     public int getStreetNum() {
