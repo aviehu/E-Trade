@@ -1,43 +1,42 @@
 package com.workshop.ETrade.Domain.Notifications;
 
+
+import com.workshop.ETrade.Controller.MessageController;
 import com.workshop.ETrade.Domain.Users.Users.Member;
-import com.workshop.ETrade.Domain.Users.Users.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.context.ApplicationContext;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+
 
 public class NotificationManager {
-    List<Notification> awaitingNotifications;
+   // List<Notification> awaitingNotifications;
+   protected ApplicationContext context;
+    protected MessageController messageController;
+
+
+
 
     public NotificationManager(){
-        awaitingNotifications = Collections.synchronizedList(new ArrayList<Notification>());
-
+        context = MessageController.getAppContext();
+        messageController = (MessageController) context.getBean("messageController");
     }
-
     public boolean sendNotification(Member user, String message, String sentFrom) {
         Notification notification = new Notification(LocalDate.now(), sentFrom, message, user.getUserName());
         if(user.isConnected()) {
-            //smt.convertAndSend("/topic/" + user.getUserName(),notification);
-//            user.sendNotification(notification);
+            messageController.sendNotification(notification);
             return true;
         }
         user.addToAwaitingNotification(notification);
-        awaitingNotifications.add(notification);
         return false;
     }
+//    public void sendAllNotification(HashMap<Member,Notification> notifications) {
+//        for (Member user : notifications.keySet()) {
+//            if (user.isConnected()) {
+//                messageController.sendNotification(notifications.get(user));
+//            }
+//            user.addToAwaitingNotification(notifications.get(user));
+//        }
+//    }
 
-    public List<Notification> getAwaitingNotifications(String userName) {
-        List<Notification> result = Collections.synchronizedList(new ArrayList<Notification>());
-        for(Notification notification : awaitingNotifications) {
-            if(notification.getSentTo().equals(userName)) {
-                result.add(notification);
-            }
-        }
-        return result;
-    }
 
 }

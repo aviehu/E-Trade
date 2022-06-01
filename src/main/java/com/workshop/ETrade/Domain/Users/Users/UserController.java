@@ -18,7 +18,6 @@ public class UserController {
     private List<Guest> guests;
     private List<Member> systemManagers;
     private List<User> users;
-    private Guest online;
     private Logger logger = Logger.getLogger("users");
 
     public UserController() {
@@ -88,7 +87,7 @@ public class UserController {
         return true;
     }
     public String enterSystem(){
-        online = new Guest("guest"+guestId);
+        Guest online = new Guest("guest"+guestId);
         online.setConnected(true);
         this.guests.add(online);
         this.users.add(online);
@@ -100,16 +99,19 @@ public class UserController {
         for(Member m : members){
             if(m.getUserName().equals(userName)) {
                 if (m.getPassword().equals(password)) {
+//                    if(isConnected(m.userName)){
+//                        return  "You are already connected\n";
+//                    }
                     m.setConnected(true);
                     logger.info(userName + " has logged in");
                     return null;
 
                 }
                 else
-                    return "Wrong password\n";
+                    return "Invalid Username or Password\n";
             }
         }
-        return "Wrong user-name\n";
+        return "Invalid Username or Password\n";
     }
     public boolean exitSystem(String userName){
         User u = getUser(userName);
@@ -274,9 +276,6 @@ public class UserController {
         return guestId;
     }
 
-    public String  getOnline() {
-        return online.getUserName();
-    }
     public boolean hasAdmin(){
         if(this.systemManagers.size() > 0)
             return true;

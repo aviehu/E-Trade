@@ -33,8 +33,16 @@ public class Facade implements SystemFacade {
         storesFacade = new StoresFacade();
         userController = new UserController();
         externalSys = ExtSysController.getInstance();
+        init();
     }
-
+    public void init(){
+        Member domain = userController.getMember("domain");
+        String guest = enterSystem().getVal();
+        login(guest,"domain","domain");
+        openStore("domain","SuperStore",123);
+        addProductToStore("domain","SuperStore","Bamba",200,5,"Snacks");
+        logOut("domain");
+    }
 
     @Override
     public newResult<Double> getCartPrice(String userName) {
@@ -202,7 +210,7 @@ public class Facade implements SystemFacade {
     public ResultBool login(String userName,String memberUserName, String password) {
         if(userController.isConnected(userName)) {
             if (!userController.isUserNameExist(memberUserName))
-                return new ResultBool(false, "Wrong user name\n");
+                return new ResultBool(false, "Invalid Username or Password \n");
             String pass = this.externalSys.encode(password); //SECURITY
             String ret = userController.logIn(memberUserName, pass);
             if (ret == null){
@@ -444,6 +452,7 @@ public class Facade implements SystemFacade {
                 Store s = this.storesFacade.getStore(storeName);
                 Member m = this.userController.getMember(newOwner);
                 s.attach(m);
+                s.notifyOne("You have been appointed to store Owner at " +storeName,userName,newOwner);
 
                 return new ResultBool(true, null);
             }
@@ -475,6 +484,7 @@ public class Facade implements SystemFacade {
                 Store s = this.storesFacade.getStore(storeName);
                 Member m = this.userController.getMember(newManager);
                 s.attach(m);
+                s.notifyOne("You have been appointed to store Manager at " +storeName,userName,newManager);
                 return new ResultBool(true, null);
             }
             return new ResultBool(false, "Could Not Appoint Store Manager");
