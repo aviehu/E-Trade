@@ -1,7 +1,12 @@
 package com.workshop.ETrade.Controller;
 
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
+import com.workshop.ETrade.Controller.Forms.PolicyForm;
+import com.workshop.ETrade.Controller.Forms.PredicateDiscountForm;
+import com.workshop.ETrade.Controller.Forms.SimpleDiscountForm;
 import com.workshop.ETrade.Domain.Notifications.Notification;
+import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
+import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
 import com.workshop.ETrade.Domain.Stores.managersPermission;
 import com.workshop.ETrade.Domain.purchaseOption;
 import com.workshop.ETrade.Domain.Notifications.Notification;
@@ -75,6 +80,51 @@ public class StoresController {
     @PostMapping("/removeproductfromcart")
     public ResultMsg removeProductFromShoppingCart(String userName, ProductForm form) {
         return systemService.removeProductFromShoppingCart(userName, form.storeName, form.quantity, form.productName);
+    }
+
+    @PostMapping("/addsimplediscount/{store}")
+    public newResult<Integer> addSimpleDiscount(@RequestHeader("Authorization") String userName,@PathVariable("store") String storeName, @RequestBody SimpleDiscountForm form) {
+        DiscountType discountType = DiscountType.PRODUCT;
+        switch (form.type) {
+            case "category":
+                discountType = DiscountType.CATEGORY;
+                break;
+            case "store":
+                discountType = DiscountType.STORE;
+                break;
+            default:
+        }
+        return systemService.addDiscount(userName, storeName, form.discountOn, form.discountPercentage, form.description, discountType);
+    }
+
+    @PostMapping("/addprediscount/{store}")
+    public newResult<Integer> addPreDiscount(@RequestHeader("Authorization") String userName,@PathVariable("store") String storeName, @RequestBody PredicateDiscountForm form) {
+        DiscountType discountType = DiscountType.PRODUCT;
+        switch (form.type) {
+            case "category":
+                discountType = DiscountType.CATEGORY;
+                break;
+            case "store":
+                discountType = DiscountType.STORE;
+                break;
+            default:
+        }
+        return systemService.addPreDiscount(userName, storeName, form.discountOn, form.discountPercentage, form.description, discountType, form.predicates, form.connectionType);
+    }
+
+    @PostMapping("/addpolicy/{store}")
+    public newResult<Integer> addPolicy(@RequestHeader("Authorization") String userName,@PathVariable("store") String storeName, @RequestBody PolicyForm form) {
+        PolicyType policyType = PolicyType.BASKET;
+        switch (form.type) {
+            case "product":
+                policyType = PolicyType.PRODUCT;
+                break;
+            case "category":
+                policyType = PolicyType.CATEGORY;
+                break;
+            default:
+        }
+        return systemService.addPolicy(userName,storeName, form.policyOn, form.description, policyType,form.predicates, form.connectionType);
     }
 
     @PostMapping("/purchase")

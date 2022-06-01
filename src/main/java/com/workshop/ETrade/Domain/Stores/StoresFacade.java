@@ -1,8 +1,11 @@
 package com.workshop.ETrade.Domain.Stores;
 
+import com.workshop.ETrade.Controller.Forms.Predicate;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
 import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
+import com.workshop.ETrade.Domain.Stores.Predicates.OperatorLeaf;
+import com.workshop.ETrade.Domain.Stores.Predicates.PredicateBuilder;
 import com.workshop.ETrade.Domain.SystemFacade;
 import com.workshop.ETrade.Domain.purchaseOption;
 import com.workshop.ETrade.Service.ResultPackge.newResult;
@@ -25,9 +28,29 @@ public class StoresFacade {
             System.out.println("error while creating logger for stores");
         }
     }
-    public int addPolicy(String userName,String store,String policyOn, String description, PolicyType policyType, OperatorComponent operatorComponent){
-        Store s = getStore(store);
-        return s.addPolicy(userName,policyOn, description, policyType, operatorComponent);
+    public int addPolicy(String userName,String storeName,String policyOn, String description, PolicyType policyType, List<Predicate> predicates, String connectionType){
+        Store store = getStoreByName(storeName);
+        if(store == null) {
+            return -1;
+        }
+        List<com.workshop.ETrade.Domain.Stores.Predicates.Predicate> pres = new LinkedList<>();
+        for(Predicate p: predicates) {
+            switch (p.predicateType){
+                case "amount":
+                    pres.add(PredicateBuilder.getProductAmountPredicate(p.preProduct, (int)p.minAmount, (int)p.maxAmount));
+                    break;
+                case "basket":
+                    pres.add(PredicateBuilder.getBasketValuePredicate(p.minAmount, p.maxAmount));
+                    break;
+                case "time":
+                    pres.add(PredicateBuilder.getTimePredicate(p.startTime, p.endTime, true));
+                    break;
+                default:
+                    break;
+            }
+        }
+        OperatorLeaf ol = new OperatorLeaf(connectionType, pres);
+        return store.addPolicy(userName,policyOn, description, policyType, ol);
     }
     public boolean addStore(String storeName, String founderName,int card) {
         Store store = getStoreByName(storeName);
@@ -311,5 +334,30 @@ public class StoresFacade {
             return false;
         }
         return store.removeManager(userName, managerToRemove);
+    }
+
+    public int addPreDiscount(String userName, String storeName, String discountOn, int discountPercentage, String description, DiscountType discountType, List<Predicate> predicates, String connectionType) {
+        Store store = getStoreByName(storeName);
+        if(store == null) {
+            return -1;
+        }
+        List<com.workshop.ETrade.Domain.Stores.Predicates.Predicate> pres = new LinkedList<>();
+        for(Predicate p: predicates) {
+            switch (p.predicateType){
+                case "amount":
+                    pres.add(PredicateBuilder.getProductAmountPredicate(p.preProduct, (int)p.minAmount, (int)p.maxAmount));
+                    break;
+                case "basket":
+                    pres.add(PredicateBuilder.getBasketValuePredicate(p.minAmount, p.maxAmount));
+                    break;
+                case "time":
+                    pres.add(PredicateBuilder.getTimePredicate(p.startTime, p.endTime, true));
+                    break;
+                default:
+                    break;
+            }
+        }
+        OperatorLeaf ol = new OperatorLeaf(connectionType, pres);
+        return store.addPredicateDiscount(discountOn, discountPercentage, description,discountType, ol);
     }
 }

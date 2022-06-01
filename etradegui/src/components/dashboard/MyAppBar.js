@@ -85,7 +85,7 @@ export default function MyAppBar({open, toggleDrawer, title}) {
                     E-trade - {title}
                 </Typography>
                 <IconButton color="inherit">
-                    <Badge badgeContent={notifications.length} color="secondary">
+                    <Badge color="secondary">
                         <LogoutIcon onClick={handleLogout}/>
                     </Badge>
                 </IconButton>
