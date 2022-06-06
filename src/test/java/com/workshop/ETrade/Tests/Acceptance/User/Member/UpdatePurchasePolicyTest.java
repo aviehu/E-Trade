@@ -44,7 +44,7 @@ public class UpdatePurchasePolicyTest {
     @Test
     public void UpdatePurchasePolicySuccessTest() {
         Assert.assertTrue(systemService.purchase("Andalus", 123, LocalTime.MAX, 123, "BeerSheva", "Masada", 12, 4).getVal());
-        Assert.assertTrue(systemService.addPolicy("Andalus","Mega", "snacks", "", PolicyType.CATEGORY, new OperatorLeaf("and", l)).getVal() > 0);
+        Assert.assertTrue(systemService.addPolicy("Andalus","Mega", "snacks", "", PolicyType.CATEGORY, new OperatorLeaf("and", l), "").getVal() > 0);
         systemService.addProductToShoppingCart("Andalus", "Bamba", "Mega", 20);
 //        systemService.purchase("Andalus", 123, LocalTime.MAX, 123, "BeerSheva", "Masada", 12, 4);
         Assert.assertFalse(systemService.purchase("Andalus", 123, LocalTime.MAX, 123, "BeerSheva", "Masada", 12, 4).getVal());
@@ -56,6 +56,6 @@ public class UpdatePurchasePolicyTest {
         name = systemService.logOut("Andalus").getVal();
         systemService.signUp(name, "Andalus1", "200", "Anda", "lus1");
         systemService.login(name, "Andalus1", "200");
-        Assert.assertEquals(-1, systemService.addPolicy("Andalus1", "Mega", "", "", PolicyType.CATEGORY, new OperatorLeaf("and", l)).getVal());
+        Assert.assertEquals(java.util.Optional.of(-1), systemService.addPolicy("Andalus1", "Mega", "", "", PolicyType.CATEGORY, new OperatorLeaf("and", l), "").getVal());
     }
 }

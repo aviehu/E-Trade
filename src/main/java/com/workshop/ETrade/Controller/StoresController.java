@@ -7,6 +7,7 @@ import com.workshop.ETrade.Controller.Forms.SimpleDiscountForm;
 import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
+import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
 import com.workshop.ETrade.Domain.Stores.managersPermission;
 import com.workshop.ETrade.Domain.purchaseOption;
 import com.workshop.ETrade.Domain.Notifications.Notification;
@@ -124,7 +125,7 @@ public class StoresController {
                 break;
             default:
         }
-        return systemService.addPolicy(userName,storeName, form.policyOn, form.description, policyType,form.predicates, form.connectionType);
+        return systemService.addPolicy(userName,storeName, form.policyOn, form.description, policyType, (OperatorComponent) form.predicates, form.connectionType);
     }
 
     @PostMapping("/purchase")

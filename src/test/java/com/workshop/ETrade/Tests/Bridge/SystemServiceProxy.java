@@ -1,5 +1,6 @@
 package com.workshop.ETrade.Tests.Bridge;
 
+import com.workshop.ETrade.Controller.Forms.Predicate;
 import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
@@ -42,10 +43,10 @@ public class SystemServiceProxy implements ServiceInterface {
     }
 
     @Override
-    public ResultNum addPolicy(String userName, String store, String policyOn, String description, PolicyType policyType, OperatorComponent operatorComponent) {
+    public newResult<Integer> addPolicy(String userName, String store, String policyOn, String description, PolicyType policyType, OperatorComponent predicates, String connectionType) {
         if (real == null)
             throw new NotImplementedException();
-        return real.addPolicy(userName, store, policyOn, description, policyType, operatorComponent);
+        return real.addPolicy(userName, store, policyOn, description, policyType, predicates, connectionType);
     }
     @Override
     public newResult<Integer> addDiscount(String userName, String store, String discountOn, int discountPercentage, String description, DiscountType discountType) {
@@ -80,6 +81,11 @@ public class SystemServiceProxy implements ServiceInterface {
         if (real == null)
             throw new NotImplementedException();
         return real.isAdmin(userName);
+    }
+
+    @Override
+    public newResult<Integer> addPreDiscount(String userName, String storeName, String discountOn, int discountPercentage, String description, DiscountType discountType, List<Predicate> predicates, String connectionType) {
+        return null;
     }
 
 

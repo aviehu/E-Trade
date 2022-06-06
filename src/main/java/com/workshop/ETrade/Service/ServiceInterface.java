@@ -5,8 +5,6 @@ import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
 import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
-import com.workshop.ETrade.Domain.Stores.Product;
-import com.workshop.ETrade.Domain.Stores.Store;
 import com.workshop.ETrade.Domain.Stores.managersPermission;
 import com.workshop.ETrade.Domain.Users.ExternalService.Payment.PaymentAdaptee;
 import com.workshop.ETrade.Domain.Users.ExternalService.Supply.SupplyAdaptee;
@@ -17,13 +15,12 @@ import com.workshop.ETrade.Service.ResultPackge.ResultNum;
 import com.workshop.ETrade.Service.ResultPackge.newResult;
 
 import java.time.LocalTime;
-import java.util.HashMap;
 import java.util.List;
 
 public interface ServiceInterface {
     public void init();
     public newResult<Double> getCartPrice(String userName);
-    public newResult<Integer> addPolicy(String userName,String store, String policyOn, String description, PolicyType policyType, List<Predicate> predicates,  String connectionType);
+    public newResult<Integer> addPolicy(String userName, String store, String policyOn, String description, PolicyType policyType, OperatorComponent predicates, String connectionType);
     public newResult<List<String>> getOnlineMembers(String userName);
     public newResult<List<String>> getOfflineMembers(String userName);
     public ResultBool supplyServiceExists();

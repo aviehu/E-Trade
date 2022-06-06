@@ -41,8 +41,8 @@ public class SystemService implements ServiceInterface {
     }
 
     @Override
-    public newResult<Integer> addPolicy(String userName, String store, String policyOn, String description, PolicyType policyType, List<Predicate> predicates, String connectionType) {
-        return facade.addPolicy(userName, store, policyOn, description, policyType, predicates, connectionType);
+    public newResult<Integer> addPolicy(String userName, String store, String policyOn, String description, PolicyType policyType, OperatorComponent predicates, String connectionType) {
+        return facade.addPolicy(userName, store, policyOn, description, policyType, (List<Predicate>) predicates, connectionType);
     }
 
 
