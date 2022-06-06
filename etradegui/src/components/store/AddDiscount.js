@@ -95,7 +95,6 @@ const DashboardContent = () => {
 
     const predicateDiscount = async (event) => {
         event.preventDefault();
-        console.log(predicates)
         const data = new FormData(event.currentTarget);
         const body = {
             discountOn: data.get("discountOn"),
