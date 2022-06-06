@@ -41,7 +41,6 @@ export default function SignIn() {
         } catch (e) {
 
         }
-
     };
 
     useEffect(() => {
@@ -100,6 +99,11 @@ export default function SignIn() {
                         <Grid container justifyContent="flex-start">
                             <Link href="/signup" variant="body2">
                                 {"Don't have an account? sign up to E-Trade"}
+                            </Link>
+                        </Grid>
+                        <Grid container justifyContent="flex-start">
+                            <Link href="/etrade" variant="body2" sx={{mt: 5}}>
+                                {"Don't want to sign up? login as a guest"}
                             </Link>
                         </Grid>
                     </Box>

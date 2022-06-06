@@ -39,9 +39,7 @@ export default function MyAppBar({open, toggleDrawer, title}) {
     async function handleLogout() {
         const res = await get("users/logout")
         const ans = await res.json()
-        if(ans.val) {
-            navigate("/")
-        }
+        navigate("/")
     }
 
     useEffect(() => {
