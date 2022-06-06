@@ -17,7 +17,8 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import Predicate from "./Predicate";
+import {useState} from "react";
+import PredicatesGen from "./PredicatesGen";
 
 const mdTheme = createTheme();
 
@@ -26,14 +27,40 @@ const DashboardContent = () => {
     const [open, setOpen] = React.useState(true);
     const [error, setError] = React.useState("")
     const [hasError, setHasError] = React.useState(false)
-    const [predicateType, setPredicateType] = React.useState("amount");
-    const [startTime, setStartTime] = React.useState(new Date())
-    const [endTime, setEndTime] = React.useState(new Date())
-    const [connectionType, setConnectionType] = React.useState("and");
+    const [predicates, setPredicates] = React.useState([{
+        index: 0,
+        predicateType: 'amount',
+        preProduct: '',
+        minAmount: 0,
+        maxAmount: 0,
+        startTime: new Date(),
+        endTime: new Date()
+    }])
+    const [preNum, setPreNum] = React.useState(1)
+    const [connectionType, setConnectionType] = useState("and")
+
 
     const [policyType, setPolicyType] = React.useState("basket");
 
     const navigate = useNavigate();
+
+    const cleanPreds = () => {
+        const tmp = predicates.filter((pre) => {
+            return pre.index <= preNum
+        })
+        const res = tmp.map(pred => {
+            return {
+                predicateType: pred.predicateType,
+                preProduct: pred.preProduct,
+                minAmount: pred.minAmount,
+                maxAmount: pred.maxAmount,
+                startTime: pred.startTime,
+                endTime: pred.endTime
+            }
+        })
+        return res
+    }
+
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -43,16 +70,7 @@ const DashboardContent = () => {
             description: data.get("description"),
             type: policyType,
             connectionType: connectionType,
-            predicates: [
-                {
-                    predicateType: predicateType,
-                    preProduct: data.get("preProduct"),
-                    minAmount: data.get("minAmount"),
-                    maxAmount: data.get("maxAmount"),
-                    startTime: startTime,
-                    endTime: endTime
-                }
-            ]
+            predicates: cleanPreds()
         }
         try {
             const res = await post(body, `stores/addpolicy/${name}`)
@@ -67,6 +85,15 @@ const DashboardContent = () => {
 
         }
     };
+
+    const handleFormChange = (index, att, val) => {
+        let data = [...predicates];
+        if(!data[index]) {
+            data.push({index: index})
+        }
+        data[index][att] = val
+        setPredicates(data)
+    }
 
     return (
         <ThemeProvider theme={mdTheme}>
@@ -132,17 +159,6 @@ const DashboardContent = () => {
                                                             />
                                                         </Grid> : null
                                                 }
-                                                <Predicate
-                                                    isPredicate={true}
-                                                    predicateType={predicateType}
-                                                    connectionType={connectionType}
-                                                    setConnectionType={setConnectionType}
-                                                    endTime={endTime}
-                                                    setEndTime={setEndTime}
-                                                    setPredicateType={setPredicateType}
-                                                    setStartTime={setStartTime}
-                                                    startTime={startTime}
-                                                />
                                                 <Grid item xl={12}>
                                                     <TextField
                                                         fullWidth
@@ -152,7 +168,45 @@ const DashboardContent = () => {
                                                         autoComplete="description"
                                                     />
                                                 </Grid>
+                                                <PredicatesGen preNum={preNum} setConnectionType={setConnectionType} connectionType={connectionType} handleFormChange={handleFormChange}></PredicatesGen>
+
                                             </Grid>
+                                            <Button
+                                                fullWidth
+                                                variant="contained"
+                                                sx={{mt: 3, mb: 2}}
+                                                onClick={() => {
+                                                    setPreNum(preNum + 1)
+                                                    let data = [...predicates]
+                                                    data.push({
+                                                        index: preNum,
+                                                        predicateType: 'amount',
+                                                        preProduct: '',
+                                                        minAmount: 0,
+                                                        maxAmount: 0,
+                                                        startTime: new Date(),
+                                                        endTime: new Date(),
+                                                    })
+                                                    setPredicates(data)
+                                                }}
+                                            >
+                                                Add Predicate
+                                            </Button>
+                                            <Button
+                                                fullWidth
+                                                variant="contained"
+                                                sx={{mt: 3, mb: 2}}
+                                                onClick={() => {
+                                                    if(preNum > 1) {
+                                                        setPreNum(preNum - 1)
+                                                    }
+                                                    let data = [...predicates]
+                                                    data.pop();
+                                                    setPredicates(data)
+                                                }}
+                                            >
+                                                Remove Predicate
+                                            </Button>
                                             <Button
                                                 type="submit"
                                                 fullWidth
