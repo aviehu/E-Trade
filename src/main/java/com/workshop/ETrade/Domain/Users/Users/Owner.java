@@ -101,8 +101,8 @@ public class Owner extends Member {
     }
 
     @Override
-    public void addAddress(String city, String street, int streetNum, int apartmentNum) {
-        super.addAddress(city, street, streetNum, apartmentNum);
+    public void addAddress(String country,String city, String street, int streetNum, int apartmentNum, int zip) {
+        super.addAddress(country, city, street, streetNum, apartmentNum, zip);
     }
 
     @Override

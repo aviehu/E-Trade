@@ -78,7 +78,7 @@ public interface ServiceInterface {
 
     public ResultMsg removeProductFromShoppingCart(String userName, String storeName, int quantity, String prodName);
 
-    public ResultBool purchase(String userName, int card, LocalTime expDate, int cvv, String city, String street, int stNum, int apartmentNum);
+    public ResultBool purchase(String userName, int creditCard, int month,int year ,String holderName,int cvv,int id,String country,String city,String street,int stNum,int apartmentNum, int zip);
 
     public ResultMsg logOut(String userName);
 

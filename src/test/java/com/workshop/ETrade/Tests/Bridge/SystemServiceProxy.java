@@ -266,11 +266,12 @@ public class SystemServiceProxy implements ServiceInterface {
     }
 
     @Override
-    public ResultBool purchase(String userName, int card, LocalTime expDate, int cvv, String city, String street, int stNum, int apartmentNum) {
+    public ResultBool purchase(String userName, int creditCard, int month, int year,String holderName, int cvv, int id, String country, String city, String street, int stNum, int apartmentNum, int zip) {
         if (real == null)
             throw new NotImplementedException();
-        return real.purchase(userName, card, expDate, cvv, city, street, stNum, apartmentNum);
+        return real.purchase(userName, creditCard, month, year,holderName, cvv, id, country, city, street, stNum, apartmentNum, zip);
     }
+
 
     @Override
     public ResultMsg logOut(String userName) {

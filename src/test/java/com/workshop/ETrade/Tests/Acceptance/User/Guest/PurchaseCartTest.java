@@ -35,8 +35,8 @@ public class PurchaseCartTest {
         systemService.addProductToShoppingCart("Andalus", "Bamba", "Mega", 10);
         //assert total price is working
         Assert.assertEquals(systemService.getCartPrice("Andalus").getVal(), 50.0,0);
-        Assert.assertTrue(systemService.purchase("Andalus", 123, LocalTime.MAX, 776,
-                "BeerSheva", "Andalus", 7, 7).isSuccess());
+        Assert.assertTrue(systemService.purchase("Andalus", 123, 4,2024,"Andalus Andalus", 776,200000000,"Israel",
+                "BeerSheva", "Andalus", 7, 7,399949).isSuccess());
         //assert cart is an empty list after purchase
         List<String> cart = systemService.displayShoppingCart("Andalus").getVal();
         List<String> expected = new ArrayList<>();
@@ -50,8 +50,8 @@ public class PurchaseCartTest {
         int prodAmount = systemService.getProductAmount("Mega", "Bamba").getVal(); //100
         String storePurchaseHistory = systemService.getStoresPurchaseHistory("Andalus", "Mega").getVal();
         systemService.addProductToShoppingCart("Andalus", "Bamba", "Mega", 200);
-        systemService.purchase("Andalus", 123, LocalTime.MAX, 776,
-                "BeerSheva", "Andalus", 7, 7);
+        systemService.purchase("Andalus", 123, 4,2024,"Andalus Andalus", 776,200000000,"Israel",
+                "BeerSheva", "Andalus", 7, 7,399949);
         // the cart didn't change
         Assert.assertEquals(cart, systemService.displayShoppingCart("Andalus").getVal());
         // the amount in the store didn't change
