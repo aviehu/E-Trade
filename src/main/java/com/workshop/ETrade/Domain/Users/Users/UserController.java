@@ -184,22 +184,22 @@ public class UserController {
             return user.displayCart();
         return null;
     }
-    public synchronized String purchase(String userName, int creditCard, LocalTime expDate,int cvv,String city,String street,int stNum,int apartmentNum){
+    public synchronized String purchase(String userName, int creditCard, int month,int year ,String holderName,int cvv,int id,String country,String city,String street,int stNum,int apartmentNum, int zip){
         User user = getUser(userName);
         SupplyAddress sa;
         if(user != null) {
             logger.info("new purchase by - " + userName);
             if(user.getCard() == null) {
-                CreditCard card = new CreditCard(creditCard, expDate, cvv);
+                CreditCard card = new CreditCard(creditCard, month,year, cvv,id,holderName);
                 if (user.getAddress() == null) {
-                    sa = new SupplyAddress(city, street, stNum, apartmentNum);
+                    sa = new SupplyAddress(country,city,street,stNum,apartmentNum,zip);
                     return user.purchase(card, sa);
                 } else {
                     return user.purchase(card, user.getAddress());
                 }
             }
             else if (user.getAddress() == null) {
-                sa = new SupplyAddress(city, street, stNum, apartmentNum);
+                sa = new SupplyAddress(country,city,street,stNum,apartmentNum,zip);
                 return user.purchase(user.getCard(), sa);
             } else
                 return user.purchase(user.getCard(), user.getAddress());

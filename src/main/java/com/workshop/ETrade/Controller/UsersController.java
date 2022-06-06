@@ -85,6 +85,16 @@ public class UsersController {
         return systemService.isAdmin(userName);
     }
 
+    @GetMapping("/onlinemembers")
+    public newResult<List<String>> onlineMembers(@RequestHeader("Authorization") String userName) {
+        return systemService.getOnlineMembers(userName);
+    }
+
+    @GetMapping("/offlinemembers")
+    public newResult<List<String>> offlineMembers(@RequestHeader("Authorization") String userName) {
+        return systemService.getOfflineMembers(userName);
+    }
+
     @GetMapping("/logout")
     public ResultMsg logOut(@RequestHeader("Authorization") String userName) {
         return systemService.logOut(userName);
