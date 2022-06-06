@@ -1,5 +1,6 @@
 package com.workshop.ETrade.Domain;
 
+import com.workshop.ETrade.Controller.Forms.Predicate;
 import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
@@ -104,8 +105,10 @@ public interface SystemFacade {
     public ResultMsg adminGetStoresPurchaseHistory(String adminName, String storeName);
 
     public ResultBool addKeyword(String userName, String productName, String storeName, String keyWord);
-    public ResultNum addPolicy(String userName,String store, String policyOn, String description, PolicyType policyType, OperatorComponent operatorComponent);
-    public ResultNum addDiscount(String userName,String store,String discountOn, int discountPercentage, String description, DiscountType discountType);
+    public newResult<Integer> addPolicy(String userName,String store, String policyOn, String description, PolicyType policyType, List<Predicate> predicates, String connectionType);
+    public newResult<Integer> addDiscount(String userName,String store,String discountOn, int discountPercentage, String description, DiscountType discountType);
+
+    newResult<Integer> addPreDiscount(String userName, String storeName, String discountOn, int discountPercentage, String description, DiscountType discountType, List<Predicate> predicates, String connectionType);
 
 //    public ResultBool exitSystem();
 

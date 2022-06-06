@@ -18,6 +18,8 @@ import MyMessages from './components/store/MyMessages'
 import RemoveMember from './components/Admin/RemoveMember'
 import CloseStore from './components/Admin/CloseStore'
 import SearchMarket from './components/store/SearchMarket'
+import AddDiscount from './components/store/AddDiscount'
+import AddPolicy from './components/store/AddPolicy'
 
 function App() {
     return (
@@ -40,6 +42,8 @@ function App() {
                <Route path="/store/edit/:name/addmanager" element={<AddManager/>} />
                <Route path="/store/edit/:name/removeowner" element={<RemoveOwner/>} />
                <Route path="/store/edit/:name/removemanager" element={<RemoveManager/>} />
+               <Route path="/store/edit/:name/adddiscount" element={<AddDiscount />} />
+               <Route path="/store/edit/:name/addpolicy" element={<AddPolicy />} />
            </Routes>
        </Router>
     )
