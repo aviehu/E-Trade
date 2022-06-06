@@ -48,6 +48,7 @@ public class UpdatePurchasePolicyTest {
         systemService.addProductToShoppingCart("Andalus", "Bamba", "Mega", 20);
 //        systemService.purchase("Andalus", 123, LocalTime.MAX, 123, "BeerSheva", "Masada", 12, 4);
         Assert.assertFalse(systemService.purchase("Andalus", 123, LocalTime.MAX, 123, "BeerSheva", "Masada", 12, 4).getVal());
+        //TODO: payment & supply not contacted, (storage, shopping cart, storepurchasegistory) not changed
     }
 
     @Test
