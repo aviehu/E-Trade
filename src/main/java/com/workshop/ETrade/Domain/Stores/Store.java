@@ -482,7 +482,7 @@ public class Store implements Observable {
         }
         return subs;
     }
-    public List<String> getProducts() {
+    public List<Product> getProducts() {
         return inventory.getProducts();
     }
 }

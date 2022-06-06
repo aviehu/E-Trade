@@ -323,7 +323,7 @@ public class SystemServiceProxy implements ServiceInterface {
     }
 
     @Override
-    public ResultBool changePurchaseOption(String userName, String storeName, String ProductName, purchaseOption newOption) {
+    public newResult<Boolean> changePurchaseOption(String userName, String storeName, String ProductName, purchaseOption newOption) {
         if (real == null)
             throw new NotImplementedException();
         return real.changePurchaseOption(userName, storeName, ProductName, newOption);
