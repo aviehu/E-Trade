@@ -1,5 +1,6 @@
 package com.workshop.ETrade.Service;
 
+import com.workshop.ETrade.Controller.Forms.BidForm;
 import com.workshop.ETrade.Controller.Forms.Predicate;
 import com.workshop.ETrade.Controller.Forms.ProductForm;
 import com.workshop.ETrade.Domain.Facade;
@@ -324,6 +325,16 @@ public class SystemService implements ServiceInterface {
     @Override
     public newResult<Boolean> addBid(String userName, String storeName, String productName, double bidAmount) {
         return facade.addBid(userName, storeName, productName, bidAmount);
+    }
+
+    @Override
+    public newResult<List<BidForm>> getStoreBids(String userName, String storeName) {
+        return facade.getStoreBids(userName, storeName);
+    }
+
+    @Override
+    public newResult<Boolean> reviewBid(String userName, String storeName, int bidId, boolean approve) {
+        return facade.reviewBid(userName, storeName, bidId, approve);
     }
 
     public ResultNum getProductAmount(String storeName, String prodName){

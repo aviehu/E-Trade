@@ -14,6 +14,7 @@ import {useEffect, useState} from "react";
 import MyAppBar from "../dashboard/MyAppBar";
 import ChangePurchaseType from './ChangePurchaseType'
 import MyDrawer from "../dashboard/MyDrawer";
+import StoreBids from './StoreBids';
 
 const mdTheme = createTheme();
 
@@ -132,7 +133,10 @@ const DashboardContent = () => {
                                             <Grid container spacing={3}>
                                                 <Grid item xs={12}>
                                                     <main>
+                                                        <h2>Products:</h2>
                                                         {products ? renderProducts(products) : <h2>Loading...</h2>}
+                                                        <h2>Bids:</h2>
+                                                        <StoreBids storeName={name}/>
                                                     </main>
                                                 </Grid>
                                             </Grid>

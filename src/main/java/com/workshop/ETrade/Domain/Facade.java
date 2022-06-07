@@ -1,15 +1,13 @@
 package com.workshop.ETrade.Domain;
 
+import com.workshop.ETrade.Controller.Forms.BidForm;
 import com.workshop.ETrade.Controller.Forms.Predicate;
 import com.workshop.ETrade.Controller.Forms.ProductForm;
 import com.workshop.ETrade.Domain.Notifications.Notification;
+import com.workshop.ETrade.Domain.Stores.*;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
 import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
-import com.workshop.ETrade.Domain.Stores.Product;
-import com.workshop.ETrade.Domain.Stores.Store;
-import com.workshop.ETrade.Domain.Stores.StoresFacade;
-import com.workshop.ETrade.Domain.Stores.managersPermission;
 import com.workshop.ETrade.Domain.Users.ExternalService.ExtSysController;
 import com.workshop.ETrade.Domain.Users.ExternalService.Payment.PaymentAdaptee;
 import com.workshop.ETrade.Domain.Users.ExternalService.Supply.SupplyAdaptee;
@@ -628,6 +626,31 @@ public class Facade implements SystemFacade {
             return new newResult<>(true, null);
         }
         return new newResult<>(null, "Cannot add bid");
+    }
+
+    @Override
+    public newResult<List<BidForm>> getStoreBids(String userName, String storeName) {
+        List<Bid> bids = storesFacade.getStoreBids(storeName);
+        if(bids != null && userController.isConnected(userName)) {
+            List<BidForm> bidForms = new LinkedList<>();
+            for(Bid bid : bids) {
+                bidForms.add(new BidForm(bid));
+            }
+            return new newResult<>(bidForms, null);
+        }
+        return new newResult<>(null, "Cannot Get Bids");
+    }
+
+    @Override
+    public newResult<Boolean> reviewBid(String userName, String storeName, int bidId, boolean approve) {
+        if(userController.isConnected(userName)) {
+            boolean approved = storesFacade.reviewBid(userName, storeName, bidId, approve);
+            if(approved) {
+                //here a purchase of this bid should be made
+            }
+            return new newResult<>(approved, null);
+        }
+        return new newResult<>(null, "User Is Not Connected");
     }
 
     public ResultBool supplyServiceExists() {

@@ -1,5 +1,6 @@
 package com.workshop.ETrade.Domain.Stores;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -12,13 +13,32 @@ public class Bid {
     private Map<String, Boolean> awaitingApprove;
     private int bidId;
 
+    private boolean rejected;
+
     public Bid(Product product, String bidderName, double price, Set<String> ownersNames, int bidId) {
         this.product = product;
         this.bidderName = bidderName;
         this.price = price;
         this.bidId = bidId;
         this.awaitingApprove = new ConcurrentHashMap<>();
+        this.rejected = false;
         initMap(ownersNames);
+    }
+
+    public String getProductName() {
+        return product.getName();
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public String getBidderName() {
+        return bidderName;
+    }
+
+    public void reject(){
+        rejected = true;
     }
 
     public boolean approve(String ownersName) {
@@ -40,6 +60,9 @@ public class Bid {
     }
 
     private boolean isApproved() {
+        if(rejected) {
+            return false;
+        }
         boolean result = true;
         Set<String> ownersToApprove = awaitingApprove.keySet();
         for(String owner: ownersToApprove) {
@@ -78,4 +101,15 @@ public class Bid {
         return result;
     }
 
+    public int getId() {
+        return bidId;
+    }
+
+    public Map<String, Boolean> getAwaitingApprove() {
+        return awaitingApprove;
+    }
+
+    public boolean getRejected() {
+        return rejected;
+    }
 }

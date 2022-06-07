@@ -368,4 +368,20 @@ public class StoresFacade {
         }
         return store.addBid(productName, bidAmount, userName);
     }
+
+    public List<Bid> getStoreBids(String storeName) {
+        Store store = getStoreByName(storeName);
+        if(store == null) {
+            return null;
+        }
+        return store.getBids();
+    }
+
+    public Boolean reviewBid(String userName, String storeName, int bidId, boolean approve) {
+        Store store = getStoreByName(storeName);
+        if(store == null) {
+            return false;
+        }
+        return store.reviewBid(userName, bidId, approve);
+    }
 }

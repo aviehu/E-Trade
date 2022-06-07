@@ -4,7 +4,6 @@ import com.workshop.ETrade.Controller.Forms.*;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
 import com.workshop.ETrade.Domain.Stores.managersPermission;
-import com.workshop.ETrade.Domain.purchaseOption;
 import com.workshop.ETrade.Service.ResultPackge.ResultBool;
 import com.workshop.ETrade.Service.ResultPackge.ResultMsg;
 import com.workshop.ETrade.Service.ResultPackge.ResultNum;
@@ -139,8 +138,18 @@ public class StoresController {
     }
 
     @PostMapping("/addbid/{store}")
-    public newResult<Boolean> addBid(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName,@RequestBody BidForm form) {
+    public newResult<Boolean> addBid(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName,@RequestBody AddBidForm form) {
         return systemService.addBid(userName, storeName, form.productName, form.bidAmount);
+    }
+
+    @GetMapping("/bids/{store}")
+    public newResult<List<BidForm>> getStoreBids(@RequestHeader("Authorization") String userName,@PathVariable("store") String storeName) {
+        return systemService.getStoreBids(userName, storeName);
+    }
+
+    @PostMapping("/reviewbid/{store}")
+    public newResult<Boolean> reviewBid(@RequestHeader("Authorization") String userName,@PathVariable("store") String storeName, @RequestBody ReviewBidForm form) {
+        return systemService.reviewBid(userName, storeName, form.bidId, form.approve);
     }
 
     @PostMapping("/removeproductfromstore/{store}")
