@@ -68,7 +68,7 @@ public class StoresController {
     }
 
     @GetMapping("/displaycart")
-    public newResult<List<String>> displayShoppingCart(@RequestHeader("Authorization") String userName) {
+    public newResult<List<com.workshop.ETrade.Controller.Forms.ProductForm>> displayShoppingCart(@RequestHeader("Authorization") String userName) {
         return systemService.displayShoppingCart(userName);
     }
 

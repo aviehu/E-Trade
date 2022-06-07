@@ -278,8 +278,15 @@ public class Store implements Observable {
     public boolean removeOwner(String ownersName, String ownerToRemove) {
         if(isOwner(ownersName) && ownersAppointments.get(ownersName).contains(ownerToRemove)) {
             ownersAppointments.get(ownersName).remove(ownerToRemove);
+            List<String> otherOwners = ownersAppointments.get(ownerToRemove);
+            List<String> otherManagers = managersAppointments.get(ownerToRemove);
+            for(String o : otherOwners) {
+                removeOwner(ownerToRemove, o);
+            }
+            for(String o : otherManagers) {
+                removeManager(ownerToRemove, o);
+            }
             ownersAppointments.remove(ownerToRemove);
-            //managersAppointments.get(ownersName).remove(ownerToRemove);
             notifyOne("You are no longer Owner at " + getName(),ownersName,ownerToRemove);
             return true;
         }

@@ -172,8 +172,8 @@ public class SystemService implements ServiceInterface {
     }
 
     @Override
-    public newResult<List<String>> displayShoppingCart(String userName) {
-        newResult<List<String>> res = facade.displayShoppingCart(userName);
+    public newResult<List<ProductForm>> displayShoppingCart(String userName) {
+        newResult<List<ProductForm>> res = facade.displayShoppingCart(userName);
         return res;
     }
 

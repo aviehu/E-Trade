@@ -1,6 +1,7 @@
 package com.workshop.ETrade.Domain;
 
 import com.workshop.ETrade.Controller.Forms.Predicate;
+import com.workshop.ETrade.Controller.Forms.ProductForm;
 import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
@@ -310,9 +311,15 @@ public class Facade implements SystemFacade {
     }
 
     @Override
-    public newResult<List<String>> displayShoppingCart(String userName) {
-        if(userController.isConnected(userName))
-            return new newResult<>(userController.displayShoppingCart(userName),null);
+    public newResult<List<ProductForm>> displayShoppingCart(String userName) {
+        List<ProductForm> ans = new LinkedList<>();
+        if(userController.isConnected(userName)) {
+            HashMap<String,Integer> prods = userController.displayShoppingCart(userName);
+            for(String prodName : prods.keySet()) {
+                ans.add(new ProductForm(prodName, prods.get(prodName)));
+            }
+            return new newResult<>(ans,null);
+        }
         return new newResult<>(null,"User is not connected");
     }
 

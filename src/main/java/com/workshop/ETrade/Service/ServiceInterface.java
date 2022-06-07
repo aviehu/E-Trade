@@ -73,7 +73,7 @@ public interface ServiceInterface {
 
     public ResultMsg addProductToShoppingCart(String userName, String productName, String storeName, int quantity);
 
-    public newResult<List<String>> displayShoppingCart(String userName);
+    public newResult<List<ProductForm>> displayShoppingCart(String userName);
 
 //    public ResultMsg addProductToShoppingCart(String userName, Store s, int quantity, String prodName);
 

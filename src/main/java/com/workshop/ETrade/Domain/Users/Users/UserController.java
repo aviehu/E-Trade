@@ -1,10 +1,13 @@
 package com.workshop.ETrade.Domain.Users.Users;
 
+import com.workshop.ETrade.Controller.Forms.ProductForm;
 import com.workshop.ETrade.Domain.Notifications.Notification;
+import com.workshop.ETrade.Domain.Stores.Product;
 import com.workshop.ETrade.Domain.Stores.Store;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
@@ -178,7 +181,7 @@ public class UserController {
             return user.removeProd(s,quantity,prodName);
         return "User: "+userName+" does not exist\n";
     }
-    public List<String> displayShoppingCart(String userName){
+    public HashMap<String,Integer> displayShoppingCart(String userName){
         User user = getUser(userName);
         if(user != null)
             return user.displayCart();

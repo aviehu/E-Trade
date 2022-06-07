@@ -1,7 +1,9 @@
 package com.workshop.ETrade.Domain.Users.Users;
 
+import com.workshop.ETrade.Domain.Stores.Product;
 import com.workshop.ETrade.Domain.Stores.Store;
 
+import java.util.HashMap;
 import java.util.List;
 
 public abstract class User {
@@ -42,7 +44,7 @@ public abstract class User {
     public String removeProd(Store s,int quantity,String prodName){
         return myShopCart.removeProd(s,quantity,prodName);
     }
-    public List<String> displayCart(){
+    public HashMap<String,Integer> displayCart(){
         return myShopCart.displayCart();
     }
 

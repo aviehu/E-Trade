@@ -60,12 +60,8 @@ public class StoreBasket {
         return store;
     }
 
-    public List<String> displayBasket(){
-        List<String> items = new LinkedList<>();
-        for(String p : prods.keySet()){
-            items.add(p);
-        }
-        return items;
+    public HashMap<String,Integer> displayBasket(){
+        return prods;
     }
     public String getStoreName(){
         return store.getName();
