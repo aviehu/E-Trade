@@ -61,7 +61,8 @@ export default function Checkout() {
             const products = ans.val
             const fixed = products.map((prod) => {
                 return {
-                    name: prod
+                    name: prod.productName,
+                    amount: prod.amount
                 }
             })
             setProducts(fixed)

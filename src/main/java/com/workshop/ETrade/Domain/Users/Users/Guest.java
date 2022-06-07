@@ -2,6 +2,7 @@ package com.workshop.ETrade.Domain.Users.Users;
 
 import com.workshop.ETrade.Domain.Stores.Store;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class Guest extends User {
@@ -39,7 +40,7 @@ public class Guest extends User {
     }
 
     @Override
-    public List<String> displayCart() {
+    public HashMap<String,Integer> displayCart() {
         return super.displayCart();
     }
 

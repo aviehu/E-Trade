@@ -1,10 +1,12 @@
 package com.workshop.ETrade.Domain.Users.Users;
 
+import com.workshop.ETrade.Domain.Stores.Product;
 import com.workshop.ETrade.Domain.Stores.Store;
 import com.workshop.ETrade.Domain.Users.ExternalService.ExtSysController;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -55,10 +57,13 @@ public class ShoppingCart {
             return "Failed to charge your credit card\n";
     }
 
-    public List<String> displayCart(){
-        List<String> items = new LinkedList<>();
+    public HashMap<String,Integer> displayCart(){
+        HashMap<String,Integer> items = new HashMap<>();
         for(StoreBasket basket : baskets){
-            items.addAll(basket.displayBasket());
+            HashMap<String,Integer> basketProds = basket.displayBasket();
+            for(String prodName : basketProds.keySet()) {
+                items.put(prodName, basketProds.get(prodName));
+            }
         }
         return items;
     }

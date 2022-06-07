@@ -1,5 +1,6 @@
 package com.workshop.ETrade.Domain.Users.Users;
 
+import com.workshop.ETrade.Controller.Forms.ProductForm;
 import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Notifications.NotificationManager;
 import com.workshop.ETrade.Domain.Observer;
@@ -80,7 +81,7 @@ public class Member extends User implements Observer {
     }
 
     @Override
-    public List<String> displayCart() {
+    public HashMap<String,Integer> displayCart() {
         return super.displayCart();
     }
 
