@@ -36,8 +36,6 @@ const DashboardContent = () => {
     const [open, setOpen] = React.useState(true);
 
     async function getStores() {
-        const { createSocket } = SocketProvider(setMessage);
-        createSocket(localStorage.getItem("userName"))
         const res = await get('stores/');
         const ans = await res.json()
         const storesName = ans.val
@@ -88,7 +86,6 @@ const DashboardContent = () => {
         <ThemeProvider theme={mdTheme}>
             <Box sx={{display: 'flex'}}>
                 <CssBaseline/>
-                <MessageDialog message={message} open={message !== null} handleClose={() => setMessage(null)}/>
                 <MyAppBar title={"Market"} open={open} toggleDrawer={toggleDrawer}/>
                 <MyDrawer open={open} setOpen={setOpen}/>
                 <Box

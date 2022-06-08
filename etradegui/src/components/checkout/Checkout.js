@@ -19,6 +19,8 @@ import {useNavigate} from 'react-router-dom';
 import {useEffect, useState} from "react";
 import get from "../get";
 import post from "../post";
+import SocketProvider from "../SocketProvider";
+import MessageDialog from '../MessageDialog'
 
 
 const steps = ['Your cart','Shipping address', 'Payment details'];
@@ -53,9 +55,12 @@ export default function Checkout() {
     const [ccv, setCcv] = useState(0);
     const [products, setProducts] = React.useState([]);
     const navigate = useNavigate();
+    const [message, setMessage] = useState(null)
 
     useEffect(() => {
         async function getMyBasket() {
+            const { createSocket } = SocketProvider(setMessage);
+            createSocket(localStorage.getItem("userName"))
             const res = await get("stores/displaycart")
             const ans = await res.json();
             const products = ans.val
@@ -109,6 +114,7 @@ export default function Checkout() {
 
     return (
         <ThemeProvider theme={theme}>
+            <MessageDialog message={message} open={message !== null} handleClose={() => setMessage(null)}/>
             <CssBaseline />
             <AppBar
                 position="absolute"
