@@ -123,8 +123,8 @@ public class StoresController {
 
     @PostMapping("/purchase")
     public ResultBool purchase(@RequestHeader("Authorization") String userName,@RequestBody PurchaseForm form) {
-        return systemService.purchase(userName, form.card, 4,2028,"Israel Israel", form.cvv,200000000,"Israel", form.city, form.street, form.stNum, form.apartmentNum, 8454202);
-        //return systemService.purchase(userName, form.card, form.month,form.year,form.holderName, form.cvv,form.id,form.country, form.city, form.street, form.stNum, form.apartmentNum, form.zip);
+        //return systemService.purchase(userName, form.card, 4,2028,"Israel Israel", form.cvv,200000000,"Israel", form.city, form.street, form.stNum, form.apartmentNum, 8454202);
+        return systemService.purchase(userName, form.card, form.month,form.year,form.holderName, form.cvv,form.id,form.country, form.city, form.street, form.stNum, form.apartmentNum, form.zip);
     }
 
     @PostMapping("/openstore")
