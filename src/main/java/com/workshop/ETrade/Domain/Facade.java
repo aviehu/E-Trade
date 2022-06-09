@@ -1,8 +1,6 @@
 package com.workshop.ETrade.Domain;
 
-import com.workshop.ETrade.Controller.Forms.BidForm;
-import com.workshop.ETrade.Controller.Forms.Predicate;
-import com.workshop.ETrade.Controller.Forms.ProductForm;
+import com.workshop.ETrade.Controller.Forms.*;
 import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Stores.*;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
@@ -11,7 +9,9 @@ import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
 import com.workshop.ETrade.Domain.Users.ExternalService.ExtSysController;
 import com.workshop.ETrade.Domain.Users.ExternalService.Payment.PaymentAdaptee;
 import com.workshop.ETrade.Domain.Users.ExternalService.Supply.SupplyAdaptee;
+import com.workshop.ETrade.Domain.Users.Users.CreditCard;
 import com.workshop.ETrade.Domain.Users.Users.Member;
+import com.workshop.ETrade.Domain.Users.Users.SupplyAddress;
 import com.workshop.ETrade.Domain.Users.Users.UserController;
 import com.workshop.ETrade.Service.ResultPackge.ResultBool;
 import com.workshop.ETrade.Service.ResultPackge.ResultMsg;
@@ -620,8 +620,10 @@ public class Facade implements SystemFacade {
     }
 
     @Override
-    public newResult<Boolean> addBid(String userName, String storeName, String productName, double bidAmount) {
-        boolean added = storesFacade.addBid(userName, storeName, productName, bidAmount);
+    public newResult<Boolean> addBid(String userName, String storeName, String productName, double bidAmount, CreditCardForm creditCard, SupplyAddressForm supplyAddress) {
+        boolean added = storesFacade.addBid(userName, storeName, productName, bidAmount,
+                new CreditCard(creditCard.cardNumber, creditCard.month, creditCard.year, creditCard.cvv, creditCard.id, creditCard.holderName),
+                new SupplyAddress(supplyAddress.country, supplyAddress.city, supplyAddress.street, supplyAddress.streetNum, supplyAddress.apartmentNum, supplyAddress.zip));
         if(added) {
             return new newResult<>(true, null);
         }
@@ -642,13 +644,53 @@ public class Facade implements SystemFacade {
     }
 
     @Override
+    public newResult<Boolean> counterBid(String userName, String storeName, int bidId, double newOffer) {
+        if(userController.isConnected(userName)) {
+            return new newResult<>(storesFacade.counterBid(storeName, bidId, newOffer), null);
+        } else {
+            return new newResult<>(null, "User Is Not Connected");
+        }
+    }
+
+    @Override
+    public newResult<List<BidForm>> userBids(String userName) {
+        if(userController.isConnected(userName)) {
+            List<Bid> bids = storesFacade.userBids(userName);
+            List<BidForm> ans = new LinkedList<>();
+            for(Bid b : bids) {
+                ans.add(new BidForm(b));
+            }
+            return new newResult<>(ans, null);
+        } else {
+            return new newResult<>(null, "User Is Not Connected");
+        }
+    }
+
+    @Override
+    public newResult<Boolean> counterBidReview(String userName, String storeName, int bidId, boolean approve) {
+        if(userController.isConnected(userName)) {
+            Bid bid = storesFacade.counterBidReview(storeName, bidId, approve);
+            if(bid != null) {
+                userController.purchaseBid(userName, bid);
+                storesFacade.purchaseBid(storeName,bid.getProductName(), userController.getUser(bid.getBidderName()));
+                return new newResult<>(true, null);
+            }
+            return new newResult<>(false, null);
+        } else {
+            return new newResult<>(null, "User Is Not Connected");
+        }
+    }
+
+    @Override
     public newResult<Boolean> reviewBid(String userName, String storeName, int bidId, boolean approve) {
         if(userController.isConnected(userName)) {
-            boolean approved = storesFacade.reviewBid(userName, storeName, bidId, approve);
-            if(approved) {
-                //here a purchase of this bid should be made
+            Bid approved = storesFacade.reviewBid(userName, storeName, bidId, approve);
+            if(approved != null) {
+                userController.purchaseBid(userName, approved);
+                storesFacade.purchaseBid(storeName,approved.getProductName(), userController.getUser(approved.getBidderName()));
+                return new newResult<>(true, null);
             }
-            return new newResult<>(approved, null);
+            return new newResult<>(false, null);
         }
         return new newResult<>(null, "User Is Not Connected");
     }

@@ -139,12 +139,22 @@ public class StoresController {
 
     @PostMapping("/addbid/{store}")
     public newResult<Boolean> addBid(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName,@RequestBody AddBidForm form) {
-        return systemService.addBid(userName, storeName, form.productName, form.bidAmount);
+        return systemService.addBid(userName, storeName, form.productName, form.bidAmount, form.creditCardForm, form.supplyAddressForm);
+    }
+
+    @PostMapping("/counterbid/{store}")
+    public newResult<Boolean> counterBid(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName,@RequestBody CounterBidForm form) {
+        return systemService.counterBid(userName,storeName,form.bidId,form.newOffer);
     }
 
     @GetMapping("/bids/{store}")
     public newResult<List<BidForm>> getStoreBids(@RequestHeader("Authorization") String userName,@PathVariable("store") String storeName) {
         return systemService.getStoreBids(userName, storeName);
+    }
+
+    @PostMapping("/offerreview/{store}")
+    public  newResult<Boolean> counterBidReview(@RequestHeader("Authorization") String userName,@PathVariable("store") String storeName,@RequestBody ReviewBidForm form) {
+        return systemService.counterBidReview(userName,storeName,form.bidId, form.approve);
     }
 
     @PostMapping("/reviewbid/{store}")

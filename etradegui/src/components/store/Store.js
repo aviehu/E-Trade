@@ -26,7 +26,6 @@ const DashboardContent = () => {
     const [immediateDialog, setImmediateDialog] = React.useState(false);
     const [bidDialog, setBidDialog] = React.useState(false);
     const [amount, setAmount] = React.useState(0);
-    const [bidAmount, setBidAmount] = React.useState(0)
     const [product, setProduct] = React.useState("");
     const [products, setProducts] = useState(null);
     const [error, setError] = React.useState("")
@@ -69,11 +68,7 @@ const DashboardContent = () => {
         setBidDialog(true);
     }
 
-    async function sendBid() {
-        const body = {
-            productName: product,
-            bidAmount: bidAmount
-        }
+    async function sendBid(body) {
         const res = await post(body, `stores/addbid/${name}`)
         const ans = await res.json()
         if(ans.val) {
@@ -145,7 +140,7 @@ const DashboardContent = () => {
                 </Box>
             </Box>
             {immediateDialog ? <AddProductDialog open={immediateDialog} handleAdding={handleAdding} setAmount={setAmount}/> : null}
-            {bidDialog ? <BidDialog open={bidDialog} setAmount={setBidAmount} handleBid={sendBid}  /> : null}
+            {bidDialog ? <BidDialog productName={product} open={bidDialog} setOpen={setBidDialog} handleBid={sendBid}  /> : null}
         </ThemeProvider>
     );
 }

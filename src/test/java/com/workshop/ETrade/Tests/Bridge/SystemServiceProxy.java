@@ -1,8 +1,6 @@
 package com.workshop.ETrade.Tests.Bridge;
 
-import com.workshop.ETrade.Controller.Forms.BidForm;
-import com.workshop.ETrade.Controller.Forms.Predicate;
-import com.workshop.ETrade.Controller.Forms.ProductForm;
+import com.workshop.ETrade.Controller.Forms.*;
 import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
@@ -91,10 +89,10 @@ public class SystemServiceProxy implements ServiceInterface {
     }
 
     @Override
-    public newResult<Boolean> addBid(String userName, String storeName, String productName, double bidAmount) {
+    public newResult<Boolean> addBid(String userName, String storeName, String productName, double bidAmount, CreditCardForm creditCard, SupplyAddressForm supplyAddress) {
         if (real == null)
             throw new NotImplementedException();
-        return real.addBid(userName, storeName, productName, bidAmount);
+        return real.addBid(userName, storeName, productName, bidAmount, creditCard, supplyAddress);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.workshop.ETrade.Controller;
 
+import com.workshop.ETrade.Controller.Forms.BidForm;
 import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Stores.Store;
 import com.workshop.ETrade.Service.ResultPackge.ResultBool;
@@ -73,6 +74,11 @@ public class UsersController {
     @PostMapping("/login")
     public ResultBool login(@RequestHeader("Authorization") String userName, @RequestBody LoginForm form) {
         return systemService.login(userName, form.email, form.password);
+    }
+
+    @GetMapping("/mybids")
+    public newResult<List<BidForm>> userBids(@RequestHeader("Authorization") String userName){
+        return systemService.userBids(userName);
     }
 
     @GetMapping("/messages")

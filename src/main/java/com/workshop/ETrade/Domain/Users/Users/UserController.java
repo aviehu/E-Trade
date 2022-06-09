@@ -2,6 +2,7 @@ package com.workshop.ETrade.Domain.Users.Users;
 
 import com.workshop.ETrade.Controller.Forms.ProductForm;
 import com.workshop.ETrade.Domain.Notifications.Notification;
+import com.workshop.ETrade.Domain.Stores.Bid;
 import com.workshop.ETrade.Domain.Stores.Product;
 import com.workshop.ETrade.Domain.Stores.Store;
 
@@ -315,5 +316,13 @@ public class UserController {
             return null;
         }
         return member.getMessages();
+    }
+
+    public void purchaseBid(String userName, Bid approved) {
+        User user = getUser(userName);
+        if(user == null) {
+            return;
+        }
+        user.purchaseBid(approved);
     }
 }

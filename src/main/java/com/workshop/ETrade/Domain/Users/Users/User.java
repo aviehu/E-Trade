@@ -1,7 +1,12 @@
 package com.workshop.ETrade.Domain.Users.Users;
 
+import com.workshop.ETrade.Controller.Forms.SupplyAddressForm;
+import com.workshop.ETrade.Domain.Notifications.Notification;
+import com.workshop.ETrade.Domain.Notifications.NotificationManager;
+import com.workshop.ETrade.Domain.Stores.Bid;
 import com.workshop.ETrade.Domain.Stores.Product;
 import com.workshop.ETrade.Domain.Stores.Store;
+import com.workshop.ETrade.Domain.Users.ExternalService.ExtSysController;
 
 import java.util.HashMap;
 import java.util.List;
@@ -12,6 +17,7 @@ public abstract class User {
     protected boolean isConnected;
     protected String userName;
     protected CreditCard card;
+    protected NotificationManager notificationManager;
 
     public ShoppingCart getMyShopCart() {
         return myShopCart;
@@ -22,6 +28,7 @@ public abstract class User {
         this.isConnected = false;
         this.address = null;
         this.card = null;
+        this.notificationManager = new NotificationManager();
     }
 
     public boolean isConnected() {
@@ -101,4 +108,33 @@ public abstract class User {
         this.card = card;
     }
 
+    public void update(String message, String from) {
+        notificationManager.sendNotification(this,message,from);
+    }
+
+    public void purchaseBid(Bid approved) {
+        CreditCard card = approved.getCard();
+        SupplyAddress address = approved.getSupplyAddress();
+        String cardFrom = approved.getCard().getCardNumber();
+        int month = card.getMonth();
+        int year = card.getYear();
+        int cvv = card.getCvv();
+        int id = card.getId();
+        String holderName = card.getHolderName();
+        ExtSysController extSystems = ExtSysController.getInstance();
+        int payTransactionId = extSystems.pay(cardFrom, month,year,holderName, cvv,id);
+        //payment
+        if(payTransactionId != -1) {//can charge payment
+            int supTransactionId =extSystems.supply(userName, address);
+            if (supTransactionId == -1) {
+                extSystems.cancelPayment(payTransactionId);
+                extSystems.cancelSup(supTransactionId);
+            }
+        } else {
+            extSystems.cancelPayment(payTransactionId);
+        }
+    }
+
+    public void addToAwaitingNotification(Notification notification) {
+    }
 }
