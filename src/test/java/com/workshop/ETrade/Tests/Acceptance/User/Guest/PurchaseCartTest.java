@@ -1,5 +1,6 @@
 package com.workshop.ETrade.Tests.Acceptance.User.Guest;
 
+import com.workshop.ETrade.Controller.Forms.ProductForm;
 import com.workshop.ETrade.Service.ResultPackge.newResult;
 import com.workshop.ETrade.Service.SystemService;
 import org.junit.After;
@@ -38,7 +39,7 @@ public class PurchaseCartTest {
         Assert.assertTrue(systemService.purchase("Andalus", 123, 4,2024,"Andalus Andalus", 776,200000000,"Israel",
                 "BeerSheva", "Andalus", 7, 7,399949).isSuccess());
         //assert cart is an empty list after purchase
-        List<String> cart = systemService.displayShoppingCart("Andalus").getVal();
+        List<ProductForm> cart = systemService.displayShoppingCart("Andalus").getVal();
         List<String> expected = new ArrayList<>();
         Assert.assertEquals(expected, cart);
         Assert.assertEquals(90, systemService.getProductAmount("Mega", "Bamba").getVal());
@@ -46,7 +47,7 @@ public class PurchaseCartTest {
 
     @Test
     public void purchaseCartFailTest(){
-        List<String> cart = systemService.displayShoppingCart("Andalus").getVal();
+        List<ProductForm> cart = systemService.displayShoppingCart("Andalus").getVal();
         int prodAmount = systemService.getProductAmount("Mega", "Bamba").getVal(); //100
         String storePurchaseHistory = systemService.getStoresPurchaseHistory("Andalus", "Mega").getVal();
         systemService.addProductToShoppingCart("Andalus", "Bamba", "Mega", 200);

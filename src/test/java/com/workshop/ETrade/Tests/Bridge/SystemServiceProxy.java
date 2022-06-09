@@ -1,9 +1,11 @@
 package com.workshop.ETrade.Tests.Bridge;
 
+import com.workshop.ETrade.Controller.Forms.BidForm;
+import com.workshop.ETrade.Controller.Forms.Predicate;
+import com.workshop.ETrade.Controller.Forms.ProductForm;
 import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
-import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
 import com.workshop.ETrade.Domain.Stores.managersPermission;
 import com.workshop.ETrade.Domain.Users.ExternalService.Payment.PaymentAdaptee;
 import com.workshop.ETrade.Domain.Users.ExternalService.Supply.SupplyAdaptee;
@@ -15,7 +17,6 @@ import com.workshop.ETrade.Service.ResultPackge.newResult;
 import com.workshop.ETrade.Service.ServiceInterface;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import java.time.LocalTime;
 import java.util.List;
 
 public class SystemServiceProxy implements ServiceInterface {
@@ -42,10 +43,10 @@ public class SystemServiceProxy implements ServiceInterface {
     }
 
     @Override
-    public ResultNum addPolicy(String userName, String store, String policyOn, String description, PolicyType policyType, OperatorComponent operatorComponent) {
+    public newResult<Integer> addPolicy(String userName, String store, String policyOn, String description, PolicyType policyType, List<Predicate> predicates, String connectionType) {
         if (real == null)
             throw new NotImplementedException();
-        return real.addPolicy(userName, store, policyOn, description, policyType, operatorComponent);
+        return real.addPolicy(userName, store, policyOn, description, policyType, predicates, connectionType );
     }
     @Override
     public newResult<Integer> addDiscount(String userName, String store, String discountOn, int discountPercentage, String description, DiscountType discountType) {
@@ -80,6 +81,34 @@ public class SystemServiceProxy implements ServiceInterface {
         if (real == null)
             throw new NotImplementedException();
         return real.isAdmin(userName);
+    }
+
+    @Override
+    public newResult<Integer> addPreDiscount(String userName, String storeName, String discountOn, int discountPercentage, String description, DiscountType discountType, List<Predicate> predicates, String connectionType) {
+        if (real == null)
+            throw new NotImplementedException();
+        return real.addPreDiscount(userName, storeName, discountOn, discountPercentage, description, discountType, predicates, connectionType);
+    }
+
+    @Override
+    public newResult<Boolean> addBid(String userName, String storeName, String productName, double bidAmount) {
+        if (real == null)
+            throw new NotImplementedException();
+        return real.addBid(userName, storeName, productName, bidAmount);
+    }
+
+    @Override
+    public newResult<List<BidForm>> getStoreBids(String userName, String storeName) {
+        if (real == null)
+            throw new NotImplementedException();
+        return real.getStoreBids(userName, storeName);
+    }
+
+    @Override
+    public newResult<Boolean> reviewBid(String userName, String storeName, int bidId, boolean approve) {
+        if (real == null)
+            throw new NotImplementedException();
+        return real.reviewBid(userName, storeName, bidId, approve);
     }
 
 
@@ -217,7 +246,7 @@ public class SystemServiceProxy implements ServiceInterface {
     }
 
     @Override
-    public newResult<List<String>> getStoreInfo(String userName, String storeName) {
+    public newResult<List<ProductForm>> getStoreInfo(String userName, String storeName) {
         if (real == null)
             throw new NotImplementedException();
         return real.getStoreInfo(userName, storeName);
@@ -252,7 +281,7 @@ public class SystemServiceProxy implements ServiceInterface {
     }
 
     @Override
-    public newResult<List<String>> displayShoppingCart(String userName) {
+    public newResult<List<ProductForm>> displayShoppingCart(String userName) {
         if (real == null)
             throw new NotImplementedException();
         return real.displayShoppingCart(userName);
