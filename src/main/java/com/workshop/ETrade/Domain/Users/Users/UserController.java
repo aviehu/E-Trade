@@ -187,7 +187,7 @@ public class UserController {
             return user.displayCart();
         return null;
     }
-    public synchronized String purchase(String userName, int creditCard, int month,int year ,String holderName,int cvv,int id,String country,String city,String street,int stNum,int apartmentNum, int zip){
+    public synchronized String purchase(String userName, String creditCard, int month,int year ,String holderName,int cvv,int id,String country,String city,String street,int stNum,int apartmentNum, int zip){
         User user = getUser(userName);
         SupplyAddress sa;
         if(user != null) {

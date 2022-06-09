@@ -4,6 +4,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import Divider from "@mui/material/Divider";
 import List from "@mui/material/List";
 import {mainListItems} from "../listItems";
+import {guestListItems} from '../guestListItems'
 import Link from "@mui/material/Link";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -47,7 +48,10 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
 
 export default function MyDrawer({open, setOpen}) {
     const [isAdmin, setIsAdmin] = useState(false)
+    const [isGuest, setIsGuest] = useState(true)
     useEffect(() => {
+        const name = localStorage.getItem("userName");
+        setIsGuest(name.startsWith("guest"))
         async function checkAdmin() {
             const res = await get('users/isadmin')
             const ans = await res.json()
@@ -79,7 +83,7 @@ export default function MyDrawer({open, setOpen}) {
             </Toolbar>
             <Divider/>
             <List component="nav">
-                {mainListItems}
+                {isGuest ? guestListItems : mainListItems}
                 <Divider sx={{my: 1}}/>
                 {isAdmin ? <Link href="/admin/removemember">
                     <ListItemButton>

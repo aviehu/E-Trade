@@ -9,7 +9,7 @@ public class MyPaymentSys {
         this.realPaymentSys = paymentAdapter;
     }
 
-    public int pay(int cardNumber, int month,int year,String holder, int cvv, int id) {
+    public int pay(String cardNumber, int month,int year,String holder, int cvv, int id) {
         return realPaymentSys.pay(cardNumber, month, year,holder, cvv,id);
     }
     public boolean canPay(int cardFrom, LocalTime expDate, int cvv,double price){

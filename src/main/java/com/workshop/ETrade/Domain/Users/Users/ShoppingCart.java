@@ -22,7 +22,7 @@ public class ShoppingCart {
     }
 
     public String purchaseCart(CreditCard card,SupplyAddress address,String userName){
-        int cardFrom = card.getCardNumber();
+        String cardFrom = card.getCardNumber();
         int month = card.getMonth();
         int year = card.getYear();
         int cvv = card.getCvv();

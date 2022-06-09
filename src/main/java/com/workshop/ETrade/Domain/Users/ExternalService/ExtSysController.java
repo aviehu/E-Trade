@@ -32,7 +32,7 @@ public class ExtSysController {
         return myInstance;
     }
 
-    public int pay(int card, int month,int year,String holder, int cvv, int id){
+    public int pay(String card, int month,int year,String holder, int cvv, int id){
         return payment.pay(card, month,year,holder, cvv, id);
     }
     public boolean canPay(int card, LocalTime expDate, int cvv, double price){

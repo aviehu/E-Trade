@@ -20,10 +20,10 @@ public class PaymentAdaptee {
         this.httpClient = httpClient;
     }
 
-    public int payment(int cardNum, int month, int year, String holder, int cvv, int id){
+    public int payment(String cardNum, int month, int year, String holder, int cvv, int id){
         List<NameValuePair> urlParameters = new ArrayList<>();
         urlParameters.add(new BasicNameValuePair("action_type", "pay"));
-        urlParameters.add(new BasicNameValuePair("card_number", String.valueOf(cardNum)));
+        urlParameters.add(new BasicNameValuePair("card_number", cardNum));
         urlParameters.add(new BasicNameValuePair("month", String.valueOf(month)));
         urlParameters.add(new BasicNameValuePair("year", String.valueOf(year)));
         urlParameters.add(new BasicNameValuePair("holder", holder));
