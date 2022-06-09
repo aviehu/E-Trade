@@ -53,6 +53,11 @@ export default function StoreBids({storeName}) {
                     <div>
                         <h5 className='title' >Bidder's Name: {bid.biddersName}</h5>
                     </div>
+                    {bid.rejected ?
+                        <div>
+                            <h5 className='title' >The bid was rejected</h5>
+                        </div> : null
+                    }
                 </div>
                 <div className="store-footer">
                     <Button disabled={(bid.awaitingApprove[userName] || bid.rejected)} onClick={() => handleSubmit(true, bid.bidId)}>Approve</Button>
