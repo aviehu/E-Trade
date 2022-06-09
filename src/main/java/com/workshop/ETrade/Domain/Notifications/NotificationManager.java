@@ -1,9 +1,8 @@
 package com.workshop.ETrade.Domain.Notifications;
 
 
-import com.workshop.ETrade.Controller.MessageController;
-import com.workshop.ETrade.Domain.Users.Users.Member;
-import com.workshop.ETrade.Domain.Users.Users.User;
+import com.workshop.ETrade.Controller.Forms.MessageController;
+import com.workshop.ETrade.Domain.Users.User;
 import org.springframework.context.ApplicationContext;
 
 import java.time.LocalDate;

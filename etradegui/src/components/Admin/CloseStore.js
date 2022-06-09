@@ -13,15 +13,15 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import {mainListItems} from '../listItems';
+import {mainListItems} from '../util/listItems';
 import '../../css/Dashboard.css';
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import {useNavigate} from 'react-router-dom';
-import get from "../get";
+import get from "../util/get";
 import MyDrawer from "../dashboard/MyDrawer";
 import MyAppBar from "../dashboard/MyAppBar";
-import MyError from "../MyError";
+import MyError from "../util/MyError";
 
 const mdTheme = createTheme();
 

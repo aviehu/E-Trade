@@ -8,10 +8,10 @@ import {styled} from "@mui/material/styles";
 import MuiAppBar from "@mui/material/AppBar";
 import {useNavigate} from "react-router-dom";
 import {useState, useEffect} from "react";
-import get from "../get";
+import get from "../util/get";
 import LogoutIcon from '@mui/icons-material/Logout';
-import SocketProvider from "../SocketProvider";
-import MessageDialog from "../MessageDialog";
+import SocketProvider from "../util/SocketProvider";
+import MessageDialog from "../util/MessageDialog";
 import * as React from "react";
 
 const drawerWidth = 240;

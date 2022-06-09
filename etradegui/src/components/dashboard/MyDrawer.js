@@ -3,8 +3,8 @@ import IconButton from "@mui/material/IconButton";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import Divider from "@mui/material/Divider";
 import List from "@mui/material/List";
-import {mainListItems} from "../listItems";
-import {guestListItems} from '../guestListItems'
+import {mainListItems} from "../util/listItems";
+import {guestListItems} from '../util/guestListItems'
 import Link from "@mui/material/Link";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -12,7 +12,7 @@ import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import ListItemText from "@mui/material/ListItemText";
 import RemoveShoppingCartIcon from "@mui/icons-material/RemoveShoppingCart";
 import {useEffect, useState} from "react";
-import get from "../get";
+import get from "../util/get";
 import {styled} from "@mui/material/styles";
 import MuiDrawer from "@mui/material/Drawer";
 import SearchIcon from '@mui/icons-material/Search';

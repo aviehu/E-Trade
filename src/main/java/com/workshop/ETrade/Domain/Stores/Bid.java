@@ -1,9 +1,8 @@
 package com.workshop.ETrade.Domain.Stores;
 
-import com.workshop.ETrade.Domain.Users.Users.CreditCard;
-import com.workshop.ETrade.Domain.Users.Users.SupplyAddress;
+import com.workshop.ETrade.Domain.Users.CreditCard;
+import com.workshop.ETrade.Domain.Users.SupplyAddress;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
