@@ -11,8 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -44,7 +43,9 @@ public class UpdatePurchasePolicyTest {
     @Test
     public void UpdatePurchasePolicySuccessTest() {
         Assert.assertTrue(systemService.purchase("Andalus", 123, 4,2024,"Andalus Andalus", 123,200000000,"Israel", "BeerSheva", "Masada", 12, 4,400000).getVal());
-        Assert.assertTrue(systemService.addPolicy("Andalus","Mega", "snacks", "", PolicyType.CATEGORY, new OperatorLeaf("and", l)).getVal() > 0);
+        List<Predicate> opList = new ArrayList<>();
+        opList.add( PredicateBuilder.getProductAmountPredicate("Bamba", 5, 30));
+        Assert.assertTrue(systemService.addPolicy("Andalus", "Mega", "snacks", "", PolicyType.CATEGORY, new ArrayList<>(), "and").getVal() > 0);
         systemService.addProductToShoppingCart("Andalus", "Bamba", "Mega", 20);
 //        systemService.purchase("Andalus", 123, LocalTime.MAX, 123, "BeerSheva", "Masada", 12, 4);
         Assert.assertFalse(systemService.purchase("Andalus", 123, 4,2024,"Andalus Andalus", 123,200000000,"Israel", "BeerSheva", "Masada", 12, 4,400000).getVal());
@@ -55,6 +56,6 @@ public class UpdatePurchasePolicyTest {
         name = systemService.logOut("Andalus").getVal();
         systemService.signUp(name, "Andalus1", "200", "Anda", "lus1");
         systemService.login(name, "Andalus1", "200");
-        Assert.assertEquals(-1, systemService.addPolicy("Andalus1", "Mega", "", "", PolicyType.CATEGORY, new OperatorLeaf("and", l)).getVal());
+        Assert.assertEquals(Optional.of(-1), systemService.addPolicy("Andalus1", "Mega", "", "", PolicyType.CATEGORY, new ArrayList<>(), "and").getVal());
     }
 }
