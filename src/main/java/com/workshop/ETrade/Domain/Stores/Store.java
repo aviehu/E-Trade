@@ -1,6 +1,7 @@
 package com.workshop.ETrade.Domain.Stores;
 
 import com.workshop.ETrade.Domain.Notifications.NotificationManager;
+import com.workshop.ETrade.Domain.Notifications.NotificationThread;
 import com.workshop.ETrade.Domain.Observable;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
@@ -498,10 +499,18 @@ public class Store implements Observable {
 
     @Override
     public void notifySubscribers(String message,String sendFrom) {
-
+        List<Thread> threads = new ArrayList<>();
         for(Member user: subscribers) {
-            if(!user.getUserName().equals(sendFrom))
-                user.update(message, sendFrom);
+            threads.add(new NotificationThread(user, message, sendFrom));
+        }
+        for(Thread t : threads) {
+            t.run();
+        }
+        for(Thread t : threads) {
+            try {
+                t.join();
+            } catch (Exception e) {
+            }
         }
 
     }

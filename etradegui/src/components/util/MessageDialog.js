@@ -13,7 +13,6 @@ export default function messageDialog({ open , handleClose, message}) {
 
     return (
         <Snackbar
-            autoHideDuration={6000}
             open={open}
             onClose={handleClose}
             message={parseMsg(message)}
