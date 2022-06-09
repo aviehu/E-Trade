@@ -8,9 +8,7 @@ import com.workshop.ETrade.Domain.Stores.managersPermission;
 import com.workshop.ETrade.Domain.Users.ExternalService.Payment.PaymentAdaptee;
 import com.workshop.ETrade.Domain.Users.ExternalService.Supply.SupplyAdaptee;
 import com.workshop.ETrade.Domain.purchaseOption;
-import com.workshop.ETrade.Service.ResultPackge.Result<Boolean>;
-<String>;
-<Integer>;
+import com.workshop.ETrade.Service.ResultPackge.Result;
 import com.workshop.ETrade.Service.ServiceInterface;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -106,6 +104,21 @@ public class SystemServiceProxy implements ServiceInterface {
         if (real == null)
             throw new NotImplementedException();
         return real.reviewBid(userName, storeName, bidId, approve);
+    }
+
+    @Override
+    public Result<Boolean> counterBid(String userName, String storeName, int bidId, double newOffer) {
+        return null;
+    }
+
+    @Override
+    public Result<List<BidForm>> userBids(String userName) {
+        return null;
+    }
+
+    @Override
+    public Result<Boolean> counterBidReview(String userName, String storeName, int bidId, boolean approve) {
+        return null;
     }
 
 
@@ -292,7 +305,7 @@ public class SystemServiceProxy implements ServiceInterface {
     }
 
     @Override
-    public Result<Boolean> purchase(String userName, int creditCard, int month, int year, String holderName, int cvv, int id, String country, String city, String street, int stNum, int apartmentNum, int zip) {
+    public Result<Boolean> purchase(String userName, String creditCard, int month, int year, String holderName, int cvv, int id, String country, String city, String street, int stNum, int apartmentNum, int zip) {
         if (real == null)
             throw new NotImplementedException();
         return real.purchase(userName, creditCard, month, year,holderName, cvv, id, country, city, street, stNum, apartmentNum, zip);

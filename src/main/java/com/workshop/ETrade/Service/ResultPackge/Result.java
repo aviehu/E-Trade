@@ -3,7 +3,7 @@ package com.workshop.ETrade.Service.ResultPackge;
 public class Result<T> {
     private String errMsg;
     private T val;
-
+    
     public Result(T val, String errMsg) {
         this.val = val;
         this.errMsg = errMsg;
