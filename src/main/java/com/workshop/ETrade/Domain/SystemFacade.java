@@ -1,8 +1,6 @@
 package com.workshop.ETrade.Domain;
 
-import com.workshop.ETrade.Controller.Forms.BidForm;
-import com.workshop.ETrade.Controller.Forms.Predicate;
-import com.workshop.ETrade.Controller.Forms.ProductForm;
+import com.workshop.ETrade.Controller.Forms.*;
 import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
@@ -113,11 +111,17 @@ public interface SystemFacade {
 
     newResult<Integer> addPreDiscount(String userName, String storeName, String discountOn, int discountPercentage, String description, DiscountType discountType, List<Predicate> predicates, String connectionType);
 
-    newResult<Boolean> addBid(String userName, String storeName, String productName, double bidAmount);
+    newResult<Boolean> addBid(String userName, String storeName, String productName, double bidAmount, CreditCardForm creditCard, SupplyAddressForm supplyAddress);
 
     newResult<List<BidForm>> getStoreBids(String userName, String storeName);
 
     newResult<Boolean> reviewBid(String userName, String storeName, int bidId, boolean approve);
+
+    newResult<Boolean> counterBid(String userName, String storeName, int bidId, double newOffer);
+
+    newResult<List<BidForm>> userBids(String userName);
+
+    newResult<Boolean> counterBidReview(String userName, String storeName, int bidId, boolean approve);
 
 //    public ResultBool exitSystem();
 

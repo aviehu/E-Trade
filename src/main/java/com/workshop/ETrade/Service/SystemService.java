@@ -1,8 +1,6 @@
 package com.workshop.ETrade.Service;
 
-import com.workshop.ETrade.Controller.Forms.BidForm;
-import com.workshop.ETrade.Controller.Forms.Predicate;
-import com.workshop.ETrade.Controller.Forms.ProductForm;
+import com.workshop.ETrade.Controller.Forms.*;
 import com.workshop.ETrade.Domain.Facade;
 import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
@@ -323,8 +321,8 @@ public class SystemService implements ServiceInterface {
     }
 
     @Override
-    public newResult<Boolean> addBid(String userName, String storeName, String productName, double bidAmount) {
-        return facade.addBid(userName, storeName, productName, bidAmount);
+    public newResult<Boolean> addBid(String userName, String storeName, String productName, double bidAmount, CreditCardForm creditCard, SupplyAddressForm supplyAddress) {
+        return facade.addBid(userName, storeName, productName, bidAmount, creditCard, supplyAddress);
     }
 
     @Override
@@ -335,6 +333,21 @@ public class SystemService implements ServiceInterface {
     @Override
     public newResult<Boolean> reviewBid(String userName, String storeName, int bidId, boolean approve) {
         return facade.reviewBid(userName, storeName, bidId, approve);
+    }
+
+    @Override
+    public newResult<Boolean> counterBid(String userName, String storeName, int bidId, double newOffer) {
+        return facade.counterBid(userName, storeName, bidId, newOffer);
+    }
+
+    @Override
+    public newResult<List<BidForm>> userBids(String userName) {
+        return facade.userBids(userName);
+    }
+
+    @Override
+    public newResult<Boolean> counterBidReview(String userName, String storeName, int bidId, boolean approve) {
+        return facade.counterBidReview(userName, storeName, bidId, approve);
     }
 
     public ResultNum getProductAmount(String storeName, String prodName){

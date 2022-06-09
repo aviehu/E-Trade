@@ -262,6 +262,7 @@ public class Member extends User implements Observer {
         notificationManager.sendNotification(this,message,from);
     }
 
+    @Override
     public void addToAwaitingNotification(Notification notification) {
         this.awaitingNotification.add(notification);
     }

@@ -8,6 +8,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
 import Link from "@mui/material/Link";
+import SellIcon from '@mui/icons-material/Sell';
 
 export const mainListItems = (
     <React.Fragment>
@@ -36,6 +37,15 @@ export const mainListItems = (
                     <DashboardIcon/>
                 </ListItemIcon>
                 <ListItemText primary="My stores"/>
+            </ListItemButton>
+        </Link>
+
+        <Link href="/mybids">
+            <ListItemButton>
+                <ListItemIcon>
+                    <SellIcon/>
+                </ListItemIcon>
+                <ListItemText primary="My Bids"/>
             </ListItemButton>
         </Link>
 

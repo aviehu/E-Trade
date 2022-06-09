@@ -20,6 +20,7 @@ import CloseStore from './components/Admin/CloseStore'
 import SearchMarket from './components/store/SearchMarket'
 import AddDiscount from './components/store/AddDiscount'
 import AddPolicy from './components/store/AddPolicy'
+import MyBids from './components/store/MyBids'
 
 function App() {
     return (
@@ -32,6 +33,7 @@ function App() {
                <Route path="/createstore" element={<CreateStore />} />
                <Route path="/mystores" element={<Mystores />} />
                <Route path="/mymessages" element={<MyMessages />} />
+               <Route path="/mybids" element={<MyBids />} />
                <Route path="/search" element={<SearchMarket />} />
                <Route path="/admin/removemember" element={<RemoveMember/>}/>
                <Route path="/admin/closestore" element={<CloseStore/>}/>
