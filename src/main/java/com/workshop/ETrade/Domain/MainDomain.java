@@ -1,6 +1,6 @@
 package com.workshop.ETrade.Domain;
 
-import com.workshop.ETrade.Service.ResultPackge.ResultBool;
+import com.workshop.ETrade.Service.ResultPackge.Result;
 
 public class MainDomain {
     public static void main(String[] args) {
@@ -9,7 +9,7 @@ public class MainDomain {
         Facade facade = new Facade();
         facade.enterSystem();
         System.out.println(facade.getOnline());
-        ResultBool r = facade.login(facade.getOnline(),"domain","domain");
+        Result<Boolean> r = facade.login(facade.getOnline(),"domain","domain");
         if(r.getVal()) {
             System.out.println("good");
             facade.openStore("domain","hila",123);

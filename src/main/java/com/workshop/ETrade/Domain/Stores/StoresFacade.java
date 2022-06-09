@@ -1,18 +1,14 @@
 package com.workshop.ETrade.Domain.Stores;
 
-import com.workshop.ETrade.Controller.Forms.BidForm;
 import com.workshop.ETrade.Controller.Forms.Predicate;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
-import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
 import com.workshop.ETrade.Domain.Stores.Predicates.OperatorLeaf;
 import com.workshop.ETrade.Domain.Stores.Predicates.PredicateBuilder;
-import com.workshop.ETrade.Domain.SystemFacade;
-import com.workshop.ETrade.Domain.Users.Users.CreditCard;
-import com.workshop.ETrade.Domain.Users.Users.SupplyAddress;
-import com.workshop.ETrade.Domain.Users.Users.User;
+import com.workshop.ETrade.Domain.Users.CreditCard;
+import com.workshop.ETrade.Domain.Users.SupplyAddress;
+import com.workshop.ETrade.Domain.Users.User;
 import com.workshop.ETrade.Domain.purchaseOption;
-import com.workshop.ETrade.Service.ResultPackge.newResult;
 
 import java.util.*;
 import java.util.logging.FileHandler;

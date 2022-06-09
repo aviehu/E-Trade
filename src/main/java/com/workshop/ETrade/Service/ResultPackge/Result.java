@@ -1,9 +1,11 @@
 package com.workshop.ETrade.Service.ResultPackge;
 
-public abstract class Result {
+public class Result<T> {
     private String errMsg;
+    private T val;
 
-    public Result(String errMsg){
+    public Result(T val, String errMsg) {
+        this.val = val;
         this.errMsg = errMsg;
     }
 
@@ -18,4 +20,7 @@ public abstract class Result {
         return this.errMsg;
     }
 
+    public T getVal() {
+        return val;
+    }
 }

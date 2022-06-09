@@ -5,22 +5,14 @@ import com.workshop.ETrade.Domain.Facade;
 import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
-import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
 import com.workshop.ETrade.Domain.Stores.Product;
-import com.workshop.ETrade.Domain.Stores.Store;
 import com.workshop.ETrade.Domain.Stores.managersPermission;
 import com.workshop.ETrade.Domain.Users.ExternalService.Payment.PaymentAdaptee;
 import com.workshop.ETrade.Domain.Users.ExternalService.Supply.SupplyAdaptee;
 import com.workshop.ETrade.Domain.purchaseOption;
-import com.workshop.ETrade.Service.ResultPackge.ResultBool;
-import com.workshop.ETrade.Service.ResultPackge.ResultMsg;
-import com.workshop.ETrade.Service.ResultPackge.ResultNum;
-import com.workshop.ETrade.Service.ResultPackge.newResult;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
+import com.workshop.ETrade.Service.ResultPackge.Result;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalTime;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -38,251 +30,251 @@ public class SystemService implements ServiceInterface {
     }
 
     @Override
-    public newResult<Double> getCartPrice(String userName) {
+    public Result<Double> getCartPrice(String userName) {
         return facade.getCartPrice(userName);
     }
 
     @Override
-    public newResult<Integer> addPolicy(String userName, String store, String policyOn, String description, PolicyType policyType, List<Predicate> predicates, String connectionType) {
+    public Result<Integer> addPolicy(String userName, String store, String policyOn, String description, PolicyType policyType, List<Predicate> predicates, String connectionType) {
         return facade.addPolicy(userName, store, policyOn, description, policyType, predicates, connectionType);
     }
 
 
     @Override
-    public newResult<List<String>> getOnlineMembers(String userName) {
+    public Result<List<String>> getOnlineMembers(String userName) {
         return facade.getOnlineMembers(userName);
     }
 
     @Override
-    public newResult<List<String>> getOfflineMembers(String userName) {
+    public Result<List<String>> getOfflineMembers(String userName) {
         return facade.getOfflineMembers(userName);
     }
 
-    public ResultBool supplyServiceExists(){
+    public Result<Boolean> supplyServiceExists(){
         return facade.supplyServiceExists();
     }
 
-    public ResultBool paymentServiceExists(){
+    public Result<Boolean> paymentServiceExists(){
         return facade.paymentServiceExists();
     }
 
-    public ResultBool hasAdmin(){
+    public Result<Boolean> hasAdmin(){
         return facade.hasAdmin();
     }
 
     @Override
-    public newResult<List<String>> getAllStores(String userName) {
+    public Result<List<String>> getAllStores(String userName) {
         return facade.getAllStores(userName);
     }
 
     @Override
-    public ResultBool removeMember(String userName, String memberToRemove) {
+    public Result<Boolean> removeMember(String userName, String memberToRemove) {
         return facade.removeMember(userName, memberToRemove);
     }
 
     @Override
-    public ResultMsg enterSystem() {
+    public Result<String> enterSystem() {
         return facade.enterSystem();
     }
 
     @Override
-    public ResultBool addSystemManager(String userName, String managerToAdd) {
+    public Result<Boolean> addSystemManager(String userName, String managerToAdd) {
         return facade.addSystemManager(userName, managerToAdd);
     }
 
     @Override
-    public ResultBool removeSystemManager(String userName, String managerToRemove) {
+    public Result<Boolean> removeSystemManager(String userName, String managerToRemove) {
         return facade.removeSystemManager(userName, managerToRemove);
     }
 
     @Override
-    public ResultBool addExternalPaymentService(PaymentAdaptee paymentAdaptee) {
+    public Result<Boolean> addExternalPaymentService(PaymentAdaptee paymentAdaptee) {
         return facade.addExternalPaymentService(paymentAdaptee);
     }
 
     @Override
-    public ResultBool changeExternalPaymentService(String userName, PaymentAdaptee paymentAdaptee) {
+    public Result<Boolean> changeExternalPaymentService(String userName, PaymentAdaptee paymentAdaptee) {
         return facade.changeExternalPaymentService(userName, paymentAdaptee);
     }
 
     @Override
-    public ResultBool editExternalPaymentService() {
+    public Result<Boolean> editExternalPaymentService() {
         return facade.editExternalPaymentService();
     }
 
     @Override
-    public ResultBool addExternalSupplyService(SupplyAdaptee supplyAdaptee) {
+    public Result<Boolean> addExternalSupplyService(SupplyAdaptee supplyAdaptee) {
         return facade.addExternalSupplyService(supplyAdaptee);
     }
 
     @Override
-    public ResultBool changeExternalSupplyService(String userName, SupplyAdaptee supplyAdaptee) {
+    public Result<Boolean> changeExternalSupplyService(String userName, SupplyAdaptee supplyAdaptee) {
         return facade.changeExternalSupplyService(userName, supplyAdaptee);
     }
 
     @Override
-    public ResultBool editExternalSupplyService() {
+    public Result<Boolean> editExternalSupplyService() {
         return facade.editExternalSupplyService();
     }
 
     @Override
-    public ResultBool exitSystem(String userName) {
+    public Result<Boolean> exitSystem(String userName) {
         return facade.exitSystem(userName);
     }
 
     @Override
-    public ResultBool signUp(String userName, String newUserName, String password, String name, String lastName) {
+    public Result<Boolean> signUp(String userName, String newUserName, String password, String name, String lastName) {
         return facade.signUp(userName, newUserName, password, name, lastName);
     }
 
     @Override
-    public ResultBool login(String userName, String memberUserName, String password) {
+    public Result<Boolean> login(String userName, String memberUserName, String password) {
         return facade.login(userName, memberUserName, password);
     }
 
     @Override
-    public newResult<List<ProductForm>> getStoreInfo(String userName, String storeName) {
+    public Result<List<ProductForm>> getStoreInfo(String userName, String storeName) {
         List<Product> products = facade.getStoreInfo(userName, storeName).getVal();
         List<ProductForm> formProds = new LinkedList<>();
         for(Product p : products) {
-            formProds.add(new ProductForm(p));
+            formProds.add(new ProductForm(p, storeName));
         }
-        return new newResult(formProds, null);
+        return new Result(formProds, null);
     }
 
     @Override
-    public newResult<List<String>> searchByKeyword(String userName, String keyword) {
+    public Result<List<String>> searchByKeyword(String userName, String keyword) {
         return facade.searchByKeyword(userName, keyword);
     }
 
     @Override
-    public newResult<List<String>> searchByCategory(String userName, String category) {
+    public Result<List<String>> searchByCategory(String userName, String category) {
         return facade.searchByCategory(userName, category);
     }
 
     @Override
-    public newResult<List<String>> searchByName(String userName, String productName) {
+    public Result<List<String>> searchByName(String userName, String productName) {
         return facade.searchByName(userName, productName);
     }
 
     @Override
-    public ResultMsg addProductToShoppingCart(String userName, String productName, String storeName, int quantity) {
+    public Result<String> addProductToShoppingCart(String userName, String productName, String storeName, int quantity) {
         return facade.addProductToShoppingCart(userName, productName, storeName, quantity);
     }
 
     @Override
-    public newResult<List<ProductForm>> displayShoppingCart(String userName) {
-        newResult<List<ProductForm>> res = facade.displayShoppingCart(userName);
+    public Result<List<ProductForm>> displayShoppingCart(String userName) {
+        Result<List<ProductForm>> res = facade.displayShoppingCart(userName);
         return res;
     }
 
     @Override
-    public ResultMsg removeProductFromShoppingCart(String userName, String storeName, int quantity, String prodName) {
+    public Result<String> removeProductFromShoppingCart(String userName, String storeName, int quantity, String prodName) {
         return facade.removeProductFromShoppingCart(userName, storeName, quantity, prodName);
     }
 
     @Override
-    public ResultBool purchase(String userName, String creditCard, int month,int year,String holderName ,int cvv,int id,String country,String city,String street,int stNum,int apartmentNum, int zip) {
+    public Result<Boolean> purchase(String userName, String creditCard, int month, int year, String holderName , int cvv, int id, String country, String city, String street, int stNum, int apartmentNum, int zip) {
         return facade.purchase(userName, creditCard, month, year,holderName, cvv, id, country, city, street, stNum, apartmentNum, zip);
     }
 
     @Override
-    public ResultMsg logOut(String userName) {
+    public Result<String> logOut(String userName) {
         return facade.logOut(userName);
     }
 
     @Override
-    public ResultBool openStore(String founderName, String storeName, int card) {
+    public Result<Boolean> openStore(String founderName, String storeName, int card) {
         return facade.openStore(founderName, storeName, card);
     }
 
     @Override
-    public ResultBool addProductToStore(String userName, String storeName, String productName, int amount, double price, String category) {
+    public Result<Boolean> addProductToStore(String userName, String storeName, String productName, int amount, double price, String category) {
         return facade.addProductToStore(userName, storeName, productName, amount, price, category);
     }
 
     @Override
-    public ResultBool removeProductFromStore(String userName, String storeName, String productName) {
+    public Result<Boolean> removeProductFromStore(String userName, String storeName, String productName) {
         return facade.removeProductFromStore(userName, storeName, productName);
     }
 
     @Override
-    public ResultBool editProductName(String userName, String storeName, String oldProductName, String newProductName) {
+    public Result<Boolean> editProductName(String userName, String storeName, String oldProductName, String newProductName) {
         return facade.editProductName(userName, storeName, oldProductName, newProductName);
     }
 
     @Override
-    public ResultBool editProductPrice(String userName, String storeName, String ProductName, double newPrice) {
+    public Result<Boolean> editProductPrice(String userName, String storeName, String ProductName, double newPrice) {
         return facade.editProductPrice(userName, storeName, ProductName, newPrice);
     }
 
     @Override
-    public ResultBool editProductQuantity(String userName, String storeName, String ProductName, int newQuantity) {
+    public Result<Boolean> editProductQuantity(String userName, String storeName, String ProductName, int newQuantity) {
         return facade.editProductQuantity(userName, storeName, ProductName, newQuantity);
     }
 
     @Override
-    public newResult<Boolean> changePurchaseOption(String userName, String storeName, String ProductName, purchaseOption newOption) {
+    public Result<Boolean> changePurchaseOption(String userName, String storeName, String ProductName, purchaseOption newOption) {
         return facade.changePurchaseOption(userName, storeName, ProductName, newOption);
     }
 
     @Override
-    public ResultBool appointStoreOwner(String userName, String storeName, String newOwner) {
+    public Result<Boolean> appointStoreOwner(String userName, String storeName, String newOwner) {
         return facade.appointStoreOwner(userName, storeName, newOwner);
     }
 
     @Override
-    public newResult<Boolean> removeStoreOwner(String userName, String storeName, String ownerToRemove) {
+    public Result<Boolean> removeStoreOwner(String userName, String storeName, String ownerToRemove) {
         return facade.removeStoreOwner(userName, storeName, ownerToRemove);
     }
 
     @Override
-    public ResultBool appointStoreManager(String userName, String storeName, String newManager) {
+    public Result<Boolean> appointStoreManager(String userName, String storeName, String newManager) {
         return facade.appointStoreManager(userName, storeName, newManager);
     }
 
     @Override
-    public newResult<Boolean> removeStoreManager(String userName, String storeName, String managerToRemove) {
+    public Result<Boolean> removeStoreManager(String userName, String storeName, String managerToRemove) {
         return facade.removeStoreManager(userName, storeName, managerToRemove);
     }
 
     @Override
-    public ResultBool changeStoreManagersPermission(String userName, String storeName, String managerName, managersPermission newPermission) {
+    public Result<Boolean> changeStoreManagersPermission(String userName, String storeName, String managerName, managersPermission newPermission) {
         return facade.changeStoreManagersPermission(userName, storeName, managerName, newPermission);
     }
 
     @Override
-    public ResultBool closeStore(String userName, String storeName) {
+    public Result<Boolean> closeStore(String userName, String storeName) {
         return facade.closeStore(userName, storeName);
     }
 
     @Override
-    public ResultMsg getStoresManagement(String userName, String storeName) {
+    public Result<String> getStoresManagement(String userName, String storeName) {
         return facade.getStoresManagement(userName, storeName);
     }
 
     @Override
-    public ResultMsg getStoresPurchaseHistory(String userName, String storeName) {
+    public Result<String> getStoresPurchaseHistory(String userName, String storeName) {
         return facade.getStoresPurchaseHistory(userName, storeName);
     }
 
     @Override
-    public ResultBool adminCloseStorePermanently(String adminName, String storeName) {
+    public Result<Boolean> adminCloseStorePermanently(String adminName, String storeName) {
         return facade.adminCloseStorePermanently(adminName, storeName);
     }
 
     @Override
-    public newResult<List<String>> getStoresOfUser(String userName) {
+    public Result<List<String>> getStoresOfUser(String userName) {
         return facade.getStoresOfUser(userName);
     }
 
 //    @Override
-//    public ResultBool adminTerminateUser(String adminName, String userToTerminate) {
+//    public newResult<Boolean> adminTerminateUser(String adminName, String userToTerminate) {
 //        return facade.adminTerminateUser(adminName, userToTerminate);
 //    }
 
     @Override
-    public ResultMsg adminGetStoresPurchaseHistory(String adminName, String storeName) {
+    public Result<String> adminGetStoresPurchaseHistory(String adminName, String storeName) {
         return facade.adminGetStoresPurchaseHistory(adminName, storeName);
     }
 
@@ -291,70 +283,70 @@ public class SystemService implements ServiceInterface {
     }
 
     @Override
-    public newResult<Integer> addDiscount(String userName,String store, String discountOn, int discountPercentage, String description, DiscountType discountType) {
+    public Result<Integer> addDiscount(String userName, String store, String discountOn, int discountPercentage, String description, DiscountType discountType) {
         return facade.addDiscount(userName,store, discountOn, discountPercentage, description, discountType);
     }
 
     @Override
-    public newResult<Double> getProdPrice(String store, String prod) {
+    public Result<Double> getProdPrice(String store, String prod) {
         return facade.getProdPrice(store, prod);
     }
 
     @Override
-    public newResult<Integer> getProdAmount(String store, String prod) {
+    public Result<Integer> getProdAmount(String store, String prod) {
         return facade.getProdAmount(store, prod);
     }
 
     @Override
-    public newResult<List<Notification>> getMessages(String userName) {
+    public Result<List<Notification>> getMessages(String userName) {
         return facade.getMessages(userName);
     }
 
     @Override
-    public newResult<Boolean> isAdmin(String userName) {
+    public Result<Boolean> isAdmin(String userName) {
         return facade.isAdmin(userName);
     }
 
     @Override
-    public newResult<Integer> addPreDiscount(String userName, String storeName, String discountOn, int discountPercentage, String description, DiscountType discountType, List<Predicate> predicates, String connectionType) {
+    public Result<Integer> addPreDiscount(String userName, String storeName, String discountOn, int discountPercentage, String description, DiscountType discountType, List<Predicate> predicates, String connectionType) {
         return facade.addPreDiscount(userName, storeName, discountOn, discountPercentage, description, discountType, predicates, connectionType);
     }
 
     @Override
-    public newResult<Boolean> addBid(String userName, String storeName, String productName, double bidAmount, CreditCardForm creditCard, SupplyAddressForm supplyAddress) {
+    public Result<Boolean> addBid(String userName, String storeName, String productName, double bidAmount, CreditCardForm creditCard, SupplyAddressForm supplyAddress) {
         return facade.addBid(userName, storeName, productName, bidAmount, creditCard, supplyAddress);
     }
 
     @Override
-    public newResult<List<BidForm>> getStoreBids(String userName, String storeName) {
+    public Result<List<BidForm>> getStoreBids(String userName, String storeName) {
         return facade.getStoreBids(userName, storeName);
     }
 
     @Override
-    public newResult<Boolean> reviewBid(String userName, String storeName, int bidId, boolean approve) {
+    public Result<Boolean> reviewBid(String userName, String storeName, int bidId, boolean approve) {
         return facade.reviewBid(userName, storeName, bidId, approve);
     }
 
     @Override
-    public newResult<Boolean> counterBid(String userName, String storeName, int bidId, double newOffer) {
+    public Result<Boolean> counterBid(String userName, String storeName, int bidId, double newOffer) {
         return facade.counterBid(userName, storeName, bidId, newOffer);
     }
 
     @Override
-    public newResult<List<BidForm>> userBids(String userName) {
+    public Result<List<BidForm>> userBids(String userName) {
         return facade.userBids(userName);
     }
 
     @Override
-    public newResult<Boolean> counterBidReview(String userName, String storeName, int bidId, boolean approve) {
+    public Result<Boolean> counterBidReview(String userName, String storeName, int bidId, boolean approve) {
         return facade.counterBidReview(userName, storeName, bidId, approve);
     }
 
-    public ResultNum getProductAmount(String storeName, String prodName){
+    public Result<Integer> getProductAmount(String storeName, String prodName){
         return facade.getProductAmount(storeName,prodName);
     }
 
-    public ResultBool addKeyword(String userName, String productName, String storeName, String keyWord) {
+    public Result<Boolean> addKeyword(String userName, String productName, String storeName, String keyWord) {
         return facade.addKeyword(userName, productName, storeName, keyWord);
     }
 

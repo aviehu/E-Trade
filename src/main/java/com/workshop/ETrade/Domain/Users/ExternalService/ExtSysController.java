@@ -7,8 +7,7 @@ import com.workshop.ETrade.Domain.Users.ExternalService.Security.mySecuritySys;
 import com.workshop.ETrade.Domain.Users.ExternalService.Supply.SupplyAdaptee;
 import com.workshop.ETrade.Domain.Users.ExternalService.Supply.SupplyAdapter;
 import com.workshop.ETrade.Domain.Users.ExternalService.Supply.mySupplySys;
-import com.workshop.ETrade.Domain.Users.Users.ShoppingCart;
-import com.workshop.ETrade.Domain.Users.Users.SupplyAddress;
+import com.workshop.ETrade.Domain.Users.SupplyAddress;
 
 import java.time.LocalTime;
 

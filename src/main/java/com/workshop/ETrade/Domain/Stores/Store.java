@@ -5,12 +5,11 @@ import com.workshop.ETrade.Domain.Observable;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
 import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
-import com.workshop.ETrade.Domain.Users.Users.CreditCard;
-import com.workshop.ETrade.Domain.Users.Users.Member;
-import com.workshop.ETrade.Domain.Users.Users.SupplyAddress;
-import com.workshop.ETrade.Domain.Users.Users.User;
+import com.workshop.ETrade.Domain.Users.CreditCard;
+import com.workshop.ETrade.Domain.Users.Member;
+import com.workshop.ETrade.Domain.Users.SupplyAddress;
+import com.workshop.ETrade.Domain.Users.User;
 import com.workshop.ETrade.Domain.purchaseOption;
-import org.springframework.security.core.parameters.P;
 
 import java.time.LocalDate;
 import java.util.*;

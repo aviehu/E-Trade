@@ -8,18 +8,20 @@ public class ProductForm {
     public purchaseOption purchaseOption;
     public int amount;
     public double price;
-
-    public ProductForm(String productName, int amount) {
+    public String storeName;
+    public ProductForm(String productName, int amount,String storeName) {
         this.productName = productName;
         this.amount = amount;
         this.purchaseOption = null;
         this.price = 0;
+        this.storeName = storeName;
     }
 
-    public ProductForm(Product product) {
+    public ProductForm(Product product, String storeName) {
         this.productName = product.getName();
         this.purchaseOption = product.getSelectedOption();
         this.amount = product.getAmount();
         this.price = product.getPrice();
+        this.storeName = storeName;
     }
 }

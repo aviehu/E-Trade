@@ -15,14 +15,14 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import Link from "@mui/material/Link";
 import '../../css/Dashboard.css';
 import {useEffect, useState} from "react";
-import get from "../get";
-import SocketProvider from "../SocketProvider";
-import MessageDialog from '../MessageDialog'
+import get from "../util/get";
+import SocketProvider from "../util/SocketProvider";
+import MessageDialog from '../util/MessageDialog'
 import MyDrawer from "./MyDrawer";
 import MyAppBar from "./MyAppBar";
-import MyError from "../MyError";
+import MyError from "../util/MyError";
 import Button from "@mui/material/Button";
-import post from "../post";
+import post from "../util/post";
 
 
 
