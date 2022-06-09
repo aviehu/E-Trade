@@ -11,7 +11,6 @@ public class PurchaseForm {
     public String country;
     public int zip;
     public int card;
-    public String expDate;
     public int cvv;
     public String city;
     public String street;
