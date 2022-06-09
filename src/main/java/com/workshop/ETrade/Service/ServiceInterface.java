@@ -1,6 +1,8 @@
 package com.workshop.ETrade.Service;
 
+import com.workshop.ETrade.Controller.Forms.BidForm;
 import com.workshop.ETrade.Controller.Forms.Predicate;
+import com.workshop.ETrade.Controller.Forms.ProductForm;
 import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
@@ -59,7 +61,7 @@ public interface ServiceInterface {
 
     public ResultBool login(String userName, String memberUserName, String password);
 
-    public newResult<List<String>> getStoreInfo(String userName, String storeName);
+    public newResult<List<ProductForm>> getStoreInfo(String userName, String storeName);
 
     public newResult<List<String>> searchByKeyword(String userName, String keyword);
 
@@ -69,7 +71,7 @@ public interface ServiceInterface {
 
     public ResultMsg addProductToShoppingCart(String userName, String productName, String storeName, int quantity);
 
-    public newResult<List<String>> displayShoppingCart(String userName);
+    public newResult<List<ProductForm>> displayShoppingCart(String userName);
 
 //    public ResultMsg addProductToShoppingCart(String userName, Store s, int quantity, String prodName);
 
@@ -91,7 +93,7 @@ public interface ServiceInterface {
 
     public ResultBool editProductQuantity(String userName, String storeName, String ProductName, int newQuantity);
 
-    public ResultBool changePurchaseOption(String userName, String storeName, String ProductName, purchaseOption newOption);
+    public newResult<Boolean> changePurchaseOption(String userName, String storeName, String ProductName, purchaseOption newOption);
 
     public ResultBool appointStoreOwner(String userName, String storeName, String newOwner);
 
@@ -132,6 +134,12 @@ public interface ServiceInterface {
     public newResult<Boolean> isAdmin(String userName);
 
     newResult<Integer> addPreDiscount(String userName, String storeName, String discountOn, int discountPercentage, String description, DiscountType discountType, List<Predicate> predicates, String connectionType);
+
+    newResult<Boolean> addBid(String userName, String storeName, String productName, double bidAmount);
+
+    newResult<List<BidForm>> getStoreBids(String userName, String storeName);
+
+    newResult<Boolean> reviewBid(String userName, String storeName, int bidId, boolean approve);
 //    public ResultBool exitSystem();
 
 }

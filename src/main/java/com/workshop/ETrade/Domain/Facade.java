@@ -1,13 +1,13 @@
 package com.workshop.ETrade.Domain;
 
+import com.workshop.ETrade.Controller.Forms.BidForm;
 import com.workshop.ETrade.Controller.Forms.Predicate;
+import com.workshop.ETrade.Controller.Forms.ProductForm;
 import com.workshop.ETrade.Domain.Notifications.Notification;
+import com.workshop.ETrade.Domain.Stores.*;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
 import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
-import com.workshop.ETrade.Domain.Stores.Store;
-import com.workshop.ETrade.Domain.Stores.StoresFacade;
-import com.workshop.ETrade.Domain.Stores.managersPermission;
 import com.workshop.ETrade.Domain.Users.ExternalService.ExtSysController;
 import com.workshop.ETrade.Domain.Users.ExternalService.Payment.PaymentAdaptee;
 import com.workshop.ETrade.Domain.Users.ExternalService.Supply.SupplyAdaptee;
@@ -225,9 +225,9 @@ public class Facade implements SystemFacade {
     }
 
     @Override
-    public newResult<List<String>> getStoreInfo(String userName, String storeName) {
+    public newResult<List<Product>> getStoreInfo(String userName, String storeName) {
         if(userController.isConnected(userName)){
-            List<String> ans = storesFacade.displayStore(storeName);
+            List<Product> ans = storesFacade.displayStore(storeName);
             if(ans != null) {
                 return new newResult<>(ans, null);
             }
@@ -309,9 +309,15 @@ public class Facade implements SystemFacade {
     }
 
     @Override
-    public newResult<List<String>> displayShoppingCart(String userName) {
-        if(userController.isConnected(userName))
-            return new newResult<>(userController.displayShoppingCart(userName),null);
+    public newResult<List<ProductForm>> displayShoppingCart(String userName) {
+        List<ProductForm> ans = new LinkedList<>();
+        if(userController.isConnected(userName)) {
+            HashMap<String,Integer> prods = userController.displayShoppingCart(userName);
+            for(String prodName : prods.keySet()) {
+                ans.add(new ProductForm(prodName, prods.get(prodName)));
+            }
+            return new newResult<>(ans,null);
+        }
         return new newResult<>(null,"User is not connected");
     }
 
@@ -435,14 +441,14 @@ public class Facade implements SystemFacade {
     }
 
     @Override
-    public ResultBool changePurchaseOption(String userName, String storeName, String productName, purchaseOption newOption) {
+    public newResult<Boolean> changePurchaseOption(String userName, String storeName, String productName, purchaseOption newOption) {
         if(userController.isConnected(userName) && userController.isUserNameExist(userName)){
             if(storesFacade.changePurchaseOption(userName, storeName, productName, newOption)) {
-                return new ResultBool(true, null);
+                return new newResult<>(true, null);
             }
-            return new ResultBool(false, "Could Not Change Product Purchase Option");
+            return new newResult<>(null, "Could Not Change Product Purchase Option");
         }
-        return new ResultBool(false, "User Is Not Connected");
+        return new newResult<>(null, "User Is Not Connected");
     }
 
     @Override
@@ -611,6 +617,40 @@ public class Facade implements SystemFacade {
         if(ret == -1)
             return new newResult<>(null,"ERROR\n");
         return new newResult<>(ret,null);
+    }
+
+    @Override
+    public newResult<Boolean> addBid(String userName, String storeName, String productName, double bidAmount) {
+        boolean added = storesFacade.addBid(userName, storeName, productName, bidAmount);
+        if(added) {
+            return new newResult<>(true, null);
+        }
+        return new newResult<>(null, "Cannot add bid");
+    }
+
+    @Override
+    public newResult<List<BidForm>> getStoreBids(String userName, String storeName) {
+        List<Bid> bids = storesFacade.getStoreBids(storeName);
+        if(bids != null && userController.isConnected(userName)) {
+            List<BidForm> bidForms = new LinkedList<>();
+            for(Bid bid : bids) {
+                bidForms.add(new BidForm(bid));
+            }
+            return new newResult<>(bidForms, null);
+        }
+        return new newResult<>(null, "Cannot Get Bids");
+    }
+
+    @Override
+    public newResult<Boolean> reviewBid(String userName, String storeName, int bidId, boolean approve) {
+        if(userController.isConnected(userName)) {
+            boolean approved = storesFacade.reviewBid(userName, storeName, bidId, approve);
+            if(approved) {
+                //here a purchase of this bid should be made
+            }
+            return new newResult<>(approved, null);
+        }
+        return new newResult<>(null, "User Is Not Connected");
     }
 
     public ResultBool supplyServiceExists() {

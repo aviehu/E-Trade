@@ -1,5 +1,6 @@
 package com.workshop.ETrade.Tests.Acceptance.User.Guest;
 
+import com.workshop.ETrade.Controller.Forms.ProductForm;
 import com.workshop.ETrade.Service.SystemService;
 import org.junit.Assert;
 import org.junit.Test;
@@ -26,10 +27,10 @@ public class CheckCartContentsTest {
 
     @Test
     public void CheckCartContentsSuccessTest(){
-        List<String> cartInfo = systemService.displayShoppingCart("Andalus").getVal();
-        Assert.assertFalse(cartInfo.contains("Bamba"));
+        List<ProductForm> cartInfo = systemService.displayShoppingCart("Andalus").getVal();
+        Assert.assertTrue(cartInfo.isEmpty());
         systemService.addProductToShoppingCart("Andalus", "Bamba", "Mega", 5);
-        Assert.assertTrue(systemService.displayShoppingCart("Andalus").getVal().contains("Bamba"));
+        Assert.assertEquals("Bamba", systemService.displayShoppingCart("Andalus").getVal().get(0).productName);
     }
 
     @Test

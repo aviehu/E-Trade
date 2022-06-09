@@ -1,11 +1,14 @@
 package com.workshop.ETrade.Service;
 
+import com.workshop.ETrade.Controller.Forms.BidForm;
 import com.workshop.ETrade.Controller.Forms.Predicate;
+import com.workshop.ETrade.Controller.Forms.ProductForm;
 import com.workshop.ETrade.Domain.Facade;
 import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
 import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
+import com.workshop.ETrade.Domain.Stores.Product;
 import com.workshop.ETrade.Domain.Stores.Store;
 import com.workshop.ETrade.Domain.Stores.managersPermission;
 import com.workshop.ETrade.Domain.Users.ExternalService.Payment.PaymentAdaptee;
@@ -20,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -139,8 +143,13 @@ public class SystemService implements ServiceInterface {
     }
 
     @Override
-    public newResult<List<String>> getStoreInfo(String userName, String storeName) {
-        return facade.getStoreInfo(userName, storeName);
+    public newResult<List<ProductForm>> getStoreInfo(String userName, String storeName) {
+        List<Product> products = facade.getStoreInfo(userName, storeName).getVal();
+        List<ProductForm> formProds = new LinkedList<>();
+        for(Product p : products) {
+            formProds.add(new ProductForm(p));
+        }
+        return new newResult(formProds, null);
     }
 
     @Override
@@ -164,8 +173,8 @@ public class SystemService implements ServiceInterface {
     }
 
     @Override
-    public newResult<List<String>> displayShoppingCart(String userName) {
-        newResult<List<String>> res = facade.displayShoppingCart(userName);
+    public newResult<List<ProductForm>> displayShoppingCart(String userName) {
+        newResult<List<ProductForm>> res = facade.displayShoppingCart(userName);
         return res;
     }
 
@@ -215,7 +224,7 @@ public class SystemService implements ServiceInterface {
     }
 
     @Override
-    public ResultBool changePurchaseOption(String userName, String storeName, String ProductName, purchaseOption newOption) {
+    public newResult<Boolean> changePurchaseOption(String userName, String storeName, String ProductName, purchaseOption newOption) {
         return facade.changePurchaseOption(userName, storeName, ProductName, newOption);
     }
 
@@ -311,6 +320,21 @@ public class SystemService implements ServiceInterface {
     @Override
     public newResult<Integer> addPreDiscount(String userName, String storeName, String discountOn, int discountPercentage, String description, DiscountType discountType, List<Predicate> predicates, String connectionType) {
         return facade.addPreDiscount(userName, storeName, discountOn, discountPercentage, description, discountType, predicates, connectionType);
+    }
+
+    @Override
+    public newResult<Boolean> addBid(String userName, String storeName, String productName, double bidAmount) {
+        return facade.addBid(userName, storeName, productName, bidAmount);
+    }
+
+    @Override
+    public newResult<List<BidForm>> getStoreBids(String userName, String storeName) {
+        return facade.getStoreBids(userName, storeName);
+    }
+
+    @Override
+    public newResult<Boolean> reviewBid(String userName, String storeName, int bidId, boolean approve) {
+        return facade.reviewBid(userName, storeName, bidId, approve);
     }
 
     public ResultNum getProductAmount(String storeName, String prodName){

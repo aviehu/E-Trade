@@ -1,30 +1,20 @@
 package com.workshop.ETrade.Controller;
 
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
-import com.workshop.ETrade.Controller.Forms.PolicyForm;
-import com.workshop.ETrade.Controller.Forms.PredicateDiscountForm;
-import com.workshop.ETrade.Controller.Forms.SimpleDiscountForm;
-import com.workshop.ETrade.Domain.Notifications.Notification;
+import com.workshop.ETrade.Controller.Forms.*;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
 import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
 import com.workshop.ETrade.Domain.Stores.managersPermission;
-import com.workshop.ETrade.Domain.purchaseOption;
-import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Service.ResultPackge.ResultBool;
 import com.workshop.ETrade.Service.ResultPackge.ResultMsg;
 import com.workshop.ETrade.Service.ResultPackge.ResultNum;
 import com.workshop.ETrade.Service.ResultPackge.newResult;
 import com.workshop.ETrade.Service.ServiceInterface;
-import com.workshop.ETrade.Service.SystemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 
 @RestController
@@ -37,9 +27,13 @@ public class StoresController {
     @Autowired
     private SimpMessagingTemplate smt;
 
+    @PostMapping("/changepurchaseoption/{store}")
+    public newResult<Boolean> changePurchaseOption(@RequestHeader("Authorization") String userName, @RequestBody ChangePurchaseOptionForm form, @PathVariable("store") String storeName) {
+        return systemService.changePurchaseOption(userName, storeName, form.productName, form.purchaseOption);
+    }
 
     @GetMapping("/info/{store}")
-    public newResult<List<String>> getStoreInfo(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName) {
+    public newResult<List<com.workshop.ETrade.Controller.Forms.ProductForm>> getStoreInfo(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName) {
         return systemService.getStoreInfo(userName, storeName);
     }
 
@@ -74,7 +68,7 @@ public class StoresController {
     }
 
     @GetMapping("/displaycart")
-    public newResult<List<String>> displayShoppingCart(@RequestHeader("Authorization") String userName) {
+    public newResult<List<com.workshop.ETrade.Controller.Forms.ProductForm>> displayShoppingCart(@RequestHeader("Authorization") String userName) {
         return systemService.displayShoppingCart(userName);
     }
 
@@ -130,8 +124,8 @@ public class StoresController {
 
     @PostMapping("/purchase")
     public ResultBool purchase(@RequestHeader("Authorization") String userName,@RequestBody PurchaseForm form) {
-        return systemService.purchase(userName, form.card, 4,2028,"Israel Israel", form.cvv,200000000,"Israel", form.city, form.street, form.stNum, form.apartmentNum, 8454202);
-        //return systemService.purchase(userName, form.card, form.month,form.year,form.holderName, form.cvv,form.id,form.country, form.city, form.street, form.stNum, form.apartmentNum, form.zip);
+        //return systemService.purchase(userName, form.card, 4,2028,"Israel Israel", form.cvv,200000000,"Israel", form.city, form.street, form.stNum, form.apartmentNum, 8454202);
+        return systemService.purchase(userName, form.card, form.month,form.year,form.holderName, form.cvv,form.id,form.country, form.city, form.street, form.stNum, form.apartmentNum, form.zip);
     }
 
     @PostMapping("/openstore")
@@ -142,6 +136,21 @@ public class StoresController {
     @PostMapping("/addproducttostore")
     public ResultBool addProductToStore(@RequestHeader("Authorization") String userName,@RequestBody NewProductForm form) {
         return systemService.addProductToStore(userName, form.storeName, form.productName, form.amount, form.price, form.category);
+    }
+
+    @PostMapping("/addbid/{store}")
+    public newResult<Boolean> addBid(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName,@RequestBody AddBidForm form) {
+        return systemService.addBid(userName, storeName, form.productName, form.bidAmount);
+    }
+
+    @GetMapping("/bids/{store}")
+    public newResult<List<BidForm>> getStoreBids(@RequestHeader("Authorization") String userName,@PathVariable("store") String storeName) {
+        return systemService.getStoreBids(userName, storeName);
+    }
+
+    @PostMapping("/reviewbid/{store}")
+    public newResult<Boolean> reviewBid(@RequestHeader("Authorization") String userName,@PathVariable("store") String storeName, @RequestBody ReviewBidForm form) {
+        return systemService.reviewBid(userName, storeName, form.bidId, form.approve);
     }
 
     @PostMapping("/removeproductfromstore/{store}")
@@ -167,11 +176,6 @@ public class StoresController {
     @PostMapping("/editproductquantity/{quantity}")
     public ResultBool editProductQuantity(String userName, EditProductForm form,@PathVariable("quantity") int newQuantity) {
         return systemService.editProductQuantity(userName, form.storeName, form.productName, newQuantity);
-    }
-
-    @PostMapping("/changepurchaseoption")//TODO: option?
-    public ResultBool changePurchaseOption(String userName, EditProductForm form, purchaseOption newOption) {
-        return systemService.changePurchaseOption(userName, form.storeName, form.productName, newOption);
     }
 
     @PostMapping("/appointowner/{store}")

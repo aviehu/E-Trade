@@ -7,6 +7,7 @@ import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
 import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
 import com.workshop.ETrade.Domain.Users.Users.Member;
 import com.workshop.ETrade.Domain.purchaseOption;
+import org.springframework.security.core.parameters.P;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -278,8 +279,15 @@ public class Store implements Observable {
     public boolean removeOwner(String ownersName, String ownerToRemove) {
         if(isOwner(ownersName) && ownersAppointments.get(ownersName).contains(ownerToRemove)) {
             ownersAppointments.get(ownersName).remove(ownerToRemove);
+            List<String> otherOwners = ownersAppointments.get(ownerToRemove);
+            List<String> otherManagers = managersAppointments.get(ownerToRemove);
+            for(String o : otherOwners) {
+                removeOwner(ownerToRemove, o);
+            }
+            for(String o : otherManagers) {
+                removeManager(ownerToRemove, o);
+            }
             ownersAppointments.remove(ownerToRemove);
-            //managersAppointments.get(ownersName).remove(ownerToRemove);
             notifyOne("You are no longer Owner at " + getName(),ownersName,ownerToRemove);
             return true;
         }
@@ -482,7 +490,31 @@ public class Store implements Observable {
         }
         return subs;
     }
-    public List<String> getProducts() {
+    public List<Product> getProducts() {
         return inventory.getProducts();
+    }
+
+    public List<Bid> getBids() {
+        return bids;
+    }
+
+    private Bid getBidById(int bidId) {
+        for(Bid bid : bids) {
+            if(bid.getId() == bidId) {
+                return bid;
+            }
+        }
+        return null;
+    }
+
+    public Boolean reviewBid(String userName, int bidId, boolean approve) {
+        if(isOwner(userName)) {
+            Bid bid = getBidById(bidId);
+            if(approve) {
+                return bid.approve(userName);
+            }
+            bid.reject();
+        }
+        return false;
     }
 }

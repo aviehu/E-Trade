@@ -12,7 +12,9 @@ import post from "../post";
 import get from "../get";
 import {useEffect, useState} from "react";
 import MyAppBar from "../dashboard/MyAppBar";
+import ChangePurchaseType from './ChangePurchaseType'
 import MyDrawer from "../dashboard/MyDrawer";
+import StoreBids from './StoreBids';
 
 const mdTheme = createTheme();
 
@@ -20,18 +22,15 @@ const DashboardContent = () => {
     const { name } = useParams()
     const [products, setProducts] = useState(null);
     const [open, setOpen] = React.useState(true);
+    const [productToChange, setProductToChange] = useState(null)
+    const [typeToChange, setTypeToChange] = useState("IMMEDIATE")
+    const [openDialog, setOpenDialog] = useState(false)
 
     async function getStore() {
         const res = await get(`stores/info/${name}`)
         const ans = await res.json()
         const products = ans.val
-        const fixedProducts = products.map((productName, id) => {
-            return {
-                "id": id,
-                "title": productName
-            }
-        })
-        setProducts(fixedProducts)
+        setProducts(products)
     }
 
     useEffect(() => {
@@ -40,6 +39,24 @@ const DashboardContent = () => {
 
 
     const navigate = useNavigate();
+
+    async function handleChange() {
+        const body = {
+            productName: productToChange.productName,
+            purchaseOption: typeToChange
+        }
+        const res = await post(body, `stores/changepurchaseoption/${name}`)
+        const ans = await res.json()
+        if(ans.val) {
+            await getStore()
+            setOpenDialog(false)
+        }
+    }
+
+    function changePurchaseType(product) {
+        setProductToChange(product)
+        setOpenDialog(true)
+    }
 
     async function handleProduct(product) {
         const body = {
@@ -54,16 +71,26 @@ const DashboardContent = () => {
 
     const renderProducts = (products) => {
         return (<ul className='stores'>
-            {products.map((product,index) => (<li key={product.id} className='store'>
+            {products.map((prod,index) => (<li className='store'>
 
                 <div className='topStore' >
                     <div>
-                        <h5 className='title' >{product.title}</h5>
+                        <h5 className='title' >Name: {prod.productName}</h5>
+                    </div>
+                    <div>
+                        <h5 className='title' >Purchase Type: {prod.purchaseOption}</h5>
+                    </div>
+                    <div>
+                        <h5 className='title' >Amount In Stock: {prod.amount}</h5>
+                    </div>
+                    <div>
+                        <h5 className='title' >Base Price: {prod.price}$</h5>
                     </div>
                 </div>
 
                 <div className="store-footer">
-                    <Button onClick={async () => await handleProduct(product)}>Remove</Button>
+                    <Button onClick={async () => await handleProduct(prod)}>Remove</Button>
+                    <Button onClick={async () => await changePurchaseType(prod)}>Change Purchase Type</Button>
                 </div>
             </li>))}
         </ul>);
@@ -106,7 +133,10 @@ const DashboardContent = () => {
                                             <Grid container spacing={3}>
                                                 <Grid item xs={12}>
                                                     <main>
+                                                        <h2>Products:</h2>
                                                         {products ? renderProducts(products) : <h2>Loading...</h2>}
+                                                        <h2>Bids:</h2>
+                                                        <StoreBids storeName={name}/>
                                                     </main>
                                                 </Grid>
                                             </Grid>
@@ -143,6 +173,7 @@ const DashboardContent = () => {
                     </Container>
                 </Box>
             </Box>
+            {openDialog ? <ChangePurchaseType open={openDialog} type={typeToChange} setType={setTypeToChange} handleChange={handleChange} ></ChangePurchaseType> : null}
         </ThemeProvider>
     );
 }

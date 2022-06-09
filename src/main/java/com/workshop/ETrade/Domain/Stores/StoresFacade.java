@@ -128,7 +128,7 @@ public class StoresFacade {
         return null;
     }
 
-    public List<String> displayStore(String storeName) {
+    public List<Product> displayStore(String storeName) {
         Store store = getStoreByName(storeName);
         if(store != null && !store.isClosed()) {
             return store.getProducts();
@@ -359,5 +359,29 @@ public class StoresFacade {
         }
         OperatorLeaf ol = new OperatorLeaf(connectionType, pres);
         return store.addPredicateDiscount(discountOn, discountPercentage, description,discountType, ol);
+    }
+
+    public boolean addBid(String userName, String storeName, String productName, double bidAmount) {
+        Store store = getStoreByName(storeName);
+        if(store == null) {
+            return false;
+        }
+        return store.addBid(productName, bidAmount, userName);
+    }
+
+    public List<Bid> getStoreBids(String storeName) {
+        Store store = getStoreByName(storeName);
+        if(store == null) {
+            return null;
+        }
+        return store.getBids();
+    }
+
+    public Boolean reviewBid(String userName, String storeName, int bidId, boolean approve) {
+        Store store = getStoreByName(storeName);
+        if(store == null) {
+            return false;
+        }
+        return store.reviewBid(userName, bidId, approve);
     }
 }

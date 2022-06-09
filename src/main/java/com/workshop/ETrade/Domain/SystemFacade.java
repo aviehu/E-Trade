@@ -1,10 +1,13 @@
 package com.workshop.ETrade.Domain;
 
+import com.workshop.ETrade.Controller.Forms.BidForm;
 import com.workshop.ETrade.Controller.Forms.Predicate;
+import com.workshop.ETrade.Controller.Forms.ProductForm;
 import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
 import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
+import com.workshop.ETrade.Domain.Stores.Product;
 import com.workshop.ETrade.Domain.Stores.managersPermission;
 import com.workshop.ETrade.Domain.Users.ExternalService.Payment.PaymentAdaptee;
 import com.workshop.ETrade.Domain.Users.ExternalService.Supply.SupplyAdaptee;
@@ -46,7 +49,7 @@ public interface SystemFacade {
 
     public ResultBool login(String userName,String memberUserName, String password);
 
-    public newResult<List<String>> getStoreInfo(String userName, String storeName);
+    public newResult<List<Product>> getStoreInfo(String userName, String storeName);
 
     public newResult<List<String>> searchByKeyword(String userName, String keyword);
 
@@ -58,7 +61,7 @@ public interface SystemFacade {
     public newResult<List<String>> getStoresOfUser(String userName);
     public ResultMsg addProductToShoppingCart(String userName, String productName, String storeName, int quantity);
 
-    public newResult<List<String>>  displayShoppingCart(String userName);
+    public newResult<List<ProductForm>>  displayShoppingCart(String userName);
 
 //    public ResultMsg addProductToShoppingCart(String userName, Store s, int quantity, String prodName);
 
@@ -80,7 +83,7 @@ public interface SystemFacade {
 
     public ResultBool editProductQuantity(String userName, String storeName, String ProductName, int newQuantity);
 
-    public ResultBool changePurchaseOption(String userName, String storeName, String ProductName, purchaseOption newOption);
+    public newResult<Boolean> changePurchaseOption(String userName, String storeName, String ProductName, purchaseOption newOption);
 
     public ResultBool appointStoreOwner(String userName, String storeName, String newOwner);
 
@@ -109,6 +112,12 @@ public interface SystemFacade {
     public newResult<Integer> addDiscount(String userName,String store,String discountOn, int discountPercentage, String description, DiscountType discountType);
 
     newResult<Integer> addPreDiscount(String userName, String storeName, String discountOn, int discountPercentage, String description, DiscountType discountType, List<Predicate> predicates, String connectionType);
+
+    newResult<Boolean> addBid(String userName, String storeName, String productName, double bidAmount);
+
+    newResult<List<BidForm>> getStoreBids(String userName, String storeName);
+
+    newResult<Boolean> reviewBid(String userName, String storeName, int bidId, boolean approve);
 
 //    public ResultBool exitSystem();
 
