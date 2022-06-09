@@ -10,7 +10,7 @@ public class PurchaseForm {
     public int id;
     public String country;
     public int zip;
-    public int card;
+    public String card;
     public int cvv;
     public String city;
     public String street;

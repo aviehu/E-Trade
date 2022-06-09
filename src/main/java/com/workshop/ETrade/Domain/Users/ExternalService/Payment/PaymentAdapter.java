@@ -11,7 +11,7 @@ public class PaymentAdapter implements IPay {
     }
 
     @Override
-    public int pay(int cardNumber, int month,int year,String holder, int cvv, int id) {
+    public int pay(String cardNumber, int month,int year,String holder, int cvv, int id) {
         if(paymentAdaptee == null)
             return -1;
         else {

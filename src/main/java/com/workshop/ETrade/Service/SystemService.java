@@ -184,7 +184,7 @@ public class SystemService implements ServiceInterface {
     }
 
     @Override
-    public ResultBool purchase(String userName, int creditCard, int month,int year,String holderName ,int cvv,int id,String country,String city,String street,int stNum,int apartmentNum, int zip) {
+    public ResultBool purchase(String userName, String creditCard, int month,int year,String holderName ,int cvv,int id,String country,String city,String street,int stNum,int apartmentNum, int zip) {
         return facade.purchase(userName, creditCard, month, year,holderName, cvv, id, country, city, street, stNum, apartmentNum, zip);
     }
 

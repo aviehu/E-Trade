@@ -4,13 +4,13 @@ import java.time.LocalTime;
 
 public class CreditCard {
     private String holderName;
-    private int cardNumber;
+    private String cardNumber;
     private int month;
     private int year;
     private int cvv;
     private int id;
 
-    public CreditCard(int cardNumber, int month,int year, int cvv,int id,String holderName) {
+    public CreditCard(String cardNumber, int month,int year, int cvv,int id,String holderName) {
         this.cardNumber = cardNumber;
         this.month = month;
         this.year = year;
@@ -19,7 +19,7 @@ public class CreditCard {
         this.holderName = holderName;
     }
 
-    public int getCardNumber() {
+    public String getCardNumber() {
         return cardNumber;
     }
 
@@ -28,7 +28,7 @@ public class CreditCard {
         return cvv;
     }
 
-    public void setCardNumber(int cardNumber) {
+    public void setCardNumber(String cardNumber) {
         this.cardNumber = cardNumber;
     }
 
