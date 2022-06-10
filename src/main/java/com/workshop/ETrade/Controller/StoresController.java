@@ -100,7 +100,7 @@ public class StoresController {
                 break;
             default:
         }
-        return systemService.addPreDiscount(userName, storeName, form.discountOn, form.discountPercentage, form.description, discountType, form.predicates, form.connectionType);
+        return systemService.addPreDiscount(userName, storeName, form.discountOn, form.discountPercentage, form.description, discountType, form.predicateForms, form.connectionType);
     }
 
     @PostMapping("/addpolicy/{store}")
@@ -115,7 +115,7 @@ public class StoresController {
                 break;
             default:
         }
-        return systemService.addPolicy(userName,storeName, form.policyOn, form.description, policyType,form.predicates, form.connectionType);
+        return systemService.addPolicy(userName,storeName, form.policyOn, form.description, policyType,form.predicateForms, form.connectionType);
     }
 
     @PostMapping("/purchase")
