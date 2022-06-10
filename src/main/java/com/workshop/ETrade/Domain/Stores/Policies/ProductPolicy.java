@@ -2,12 +2,14 @@ package com.workshop.ETrade.Domain.Stores.Policies;
 
 import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
 import com.workshop.ETrade.Domain.Stores.Product;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.util.Map;
 
 public class ProductPolicy implements Policy{
 
     private String productName;
+    @DBRef(lazy = true)
     private OperatorComponent operatorComponent;
     private int id;
     private String description;

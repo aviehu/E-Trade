@@ -6,11 +6,18 @@ import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
 import com.workshop.ETrade.Domain.Stores.Product;
+import com.workshop.ETrade.Domain.Stores.Store;
 import com.workshop.ETrade.Domain.Stores.managersPermission;
 import com.workshop.ETrade.Domain.Users.ExternalService.Payment.PaymentAdaptee;
 import com.workshop.ETrade.Domain.Users.ExternalService.Supply.SupplyAdaptee;
 import com.workshop.ETrade.Domain.purchaseOption;
+import com.workshop.ETrade.Persistance.StoreDTO;
+import com.workshop.ETrade.Repository.MemberRepository;
+import com.workshop.ETrade.Repository.ProductRepository;
+import com.workshop.ETrade.Repository.StoreRepository;
 import com.workshop.ETrade.Service.ResultPackge.Result;
+import com.workshop.ETrade.TestEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
@@ -18,9 +25,18 @@ import java.util.List;
 
 @Service
 public class SystemService implements ServiceInterface {
+
     private Facade facade;
 
-    private static SystemService myInstance = null;
+    @Autowired
+    private MemberRepository memberRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
+
+    @Autowired
+    private StoreRepository storeRepository;
+
     public SystemService() {
         init();
     }
@@ -124,6 +140,7 @@ public class SystemService implements ServiceInterface {
 
     @Override
     public Result<Boolean> signUp(String userName, String newUserName, String password, String name, String lastName) {
+        memberRepository.save(new TestEntity(newUserName, password));
         return facade.signUp(userName, newUserName, password, name, lastName);
     }
 
@@ -188,12 +205,17 @@ public class SystemService implements ServiceInterface {
 
     @Override
     public Result<Boolean> openStore(String founderName, String storeName, int card) {
-        return facade.openStore(founderName, storeName, card);
+        Result<Boolean> res = facade.openStore(founderName, storeName, card);
+        if (res.isSuccess())
+            storeRepository.save(new StoreDTO(facade.storesFacade.getStore(storeName)));
+        return res;
     }
 
     @Override
     public Result<Boolean> addProductToStore(String userName, String storeName, String productName, int amount, double price, String category) {
-        return facade.addProductToStore(userName, storeName, productName, amount, price, category);
+        Result<Boolean> res = facade.addProductToStore(userName, storeName, productName, amount, price, category);
+        if(res.isSuccess()) productRepository.save(new Product(productName, amount, price, category));
+        return res;
     }
 
     @Override

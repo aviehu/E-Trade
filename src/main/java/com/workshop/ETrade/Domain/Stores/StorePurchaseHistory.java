@@ -1,11 +1,14 @@
 package com.workshop.ETrade.Domain.Stores;
 
+import org.springframework.data.mongodb.core.mapping.DBRef;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 public class StorePurchaseHistory {
+    @DBRef(lazy = true)
     private List<Purchase> purchases;
     private int purchaseId;
 

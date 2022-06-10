@@ -1,11 +1,13 @@
 package com.workshop.ETrade.Domain.Stores;
 
 import com.workshop.ETrade.Domain.purchaseOption;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.util.*;
 
 public class Inventory {
 
+    @DBRef
     private List<Product> products;
 
     public Inventory() {

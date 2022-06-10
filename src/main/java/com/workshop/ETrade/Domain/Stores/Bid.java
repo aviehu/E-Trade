@@ -2,6 +2,7 @@ package com.workshop.ETrade.Domain.Stores;
 
 import com.workshop.ETrade.Domain.Users.CreditCard;
 import com.workshop.ETrade.Domain.Users.SupplyAddress;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.util.Map;
 import java.util.Set;
@@ -19,9 +20,11 @@ public class Bid {
 
     private boolean approvedByBidder;
 
-    CreditCard creditCard;
+    @DBRef(lazy = true)
+    private CreditCard creditCard;
 
-    SupplyAddress supplyAddress;
+    @DBRef(lazy = true)
+    private SupplyAddress supplyAddress;
 
     private boolean rejected;
 

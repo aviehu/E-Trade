@@ -1,5 +1,7 @@
 package com.workshop.ETrade.Domain.Stores;
 
+import org.springframework.data.mongodb.core.mapping.DBRef;
+
 import java.time.LocalDate;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -9,6 +11,7 @@ public class Auction {
     private int auctionId;
     private double price;
     private LocalDate auctionEnd;
+    @DBRef(lazy = true)
     private Product product;
     private String currentWinner;
     private Lock auctionLock;

@@ -1,4 +1,4 @@
-package com.workshop.ETrade.Controller.Forms;
+package com.workshop.ETrade.Controller;
 
 import com.workshop.ETrade.Domain.Notifications.Notification;
 import org.springframework.beans.BeansException;

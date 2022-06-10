@@ -1,12 +1,14 @@
 package com.workshop.ETrade.Domain.Stores.Predicates;
 
 import com.workshop.ETrade.Domain.Stores.Product;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.util.List;
 import java.util.Map;
 
 public class OperatorLeaf extends OperatorComponent{
 
+    @DBRef(lazy = true)
     private List<Predicate> predicates;
 
     public OperatorLeaf(String type , List<Predicate> predicates) {

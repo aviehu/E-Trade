@@ -11,6 +11,7 @@ import com.workshop.ETrade.Domain.Users.Member;
 import com.workshop.ETrade.Domain.Users.SupplyAddress;
 import com.workshop.ETrade.Domain.Users.User;
 import com.workshop.ETrade.Domain.purchaseOption;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -18,7 +19,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class Store implements Observable {
 
-    private boolean closedByAdmin;
     private String name;
     private String founderName;
     private int card;
@@ -26,17 +26,23 @@ public class Store implements Observable {
     private int auctionId;
     private int bidId;
     private int raffleId;
+    @DBRef(lazy = true)
     private Inventory inventory;
     private Map<String, managersPermission> managersPermissions;
+    @DBRef(lazy = true)
     private PolicyManager policyManager;
+    @DBRef(lazy = true)
     private StorePurchaseHistory storeHistory;
     private Map<String, List<String>> ownersAppointments;
     private Map<String, List<String>> managersAppointments;
+    @DBRef(lazy = true)
     private List<Raffle> raffles;
+    @DBRef(lazy = true)
     private List<Bid> bids;
+    @DBRef(lazy = true)
     private List<Auction> auctions;
+    @DBRef(lazy = true)
     private List<Member> subscribers;
-    private NotificationManager notificationManager;
 
     public Store(String storeName, String founderName,int card) {
         name = storeName;
@@ -57,8 +63,6 @@ public class Store implements Observable {
         bidId = 1;
         raffleId = 1;
         managersPermissions = new ConcurrentHashMap<>();
-        closedByAdmin = false;
-        notificationManager = new NotificationManager();
         subscribers = new ArrayList<>();
     }
 
@@ -145,7 +149,6 @@ public class Store implements Observable {
     public boolean adminCloseStore() {
         if(!closed) {
             closed = true;
-            closedByAdmin = true;
             notifySubscribers("A system manager closed the store "+ getName()+"\n",name);
             return true;
         }
@@ -250,7 +253,7 @@ public class Store implements Observable {
     public boolean startRaffle(String productName, LocalDate raffleEnd, double price) {
         Product product = inventory.getProductByName(productName);
         if(product != null && product.getSelectedOption() == purchaseOption.RAFFLE) {
-            raffles.add(new Raffle(product,price, raffleEnd, raffleId));
+            raffles.add(new Raffle(price, raffleEnd, raffleId));
             return true;
         }
         return false;
@@ -577,5 +580,25 @@ public class Store implements Observable {
             return null;
         }
         return bid.counterOfferReview(approve);
+    }
+
+    public String getFounderName() {
+        return founderName;
+    }
+
+    public int getBidId() {
+        return bidId;
+    }
+
+    public Map<String, managersPermission> getManagersPermissions() {
+        return managersPermissions;
+    }
+
+    public Map<String, List<String>> getOwnersAppointments() {
+        return ownersAppointments;
+    }
+
+    public Map<String, List<String>> getManagersAppointments() {
+        return managersAppointments;
     }
 }

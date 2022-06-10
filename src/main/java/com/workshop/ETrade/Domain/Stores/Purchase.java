@@ -1,10 +1,14 @@
 package com.workshop.ETrade.Domain.Stores;
 
+import org.springframework.data.mongodb.core.mapping.DBRef;
+
 import java.time.LocalDate;
 import java.util.Map;
 
 public class Purchase {
     private double price;
+
+    @DBRef(lazy = true)
     private Map<Product, Integer> prods;
     private String buyer;
     private LocalDate purchaseTime;
