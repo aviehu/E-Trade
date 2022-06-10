@@ -1,10 +1,13 @@
 package com.workshop.ETrade.Tests.Acceptance.User.Member;
 
+import com.workshop.ETrade.Controller.Forms.ProductForm;
 import com.workshop.ETrade.Service.SystemService;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.List;
 
 public class UpdateManagerPermissionTest {
     private SystemService systemService;
@@ -26,15 +29,24 @@ public class UpdateManagerPermissionTest {
 
     @Test
     public void updateManagerPermissionSuccessTest(){
-        Assert.assertTrue(systemService.getStoreInfo("Andalus", "Mega").getVal().contains("Bamba"));
+        Assert.assertTrue(isInList(systemService.getStoreInfo("Andalus", "Mega").getVal(), "Bamba"));
         systemService.removeProductFromStore("Andalus", "Mega", "Bamba");
         Assert.assertFalse(systemService.getStoreInfo("Andalus", "Mega").getVal().contains("Bamba"));
     }
 
+    private boolean isInList(List<ProductForm> productForms, String productName)  {
+        for(ProductForm pf : productForms) {
+            if(pf.productName.equals(productName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Test
     public void removeProductFromStoreFailTest(){
-        Assert.assertTrue(systemService.getStoreInfo("Andalus", "Mega").getVal().contains("Bamba"));
+        Assert.assertTrue(isInList(systemService.getStoreInfo("Andalus", "Mega").getVal(), "Bamba"));
         Assert.assertFalse(systemService.removeProductFromStore("Andalus", "Mega", "Bisly").isSuccess());
-        Assert.assertTrue(systemService.getStoreInfo("Andalus", "Mega").getVal().contains("Bamba"));
+        Assert.assertTrue(isInList(systemService.getStoreInfo("Andalus", "Mega").getVal(), "Bamba"));
     }
 }

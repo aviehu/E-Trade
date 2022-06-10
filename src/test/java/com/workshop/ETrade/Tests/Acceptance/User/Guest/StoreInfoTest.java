@@ -1,10 +1,13 @@
 package com.workshop.ETrade.Tests.Acceptance.User.Guest;
 
+import com.workshop.ETrade.Controller.Forms.ProductForm;
 import com.workshop.ETrade.Service.SystemService;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.List;
 
 public class StoreInfoTest {
 
@@ -26,7 +29,16 @@ public class StoreInfoTest {
 
     @Test
     public void StoreInfoSuccessTest(){
-        Assert.assertTrue(systemService.getStoreInfo("Andalus", "Mega").getVal().contains("Bamba"));
+        Assert.assertTrue(isInList(systemService.getStoreInfo("Andalus", "Mega").getVal(), "Bamba"));
+    }
+
+    private boolean isInList(List<ProductForm> productForms, String productName)  {
+        for(ProductForm pf : productForms) {
+            if(pf.productName.equals(productName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Test

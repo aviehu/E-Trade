@@ -135,6 +135,9 @@ public class SystemService implements ServiceInterface {
     @Override
     public Result<List<ProductForm>> getStoreInfo(String userName, String storeName) {
         List<Product> products = facade.getStoreInfo(userName, storeName).getVal();
+        if(products == null) {
+            return new Result<>(null, "Store Doesn't Exist");
+        }
         List<ProductForm> formProds = new LinkedList<>();
         for(Product p : products) {
             formProds.add(new ProductForm(p, storeName));
