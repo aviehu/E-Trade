@@ -186,11 +186,7 @@ public class Inventory {
         return product.setAmount(newQuantity);
     }
 
-    public List<String> getProducts() {
-        List<String> itemList = new LinkedList<>();
-        for(Product p: products) {
-            itemList.add(p.getName());
-        }
-        return itemList;
+    public List<Product> getProducts() {
+        return products;
     }
 }

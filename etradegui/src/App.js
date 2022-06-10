@@ -1,25 +1,26 @@
 import './css/App.css';
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import SignIn from "./components/Signin";
-import SignUp from "./components/Signup";
+import SignIn from "./components/dashboard/Signin";
+import SignUp from "./components/dashboard/Signup";
 import Dashboard from "./components/dashboard/Dashboard";
 import Checkout from "./components/checkout/Checkout";
-import CreateStore from "./components/store/CreateStore";
-import Mystores from "./components/store/Mystores";
-import Store from "./components/store/Store";
-import EditStore from './components/store/EditStore'
-import AddProduct from './components/store/AddProduct'
-import AddOwner from './components/store/AddOwner'
-import AddManager from './components/store/AddManager'
-import RemoveOwner from './components/store/RemoveOwner'
-import RemoveManager from './components/store/RemoveManager'
-import MyMessages from './components/store/MyMessages'
+import CreateStore from "./components/store/userActions/CreateStore";
+import Mystores from "./components/dashboard/Mystores";
+import Store from "./components/store/userActions/Store";
+import EditStore from './components/store/editStore/EditStore'
+import AddProduct from './components/store/editStore/AddProduct'
+import AddOwner from './components/store/editStore/AddOwner'
+import AddManager from './components/store/editStore/AddManager'
+import RemoveOwner from './components/store/editStore/RemoveOwner'
+import RemoveManager from './components/store/editStore/RemoveManager'
+import MyMessages from './components/dashboard/MyMessages'
 import RemoveMember from './components/Admin/RemoveMember'
 import CloseStore from './components/Admin/CloseStore'
-import SearchMarket from './components/store/SearchMarket'
-import AddDiscount from './components/store/AddDiscount'
-import AddPolicy from './components/store/AddPolicy'
+import SearchMarket from './components/dashboard/SearchMarket'
+import AddDiscount from './components/store/editStore/policies/AddDiscount'
+import AddPolicy from './components/store/editStore/policies/AddPolicy'
+import MyBids from './components/dashboard/MyBids'
 
 function App() {
     return (
@@ -32,6 +33,7 @@ function App() {
                <Route path="/createstore" element={<CreateStore />} />
                <Route path="/mystores" element={<Mystores />} />
                <Route path="/mymessages" element={<MyMessages />} />
+               <Route path="/mybids" element={<MyBids />} />
                <Route path="/search" element={<SearchMarket />} />
                <Route path="/admin/removemember" element={<RemoveMember/>}/>
                <Route path="/admin/closestore" element={<CloseStore/>}/>

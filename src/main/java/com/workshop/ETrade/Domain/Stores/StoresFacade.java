@@ -3,12 +3,12 @@ package com.workshop.ETrade.Domain.Stores;
 import com.workshop.ETrade.Controller.Forms.Predicate;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
-import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
 import com.workshop.ETrade.Domain.Stores.Predicates.OperatorLeaf;
 import com.workshop.ETrade.Domain.Stores.Predicates.PredicateBuilder;
-import com.workshop.ETrade.Domain.SystemFacade;
+import com.workshop.ETrade.Domain.Users.CreditCard;
+import com.workshop.ETrade.Domain.Users.SupplyAddress;
+import com.workshop.ETrade.Domain.Users.User;
 import com.workshop.ETrade.Domain.purchaseOption;
-import com.workshop.ETrade.Service.ResultPackge.newResult;
 
 import java.util.*;
 import java.util.logging.FileHandler;
@@ -128,7 +128,7 @@ public class StoresFacade {
         return null;
     }
 
-    public List<String> displayStore(String storeName) {
+    public List<Product> displayStore(String storeName) {
         Store store = getStoreByName(storeName);
         if(store != null && !store.isClosed()) {
             return store.getProducts();
@@ -359,5 +359,63 @@ public class StoresFacade {
         }
         OperatorLeaf ol = new OperatorLeaf(connectionType, pres);
         return store.addPredicateDiscount(discountOn, discountPercentage, description,discountType, ol);
+    }
+
+    public boolean addBid(String userName, String storeName, String productName, double bidAmount, CreditCard creditCard, SupplyAddress supplyAddress) {
+        Store store = getStoreByName(storeName);
+        if(store == null) {
+            return false;
+        }
+        return store.addBid(productName, bidAmount, userName, creditCard, supplyAddress, storeName);
+    }
+
+    public List<Bid> getStoreBids(String storeName) {
+        Store store = getStoreByName(storeName);
+        if(store == null) {
+            return null;
+        }
+        return store.getBids();
+    }
+
+    public Bid reviewBid(String userName, String storeName, int bidId, boolean approve) {
+        Store store = getStoreByName(storeName);
+        if(store == null) {
+            return null;
+        }
+        return store.reviewBid(userName, bidId, approve);
+    }
+
+    public boolean counterBid(String storeName, int bidId, double newOffer) {
+        Store store = getStoreByName(storeName);
+        if(store == null) {
+            return false;
+        }
+        return store.counterBid(bidId, newOffer);
+    }
+
+    public void purchaseBid(String storeName, String productName, User user) {
+        Store store = getStoreByName(storeName);
+        if(store == null) {
+            return ;
+        }
+        HashMap<String, Integer> prods = new HashMap<>();
+        prods.put(productName, 1);
+        store.purchaseBid(prods,user);
+    }
+
+    public List<Bid> userBids(String userName) {
+        List<Bid> bids = new LinkedList<>();
+        for(Store store : stores) {
+            bids.addAll(store.userBids(userName));
+        }
+        return bids;
+    }
+
+    public Bid counterBidReview(String storeName, int bidId, boolean approve) {
+        Store store = getStoreByName(storeName);
+        if(store == null) {
+            return null;
+        }
+        return store.counterBidReview(bidId, approve);
     }
 }

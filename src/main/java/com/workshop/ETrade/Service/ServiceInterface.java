@@ -1,140 +1,144 @@
 package com.workshop.ETrade.Service;
 
-import com.workshop.ETrade.Controller.Forms.Predicate;
+import com.workshop.ETrade.Controller.Forms.*;
 import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
-import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
-import com.workshop.ETrade.Domain.Stores.Product;
-import com.workshop.ETrade.Domain.Stores.Store;
 import com.workshop.ETrade.Domain.Stores.managersPermission;
 import com.workshop.ETrade.Domain.Users.ExternalService.Payment.PaymentAdaptee;
 import com.workshop.ETrade.Domain.Users.ExternalService.Supply.SupplyAdaptee;
 import com.workshop.ETrade.Domain.purchaseOption;
-import com.workshop.ETrade.Service.ResultPackge.ResultBool;
-import com.workshop.ETrade.Service.ResultPackge.ResultMsg;
-import com.workshop.ETrade.Service.ResultPackge.ResultNum;
-import com.workshop.ETrade.Service.ResultPackge.newResult;
+import com.workshop.ETrade.Service.ResultPackge.Result;
 
-import java.time.LocalTime;
-import java.util.HashMap;
 import java.util.List;
 
 public interface ServiceInterface {
     public void init();
-    public newResult<Double> getCartPrice(String userName);
-    public newResult<Integer> addPolicy(String userName,String store, String policyOn, String description, PolicyType policyType, List<Predicate> predicates,  String connectionType);
-    public newResult<List<String>> getOnlineMembers(String userName);
-    public newResult<List<String>> getOfflineMembers(String userName);
-    public ResultBool supplyServiceExists();
+    public Result<Double> getCartPrice(String userName);
+    public Result<Integer> addPolicy(String userName, String store, String policyOn, String description, PolicyType policyType, List<Predicate> predicates, String connectionType);
+    public Result<List<String>> getOnlineMembers(String userName);
+    public Result<List<String>> getOfflineMembers(String userName);
+    public Result<Boolean> supplyServiceExists();
 
-    public ResultBool paymentServiceExists();
+    public Result<Boolean> paymentServiceExists();
 
-    public ResultBool hasAdmin();
+    public Result<Boolean> hasAdmin();
 
-    public newResult<List<String>> getAllStores(String userName);
+    public Result<List<String>> getAllStores(String userName);
 
-    public ResultBool removeMember(String userName, String memberToRemove);
+    public Result<Boolean> removeMember(String userName, String memberToRemove);
 
-    public ResultMsg enterSystem();
+    public Result<String> enterSystem();
 
-    public ResultBool addSystemManager(String userName, String managerToAdd);
+    public Result<Boolean> addSystemManager(String userName, String managerToAdd);
 
-    public ResultBool removeSystemManager(String userName, String managerToRemove);
+    public Result<Boolean> removeSystemManager(String userName, String managerToRemove);
 
-    public ResultBool addExternalPaymentService(PaymentAdaptee paymentAdaptee);
+    public Result<Boolean> addExternalPaymentService(PaymentAdaptee paymentAdaptee);
 
-    public ResultBool changeExternalPaymentService(String userName, PaymentAdaptee paymentAdaptee);
+    public Result<Boolean> changeExternalPaymentService(String userName, PaymentAdaptee paymentAdaptee);
 
-    public ResultBool editExternalPaymentService();
+    public Result<Boolean> editExternalPaymentService();
 
-    public ResultBool addExternalSupplyService(SupplyAdaptee supplyAdaptee);
+    public Result<Boolean> addExternalSupplyService(SupplyAdaptee supplyAdaptee);
 
-    public ResultBool changeExternalSupplyService(String userName, SupplyAdaptee supplyAdaptee);
+    public Result<Boolean> changeExternalSupplyService(String userName, SupplyAdaptee supplyAdaptee);
 
-    public ResultBool editExternalSupplyService();
+    public Result<Boolean> editExternalSupplyService();
 
-    public ResultBool exitSystem(String name);
+    public Result<Boolean> exitSystem(String name);
 
-//    public ResultBool exitSystemAsGuest(String name);
+//    public newResult<Boolean> exitSystemAsGuest(String name);
 
-    public ResultBool signUp(String userName, String newUserName, String password,String name,String lastName);
+    public Result<Boolean> signUp(String userName, String newUserName, String password, String name, String lastName);
 
-    public ResultBool login(String userName, String memberUserName, String password);
+    public Result<Boolean> login(String userName, String memberUserName, String password);
 
-    public newResult<List<String>> getStoreInfo(String userName, String storeName);
+    public Result<List<ProductForm>> getStoreInfo(String userName, String storeName);
 
-    public newResult<List<String>> searchByKeyword(String userName, String keyword);
+    public Result<List<String>> searchByKeyword(String userName, String keyword);
 
-    public newResult<List<String>> searchByCategory(String userName, String category);
+    public Result<List<String>> searchByCategory(String userName, String category);
 
-    public newResult<List<String>> searchByName(String userName, String productName);
+    public Result<List<String>> searchByName(String userName, String productName);
 
-    public ResultMsg addProductToShoppingCart(String userName, String productName, String storeName, int quantity);
+    public Result<String> addProductToShoppingCart(String userName, String productName, String storeName, int quantity);
 
-    public newResult<List<String>> displayShoppingCart(String userName);
+    public Result<List<ProductForm>> displayShoppingCart(String userName);
 
-//    public ResultMsg addProductToShoppingCart(String userName, Store s, int quantity, String prodName);
+//    public newResult<String> addProductToShoppingCart(String userName, Store s, int quantity, String prodName);
 
-    public ResultMsg removeProductFromShoppingCart(String userName, String storeName, int quantity, String prodName);
+    public Result<String> removeProductFromShoppingCart(String userName, String storeName, int quantity, String prodName);
 
-    public ResultBool purchase(String userName, int card, LocalTime expDate, int cvv, String city, String street, int stNum, int apartmentNum);
+    public Result<Boolean> purchase(String userName, String creditCard, int month, int year , String holderName, int cvv, int id, String country, String city, String street, int stNum, int apartmentNum, int zip);
 
-    public ResultMsg logOut(String userName);
+    public Result<String> logOut(String userName);
 
-    public ResultBool openStore(String founderName, String storeName, int card);
+    public Result<Boolean> openStore(String founderName, String storeName, int card);
 
-    public ResultBool addProductToStore(String userName, String storeName, String productName, int amount, double price, String category);
+    public Result<Boolean> addProductToStore(String userName, String storeName, String productName, int amount, double price, String category);
 
-    public ResultBool removeProductFromStore(String userName, String storeName, String productName);
+    public Result<Boolean> removeProductFromStore(String userName, String storeName, String productName);
 
-    public ResultBool editProductName(String userName, String storeName, String oldProductName, String newProductName);
+    public Result<Boolean> editProductName(String userName, String storeName, String oldProductName, String newProductName);
 
-    public ResultBool editProductPrice(String userName, String storeName, String ProductName, double newPrice);
+    public Result<Boolean> editProductPrice(String userName, String storeName, String ProductName, double newPrice);
 
-    public ResultBool editProductQuantity(String userName, String storeName, String ProductName, int newQuantity);
+    public Result<Boolean> editProductQuantity(String userName, String storeName, String ProductName, int newQuantity);
 
-    public ResultBool changePurchaseOption(String userName, String storeName, String ProductName, purchaseOption newOption);
+    public Result<Boolean> changePurchaseOption(String userName, String storeName, String ProductName, purchaseOption newOption);
 
-    public ResultBool appointStoreOwner(String userName, String storeName, String newOwner);
+    public Result<Boolean> appointStoreOwner(String userName, String storeName, String newOwner);
 
-    public newResult<Boolean> removeStoreOwner(String userName, String storeName, String ownerToRemove);
+    public Result<Boolean> removeStoreOwner(String userName, String storeName, String ownerToRemove);
 
-    public ResultBool appointStoreManager(String userName, String storeName, String newManager);
+    public Result<Boolean> appointStoreManager(String userName, String storeName, String newManager);
 
-    public newResult<Boolean> removeStoreManager(String userName, String storeName, String managerToRemove);
+    public Result<Boolean> removeStoreManager(String userName, String storeName, String managerToRemove);
 
-    public ResultBool changeStoreManagersPermission(String userName, String storeName, String managerName, managersPermission newPermission);
+    public Result<Boolean> changeStoreManagersPermission(String userName, String storeName, String managerName, managersPermission newPermission);
 
-    public ResultBool closeStore(String userName, String storeName);
+    public Result<Boolean> closeStore(String userName, String storeName);
 
-    public ResultMsg getStoresManagement(String userName, String storeName);
+    public Result<String> getStoresManagement(String userName, String storeName);
 
-    public ResultMsg getStoresPurchaseHistory(String userName, String storeName);
+    public Result<String> getStoresPurchaseHistory(String userName, String storeName);
 
-    public ResultBool adminCloseStorePermanently(String adminName, String storeName);
+    public Result<Boolean> adminCloseStorePermanently(String adminName, String storeName);
 
-//    public ResultBool adminTerminateUser(String adminName, String userToTerminate);
+//    public newResult<Boolean> adminTerminateUser(String adminName, String userToTerminate);
 
-    public newResult<List<String>> getStoresOfUser(String userName);
+    public Result<List<String>> getStoresOfUser(String userName);
 
-    public ResultMsg adminGetStoresPurchaseHistory(String adminName, String storeName);
+    public Result<String> adminGetStoresPurchaseHistory(String adminName, String storeName);
 
-    public ResultBool addKeyword(String userName, String productName, String storeName, String keyWord);
+    public Result<Boolean> addKeyword(String userName, String productName, String storeName, String keyWord);
 
-    public ResultNum getProductAmount(String storeName, String prodName);
+    public Result<Integer> getProductAmount(String storeName, String prodName);
 
     public String getOnline();
-    public newResult<Integer> addDiscount(String userName,String store,String discountOn, int discountPercentage, String description, DiscountType discountType);
+    public Result<Integer> addDiscount(String userName, String store, String discountOn, int discountPercentage, String description, DiscountType discountType);
 
-    public newResult<Double> getProdPrice(String store,String prod);
-    public newResult<Integer> getProdAmount(String store,String prod);
+    public Result<Double> getProdPrice(String store, String prod);
+    public Result<Integer> getProdAmount(String store, String prod);
 
-    public newResult<List<Notification>> getMessages(String userName);
+    public Result<List<Notification>> getMessages(String userName);
 
-    public newResult<Boolean> isAdmin(String userName);
+    public Result<Boolean> isAdmin(String userName);
 
-    newResult<Integer> addPreDiscount(String userName, String storeName, String discountOn, int discountPercentage, String description, DiscountType discountType, List<Predicate> predicates, String connectionType);
-//    public ResultBool exitSystem();
+    Result<Integer> addPreDiscount(String userName, String storeName, String discountOn, int discountPercentage, String description, DiscountType discountType, List<Predicate> predicates, String connectionType);
+
+    Result<Boolean> addBid(String userName, String storeName, String productName, double bidAmount, CreditCardForm creditCard, SupplyAddressForm supplyAddress);
+
+    Result<List<BidForm>> getStoreBids(String userName, String storeName);
+
+    Result<Boolean> reviewBid(String userName, String storeName, int bidId, boolean approve);
+    public Result<Boolean> counterBid(String userName, String storeName, int bidId, double newOffer);
+
+    Result<List<BidForm>> userBids(String userName);
+
+    Result<Boolean> counterBidReview(String userName, String storeName, int bidId, boolean approve);
+
+//    public newResult<Boolean> exitSystem();
 
 }

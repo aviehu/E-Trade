@@ -9,10 +9,11 @@ import '../../css/Dashboard.css';
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import {useNavigate} from 'react-router-dom';
-import post from "../post";
+import post from "../util/post";
 import MyAppBar from "../dashboard/MyAppBar";
 import MyDrawer from "../dashboard/MyDrawer";
-import MyError from "../MyError";
+import MyError from "../util/MyError";
+import get from "../util/get";
 
 const mdTheme = createTheme();
 
@@ -20,13 +21,41 @@ const DashboardContent = () => {
     const [open, setOpen] = React.useState(true);
     const [error, setError] = React.useState("")
     const [hasError, setHasError] = React.useState(false)
+    const [online, setOnline] = React.useState([])
+    const [offline, setOffline] = React.useState([])
 
-    const navigate = useNavigate();
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
+    React.useEffect(() => {
+
+        async function getOffline() {
+            const res = await get("users/offlinemembers")
+            const ans = await res.json()
+            if(ans.val) {
+                setOffline(ans.val)
+            } else {
+                setError(ans.err)
+                setHasError(true)
+            }
+        }
+
+        async function getOnline() {
+            const res = await get("users/onlinemembers")
+            const ans = await res.json()
+            if(ans.val) {
+                setOnline(ans.val)
+            } else {
+                setError(ans.err)
+                setHasError(true)
+            }
+        }
+        getOnline()
+        getOffline()
+        console.log(online)
+        console.log(offline)
+    }, [])
+
+    const handleRemove = async (userName) => {
         const body = {
-            appointee: data.get("member")
+            appointee: userName
         }
         try {
             const res = await post(body, `users/remove`)
@@ -41,6 +70,42 @@ const DashboardContent = () => {
 
         }
     };
+
+    const renderOnline = () => {
+        return (<ul className='stores'>
+            {online.map((userName, index) => (<li key={userName} className='store'>
+
+                <div className='topStore' >
+                    <div>
+                        <h5 className='title' >{userName}</h5>
+                    </div>
+                </div>
+
+                <div className="store-footer">
+                    <Button onClick={() => handleRemove(userName)}>Remove Member</Button>
+                </div>
+            </li>))}
+        </ul>);
+    }
+
+    const renderOffline = () => {
+        return (<ul className='stores'>
+            {offline.map((userName, index) => (<li key={userName} className='store'>
+
+                <div className='topStore' >
+                    <div>
+                        <h5 className='title' >{userName}</h5>
+                    </div>
+                </div>
+
+                <div className="store-footer">
+                    <Button onClick={() => handleRemove(userName)}>Remove Member</Button>
+                </div>
+            </li>))}
+        </ul>);
+    }
+
+    const navigate = useNavigate();
 
     return (
         <ThemeProvider theme={mdTheme}>
@@ -76,27 +141,17 @@ const DashboardContent = () => {
                                             alignItems: 'center',
                                         }}
                                     >
-                                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{mt: 3}}>
+                                        <Box component="form" noValidate sx={{mt: 3}}>
                                             <Grid container spacing={2}>
                                                 <Grid item xl={12}>
-                                                    <TextField
-                                                        required
-                                                        fullWidth
-                                                        id="member"
-                                                        label="Member To Remove"
-                                                        name="member"
-                                                        autoComplete="member"
-                                                    />
+                                                    <h4>Online:</h4>
                                                 </Grid>
+                                                {renderOnline()}
+                                                <Grid item xl={12}>
+                                                    <h4>offline:</h4>
+                                                </Grid>
+                                                {renderOffline()}
                                             </Grid>
-                                            <Button
-                                                type="submit"
-                                                fullWidth
-                                                variant="contained"
-                                                sx={{mt: 3, mb: 2}}
-                                            >
-                                                Remove Member
-                                            </Button>
                                         </Box>
                                     </Box>
                                 </Container>

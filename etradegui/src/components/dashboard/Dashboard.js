@@ -15,14 +15,14 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import Link from "@mui/material/Link";
 import '../../css/Dashboard.css';
 import {useEffect, useState} from "react";
-import get from "../get";
-import SocketProvider from "../SocketProvider";
-import MessageDialog from '../MessageDialog'
+import get from "../util/get";
+import SocketProvider from "../util/SocketProvider";
+import MessageDialog from '../util/MessageDialog'
 import MyDrawer from "./MyDrawer";
 import MyAppBar from "./MyAppBar";
-import MyError from "../MyError";
+import MyError from "../util/MyError";
 import Button from "@mui/material/Button";
-import post from "../post";
+import post from "../util/post";
 
 
 
@@ -36,8 +36,6 @@ const DashboardContent = () => {
     const [open, setOpen] = React.useState(true);
 
     async function getStores() {
-        const { createSocket } = SocketProvider(setMessage);
-        createSocket(localStorage.getItem("userName"))
         const res = await get('stores/');
         const ans = await res.json()
         const storesName = ans.val
@@ -88,7 +86,6 @@ const DashboardContent = () => {
         <ThemeProvider theme={mdTheme}>
             <Box sx={{display: 'flex'}}>
                 <CssBaseline/>
-                <MessageDialog message={message} open={message !== null} handleClose={() => setMessage(null)}/>
                 <MyAppBar title={"Market"} open={open} toggleDrawer={toggleDrawer}/>
                 <MyDrawer open={open} setOpen={setOpen}/>
                 <Box

@@ -1,10 +1,13 @@
 package com.workshop.ETrade.Tests.Acceptance.User.Guest;
 
+import com.workshop.ETrade.Controller.Forms.ProductForm;
 import com.workshop.ETrade.Service.SystemService;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.List;
 
 public class UpdateCartTest {
     private SystemService systemService;
@@ -28,15 +31,24 @@ public class UpdateCartTest {
 
     @Test
     public void UpdateCartSuccessTest(){
-        Assert.assertTrue(systemService.displayShoppingCart("Andalus").getVal().contains("Bamba"));
+        Assert.assertTrue(isInList(systemService.displayShoppingCart("Andalus").getVal(), "Bamba"));
         systemService.removeProductFromShoppingCart("Andalus", "Mega", 5, "Bamba");
         Assert.assertFalse(systemService.displayShoppingCart("Andalus").getVal().contains("Bamba"));
+    }
+
+    private boolean isInList(List<ProductForm> productForms, String productName)  {
+        for(ProductForm pf : productForms) {
+            if(pf.productName.equals(productName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Test
     public void UpdateCartFailTest(){
         systemService.addProductToShoppingCart("Andalus", "Bamba", "Mega", 5);
-        Assert.assertTrue(systemService.displayShoppingCart("Andalus").getVal().contains("Bamba"));
+        Assert.assertTrue(isInList(systemService.displayShoppingCart("Andalus").getVal(), "Bamba"));
         systemService.removeProductFromShoppingCart("Andalus", "Mega", 5, "Bisly");
         Assert.assertFalse(systemService.displayShoppingCart("Andalus").getVal().contains("Bisly"));
     }

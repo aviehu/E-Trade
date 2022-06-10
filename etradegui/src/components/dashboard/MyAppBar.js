@@ -8,8 +8,11 @@ import {styled} from "@mui/material/styles";
 import MuiAppBar from "@mui/material/AppBar";
 import {useNavigate} from "react-router-dom";
 import {useState, useEffect} from "react";
-import get from "../get";
+import get from "../util/get";
 import LogoutIcon from '@mui/icons-material/Logout';
+import SocketProvider from "../util/SocketProvider";
+import MessageDialog from "../util/MessageDialog";
+import * as React from "react";
 
 const drawerWidth = 240;
 
@@ -35,16 +38,18 @@ const AppBar = styled(MuiAppBar, {
 export default function MyAppBar({open, toggleDrawer, title}) {
     const navigate = useNavigate();
     const [notifications, setNotifications] = useState([])
+    const [message, setMessage] = useState(null)
+
 
     async function handleLogout() {
         const res = await get("users/logout")
         const ans = await res.json()
-        if(ans.val) {
-            navigate("/")
-        }
+        navigate("/")
     }
 
     useEffect(() => {
+        const { createSocket } = SocketProvider(setMessage);
+        createSocket(localStorage.getItem("userName"))
         async function getMessages() {
             const note = await get('users/messages')
             const notes = await note.json()
@@ -54,10 +59,12 @@ export default function MyAppBar({open, toggleDrawer, title}) {
             }
         }
         getMessages()
+
     }, [])
 
     return (
         <AppBar position="absolute" open={open}>
+            <MessageDialog message={message} open={message !== null} handleClose={() => setMessage(null)}/>
             <Toolbar
                 sx={{
                     pr: '24px', // keep right padding when drawer closed

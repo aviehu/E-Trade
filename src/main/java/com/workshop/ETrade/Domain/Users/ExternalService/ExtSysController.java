@@ -2,11 +2,12 @@ package com.workshop.ETrade.Domain.Users.ExternalService;
 
 import com.workshop.ETrade.Domain.Users.ExternalService.Payment.MyPaymentSys;
 import com.workshop.ETrade.Domain.Users.ExternalService.Payment.PaymentAdaptee;
+import com.workshop.ETrade.Domain.Users.ExternalService.Payment.PaymentAdapter;
 import com.workshop.ETrade.Domain.Users.ExternalService.Security.mySecuritySys;
 import com.workshop.ETrade.Domain.Users.ExternalService.Supply.SupplyAdaptee;
+import com.workshop.ETrade.Domain.Users.ExternalService.Supply.SupplyAdapter;
 import com.workshop.ETrade.Domain.Users.ExternalService.Supply.mySupplySys;
-import com.workshop.ETrade.Domain.Users.Users.ShoppingCart;
-import com.workshop.ETrade.Domain.Users.Users.SupplyAddress;
+import com.workshop.ETrade.Domain.Users.SupplyAddress;
 
 import java.time.LocalTime;
 
@@ -17,8 +18,9 @@ public class ExtSysController {
     private mySecuritySys security;
 
     private ExtSysController() {
-        payment = new MyPaymentSys();
-        supply = new mySupplySys();
+        HttpClient httpClient = new HttpClient();
+        payment = new MyPaymentSys(new PaymentAdapter(new PaymentAdaptee(httpClient)));
+        supply = new mySupplySys(new SupplyAdapter(new SupplyAdaptee(httpClient)));
         security = new mySecuritySys();
     }
 
@@ -29,14 +31,20 @@ public class ExtSysController {
         return myInstance;
     }
 
-    public boolean pay(int card, LocalTime expDate, int cvv, double price,int cardTo){
-        return payment.pay(card, expDate, cvv, price,cardTo);
+    public int pay(String card, int month,int year,String holder, int cvv, int id){
+        return payment.pay(card, month,year,holder, cvv, id);
     }
     public boolean canPay(int card, LocalTime expDate, int cvv, double price){
         return payment.canPay(card, expDate, cvv, price);
     }
-    public boolean supply(ShoppingCart cart, SupplyAddress address){
-        return supply.supply(cart, address);
+    public int cancelPayment(int transId){
+        return payment.cancelPayment(transId);
+    }
+    public int cancelSup(int transId){
+        return supply.cancelSup(transId);
+    }
+    public int supply(String name, SupplyAddress address){
+        return supply.supply(name,address.getStreet(),address.getCity(),address.getCountry(),address.getZip());
     }
     public boolean isExistSupply(){
         return getInstance().supply.isExist();

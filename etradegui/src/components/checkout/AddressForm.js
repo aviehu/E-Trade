@@ -5,7 +5,7 @@ import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 
-export default function AddressForm({setAddress, setStreetNum, setCity, setAptNum}) {
+export default function AddressForm({setAddress, setStreetNum, setCity, setAptNum,setCountry, setZip}) {
     return (
         <React.Fragment>
             <Typography variant="h6" gutterBottom>
@@ -28,7 +28,7 @@ export default function AddressForm({setAddress, setStreetNum, setCity, setAptNu
                 <Grid item xs={12}>
                     <TextField
                         required
-                        onChange={(event) => setAddress(event.target.value)}
+                        onChange={(event) => setStreetNum(event.target.value)}
                         id="streetNum"
                         name="streetNum"
                         label="Your Street Num"
@@ -56,6 +56,29 @@ export default function AddressForm({setAddress, setStreetNum, setCity, setAptNu
                         id="aptNum"
                         name="aptNum"
                         label="Apartment Number"
+                        fullWidth
+                        autoComplete="shipping country"
+                        variant="standard"
+                    />
+                </Grid>                <Grid item xs={12} sm={6}>
+                    <TextField
+                        onChange={(event) => setCountry(event.target.value)}
+                        required
+                        id="country"
+                        name="country"
+                        label="Country"
+                        fullWidth
+                        autoComplete="shipping address-level2"
+                        variant="standard"
+                    />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <TextField
+                        required
+                        onChange={(event) => setZip(event.target.value)}
+                        id="zip"
+                        name="zip"
+                        label="Zip"
                         fullWidth
                         autoComplete="shipping country"
                         variant="standard"

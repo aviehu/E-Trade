@@ -17,23 +17,25 @@ import PaymentForm from './PaymentForm';
 import Review from './Review';
 import {useNavigate} from 'react-router-dom';
 import {useEffect, useState} from "react";
-import get from "../get";
-import post from "../post";
+import get from "../util/get";
+import post from "../util/post";
+import SocketProvider from "../util/SocketProvider";
+import MessageDialog from '../util/MessageDialog'
 
 
 const steps = ['Your cart','Shipping address', 'Payment details'];
 
 const orderNumber = 10; //todo
 
-function getStepContent(step, products, totalPrice, setAddress, setCity, setAptNum, setCardNum, setExpDate, setCcv, expDate, setStreetNum) {
+function getStepContent(step, products, totalPrice, setAddress, setCity, setAptNum, setCardNum, setExpDate, setCcv, expDate, setStreetNum ,setCountry , setZip, year, setYear, month, setMonth, setCardHolder, setCardHolderId, getMyBasket) {
     switch (step) {
         case 0:
-            return <Review products={products} totalPrice={totalPrice}/>;
+            return <Review products={products} totalPrice={totalPrice} getMyBasket={getMyBasket}/>;
 
         case 1:
-            return <AddressForm setAddress={setAddress} setCity={setCity} setAptNum={setAptNum} setStreetNum={setStreetNum}/>;
+            return <AddressForm setAddress={setAddress} setCountry={setCountry} setZip={setZip} setCity={setCity} setAptNum={setAptNum} setStreetNum={setStreetNum}/>;
         case 2:
-            return <PaymentForm expDate={expDate} setCardNum={setCardNum} setExpDate={setExpDate} setCcv={setCcv} />;
+            return <PaymentForm expDate={expDate} setCardNum={setCardNum} setExpDate={setExpDate} setCcv={setCcv} year={year} setYear={setYear} month={month} setMonth={setMonth} setCardHolder={setCardHolder} setCardHolderId={setCardHolderId}/>;
         default:
             throw new Error('Unknown step');
     }
@@ -53,24 +55,28 @@ export default function Checkout() {
     const [ccv, setCcv] = useState(0);
     const [products, setProducts] = React.useState([]);
     const navigate = useNavigate();
+    const [message, setMessage] = useState(null)
+    const [zip, setZip] = useState(0);
+    const [country, setCountry] = useState("");
+    const [year, setYear] = useState(2022);
+    const [month, setMonth] = useState(1);
+    const [cardHolder, setCardHolder] = useState("");
+    const [cardHolderId, setCardHolderId] = useState(0);
+
+    async function getMyBasket() {
+        const { createSocket } = SocketProvider(setMessage);
+        createSocket(localStorage.getItem("userName"))
+        const res = await get("stores/displaycart")
+        const ans = await res.json();
+        setProducts(ans.val)
+
+        const res2 = await get("stores/getcartprice")
+        const ans2 = await res2.json();
+        const val = ans2.val
+        setTotalPrice(val);
+    }
 
     useEffect(() => {
-        async function getMyBasket() {
-            const res = await get("stores/displaycart")
-            const ans = await res.json();
-            const products = ans.val
-            const fixed = products.map((prod) => {
-                return {
-                    name: prod
-                }
-            })
-            setProducts(fixed)
-
-            const res2 = await get("stores/getcartprice")
-            const ans2 = await res2.json();
-            const val = ans2.val
-            setTotalPrice(val);
-        }
         getMyBasket()
     }, [])
 
@@ -83,7 +89,14 @@ export default function Checkout() {
                 city: city,
                 street: address,
                 stNum: streetNum,
-                apartmentNum: aptNumber
+                apartmentNum: aptNumber,
+                month: month,
+                year: year,
+                holderName: cardHolder,
+                id: cardHolderId,
+                country: country,
+                zip: zip,
+
             }
             console.log(body)
             const ans = await post(body, "stores/purchase")
@@ -108,6 +121,7 @@ export default function Checkout() {
 
     return (
         <ThemeProvider theme={theme}>
+            <MessageDialog message={message} open={message !== null} handleClose={() => setMessage(null)}/>
             <CssBaseline />
             <AppBar
                 position="absolute"
@@ -149,7 +163,7 @@ export default function Checkout() {
                             </React.Fragment>
                         ) : (
                             <React.Fragment>
-                                {getStepContent(activeStep, products, totalPrice, setAddress, setCity, setAptNum, setCardNum, setExpDate, setCcv, expDate, setStreetNum)}
+                                {getStepContent(activeStep, products, totalPrice, setAddress, setCity, setAptNum, setCardNum, setExpDate, setCcv, expDate, setStreetNum, setCountry, setZip, year, setYear, month, setMonth, setCardHolder, setCardHolderId, getMyBasket)}
                                 <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                                     {(
                                         <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>

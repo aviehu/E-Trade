@@ -1,11 +1,15 @@
 package com.workshop.ETrade.Domain.Stores;
 
 import com.workshop.ETrade.Domain.Notifications.NotificationManager;
+import com.workshop.ETrade.Domain.Notifications.NotificationThread;
 import com.workshop.ETrade.Domain.Observable;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
 import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
-import com.workshop.ETrade.Domain.Users.Users.Member;
+import com.workshop.ETrade.Domain.Users.CreditCard;
+import com.workshop.ETrade.Domain.Users.Member;
+import com.workshop.ETrade.Domain.Users.SupplyAddress;
+import com.workshop.ETrade.Domain.Users.User;
 import com.workshop.ETrade.Domain.purchaseOption;
 
 import java.time.LocalDate;
@@ -164,6 +168,33 @@ public class Store implements Observable {
         return false;
     }
 
+    public boolean counterBid(int bidId, double newOffer) {
+        Bid bid = getBidById(bidId);
+        if(bid == null) {
+            return false;
+        }
+        return bid.counterOffer(newOffer);
+    }
+
+    public synchronized boolean purchaseBid(Map<String,Integer> prods, User buyer){
+        Map<Product,Integer> amounts = inventory.getAmountsFromNames(prods);
+        if(policyManager.canPurchase(amounts) && inventory.canPurchase(prods)) {
+            inventory.purchase(prods);
+            Map<Product, Integer> products = new HashMap<Product, Integer>();
+            for(String productName : prods.keySet()) {
+                Product product = inventory.getProductByName(productName);
+                products.put(product, prods.get(productName));
+            }
+            storeHistory.addPurchase(policyManager.getTotalPrice(products), products, buyer.getUserName());
+            purchased(prods.keySet().stream().toList(),buyer.getUserName());
+            notifyUser("Your bid has been approved", name, buyer);
+            notifySubscribers("A bid for - " + prods.keySet().toArray()[0] + "  in " + name + " has been approved", buyer.getUserName());
+
+            return true;
+        }
+        return false;
+    }
+
     public String getHistory(String userName) {
         if(hasLowPermission(userName)) {
             return storeHistory.getHistory();
@@ -206,10 +237,10 @@ public class Store implements Observable {
         return null;
     }
 
-    public boolean addBid(String productName, double amount, String biddersName) {
+    public boolean addBid(String productName, double amount, String biddersName, CreditCard creditCard, SupplyAddress supplyAddress, String storeName) {
         Product product = inventory.getProductByName(productName);
         if(product != null && product.getSelectedOption() == purchaseOption.BID) {
-            bids.add(new Bid(product,biddersName,amount,ownersAppointments.keySet(), bidId));
+            bids.add(new Bid(product,biddersName,amount,ownersAppointments.keySet(), bidId, creditCard, supplyAddress, storeName));
             bidId++;
             return true;
         }
@@ -278,8 +309,15 @@ public class Store implements Observable {
     public boolean removeOwner(String ownersName, String ownerToRemove) {
         if(isOwner(ownersName) && ownersAppointments.get(ownersName).contains(ownerToRemove)) {
             ownersAppointments.get(ownersName).remove(ownerToRemove);
+            List<String> otherOwners = ownersAppointments.get(ownerToRemove);
+            List<String> otherManagers = managersAppointments.get(ownerToRemove);
+            for(String o : otherOwners) {
+                removeOwner(ownerToRemove, o);
+            }
+            for(String o : otherManagers) {
+                removeManager(ownerToRemove, o);
+            }
             ownersAppointments.remove(ownerToRemove);
-            //managersAppointments.get(ownersName).remove(ownerToRemove);
             notifyOne("You are no longer Owner at " + getName(),ownersName,ownerToRemove);
             return true;
         }
@@ -461,10 +499,18 @@ public class Store implements Observable {
 
     @Override
     public void notifySubscribers(String message,String sendFrom) {
-
+        List<Thread> threads = new ArrayList<>();
         for(Member user: subscribers) {
-            if(!user.getUserName().equals(sendFrom))
-                user.update(message, sendFrom);
+            threads.add(new NotificationThread(user, message, sendFrom));
+        }
+        for(Thread t : threads) {
+            t.run();
+        }
+        for(Thread t : threads) {
+            try {
+                t.join();
+            } catch (Exception e) {
+            }
         }
 
     }
@@ -475,6 +521,11 @@ public class Store implements Observable {
                 user.update(message, sendFrom);
         }
     }
+
+    public void notifyUser(String message,String sendFrom,User sendTo) {
+        //
+        sendTo.update(message,sendFrom);
+    }
     public List<String> getSubscribers(){
         List<String> subs = new ArrayList<>();
         for (Member m: this.subscribers){
@@ -482,7 +533,49 @@ public class Store implements Observable {
         }
         return subs;
     }
-    public List<String> getProducts() {
+    public List<Product> getProducts() {
         return inventory.getProducts();
+    }
+
+    public List<Bid> getBids() {
+        return bids;
+    }
+
+    private Bid getBidById(int bidId) {
+        for(Bid bid : bids) {
+            if(bid.getId() == bidId) {
+                return bid;
+            }
+        }
+        return null;
+    }
+
+    public Bid reviewBid(String userName, int bidId, boolean approve) {
+        if(isOwner(userName)) {
+            Bid bid = getBidById(bidId);
+            if(approve) {
+                return bid.approve(userName);
+            }
+            bid.reject();
+        }
+        return null;
+    }
+
+    public List<Bid> userBids(String userName) {
+        List<Bid> ans = new LinkedList<>();
+        for(Bid b : bids) {
+            if(b.getBidderName().equals(userName)) {
+                ans.add(b);
+            }
+        }
+        return ans;
+    }
+
+    public Bid counterBidReview(int bidId, boolean approve) {
+        Bid bid = getBidById(bidId);
+        if(bid == null) {
+            return null;
+        }
+        return bid.counterOfferReview(approve);
     }
 }
