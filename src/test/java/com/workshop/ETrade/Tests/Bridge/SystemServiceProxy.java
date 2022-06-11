@@ -24,7 +24,7 @@ public class SystemServiceProxy implements ServiceInterface {
     }
 
     @Override
-    public void init() {
+    public void init() throws Exception {
         if (real == null)
             throw new NotImplementedException();
         real.init();

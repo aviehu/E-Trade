@@ -6,20 +6,18 @@ import com.workshop.ETrade.Domain.Pair;
 import com.workshop.ETrade.Domain.Stores.Bid;
 import com.workshop.ETrade.Domain.Stores.Store;
 import com.workshop.ETrade.Domain.Users.ExternalService.ExtSysController;
+import com.workshop.ETrade.Service.ResultPackge.Result;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.util.HashMap;
+import java.util.List;
 
 public abstract class User {
-    @DBRef(lazy = true)
     protected ShoppingCart myShopCart;
-    @DBRef(lazy = true)
     protected SupplyAddress address;
     protected boolean isConnected;
     protected String userName;
-    @DBRef(lazy = true)
     protected CreditCard card;
-    @DBRef(lazy = true)
     protected NotificationManager notificationManager;
 
     public ShoppingCart getMyShopCart() {
@@ -58,7 +56,7 @@ public abstract class User {
         return myShopCart.displayCart();
     }
 
-    public abstract String purchase(CreditCard card,SupplyAddress address);
+    public abstract Result<List<String>> purchase(CreditCard card, SupplyAddress address);
 
     //getStoreInfo:
     //input:store -> output: store info and store's items info(2.1)

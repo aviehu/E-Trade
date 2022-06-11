@@ -1,6 +1,5 @@
 package com.workshop.ETrade.Service.InitExecuter.Functions;
 
-import com.workshop.ETrade.Domain.Users.Owner;
 import com.workshop.ETrade.Service.ResultPackge.Result;
 
 public class appointStoreOwnerFunction extends Function<Boolean>{

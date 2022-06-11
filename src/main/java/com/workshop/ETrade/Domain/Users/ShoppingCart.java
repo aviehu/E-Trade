@@ -3,6 +3,7 @@ package com.workshop.ETrade.Domain.Users;
 import com.workshop.ETrade.Domain.Pair;
 import com.workshop.ETrade.Domain.Stores.Store;
 import com.workshop.ETrade.Domain.Users.ExternalService.ExtSysController;
+import com.workshop.ETrade.Service.ResultPackge.Result;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class ShoppingCart {
         extSystems = ExtSysController.getInstance(true,true);
     }
 
-    public List<String> purchaseCart(CreditCard card,SupplyAddress address,String userName){
+    public Result<List<String>> purchaseCart(CreditCard card,SupplyAddress address,String userName){
         List<String> storesToNotify = new ArrayList<>();
         String cardFrom = card.getCardNumber();
         int month = card.getMonth();
@@ -39,8 +40,7 @@ public class ShoppingCart {
                 if (supTransactionId == -1) {
                     extSystems.cancelPayment(payTransactionId);
                     extSystems.cancelSup(supTransactionId);
-                    storesToNotify.add("Failed! can't supply your shopping cart\n");
-                    return storesToNotify;
+                    return new Result<List<String>>(null, "Failed! can't supply your shopping cart\n");
                 }
 
                 for (StoreBasket b : baskets) {
@@ -48,22 +48,18 @@ public class ShoppingCart {
                     if (!b.purchase(userName)){
                         extSystems.cancelPayment(payTransactionId);
                         extSystems.cancelSup(supTransactionId);
-                        storesToNotify.add(b.getStoreName());
-                        storesToNotify.add("Failed! can't purchase product from " + b.getStoreName() + "\n");
-                        return storesToNotify;
+                        return new Result<List<String>>(null, "Failed! can't purchase product from " + b.getStoreName() + "\n");
                     }
-
+                    storesToNotify.add(b.getStoreName());
                 }
-                return null;
             }
             else{
-                storesToNotify.add(ret);
-                return storesToNotify;
+                return new Result<>(null, "Failed! can't purchase your cart");
             }
         }else{
-            storesToNotify.add("Failed! can't charge your credit card\n");
-            return storesToNotify;
+            return new Result<>(null, "Failed! can't charge your credit card\n");
         }
+        return new Result<>(storesToNotify, null);
     }
 
     public HashMap<String, Pair<Integer,String>> displayCart(){

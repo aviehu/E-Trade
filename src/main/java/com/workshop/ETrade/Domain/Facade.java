@@ -341,23 +341,16 @@ public class Facade implements SystemFacade {
     public Result<Boolean> purchase(String userName, String creditCard, int month, int year, String holderName, int cvv, int id, String country, String city, String street, int stNum, int apartmentNum, int zip) {
         if(userController.isConnected(userName)) {
             boolean success = true;
-            String faile = "";
-            List<String> ret = userController.purchase(userName, creditCard, month, year,holderName, cvv, id, country, city, street, stNum, apartmentNum, zip);
-            if(ret.size() == 1){
-                faile = ret.remove(0);
-                if(faile.split("!")[0].equals("Faile"));
-                    success = false;
-            }
-            if (success) {
-                for(String store : ret){
+            Result<List<String>> ret = userController.purchase(userName, creditCard, month, year,holderName, cvv, id, country, city, street, stNum, apartmentNum, zip);
+            if (ret.isSuccess()) {
+                for(String store : ret.getVal()){
                     Store s = storesFacade.getStore(store);
                     notifySubscribers(s.getSubscribers(),"Theres been a purchase in " + s.getName()+"\n",userName);
                 }
-
                 return new Result<>(true, null);
             }
             else
-                return new Result<>(null,faile);
+                return new Result<>(null,ret.getErr());
         }
         return new Result<>(false, "User is not connected");
     }
