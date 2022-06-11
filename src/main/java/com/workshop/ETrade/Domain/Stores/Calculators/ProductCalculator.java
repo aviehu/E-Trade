@@ -6,9 +6,9 @@ import java.util.Map;
 
 public class ProductCalculator extends Calculator{
     private String productName;
-    private double discountPercent;
+    private int discountPercent;
 
-    public ProductCalculator(String productName, double discountPercent){
+    public ProductCalculator(String productName, int discountPercent){
         this.productName = productName;
         this.discountPercent = discountPercent;
     }
@@ -38,7 +38,7 @@ public class ProductCalculator extends Calculator{
     }
 
     @Override
-    public double getDiscountPercentage() {
+    public int getDiscountPercentage() {
         return discountPercent;
     }
 }

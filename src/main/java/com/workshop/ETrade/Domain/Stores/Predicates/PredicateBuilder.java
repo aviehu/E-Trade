@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 public class PredicateBuilder {
 
-    public static Predicate getProductAmountPredicate(String productName, int minAmount, int maxAmount) {
+    public static Predicate getProductAmountPredicate(String productName, double minAmount, double maxAmount) {
         return new ProductAmountPredicate(productName, minAmount, maxAmount);
     }
 

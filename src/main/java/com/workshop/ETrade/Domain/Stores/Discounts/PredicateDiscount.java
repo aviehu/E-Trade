@@ -4,6 +4,7 @@ import com.workshop.ETrade.Domain.Stores.Calculators.Calculator;
 import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
 import com.workshop.ETrade.Domain.Stores.Predicates.Predicate;
 import com.workshop.ETrade.Domain.Stores.Product;
+import com.workshop.ETrade.Persistance.Stores.DiscountDTO;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.util.List;
@@ -37,5 +38,10 @@ public class PredicateDiscount extends Discount {
 
     public List<Predicate> getPredicates() {
         return operatorComponent.getPredicates();
+    }
+
+    @Override
+    public DiscountDTO init() {
+        return new DiscountDTO(this);
     }
 }

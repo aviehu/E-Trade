@@ -2,7 +2,9 @@ package com.workshop.ETrade.Domain.Stores;
 
 import com.workshop.ETrade.Domain.Notifications.NotificationThread;
 import com.workshop.ETrade.Domain.Observable;
+import com.workshop.ETrade.Domain.Stores.Discounts.Discount;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
+import com.workshop.ETrade.Domain.Stores.Policies.Policy;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
 import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
 import com.workshop.ETrade.Domain.Users.CreditCard;
@@ -50,7 +52,7 @@ public class Store implements Observable {
         bidId = storeDTO.bidId;
         inventory = new Inventory(storeDTO.products);
         managersPermissions = storeDTO.managersPermissions;
-        policyManager = new PolicyManager(); // TODO
+        policyManager = new PolicyManager(storeDTO.policies, storeDTO.policyId, storeDTO.discounts, storeDTO.discountId);
 //        storeHistory = new StorePurchaseHistory(storeDTO.purchaseHistory);
         storeHistory = new StorePurchaseHistory();
         List<MapDBobjDTO> dts = storeDTO.ownersAppointments;
@@ -641,5 +643,13 @@ public class Store implements Observable {
 
     public int getDiscountId() {
         return policyManager.getDiscountId();
+    }
+
+    public List<Discount> getDiscounts() {
+        return policyManager.getDiscounts();
+    }
+
+    public List<Policy> getPolicies() {
+        return policyManager.getPolicies();
     }
 }
