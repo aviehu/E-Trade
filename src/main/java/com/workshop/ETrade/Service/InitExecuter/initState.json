@@ -1,0 +1,6 @@
+[{"function":"com.workshop.ETrade.Service.InitExecuter.Functions.SignUpFunction","params":"{\"userName\":\"Andalus\",\"password\":\"100\",\"name\": \"Anda\",\"lastName\":\"Lus\"}"},
+ {"function":"com.workshop.ETrade.Service.InitExecuter.Functions.LoginFunction","params":"{\"userName\":\"Andalus\",\"password\":\"100\"}"},
+ {"function":"com.workshop.ETrade.Service.InitExecuter.Functions.OpenStoreFunction","params":"{\"founderName\":\"Andalus\",\"storeName\":\"Mega\",\"card\":\"123123123\"}"},
+ {"function":"com.workshop.ETrade.Service.InitExecuter.Functions.appointStoreOwnerFunction","params":"{\"userName\":\"Andalus\",\"storeName\":\"Mega\",\"newOwner\":\"domain\"}"},
+ {"function":"com.workshop.ETrade.Service.InitExecuter.Functions.addProductToStoreFunction","params":"{\"userName\":\"Andalus\",\"storeName\":\"Mega\",\"productName\":\"Bamba\",\"amount\":\"100\",\"price\":\"5\",\"category\":\"snacks\"}"}]
+

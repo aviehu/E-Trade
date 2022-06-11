@@ -10,9 +10,13 @@ import com.workshop.ETrade.Domain.Stores.managersPermission;
 import com.workshop.ETrade.Domain.Users.ExternalService.Payment.PaymentAdaptee;
 import com.workshop.ETrade.Domain.Users.ExternalService.Supply.SupplyAdaptee;
 import com.workshop.ETrade.Domain.purchaseOption;
+import com.workshop.ETrade.Service.InitExecuter.LoadServiceFromInitState;
 import com.workshop.ETrade.Service.ResultPackge.Result;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -21,12 +25,15 @@ public class SystemService implements ServiceInterface {
     private Facade facade;
 
     private static SystemService myInstance = null;
-    public SystemService() {
+    public SystemService() throws Exception {
         init();
     }
 
-    public void init(){
+    public void init() throws Exception {
         this.facade = new Facade();
+//        File file = new File("src\\main\\java\\com\\workshop\\ETrade\\Service\\InitExecuter\\initState.json");
+//        String path = file.getAbsolutePath();
+//        LoadServiceFromInitState.loadFromFile(path,this);
     }
 
     @Override
