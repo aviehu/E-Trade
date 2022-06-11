@@ -7,6 +7,7 @@ import com.workshop.ETrade.Domain.Stores.Product;
 import com.workshop.ETrade.Domain.Stores.Store;
 import com.workshop.ETrade.Repository.MemberRepository;
 import com.workshop.ETrade.Repository.ProductRepository;
+import com.workshop.ETrade.Service.ResultPackge.Result;
 import com.workshop.ETrade.TestEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -194,7 +195,7 @@ public class UserController {
             return user.displayCart();
         return null;
     }
-    public synchronized String purchase(String userName, String creditCard, int month,int year ,String holderName,int cvv,int id,String country,String city,String street,int stNum,int apartmentNum, int zip){
+    public synchronized Result<List<String>> purchase(String userName, String creditCard, int month, int year , String holderName, int cvv, int id, String country, String city, String street, int stNum, int apartmentNum, int zip){
         User user = getUser(userName);
         SupplyAddress sa;
         if(user != null) {
@@ -214,7 +215,7 @@ public class UserController {
             } else
                 return user.purchase(user.getCard(), user.getAddress());
         }
-        return "User: "+userName+" does not exist\n";
+        return new Result<>(null, "FAIL!User: "+userName+" does not exist\n");
     }
     public boolean isValidPassword(String password){
         return password != null && !password.equals("");
@@ -301,6 +302,7 @@ public class UserController {
                 ret.add(m.getUserName());
             }
         }
+        ret.remove(getMember(userName));
         return ret;
     }
     public List<String> getOfflineMembers(String userName) {

@@ -6,9 +6,11 @@ import com.workshop.ETrade.Domain.Pair;
 import com.workshop.ETrade.Domain.Stores.Bid;
 import com.workshop.ETrade.Domain.Stores.Store;
 import com.workshop.ETrade.Domain.Users.ExternalService.ExtSysController;
+import com.workshop.ETrade.Service.ResultPackge.Result;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.util.HashMap;
+import java.util.List;
 
 public abstract class User {
     protected ShoppingCart myShopCart;
@@ -54,7 +56,7 @@ public abstract class User {
         return myShopCart.displayCart();
     }
 
-    public abstract String purchase(CreditCard card,SupplyAddress address);
+    public abstract Result<List<String>> purchase(CreditCard card, SupplyAddress address);
 
     //getStoreInfo:
     //input:store -> output: store info and store's items info(2.1)
@@ -120,7 +122,7 @@ public abstract class User {
         int cvv = card.getCvv();
         int id = card.getId();
         String holderName = card.getHolderName();
-        ExtSysController extSystems = ExtSysController.getInstance();
+        ExtSysController extSystems = ExtSysController.getInstance(true,true);
         int payTransactionId = extSystems.pay(cardFrom, month,year,holderName, cvv,id);
         //payment
         if(payTransactionId != -1) {//can charge payment

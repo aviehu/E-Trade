@@ -2,20 +2,19 @@ package com.workshop.ETrade.Domain;
 
 import com.workshop.ETrade.Controller.Forms.*;
 import com.workshop.ETrade.Domain.Notifications.Notification;
+import com.workshop.ETrade.Domain.Notifications.NotificationThread;
 import com.workshop.ETrade.Domain.Stores.*;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
+import com.workshop.ETrade.Domain.Users.*;
 import com.workshop.ETrade.Domain.Users.ExternalService.ExtSysController;
 import com.workshop.ETrade.Domain.Users.ExternalService.Payment.PaymentAdaptee;
 import com.workshop.ETrade.Domain.Users.ExternalService.Supply.SupplyAdaptee;
-import com.workshop.ETrade.Domain.Users.CreditCard;
-import com.workshop.ETrade.Domain.Users.Member;
-import com.workshop.ETrade.Domain.Users.SupplyAddress;
-import com.workshop.ETrade.Domain.Users.UserController;
 import com.workshop.ETrade.Service.ResultPackge.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -31,7 +30,9 @@ public class Facade implements SystemFacade {
     public Facade() {
         storesFacade = new StoresFacade();
         userController = new UserController();
-        externalSys = ExtSysController.getInstance();
+        //need to change according to config file.
+        externalSys = ExtSysController.getInstance(true,true);
+        //
     }
     public void init(){
         storesFacade.init();
@@ -339,11 +340,17 @@ public class Facade implements SystemFacade {
     @Override
     public Result<Boolean> purchase(String userName, String creditCard, int month, int year, String holderName, int cvv, int id, String country, String city, String street, int stNum, int apartmentNum, int zip) {
         if(userController.isConnected(userName)) {
-            String ret = userController.purchase(userName, creditCard, month, year,holderName, cvv, id, country, city, street, stNum, apartmentNum, zip);
-            if (ret == null)
+            boolean success = true;
+            Result<List<String>> ret = userController.purchase(userName, creditCard, month, year,holderName, cvv, id, country, city, street, stNum, apartmentNum, zip);
+            if (ret.isSuccess()) {
+                for(String store : ret.getVal()){
+                    Store s = storesFacade.getStore(store);
+                    notifySubscribers(s.getSubscribers(),"Theres been a purchase in " + s.getName()+"\n",userName);
+                }
                 return new Result<>(true, null);
+            }
             else
-                return new Result<>(null,ret);
+                return new Result<>(null,ret.getErr());
         }
         return new Result<>(false, "User is not connected");
     }
@@ -451,7 +458,7 @@ public class Facade implements SystemFacade {
                 Store s = this.storesFacade.getStore(storeName);
                 Member m = this.userController.getMember(newOwner);
                 s.attach(m);
-                s.notifyOne("You have been appointed to store Owner at " +storeName,userName,newOwner);
+                notifyOne("You have been appointed to store Owner at " +storeName,userName,newOwner);
 
                 return new Result<>(true, null);
             }
@@ -467,6 +474,7 @@ public class Facade implements SystemFacade {
                 //subscribe new owner
                 Store s = this.storesFacade.getStore(storeName);
                 Member m = this.userController.getMember(ownerToRemove);
+                notifyOne("You are no longer Owner at " + s.getName(),userName,ownerToRemove);
                 s.detach(m);
                 return new Result<>(true, null);
             }
@@ -483,7 +491,7 @@ public class Facade implements SystemFacade {
                 Store s = this.storesFacade.getStore(storeName);
                 Member m = this.userController.getMember(newManager);
                 s.attach(m);
-                s.notifyOne("You have been appointed to store Manager at " +storeName,userName,newManager);
+                notifyOne("You have been appointed to store Manager at " +storeName,userName,newManager);
                 return new Result<>(true, null);
             }
             return new Result<>(false, "Could Not Appoint Store Manager");
@@ -499,6 +507,7 @@ public class Facade implements SystemFacade {
                 Store s = this.storesFacade.getStore(storeName);
                 Member m = this.userController.getMember(managerToRemove);
                 s.detach(m);
+                notifyOne("You are no longer Manager at " + storeName,userName,managerToRemove);
                 return new Result<>(true, null);
             }
             return new Result<>(false, "Could Not Appoint Store Owner");
@@ -680,6 +689,8 @@ public class Facade implements SystemFacade {
             if(approved != null) {
                 userController.purchaseBid(userName, approved);
                 storesFacade.purchaseBid(storeName,approved.getProductName(), userController.getUser(approved.getBidderName()));
+                notifyUser("Your bid has been approved", storeName, approved.getBidderName());
+                notifySubscribers(storesFacade.getStore(storeName).getSubscribers(),"A bid for - " + approved.getProductName() + "  in " + storeName + " has been approved", approved.getBidderName());
                 return new Result<>(true, null);
             }
             return new Result<>(false, null);
@@ -755,5 +766,35 @@ public class Facade implements SystemFacade {
             return new Result<>(null,"no such store\n");
         return  new Result<>(amount,null);
 
+    }
+
+
+    public void notifySubscribers(List<String> subscribers,String message,String sendFrom) {
+        List<Thread> threads = new ArrayList<>();
+        for(String user: subscribers) {
+            Member member = userController.getMember(user);
+            threads.add(new NotificationThread(member, message, sendFrom));
+        }
+        for(Thread t : threads) {
+            t.run();
+        }
+        for(Thread t : threads) {
+            try {
+                t.join();
+            } catch (Exception e) {
+            }
+        }
+
+    }
+    public void notifyOne(String message,String sendFrom,String sendTo) {
+        //
+                User user = userController.getUser(sendTo);
+                user.update(message, sendFrom);
+        }
+
+
+    public void notifyUser(String message, String sendFrom, String sendTo) {
+        User user = userController.getUser(sendTo);
+        user.update(message,sendFrom);
     }
 }

@@ -15,11 +15,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class AppointNewOwnerTest {
     @Autowired
     private SystemService systemService;
+    String guestName;
 
     @Before
     public void setUp() throws Exception {
         //systemService = new SystemService();
-        String guestName = systemService.enterSystem().getVal();
+        guestName = systemService.enterSystem().getVal();
         systemService.signUp(guestName, "Mira", "200","Mira","Mira");
         systemService.signUp(guestName, "Andalus", "100","Andalus","Andalus");
         systemService.signUp(guestName, "Andalus2", "102","Andalus2","Andalus2");
@@ -53,6 +54,31 @@ public class AppointNewOwnerTest {
         Assert.assertTrue(systemService.appointStoreOwner("Andalus", "Mega", "Mira").isSuccess());
         Assert.assertTrue(systemService.removeStoreOwner("Andalus", "Mega", "Mira").isSuccess());
         Assert.assertTrue(systemService.appointStoreManager("Andalus", "Mega", "Mira").isSuccess());
+
+    }
+    @Test
+    public void AppointThreeManagersTreeTest() {
+        systemService.signUp(guestName,"Andalus2","102","Andalus","Andalus");
+        systemService.login(guestName, "Andalus", "100");
+        systemService.appointStoreOwner("Andalus","Mega","Andalus2");
+        String guest2 = systemService.enterSystem().getVal();
+        systemService.login(guest2,"Andalus2", "102");
+        systemService.appointStoreOwner("Andalus2","Mega","Mira");
+        String guest3 = systemService.enterSystem().getVal();
+        systemService.login(guest3,"Mira","200");
+        // mira cant remove her appointee
+        Assert.assertFalse(systemService.removeStoreOwner("Mira","Mega","Andalus2").getVal());
+        // Andalus2 cant remove her appointee
+        Assert.assertFalse(systemService.removeStoreOwner("Andalus2","Mega","Andalus").getVal());
+        Assert.assertTrue(systemService.removeStoreOwner("Andalus","Mega","Andalus2").getVal());
+        boolean b1 = systemService.getStoresManagement("Andalus","Mega").getVal().contains("Andalus2");
+        boolean b2 = systemService.getStoresManagement("Andalus","Mega").getVal().contains("Mira");
+        Assert.assertTrue(!b1);
+        Assert.assertTrue(!b2);
+
+
+
+
 
     }
 

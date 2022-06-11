@@ -6,6 +6,7 @@ import com.workshop.ETrade.Domain.Observer;
 import com.workshop.ETrade.Domain.Pair;
 import com.workshop.ETrade.Domain.Stores.Store;
 import com.workshop.ETrade.Persistance.Users.MemberDTO;
+import com.workshop.ETrade.Service.ResultPackge.Result;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.util.ArrayList;
@@ -115,19 +116,18 @@ public class Member extends User implements Observer {
     }
 
     @Override
-    public String purchase(CreditCard card,SupplyAddress address) {
-        String ret = myShopCart.purchaseCart(card,address,userName);
-        if(ret == null){
-            for (StoreBasket b : myShopCart.getBaskets()){
-                StoreBasket copy = b;
-                pHistory.addToHistory(copy);
-            }
-            myShopCart.finishPurchase();
-            return null;
-
-        }
-        else
-            return ret;
+    public Result<List<String>> purchase(CreditCard card, SupplyAddress address) {
+        return myShopCart.purchaseCart(card,address,userName);
+//        if(ret == null){
+//            for (StoreBasket b : myShopCart.getBaskets()){
+//                StoreBasket copy = b;
+//                pHistory.addToHistory(copy);
+//            }
+//            myShopCart.finishPurchase();
+//            return null;
+//
+//        }
+//        else
     }
 
     @Override
