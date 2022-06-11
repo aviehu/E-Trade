@@ -100,7 +100,7 @@ public class PolicyManager {
         policies.add(policy);
         AllRepos.getPolicyRepo().save(new PolicyDTO(policy));
         this.policyId ++;
-        return policyId - 1;
+        return this.policyId - 1;
     }
 
     public int addDiscount(String discountOn, int discountPercentage, String description, DiscountType type) {

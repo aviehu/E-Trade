@@ -5,9 +5,33 @@ import com.workshop.ETrade.Persistance.Users.MemberDTO;
 import com.workshop.ETrade.Persistance.Users.StoreBasketDTO;
 import com.workshop.ETrade.Persistance.Users.SystemManagerDTO;
 import com.workshop.ETrade.Repository.StoreBasketRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public class AllRepos {
+    private static boolean isTest = true;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     private static MongoRepository<StoreDTO, String> storeRepo;
     private static MongoRepository<ProductDTO, String> productRepo;
     private static MongoRepository<MemberDTO, String> memberRepo;
@@ -17,7 +41,12 @@ public class AllRepos {
     private static MongoRepository<DiscountDTO, String> discountRepo;
     private static MongoRepository<SystemManagerDTO, String> systemManagerRepo;
 
+
+
     public static MongoRepository<DiscountDTO, String> getDiscountRepo() {
+        if(isTest) {
+            return new MockRepo<>();
+        }
         return discountRepo;
     }
 
@@ -28,6 +57,9 @@ public class AllRepos {
     }
 
     public static MongoRepository<PolicyDTO, String> getPolicyRepo() {
+        if(isTest) {
+            return new MockRepo<>();
+        }
         return policyRepo;
     }
 
@@ -38,6 +70,9 @@ public class AllRepos {
     }
 
     public static MongoRepository<BidDTO, String> getBidRepo() {
+        if(isTest) {
+            return new MockRepo<>();
+        }
         return bidRepo;
     }
 
@@ -48,6 +83,9 @@ public class AllRepos {
     }
 
     public static MongoRepository<SystemManagerDTO, String> getSystemManagerRepo() {
+        if(isTest) {
+            return new MockRepo<>();
+        }
         return systemManagerRepo;
     }
 
@@ -57,6 +95,9 @@ public class AllRepos {
     }
 
     public static StoreBasketRepository getStoreBasketRepo() {
+        if(isTest) {
+            return new MockBasketRepo();
+        }
         return storeBasketRepo;
     }
 
@@ -65,6 +106,9 @@ public class AllRepos {
     }
 
     public static MongoRepository<MemberDTO, String> getMemberRepo() {
+        if(isTest) {
+            return new MockRepo<>();
+        }
         return memberRepo;
     }
 
@@ -80,6 +124,9 @@ public class AllRepos {
     }
 
     public static MongoRepository<ProductDTO, String> getProductRepo() {
+        if(isTest) {
+            return new MockRepo<>();
+        }
         return productRepo;
     }
 
@@ -90,6 +137,10 @@ public class AllRepos {
     }
 
     public static MongoRepository<StoreDTO, String> getStoreRepo() {
+        if(isTest) {
+            return new MockRepo<>();
+        }
         return storeRepo;
     }
+
 }

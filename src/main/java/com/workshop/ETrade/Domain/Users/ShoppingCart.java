@@ -114,7 +114,9 @@ public class ShoppingCart {
         else {
             ret = b.addProd(quantity, prodName);
             StoreBasketDTO dto = AllRepos.getStoreBasketRepo().findByStoreAndUser(b.getStore().getName(), b.getUserName());
-            AllRepos.getStoreBasketRepo().save(new StoreBasketDTO(b, dto.getId()));
+            if(dto != null) {
+                AllRepos.getStoreBasketRepo().save(new StoreBasketDTO(b, dto.getId()));
+            }
         }
         if(ret.contains("successfully"))
             return ret+displayCart();
@@ -130,11 +132,16 @@ public class ShoppingCart {
             String ret = b.removeProd(quantity,prodName);
             if(b.getProds().isEmpty()) {
                 StoreBasketDTO dto = AllRepos.getStoreBasketRepo().findByStoreAndUser(b.getStore().getName(), b.getUserName());
-                AllRepos.getStoreBasketRepo().delete(new StoreBasketDTO(b, dto.getId()));
+                if(dto != null) {
+                    AllRepos.getStoreBasketRepo().delete(new StoreBasketDTO(b, dto.getId()));
+                }
             }
             else {
                 StoreBasketDTO dto = AllRepos.getStoreBasketRepo().findByStoreAndUser(b.getStore().getName(), b.getUserName());
-                AllRepos.getStoreBasketRepo().save(new StoreBasketDTO(b, dto.getId()));
+                if(dto != null) {
+
+                    AllRepos.getStoreBasketRepo().save(new StoreBasketDTO(b, dto.getId()));
+                }
             }
             if (ret == null)
                 return "Successfully added "+quantity+" "+prodName+".\n"+displayCart();
@@ -150,7 +157,9 @@ public class ShoppingCart {
         for(StoreBasket b : baskets) {
             b.finishPurchase();
             StoreBasketDTO dto = AllRepos.getStoreBasketRepo().findByStoreAndUser(b.getStore().getName(), b.getUserName());
-            AllRepos.getStoreBasketRepo().delete(new StoreBasketDTO(b, dto.getId()));
+            if(dto != null) {
+                AllRepos.getStoreBasketRepo().delete(new StoreBasketDTO(b, dto.getId()));
+            }
         }
         baskets.clear();
 

@@ -20,6 +20,7 @@ public class InitiateSystemTest {
     @Test
     public void atLeastOneAdmin() throws Exception {
         systemService.init();
+        systemService.enterSystem();
         Assert.assertTrue(systemService.hasAdmin().getVal());
     }
 
