@@ -1,14 +1,11 @@
 package com.workshop.ETrade.Domain.Users.ExternalService.Supply;
 
 import com.workshop.ETrade.Domain.Users.ExternalService.HttpClient;
-import com.workshop.ETrade.Domain.Users.Users.SupplyAddress;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class SupplyAdaptee {
     HttpClient httpClient;

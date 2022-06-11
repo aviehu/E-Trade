@@ -6,6 +6,6 @@ public class PolicyForm {
     public String policyOn;
     public String description;
     public String type;
-    public List<Predicate> predicates;
+    public List<PredicateForm> predicateForms;
     public String connectionType;
 }

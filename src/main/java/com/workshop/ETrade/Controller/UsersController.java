@@ -1,18 +1,16 @@
 package com.workshop.ETrade.Controller;
 
+import com.workshop.ETrade.Controller.Forms.AppointForm;
+import com.workshop.ETrade.Controller.Forms.BidForm;
+import com.workshop.ETrade.Controller.Forms.LoginForm;
+import com.workshop.ETrade.Controller.Forms.SignUpForm;
 import com.workshop.ETrade.Domain.Notifications.Notification;
-import com.workshop.ETrade.Domain.Stores.Store;
-import com.workshop.ETrade.Service.ResultPackge.ResultBool;
-import com.workshop.ETrade.Service.ResultPackge.ResultMsg;
-import com.workshop.ETrade.Service.ResultPackge.newResult;
+import com.workshop.ETrade.Service.ResultPackge.Result;
 import com.workshop.ETrade.Service.ServiceInterface;
-import com.workshop.ETrade.Service.SystemService;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 
@@ -27,81 +25,86 @@ public class UsersController {
     private SimpMessagingTemplate smt;
 
 //    @GetMapping("/onlinemembers")
-//    public ResultMsg getOnlineMembers(@RequestHeader("Authorization") String userName) {
+//    public newResult<String> getOnlineMembers(@RequestHeader("Authorization") String userName) {
 //        return systemService.getOnlineMembers(systemService.getOnline());
 //    }
 
 //    @GetMapping("/offlinemembers")
-//    public ResultMsg getOfflineMembers(@RequestHeader("Authorization") String userName) {
+//    public newResult<String> getOfflineMembers(@RequestHeader("Authorization") String userName) {
 //        return systemService.getOfflineMembers(userName);
 //    }
 
-//    public ResultBool hasAdmin(){
+//    public newResult<Boolean> hasAdmin(){
 //        return systemService.hasAdmin();
 //    }
 
     @PostMapping("/remove")
-    public ResultBool removeMember(@RequestHeader("Authorization") String userName, @RequestBody AppointForm form) {
+    public Result<Boolean> removeMember(@RequestHeader("Authorization") String userName, @RequestBody AppointForm form) {
         return systemService.removeMember(userName, form.appointee);
     }
 
     @GetMapping("/entersystem")
-    public ResultMsg enterSystem() {
+    public Result<String> enterSystem() {
         return systemService.enterSystem();
     }
 
     @GetMapping("/addsysmanager/{member}")
-    public ResultBool addSystemManager(String userName, @PathVariable("member") String managerToAdd) {
+    public Result<Boolean> addSystemManager(String userName, @PathVariable("member") String managerToAdd) {
         return systemService.addSystemManager(userName, managerToAdd);
     }
 
     @GetMapping("/removesysmanager/{member}")
-    public ResultBool removeSystemManager(String userName, @PathVariable("member") String managerToRemove) {
+    public Result<Boolean> removeSystemManager(String userName, @PathVariable("member") String managerToRemove) {
         return systemService.removeSystemManager(userName, managerToRemove);
     }
 
     @GetMapping("/exitsystem")
-    public ResultBool exitSystem(String userName) {
+    public Result<Boolean> exitSystem(String userName) {
         return systemService.exitSystem(userName);
     }
 
     @PostMapping("/signup")
-    public ResultBool signUp(@RequestHeader("Authorization") String username, @RequestBody SignUpForm form) {
+    public Result<Boolean> signUp(@RequestHeader("Authorization") String username, @RequestBody SignUpForm form) {
         return systemService.signUp(username, form.email, form.password, form.firstName, form.lastName);
     }
 
     @PostMapping("/login")
-    public ResultBool login(@RequestHeader("Authorization") String userName, @RequestBody LoginForm form) {
+    public Result<Boolean> login(@RequestHeader("Authorization") String userName, @RequestBody LoginForm form) {
         return systemService.login(userName, form.email, form.password);
     }
 
+    @GetMapping("/mybids")
+    public Result<List<BidForm>> userBids(@RequestHeader("Authorization") String userName){
+        return systemService.userBids(userName);
+    }
+
     @GetMapping("/messages")
-    public newResult<List<Notification>> getMessages(@RequestHeader("Authorization") String userName) {
+    public Result<List<Notification>> getMessages(@RequestHeader("Authorization") String userName) {
         return systemService.getMessages(userName);
     }
 
     @GetMapping("/isadmin")
-    public newResult<Boolean> isAdmin(@RequestHeader("Authorization") String userName) {
+    public Result<Boolean> isAdmin(@RequestHeader("Authorization") String userName) {
         return systemService.isAdmin(userName);
     }
 
     @GetMapping("/onlinemembers")
-    public newResult<List<String>> onlineMembers(@RequestHeader("Authorization") String userName) {
+    public Result<List<String>> onlineMembers(@RequestHeader("Authorization") String userName) {
         return systemService.getOnlineMembers(userName);
     }
 
     @GetMapping("/offlinemembers")
-    public newResult<List<String>> offlineMembers(@RequestHeader("Authorization") String userName) {
+    public Result<List<String>> offlineMembers(@RequestHeader("Authorization") String userName) {
         return systemService.getOfflineMembers(userName);
     }
 
     @GetMapping("/logout")
-    public ResultMsg logOut(@RequestHeader("Authorization") String userName) {
+    public Result<String> logOut(@RequestHeader("Authorization") String userName) {
         return systemService.logOut(userName);
     }
 
 //    @GetMapping("/terminate/{user}")
-//    public ResultBool adminTerminateUser(String adminName, @PathVariable("user") String userToTerminate) {
+//    public newResult<Boolean> adminTerminateUser(String adminName, @PathVariable("user") String userToTerminate) {
 //        return systemService.adminTerminateUser(adminName, userToTerminate);
 //    }
 

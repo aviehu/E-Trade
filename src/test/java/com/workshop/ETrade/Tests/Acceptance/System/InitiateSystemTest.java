@@ -18,7 +18,7 @@ public class InitiateSystemTest {
     }
 
     @Test
-    public void atLeastOneAdmin(){
+    public void atLeastOneAdmin() throws Exception {
         systemService.init();
         Assert.assertTrue(systemService.hasAdmin().getVal());
     }

@@ -41,15 +41,15 @@ public class UpdateProductTest {
 
     @Test
     public void updateProductQuantitySuccessTest(){
-        Assert.assertEquals(systemService.getProductAmount("Mega","Bamba").getVal(),100);
+        Assert.assertEquals((int)systemService.getProductAmount("Mega","Bamba").getVal(),100);
         systemService.editProductQuantity("Andalus", "Mega", "Bamba", 8);
-        Assert.assertEquals(systemService.getProductAmount("Mega","Bamba").getVal(),8);
+        Assert.assertEquals((int)systemService.getProductAmount("Mega","Bamba").getVal(),8);
     }
 
     @Test
     public void updateProductQuantityFailTest(){
-        Assert.assertEquals(systemService.getProductAmount("Mega","Bamba").getVal(),100);
+        Assert.assertEquals((int)systemService.getProductAmount("Mega","Bamba").getVal(),100);
         Assert.assertFalse(systemService.editProductQuantity("Andalus", "Mega", "Bisly", 8).getVal());
-        Assert.assertEquals(systemService.getProductAmount("Mega","Bamba").getVal(),100);
+        Assert.assertEquals((int)systemService.getProductAmount("Mega","Bamba").getVal(),100);
     }
 }

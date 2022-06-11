@@ -1,13 +1,16 @@
 package com.workshop.ETrade.Domain.Stores;
 
 import com.workshop.ETrade.Domain.Notifications.NotificationManager;
+import com.workshop.ETrade.Domain.Notifications.NotificationThread;
 import com.workshop.ETrade.Domain.Observable;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
 import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
-import com.workshop.ETrade.Domain.Users.Users.Member;
+import com.workshop.ETrade.Domain.Users.CreditCard;
+import com.workshop.ETrade.Domain.Users.Member;
+import com.workshop.ETrade.Domain.Users.SupplyAddress;
+import com.workshop.ETrade.Domain.Users.User;
 import com.workshop.ETrade.Domain.purchaseOption;
-import org.springframework.security.core.parameters.P;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -165,6 +168,33 @@ public class Store implements Observable {
         return false;
     }
 
+    public boolean counterBid(int bidId, double newOffer) {
+        Bid bid = getBidById(bidId);
+        if(bid == null) {
+            return false;
+        }
+        return bid.counterOffer(newOffer);
+    }
+
+    public synchronized boolean purchaseBid(Map<String,Integer> prods, User buyer){
+        Map<Product,Integer> amounts = inventory.getAmountsFromNames(prods);
+        if(policyManager.canPurchase(amounts) && inventory.canPurchase(prods)) {
+            inventory.purchase(prods);
+            Map<Product, Integer> products = new HashMap<Product, Integer>();
+            for(String productName : prods.keySet()) {
+                Product product = inventory.getProductByName(productName);
+                products.put(product, prods.get(productName));
+            }
+            storeHistory.addPurchase(policyManager.getTotalPrice(products), products, buyer.getUserName());
+            purchased(prods.keySet().stream().toList(),buyer.getUserName());
+            notifyUser("Your bid has been approved", name, buyer);
+            notifySubscribers("A bid for - " + prods.keySet().toArray()[0] + "  in " + name + " has been approved", buyer.getUserName());
+
+            return true;
+        }
+        return false;
+    }
+
     public String getHistory(String userName) {
         if(hasLowPermission(userName)) {
             return storeHistory.getHistory();
@@ -207,10 +237,10 @@ public class Store implements Observable {
         return null;
     }
 
-    public boolean addBid(String productName, double amount, String biddersName) {
+    public boolean addBid(String productName, double amount, String biddersName, CreditCard creditCard, SupplyAddress supplyAddress, String storeName) {
         Product product = inventory.getProductByName(productName);
         if(product != null && product.getSelectedOption() == purchaseOption.BID) {
-            bids.add(new Bid(product,biddersName,amount,ownersAppointments.keySet(), bidId));
+            bids.add(new Bid(product,biddersName,amount,ownersAppointments.keySet(), bidId, creditCard, supplyAddress, storeName));
             bidId++;
             return true;
         }
@@ -469,10 +499,18 @@ public class Store implements Observable {
 
     @Override
     public void notifySubscribers(String message,String sendFrom) {
-
+        List<Thread> threads = new ArrayList<>();
         for(Member user: subscribers) {
-            if(!user.getUserName().equals(sendFrom))
-                user.update(message, sendFrom);
+            threads.add(new NotificationThread(user, message, sendFrom));
+        }
+        for(Thread t : threads) {
+            t.run();
+        }
+        for(Thread t : threads) {
+            try {
+                t.join();
+            } catch (Exception e) {
+            }
         }
 
     }
@@ -482,6 +520,11 @@ public class Store implements Observable {
             if(user.getUserName().equals(sendTo))
                 user.update(message, sendFrom);
         }
+    }
+
+    public void notifyUser(String message,String sendFrom,User sendTo) {
+        //
+        sendTo.update(message,sendFrom);
     }
     public List<String> getSubscribers(){
         List<String> subs = new ArrayList<>();
@@ -507,7 +550,7 @@ public class Store implements Observable {
         return null;
     }
 
-    public Boolean reviewBid(String userName, int bidId, boolean approve) {
+    public Bid reviewBid(String userName, int bidId, boolean approve) {
         if(isOwner(userName)) {
             Bid bid = getBidById(bidId);
             if(approve) {
@@ -515,6 +558,24 @@ public class Store implements Observable {
             }
             bid.reject();
         }
-        return false;
+        return null;
+    }
+
+    public List<Bid> userBids(String userName) {
+        List<Bid> ans = new LinkedList<>();
+        for(Bid b : bids) {
+            if(b.getBidderName().equals(userName)) {
+                ans.add(b);
+            }
+        }
+        return ans;
+    }
+
+    public Bid counterBidReview(int bidId, boolean approve) {
+        Bid bid = getBidById(bidId);
+        if(bid == null) {
+            return null;
+        }
+        return bid.counterOfferReview(approve);
     }
 }

@@ -9,11 +9,11 @@ import '../../css/Dashboard.css';
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import {useNavigate} from 'react-router-dom';
-import post from "../post";
+import post from "../util/post";
 import MyAppBar from "../dashboard/MyAppBar";
 import MyDrawer from "../dashboard/MyDrawer";
-import MyError from "../MyError";
-import get from "../get";
+import MyError from "../util/MyError";
+import get from "../util/get";
 
 const mdTheme = createTheme();
 

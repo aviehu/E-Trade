@@ -1,14 +1,14 @@
 package com.workshop.ETrade.Domain.Stores;
 
-import com.workshop.ETrade.Controller.Forms.Predicate;
+import com.workshop.ETrade.Controller.Forms.PredicateForm;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
-import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
 import com.workshop.ETrade.Domain.Stores.Predicates.OperatorLeaf;
 import com.workshop.ETrade.Domain.Stores.Predicates.PredicateBuilder;
-import com.workshop.ETrade.Domain.SystemFacade;
+import com.workshop.ETrade.Domain.Users.CreditCard;
+import com.workshop.ETrade.Domain.Users.SupplyAddress;
+import com.workshop.ETrade.Domain.Users.User;
 import com.workshop.ETrade.Domain.purchaseOption;
-import com.workshop.ETrade.Service.ResultPackge.newResult;
 
 import java.util.*;
 import java.util.logging.FileHandler;
@@ -22,19 +22,19 @@ public class StoresFacade {
     public StoresFacade(){
         stores = Collections.synchronizedList(new ArrayList<Store>());
         try {
-            Handler fileHandler = new FileHandler(System.getProperty("user.dir") + "/stores.log", 2000, 5);
+            Handler fileHandler = new FileHandler(System.getProperty("user.dir") + "/storesLog/stores.log", 2000, 5);
             logger.addHandler(fileHandler);
         } catch (Exception e) {
             System.out.println("error while creating logger for stores");
         }
     }
-    public int addPolicy(String userName,String storeName,String policyOn, String description, PolicyType policyType, List<Predicate> predicates, String connectionType){
+    public int addPolicy(String userName, String storeName, String policyOn, String description, PolicyType policyType, List<PredicateForm> predicateForms, String connectionType){
         Store store = getStoreByName(storeName);
         if(store == null) {
             return -1;
         }
         List<com.workshop.ETrade.Domain.Stores.Predicates.Predicate> pres = new LinkedList<>();
-        for(Predicate p: predicates) {
+        for(PredicateForm p: predicateForms) {
             switch (p.predicateType){
                 case "amount":
                     pres.add(PredicateBuilder.getProductAmountPredicate(p.preProduct, (int)p.minAmount, (int)p.maxAmount));
@@ -336,13 +336,13 @@ public class StoresFacade {
         return store.removeManager(userName, managerToRemove);
     }
 
-    public int addPreDiscount(String userName, String storeName, String discountOn, int discountPercentage, String description, DiscountType discountType, List<Predicate> predicates, String connectionType) {
+    public int addPreDiscount(String userName, String storeName, String discountOn, int discountPercentage, String description, DiscountType discountType, List<PredicateForm> predicateForms, String connectionType) {
         Store store = getStoreByName(storeName);
         if(store == null) {
             return -1;
         }
         List<com.workshop.ETrade.Domain.Stores.Predicates.Predicate> pres = new LinkedList<>();
-        for(Predicate p: predicates) {
+        for(PredicateForm p: predicateForms) {
             switch (p.predicateType){
                 case "amount":
                     pres.add(PredicateBuilder.getProductAmountPredicate(p.preProduct, (int)p.minAmount, (int)p.maxAmount));
@@ -361,12 +361,12 @@ public class StoresFacade {
         return store.addPredicateDiscount(discountOn, discountPercentage, description,discountType, ol);
     }
 
-    public boolean addBid(String userName, String storeName, String productName, double bidAmount) {
+    public boolean addBid(String userName, String storeName, String productName, double bidAmount, CreditCard creditCard, SupplyAddress supplyAddress) {
         Store store = getStoreByName(storeName);
         if(store == null) {
             return false;
         }
-        return store.addBid(productName, bidAmount, userName);
+        return store.addBid(productName, bidAmount, userName, creditCard, supplyAddress, storeName);
     }
 
     public List<Bid> getStoreBids(String storeName) {
@@ -377,11 +377,45 @@ public class StoresFacade {
         return store.getBids();
     }
 
-    public Boolean reviewBid(String userName, String storeName, int bidId, boolean approve) {
+    public Bid reviewBid(String userName, String storeName, int bidId, boolean approve) {
+        Store store = getStoreByName(storeName);
+        if(store == null) {
+            return null;
+        }
+        return store.reviewBid(userName, bidId, approve);
+    }
+
+    public boolean counterBid(String storeName, int bidId, double newOffer) {
         Store store = getStoreByName(storeName);
         if(store == null) {
             return false;
         }
-        return store.reviewBid(userName, bidId, approve);
+        return store.counterBid(bidId, newOffer);
+    }
+
+    public void purchaseBid(String storeName, String productName, User user) {
+        Store store = getStoreByName(storeName);
+        if(store == null) {
+            return ;
+        }
+        HashMap<String, Integer> prods = new HashMap<>();
+        prods.put(productName, 1);
+        store.purchaseBid(prods,user);
+    }
+
+    public List<Bid> userBids(String userName) {
+        List<Bid> bids = new LinkedList<>();
+        for(Store store : stores) {
+            bids.addAll(store.userBids(userName));
+        }
+        return bids;
+    }
+
+    public Bid counterBidReview(String storeName, int bidId, boolean approve) {
+        Store store = getStoreByName(storeName);
+        if(store == null) {
+            return null;
+        }
+        return store.counterBidReview(bidId, approve);
     }
 }

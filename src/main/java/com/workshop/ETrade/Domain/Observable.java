@@ -1,6 +1,6 @@
 package com.workshop.ETrade.Domain;
 
-import com.workshop.ETrade.Domain.Users.Users.Member;
+import com.workshop.ETrade.Domain.Users.Member;
 
 
 public interface Observable {

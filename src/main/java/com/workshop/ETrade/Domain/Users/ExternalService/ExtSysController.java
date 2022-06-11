@@ -7,8 +7,7 @@ import com.workshop.ETrade.Domain.Users.ExternalService.Security.mySecuritySys;
 import com.workshop.ETrade.Domain.Users.ExternalService.Supply.SupplyAdaptee;
 import com.workshop.ETrade.Domain.Users.ExternalService.Supply.SupplyAdapter;
 import com.workshop.ETrade.Domain.Users.ExternalService.Supply.mySupplySys;
-import com.workshop.ETrade.Domain.Users.Users.ShoppingCart;
-import com.workshop.ETrade.Domain.Users.Users.SupplyAddress;
+import com.workshop.ETrade.Domain.Users.SupplyAddress;
 
 import java.time.LocalTime;
 
@@ -32,7 +31,7 @@ public class ExtSysController {
         return myInstance;
     }
 
-    public int pay(int card, int month,int year,String holder, int cvv, int id){
+    public int pay(String card, int month,int year,String holder, int cvv, int id){
         return payment.pay(card, month,year,holder, cvv, id);
     }
     public boolean canPay(int card, LocalTime expDate, int cvv, double price){

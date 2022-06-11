@@ -1,7 +1,5 @@
 package com.workshop.ETrade.Domain.Users.ExternalService.Supply;
 
-import com.workshop.ETrade.Domain.Users.Users.SupplyAddress;
-
 import java.util.ArrayList;
 import java.util.List;
 
