@@ -13,10 +13,36 @@ public class StoreBasketDTO {
     private String store;
     private String user;
 
+    @Id
+    private String id;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
     public StoreBasketDTO(StoreBasket storeBasket) {
         this.prods = storeBasket.getProds();
         this.store = storeBasket.getStoreName();
         this.user = storeBasket.getUserName();
+    }
+
+    public StoreBasketDTO(StoreBasket storeBasket, String id) {
+        this.prods = storeBasket.getProds();
+        this.store = storeBasket.getStoreName();
+        this.user = storeBasket.getUserName();
+        this.id = id;
     }
 
     public StoreBasketDTO(HashMap<String, Integer> prods, String store, String userName) {

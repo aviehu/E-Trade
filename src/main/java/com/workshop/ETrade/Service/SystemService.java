@@ -37,6 +37,9 @@ public class SystemService implements ServiceInterface {
     private StoreBasketRepository storeBasketRepository;
 
     @Autowired
+    private SystemManagerRepository systemManagerRepository;
+
+    @Autowired
     private BidRepository bidRepository;
 
     @Autowired
@@ -108,6 +111,7 @@ public class SystemService implements ServiceInterface {
             AllRepos.setProductRepo(productRepository);
             AllRepos.setMemberRepo(memberRepository);
             AllRepos.setStoreBasketRepo(storeBasketRepository);
+            AllRepos.setSystemManagerRepo(systemManagerRepository);
             AllRepos.setBidRepo(bidRepository);
             AllRepos.setPolicyRepo(policyRepository);
             AllRepos.setDiscountRepo(discountRepository);

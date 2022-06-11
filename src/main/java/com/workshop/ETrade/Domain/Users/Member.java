@@ -1,5 +1,6 @@
 package com.workshop.ETrade.Domain.Users;
 
+import com.workshop.ETrade.AllRepos;
 import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Notifications.NotificationManager;
 import com.workshop.ETrade.Domain.Observer;
@@ -298,6 +299,7 @@ public class Member extends User implements Observer {
     @Override
     public void addToAwaitingNotification(Notification notification) {
         this.awaitingNotification.add(notification);
+        AllRepos.getMemberRepo().save(new MemberDTO(this));
     }
 
     public List<Notification> getMessages() {

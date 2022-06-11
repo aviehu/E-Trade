@@ -3,16 +3,19 @@ package com.workshop.ETrade;
 import com.workshop.ETrade.Persistance.Stores.*;
 import com.workshop.ETrade.Persistance.Users.MemberDTO;
 import com.workshop.ETrade.Persistance.Users.StoreBasketDTO;
+import com.workshop.ETrade.Persistance.Users.SystemManagerDTO;
+import com.workshop.ETrade.Repository.StoreBasketRepository;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public class AllRepos {
     private static MongoRepository<StoreDTO, String> storeRepo;
     private static MongoRepository<ProductDTO, String> productRepo;
     private static MongoRepository<MemberDTO, String> memberRepo;
-    private static MongoRepository<StoreBasketDTO, String> storeBasketRepo;
+    private static StoreBasketRepository storeBasketRepo;
     private static MongoRepository<BidDTO, String> bidRepo;
     private static MongoRepository<PolicyDTO, String> policyRepo;
     private static MongoRepository<DiscountDTO, String> discountRepo;
+    private static MongoRepository<SystemManagerDTO, String> systemManagerRepo;
 
     public static MongoRepository<DiscountDTO, String> getDiscountRepo() {
         return discountRepo;
@@ -44,11 +47,20 @@ public class AllRepos {
         }
     }
 
-    public static MongoRepository<StoreBasketDTO, String> getStoreBasketRepo() {
+    public static MongoRepository<SystemManagerDTO, String> getSystemManagerRepo() {
+        return systemManagerRepo;
+    }
+
+    public static void setSystemManagerRepo(MongoRepository<SystemManagerDTO, String> systemManagerRepo) {
+        if (AllRepos.systemManagerRepo == null)
+            AllRepos.systemManagerRepo = systemManagerRepo;
+    }
+
+    public static StoreBasketRepository getStoreBasketRepo() {
         return storeBasketRepo;
     }
 
-    public static void setStoreBasketRepo(MongoRepository<StoreBasketDTO, String> storeBasketRepo) {
+    public static void setStoreBasketRepo(StoreBasketRepository storeBasketRepo) {
         AllRepos.storeBasketRepo = storeBasketRepo;
     }
 
