@@ -35,7 +35,7 @@ public class Inventory {
         if(getProductByName(name) == null) {
             Product product = new Product(name, amount, price, category);
             products.add(product);
-           // AllRepos.getProductRepo().save(new ProductDTO(product));
+            AllRepos.getProductRepo().save(new ProductDTO(product));
             return true;
         }
         return false;
@@ -62,6 +62,7 @@ public class Inventory {
         Product product = getProductByName(oldName);
         if(product != null && getProductByName(newName) != null){
             product.setName(newName);
+            AllRepos.getProductRepo().save(new ProductDTO(product));
             return true;
         }
         return false;
@@ -71,6 +72,7 @@ public class Inventory {
         Product product = getProductByName(productName);
         if(product != null) {
             products.remove(product);
+            AllRepos.getProductRepo().delete(new ProductDTO(product));
             return true;
         }
         return false;
@@ -90,6 +92,7 @@ public class Inventory {
         Product product = getProductByName(productName);
         if(product != null){
             product.setPrice(newPrice);
+            AllRepos.getProductRepo().save(new ProductDTO(product));
             return true;
         }
         return false;
@@ -99,6 +102,7 @@ public class Inventory {
         Product product = getProductByName(productName);
         if(product != null) {
             product.addKeyword(keyword);
+            AllRepos.getProductRepo().save(new ProductDTO(product));
             return true;
         }
         return false;
@@ -162,6 +166,7 @@ public class Inventory {
             return false;
         }
         product.setSelectedOption(option);
+        AllRepos.getProductRepo().save(new ProductDTO(product));
         return true;
     }
 
@@ -187,6 +192,7 @@ public class Inventory {
             if(product == null || !product.setAmount(product.getAmount() - prods.get(productName))) {
                 return false;
             }
+            AllRepos.getProductRepo().save(new ProductDTO(product));
         }
         return true;
     }
@@ -196,6 +202,7 @@ public class Inventory {
         if(product == null) {
             return false;
         }
+        AllRepos.getProductRepo().save(new ProductDTO(product));
         return product.setAmount(newQuantity);
     }
 

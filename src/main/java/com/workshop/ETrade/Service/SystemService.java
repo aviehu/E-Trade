@@ -39,6 +39,15 @@ public class SystemService implements ServiceInterface {
     @Autowired
     private SystemManagerRepository systemManagerRepository;
 
+    @Autowired
+    private BidRepository bidRepository;
+
+    @Autowired
+    private PolicyRepository policyRepository;
+
+    @Autowired
+    private DiscountRepository discountRepository;
+
     public SystemService() {
         initialize = false;
         init();
@@ -103,6 +112,9 @@ public class SystemService implements ServiceInterface {
             AllRepos.setMemberRepo(memberRepository);
             AllRepos.setStoreBasketRepo(storeBasketRepository);
             AllRepos.setSystemManagerRepo(systemManagerRepository);
+            AllRepos.setBidRepo(bidRepository);
+            AllRepos.setPolicyRepo(policyRepository);
+            AllRepos.setDiscountRepo(discountRepository);
             facade.init();
             initialize = true;
         }

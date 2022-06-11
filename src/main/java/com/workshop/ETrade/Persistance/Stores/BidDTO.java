@@ -6,12 +6,13 @@ import org.springframework.data.annotation.Id;
 import java.util.Map;
 
 public class BidDTO {
+
     public String productName;
     public String bidderName;
     public double price;
     public Map<String, Boolean> awaitingApprove;
     @Id
-    public int bidId;
+    public String bidId;
     public boolean approvedByBidder;
     public boolean rejected;
     public String storeName;
@@ -39,7 +40,7 @@ public class BidDTO {
         this.bidderName = bidderName;
         this.price = price;
         this.awaitingApprove = awaitingApprove;
-        this.bidId = bidId;
+        this.bidId = Integer.toString(bidId);
         this.approvedByBidder = approvedByBidder;
         this.rejected = rejected;
         this.storeName = storeName;
@@ -64,7 +65,7 @@ public class BidDTO {
         rejected = bid.getRejected();
         storeName = bid.getStoreName();
         price = bid.getPrice();
-        bidId = bid.getId();
+        bidId = Integer.toString(bid.getId());
 
         holderName = bid.getCard().getHolderName();
         cardNumber = bid.getCard().getCardNumber();

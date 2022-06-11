@@ -47,7 +47,7 @@ public class Bid {
         product = prod;
         bidderName = bidDTO.bidderName;
         price = bidDTO.price;
-        bidId = bidDTO.bidId;
+        bidId = Integer.parseInt(bidDTO.bidId);
         awaitingApprove = bidDTO.awaitingApprove;
         rejected = bidDTO.rejected;
         creditCard = new CreditCard(bidDTO.cardNumber, bidDTO.month, bidDTO.year, bidDTO.cvv, bidDTO.id, bidDTO.holderName);

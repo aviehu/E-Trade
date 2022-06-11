@@ -1,5 +1,6 @@
 package com.workshop.ETrade.Domain.Stores;
 
+import com.workshop.ETrade.AllRepos;
 import com.workshop.ETrade.Domain.Stores.Discounts.*;
 import com.workshop.ETrade.Domain.Stores.Policies.*;
 import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
@@ -49,7 +50,7 @@ public class PolicyManager {
                 }
             }
             OperatorLeaf ol = new OperatorLeaf(pdto.operatorType, pres);
-            addPolicy(pdto.policyOn, pdto.description,pdto.type,ol);
+            addPolicy(Integer.parseInt(pdto.policyId), pdto.policyOn, pdto.description,pdto.type,ol);
         }
         this.policyId = policyId;
 
@@ -73,7 +74,7 @@ public class PolicyManager {
                     }
                 }
                 OperatorLeaf ol = new OperatorLeaf(ddto.operatorType, pres);
-                addPredicateDiscount(ddto.discountOn, ddto.discountPercentage, ddto.description, ddto.type,ol);
+                addPredicateDiscount(Integer.parseInt(ddto.discountId), ddto.discountOn, ddto.discountPercentage, ddto.description, ddto.type,ol);
             }
         }
         this.policyId = policyId;
@@ -89,25 +90,32 @@ public class PolicyManager {
         return null;
     }
 
-    public int addPolicy(String policyOn, String description, PolicyType type, OperatorComponent operatorComponent) {
+    public int addPolicy(int policyId, String policyOn, String description, PolicyType type, OperatorComponent operatorComponent) {
+        Policy policy;
         switch (type) {
-            case BASKET -> policies.add(new BasketPolicy(policyId, description, operatorComponent));
-            case PRODUCT -> policies.add(new ProductPolicy(policyId, description, policyOn, operatorComponent));
-            case CATEGORY -> policies.add(new CategoryPolicy(policyId, description, policyOn, operatorComponent));
+            case BASKET -> policy = new BasketPolicy(policyId, description, operatorComponent);
+            case PRODUCT -> policy = new ProductPolicy(policyId, description, policyOn, operatorComponent);
+            default ->  policy = new CategoryPolicy(policyId, description, policyOn, operatorComponent);
         }
-        policyId ++;
+        policies.add(policy);
+        AllRepos.getPolicyRepo().save(new PolicyDTO(policy));
+        this.policyId ++;
         return policyId - 1;
     }
 
     public int addDiscount(String discountOn, int discountPercentage, String description, DiscountType type) {
-        discounts.add(new Discount(discountId, discountOn, discountPercentage, description, type));
+        Discount discount = new Discount(discountId, discountOn, discountPercentage, description, type);
+        discounts.add(discount);
+        AllRepos.getDiscountRepo().save(new DiscountDTO(discount));
         discountId++;
         return discountId - 1;
     }
 
-    public int addPredicateDiscount(String discountOn, int discountPercentage, String description, DiscountType type, OperatorComponent operatorComponent) {
-        discounts.add(new PredicateDiscount(discountId, discountOn, discountPercentage, description, type, operatorComponent));
-        discountId++;
+    public int addPredicateDiscount(int discountId, String discountOn, int discountPercentage, String description, DiscountType type, OperatorComponent operatorComponent) {
+        PredicateDiscount discount = new PredicateDiscount(discountId, discountOn, discountPercentage, description, type, operatorComponent);
+        discounts.add(discount);
+        AllRepos.getDiscountRepo().save(new DiscountDTO(discount));
+        this.discountId++;
         return discountId - 1;
     }
 

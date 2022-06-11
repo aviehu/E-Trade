@@ -11,6 +11,7 @@ import java.util.*;
 public class StoreDTO {
     @Id
     public String name;
+    @DBRef
     public List<ProductDTO> products;
     public int discountId;
     public int policyId;
@@ -21,8 +22,11 @@ public class StoreDTO {
     public Map<String, managersPermission> managersPermissions;
     public List<MapDBobjDTO> ownersAppointments;
     public List<MapDBobjDTO> managersAppointments;
+    @DBRef
     public List<BidDTO> bids;
+    @DBRef
     public List<DiscountDTO> discounts;
+    @DBRef
     public List<PolicyDTO> policies;
     //public List<PurchaseDTO>  purchaseHistory;
 
