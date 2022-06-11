@@ -9,8 +9,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.stereotype.Component;
 
 @SpringBootApplication
+@EnableMongoRepositories(basePackages = "com.workshop.ETrade.Repository")
+@ComponentScan("com.workshop.ETrade")
 public class ETradeApplication {
 
 	public static void main(String[] args) {

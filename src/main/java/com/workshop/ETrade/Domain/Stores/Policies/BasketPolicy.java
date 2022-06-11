@@ -2,11 +2,13 @@ package com.workshop.ETrade.Domain.Stores.Policies;
 
 import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
 import com.workshop.ETrade.Domain.Stores.Product;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.util.Map;
 
 public class BasketPolicy implements Policy {
 
+    @DBRef(lazy = true)
     private OperatorComponent operatorComponent;
     private String description;
     private int id;

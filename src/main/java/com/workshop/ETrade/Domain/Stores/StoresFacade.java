@@ -9,6 +9,9 @@ import com.workshop.ETrade.Domain.Users.CreditCard;
 import com.workshop.ETrade.Domain.Users.SupplyAddress;
 import com.workshop.ETrade.Domain.Users.User;
 import com.workshop.ETrade.Domain.purchaseOption;
+import com.workshop.ETrade.Persistance.Stores.StoreDTO;
+import com.workshop.ETrade.TestRepo;
+import org.bson.types.ObjectId;
 
 import java.util.*;
 import java.util.logging.FileHandler;
@@ -28,6 +31,15 @@ public class StoresFacade {
             System.out.println("error while creating logger for stores");
         }
     }
+
+    public void init() {
+        long i = TestRepo.getRepo().count();
+        List<StoreDTO> dtos = TestRepo.getRepo().findAll();
+        for(StoreDTO storeDTO : dtos)  {
+            stores.add(new Store(storeDTO));
+        }
+    }
+
     public int addPolicy(String userName, String storeName, String policyOn, String description, PolicyType policyType, List<PredicateForm> predicateForms, String connectionType){
         Store store = getStoreByName(storeName);
         if(store == null) {

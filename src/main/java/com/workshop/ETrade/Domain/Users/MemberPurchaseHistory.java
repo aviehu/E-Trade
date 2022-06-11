@@ -1,9 +1,12 @@
 package com.workshop.ETrade.Domain.Users;
 
+import org.springframework.data.mongodb.core.mapping.DBRef;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class MemberPurchaseHistory {
+    @DBRef(lazy = true)
     private List<StoreBasket>   basketsPurchased;
 
     public MemberPurchaseHistory() {
