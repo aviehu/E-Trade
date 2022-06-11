@@ -11,9 +11,7 @@ public class PolicyManager {
 
     private int discountId;
     private int policyId;
-    @DBRef(lazy = true)
     private List<Discount> discounts;
-    @DBRef(lazy = true)
     private List<Policy> policies;
 
     public PolicyManager() {
@@ -132,5 +130,13 @@ public class PolicyManager {
             }
         }
         return false;
+    }
+
+    public int getPolicyId() {
+        return policyId;
+    }
+
+    public int getDiscountId() {
+        return discountId;
     }
 }

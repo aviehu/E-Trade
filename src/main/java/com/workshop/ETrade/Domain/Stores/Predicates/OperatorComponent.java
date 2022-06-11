@@ -2,6 +2,7 @@ package com.workshop.ETrade.Domain.Stores.Predicates;
 
 import com.workshop.ETrade.Domain.Stores.Product;
 
+import java.util.List;
 import java.util.Map;
 
 public abstract class OperatorComponent {
@@ -18,4 +19,5 @@ public abstract class OperatorComponent {
 
     abstract public boolean shouldApply(Map<Product, Integer> amounts);
 
+    abstract public List<Predicate> getPredicates();
 }

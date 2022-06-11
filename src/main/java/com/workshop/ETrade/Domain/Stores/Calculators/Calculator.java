@@ -18,4 +18,7 @@ public abstract class Calculator {
         return newPrices;
     }
 
+    abstract public String getDiscountOn();
+
+    abstract public double getDiscountPercentage();
 }

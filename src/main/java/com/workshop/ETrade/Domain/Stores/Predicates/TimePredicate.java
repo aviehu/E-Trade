@@ -1,6 +1,7 @@
 package com.workshop.ETrade.Domain.Stores.Predicates;
 
 import com.workshop.ETrade.Domain.Stores.Product;
+import com.workshop.ETrade.Persistance.Stores.PredicateDTO;
 
 import java.time.LocalDate;
 import java.util.Map;
@@ -25,5 +26,18 @@ public class TimePredicate implements Predicate{
         } else {
             return now.isBefore(startTime) || now.isAfter(endTime);
         }
+    }
+
+    @Override
+    public PredicateDTO init() {
+        return new PredicateDTO(this);
+    }
+
+    public LocalDate getStartTime() {
+        return startTime;
+    }
+
+    public LocalDate getEndTime() {
+        return endTime;
     }
 }

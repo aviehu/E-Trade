@@ -1,6 +1,5 @@
 package com.workshop.ETrade.Domain.Stores;
 
-import com.workshop.ETrade.Domain.Notifications.NotificationManager;
 import com.workshop.ETrade.Domain.Notifications.NotificationThread;
 import com.workshop.ETrade.Domain.Observable;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
@@ -15,8 +14,7 @@ import com.workshop.ETrade.Persistance.Stores.BidDTO;
 import com.workshop.ETrade.Persistance.Stores.MapDBobjDTO;
 import com.workshop.ETrade.Persistance.Stores.ProductDTO;
 import com.workshop.ETrade.Persistance.Stores.StoreDTO;
-import com.workshop.ETrade.TestRepo;
-import org.springframework.data.mongodb.core.mapping.DBRef;
+import com.workshop.ETrade.AllRepos;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.time.LocalDate;
@@ -43,7 +41,6 @@ public class Store implements Observable {
     private List<Bid> bids;
     private List<Auction> auctions;
     private List<Member> subscribers;
-    private MongoRepository<StoreDTO,String> storeRepo;
 
     public Store(StoreDTO storeDTO) {
         name = storeDTO.name;
@@ -51,10 +48,8 @@ public class Store implements Observable {
         card = storeDTO.card;
         closed = storeDTO.closed;
         bidId = storeDTO.bidId;
-//        inventory = new Inventory(storeDTO.products);
-        inventory = new Inventory();
-//        managersPermissions = storeDTO.managersPermissions;
-        managersPermissions = new HashMap<>();
+        inventory = new Inventory(storeDTO.products);
+        managersPermissions = storeDTO.managersPermissions;
         policyManager = new PolicyManager(); // TODO
 //        storeHistory = new StorePurchaseHistory(storeDTO.purchaseHistory);
         storeHistory = new StorePurchaseHistory();
@@ -68,14 +63,11 @@ public class Store implements Observable {
         for(MapDBobjDTO d : dts) {
             managersAppointments.put(d.key, d.val);
         }
-//        ownersAppointments = new HashMap<>();
-//        managersAppointments = storeDTO.managersAppointments;
-
+        subscribers = new ArrayList<>();
         bids = new LinkedList<>();
-
-//        for(BidDTO b : storeDTO.bids) {
-//            bids.add(new Bid(b, inventory.getProductByName(b.productName)));
-//        }
+        for(BidDTO b : storeDTO.bids) {
+            bids.add(new Bid(b, inventory.getProductByName(b.productName)));
+        }
         closed = false;
     }
 
@@ -99,8 +91,6 @@ public class Store implements Observable {
         raffleId = 1;
         managersPermissions = new ConcurrentHashMap<>();
         subscribers = new ArrayList<>();
-        storeRepo = TestRepo.getRepo();
-        storeRepo.save(new StoreDTO(this));
     }
 
     public int addDiscount(String userName,String discountOn, int discountPercentage, String description, DiscountType discountType) {
@@ -311,7 +301,6 @@ public class Store implements Observable {
         if(!isManager(nameToAdd) && !isOwner(nameToAdd) && isOwner(ownerName)){
             managersAppointments.get(ownerName).add(nameToAdd);
             managersPermissions.put(nameToAdd, managersPermission.LOW);
-            storeRepo.save(new StoreDTO(this));
             return true;
         }
         return false;
@@ -339,7 +328,6 @@ public class Store implements Observable {
     public boolean addProduct(String userName, String productName, int amount, double price, String category) {
         if(hasHighPermission(userName)) {
             if(inventory.addProduct(productName, amount, price, category)) {
-                storeRepo.save(new StoreDTO(this));
                 return true;
             }
         }
@@ -645,5 +633,13 @@ public class Store implements Observable {
 
     public List<Purchase> getPurchases() {
         return storeHistory.getPurchases();
+    }
+
+    public int getPolicyId() {
+        return policyManager.getPolicyId();
+    }
+
+    public int getDiscountId() {
+        return policyManager.getDiscountId();
     }
 }

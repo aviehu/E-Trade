@@ -35,4 +35,14 @@ public class CategoryCalculator extends Calculator {
         return newPrices;
     }
 
+    @Override
+    public String getDiscountOn() {
+        return category;
+    }
+
+    @Override
+    public double getDiscountPercentage() {
+        return discountPercent;
+    }
+
 }
