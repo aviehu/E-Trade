@@ -63,7 +63,7 @@ public class Member extends User implements Observer {
     public Member(String userName, String password, String name, String lastName) {
         super();
         this.discount = 0;
-        this.myShopCart.setDiscount(discount);
+
         this.securityLvl = 0;
         this.securityQuests = new HashMap<>();
         this.pHistory = new MemberPurchaseHistory();
@@ -76,12 +76,14 @@ public class Member extends User implements Observer {
         this.address = null;
         this.notificationManager = new NotificationManager();
         this.awaitingNotification = new ArrayList<>();
+        this.myShopCart = new ShoppingCart(0, userName);
+        this.myShopCart.setDiscount(discount);
     }
 
     public Member(MemberDTO memberDTO) {
         super();
         this.discount = memberDTO.discount;
-        this.myShopCart.setDiscount(discount);
+
         this.securityLvl = memberDTO.securityLvl;
         this.securityQuests = memberDTO.securityQuests;
         this.pHistory = new MemberPurchaseHistory();
@@ -93,6 +95,8 @@ public class Member extends User implements Observer {
         this.mail = memberDTO.mail;
         this.address = memberDTO.address;
         this.awaitingNotification = memberDTO.awaitingNotification;
+        this.myShopCart = new ShoppingCart(0,this.userName);
+        //this.myShopCart.setDiscount(discount);
     }
 
     @Override
@@ -100,19 +104,19 @@ public class Member extends User implements Observer {
         return super.getMyShopCart();
     }
 
-    @Override
+
     public String addProdToCart(Store store, int quantity, String prodName) {
-         return super.addProdToCart(store,quantity,prodName);
+         return this.myShopCart.addProd(store,quantity,prodName);
     }
 
     @Override
     public String removeProd(Store s, int quantity, String prodName) {
-        return super.removeProd(s, quantity, prodName);
+        return this.myShopCart.removeProd(s, quantity, prodName);
     }
 
     @Override
     public HashMap<String, Pair<Integer,String>> displayCart() {
-        return super.displayCart();
+        return this.myShopCart.displayCart();
     }
 
     @Override
@@ -303,4 +307,5 @@ public class Member extends User implements Observer {
     public void addBasket(StoreBasket storeBasket) {
         myShopCart.addBasket(storeBasket);
     }
+
 }
