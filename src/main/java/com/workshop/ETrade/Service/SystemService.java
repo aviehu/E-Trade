@@ -11,7 +11,9 @@ import com.workshop.ETrade.Domain.Users.ExternalService.Payment.PaymentAdaptee;
 import com.workshop.ETrade.Domain.Users.ExternalService.Supply.SupplyAdaptee;
 import com.workshop.ETrade.Domain.purchaseOption;
 import com.workshop.ETrade.Persistance.Stores.StoreDTO;
+import com.workshop.ETrade.Repository.MemberRepository;
 import com.workshop.ETrade.Repository.ProductRepository;
+import com.workshop.ETrade.Repository.StoreBasketRepository;
 import com.workshop.ETrade.Repository.StoreRepository;
 import com.workshop.ETrade.Service.ResultPackge.Result;
 import com.workshop.ETrade.AllRepos;
@@ -30,6 +32,12 @@ public class SystemService implements ServiceInterface {
 
     @Autowired
     private StoreRepository storeRepository;
+
+    @Autowired
+    private MemberRepository memberRepository;
+
+    @Autowired
+    private StoreBasketRepository storeBasketRepository;
 
     public SystemService() {
         initialize = false;
@@ -90,9 +98,10 @@ public class SystemService implements ServiceInterface {
     @Override
     public Result<String> enterSystem() {
         if(!initialize) {
-            List<StoreDTO> sss = storeRepository.findAll();
             AllRepos.setStoreRepo(storeRepository);
             AllRepos.setProductRepo(productRepository);
+            AllRepos.setMemberRepo(memberRepository);
+            AllRepos.setStoreBasketRepo(storeBasketRepository);
             facade.init();
             initialize = true;
         }

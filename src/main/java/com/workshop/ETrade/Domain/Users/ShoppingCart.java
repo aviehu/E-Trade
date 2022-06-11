@@ -1,8 +1,10 @@
 package com.workshop.ETrade.Domain.Users;
 
+import com.workshop.ETrade.AllRepos;
 import com.workshop.ETrade.Domain.Pair;
 import com.workshop.ETrade.Domain.Stores.Store;
 import com.workshop.ETrade.Domain.Users.ExternalService.ExtSysController;
+import com.workshop.ETrade.Persistance.Users.StoreBasketDTO;
 import com.workshop.ETrade.Service.ResultPackge.Result;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
@@ -16,8 +18,9 @@ public class ShoppingCart {
 
     private List<StoreBasket> baskets;
     private int discount;
-
-    public ShoppingCart(int discount) {
+    private String userName;
+    public ShoppingCart(int discount, String userName) {
+        this.userName = userName;
         this.discount = discount;
         this.baskets = new ArrayList<>();
         extSystems = ExtSysController.getInstance(true,true);
@@ -100,9 +103,10 @@ public class ShoppingCart {
         StoreBasket b = getBasketByStore(s);
         String ret;
         if(b == null){
-            b = new StoreBasket(s);
+            b = new StoreBasket(s, userName);
             ret = b.addProd(quantity,prodName);
             baskets.add(b);
+            AllRepos.getStoreBasketRepo().save(new StoreBasketDTO(b));
         }
         else
             ret = b.addProd(quantity,prodName);
@@ -138,4 +142,7 @@ public class ShoppingCart {
         this.discount = discount;
     }
 
+    public void addBasket(StoreBasket storeBasket) {
+        baskets.add(storeBasket);
+    }
 }

@@ -299,4 +299,8 @@ public class Member extends User implements Observer {
     public List<Notification> getMessages() {
         return awaitingNotification;
     }
+
+    public void addBasket(StoreBasket storeBasket) {
+        myShopCart.addBasket(storeBasket);
+    }
 }
