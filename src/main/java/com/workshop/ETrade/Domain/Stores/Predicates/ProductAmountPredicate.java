@@ -33,4 +33,16 @@ public class ProductAmountPredicate implements Predicate{
         }
         return minAmount == 0;
     }
+
+    public double getMinAmount() {
+        return minAmount;
+    }
+
+    public double getMaxAmount() {
+        return maxAmount;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
 }

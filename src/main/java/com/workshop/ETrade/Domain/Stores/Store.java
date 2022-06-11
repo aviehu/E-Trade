@@ -634,4 +634,12 @@ public class Store implements Observable {
     public List<Purchase> getPurchases() {
         return storeHistory.getPurchases();
     }
+
+    public int getPolicyId() {
+        return policyManager.getPolicyId();
+    }
+
+    public int getDiscountId() {
+        return policyManager.getDiscountId();
+    }
 }

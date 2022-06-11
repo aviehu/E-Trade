@@ -26,4 +26,12 @@ public class TimePredicate implements Predicate{
             return now.isBefore(startTime) || now.isAfter(endTime);
         }
     }
+
+    public LocalDate getStartTime() {
+        return startTime;
+    }
+
+    public LocalDate getEndTime() {
+        return endTime;
+    }
 }

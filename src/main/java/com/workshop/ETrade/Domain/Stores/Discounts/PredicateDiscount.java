@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import java.util.Map;
 
 public class PredicateDiscount extends Discount {
-    @DBRef(lazy = true)
+
     OperatorComponent operatorComponent;
 
     public PredicateDiscount(int id, String discountOn , int discountPercentage, String description, DiscountType type, OperatorComponent operatorComponent) {

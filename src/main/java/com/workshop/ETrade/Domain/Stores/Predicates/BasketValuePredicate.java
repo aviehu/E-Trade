@@ -21,4 +21,12 @@ public class BasketValuePredicate implements Predicate{
         }
         return total >= minValue && total <= maxValue;
     }
+
+    public double getMinValue() {
+        return minValue;
+    }
+
+    public double getMaxValue() {
+        return maxValue;
+    }
 }

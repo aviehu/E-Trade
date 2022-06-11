@@ -6,6 +6,11 @@ import com.workshop.ETrade.Domain.Stores.Bid;
 import com.workshop.ETrade.Domain.Stores.Product;
 import com.workshop.ETrade.Domain.Stores.Store;
 import com.workshop.ETrade.Repository.ProductRepository;
+<<<<<<< HEAD
+=======
+import com.workshop.ETrade.Service.ResultPackge.Result;
+import com.workshop.ETrade.TestEntity;
+>>>>>>> a60421d22b3a9246f621f44d3befe67c0fc17b7f
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.stereotype.Component;
@@ -20,17 +25,12 @@ import java.util.logging.Logger;
 
 public class UserController {
     public static int guestId;
-    @DBRef(lazy = true)
     List<Member> members;
     public static int memberDiscount;
 
-    @DBRef(lazy = true)
     private List<Guest> guests;
-    @DBRef(lazy = true)
     private List<Member> systemManagers;
-    @DBRef(lazy = true)
     private List<User> users;
-    @DBRef(lazy = true)
     private Logger logger = Logger.getLogger("users");
 
     public UserController() {
@@ -197,7 +197,7 @@ public class UserController {
             return user.displayCart();
         return null;
     }
-    public synchronized String purchase(String userName, String creditCard, int month,int year ,String holderName,int cvv,int id,String country,String city,String street,int stNum,int apartmentNum, int zip){
+    public synchronized Result<List<String>> purchase(String userName, String creditCard, int month, int year , String holderName, int cvv, int id, String country, String city, String street, int stNum, int apartmentNum, int zip){
         User user = getUser(userName);
         SupplyAddress sa;
         if(user != null) {
@@ -217,7 +217,7 @@ public class UserController {
             } else
                 return user.purchase(user.getCard(), user.getAddress());
         }
-        return "User: "+userName+" does not exist\n";
+        return new Result<>(null, "FAIL!User: "+userName+" does not exist\n");
     }
     public boolean isValidPassword(String password){
         return password != null && !password.equals("");

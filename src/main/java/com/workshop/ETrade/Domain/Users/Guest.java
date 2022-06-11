@@ -2,8 +2,10 @@ package com.workshop.ETrade.Domain.Users;
 
 import com.workshop.ETrade.Domain.Pair;
 import com.workshop.ETrade.Domain.Stores.Store;
+import com.workshop.ETrade.Service.ResultPackge.Result;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class Guest extends User {
     int id;
@@ -45,14 +47,11 @@ public class Guest extends User {
     }
 
     @Override
-    public String purchase(CreditCard card,SupplyAddress address) {
-        String ret = myShopCart.purchaseCart(card,address,userName);
-        if(ret == null) {
+    public Result<List<String>> purchase(CreditCard card, SupplyAddress address) {
+        Result<List<String>> ret = myShopCart.purchaseCart(card,address,userName);
+        if(ret.isSuccess())
             myShopCart.finishPurchase();
-            return null;
-        }
-        else
-            return ret;
+        return ret;
     }
 
     @Override

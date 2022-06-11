@@ -11,6 +11,8 @@ public class StoreDTO {
     public String name;
     @DBRef
     public List<ProductDTO> products;
+    public int discountId;
+    public int policyId;
     public String founderName;
     public int card;
     public boolean closed;
@@ -21,7 +23,7 @@ public class StoreDTO {
     public List<BidDTO> bids;
     //public List<PurchaseDTO>  purchaseHistory;
 
-    public StoreDTO(String name, String founderName, int card, boolean closed, int bidId,  List<MapDBobjDTO> ownersAppointments, List<MapDBobjDTO> managersAppointments, List<ProductDTO> products, Map<String, String> managersPermissions, List<BidDTO> bids) {
+    public StoreDTO(String name, String founderName, int card, boolean closed, int bidId,  List<MapDBobjDTO> ownersAppointments, List<MapDBobjDTO> managersAppointments, List<ProductDTO> products, Map<String, String> managersPermissions, List<BidDTO> bids, int discountId, int policyId) {
         this.name = name;
         this.products = products;
         this.founderName = founderName;
@@ -49,6 +51,8 @@ public class StoreDTO {
         this.ownersAppointments = ownersAppointments;
         this.managersAppointments = managersAppointments;
         this.bids = bids;
+        this.discountId = discountId;
+        this.policyId = policyId;
 //        this.purchaseHistory = purchaseHistory;
     }
 
@@ -83,6 +87,9 @@ public class StoreDTO {
         for (Bid b : bs) {
             bids.add(new BidDTO(b));
         }
+        policyId = store.getPolicyId();
+        discountId = store.getDiscountId();
+
 //        List<Purchase> purchases = store.getPurchases();
 //        purchaseHistory = new ArrayList<>();
 //        for(Purchase p : purchases) {

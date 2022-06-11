@@ -6,19 +6,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MemberPurchaseHistory {
-    @DBRef(lazy = true)
-    private List<StoreBasket>   basketsPurchased;
+    private List<StoreBasket> basketsPurchased;
 
     public MemberPurchaseHistory() {
         this.basketsPurchased = new ArrayList<>();
     }
 
     public String displayHistory(){
-        String display = "";
+        StringBuilder display = new StringBuilder();
         for(StoreBasket b : basketsPurchased){
-            display += b.displayBasket();
+            display.append(b.displayBasket());
         }
-        return display;
+        return display.toString();
     }
     public void addToHistory(StoreBasket b){
         basketsPurchased.add(b);
@@ -33,7 +32,7 @@ public class MemberPurchaseHistory {
     }
     public boolean isPurchasedFromStore(String storeName){
         for(StoreBasket b : basketsPurchased){
-            if(b.getStoreName() == storeName)
+            if(b.getStoreName().equals(storeName))
                 return true;
         }
         return false;
