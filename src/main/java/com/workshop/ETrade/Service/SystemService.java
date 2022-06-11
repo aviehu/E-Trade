@@ -45,10 +45,8 @@ public class SystemService implements ServiceInterface {
         init();
     }
     private static SystemService myInstance = null;
-    public SystemService() throws Exception {
 
-
-    public void init() throws Exception {
+    public void init(){
         this.facade = new Facade();
 //        File file = new File("src\\main\\java\\com\\workshop\\ETrade\\Service\\InitExecuter\\initState.json");
 //        String path = file.getAbsolutePath();
