@@ -3,6 +3,7 @@ package com.workshop.ETrade.Domain.Stores.Predicates;
 import com.workshop.ETrade.Domain.Stores.Product;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -30,5 +31,10 @@ public class OperatorComposite extends OperatorComponent {
             }
         }
         return ans;
+    }
+
+    @Override
+    public List<Predicate> getPredicates() {
+        return new ArrayList<>();
     }
 }

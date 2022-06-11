@@ -1,6 +1,7 @@
 package com.workshop.ETrade.Persistance.Stores;
 
 import com.workshop.ETrade.Domain.Stores.Predicates.BasketValuePredicate;
+import com.workshop.ETrade.Domain.Stores.Predicates.Predicate;
 import com.workshop.ETrade.Domain.Stores.Predicates.ProductAmountPredicate;
 import com.workshop.ETrade.Domain.Stores.Predicates.TimePredicate;
 
@@ -15,6 +16,10 @@ public class PredicateDTO {
 
     public PredicateDTO() {
 
+    }
+
+    public PredicateDTO(Predicate predicate) {
+        predicate.init();
     }
 
     public PredicateDTO(double minAmount, double maxAmount, String productName, LocalDate startTime, LocalDate endTime) {

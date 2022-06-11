@@ -2,9 +2,11 @@ package com.workshop.ETrade.Domain.Stores.Discounts;
 
 import com.workshop.ETrade.Domain.Stores.Calculators.Calculator;
 import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
+import com.workshop.ETrade.Domain.Stores.Predicates.Predicate;
 import com.workshop.ETrade.Domain.Stores.Product;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
+import java.util.List;
 import java.util.Map;
 
 public class PredicateDiscount extends Discount {
@@ -27,5 +29,13 @@ public class PredicateDiscount extends Discount {
     @Override
     public boolean shouldApply(Map<Product, Integer> amounts) {
         return operatorComponent.shouldApply(amounts);
+    }
+
+    public String OperatorType() {
+        return operatorComponent.getType();
+    }
+
+    public List<Predicate> getPredicates() {
+        return operatorComponent.getPredicates();
     }
 }

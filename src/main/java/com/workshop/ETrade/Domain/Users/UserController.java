@@ -6,11 +6,7 @@ import com.workshop.ETrade.Domain.Stores.Bid;
 import com.workshop.ETrade.Domain.Stores.Product;
 import com.workshop.ETrade.Domain.Stores.Store;
 import com.workshop.ETrade.Repository.ProductRepository;
-<<<<<<< HEAD
-=======
 import com.workshop.ETrade.Service.ResultPackge.Result;
-import com.workshop.ETrade.TestEntity;
->>>>>>> a60421d22b3a9246f621f44d3befe67c0fc17b7f
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.stereotype.Component;
