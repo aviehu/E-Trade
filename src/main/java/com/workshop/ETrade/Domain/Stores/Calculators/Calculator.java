@@ -20,5 +20,5 @@ public abstract class Calculator {
 
     abstract public String getDiscountOn();
 
-    abstract public double getDiscountPercentage();
+    abstract public int getDiscountPercentage();
 }

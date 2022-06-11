@@ -12,7 +12,7 @@ import java.util.List;
 public class DiscountDTO {
     public boolean isPre;
     public String discountOn;
-    public double discountPercentage;
+    public int discountPercentage;
     public String description;
     public DiscountType type;
 
@@ -23,7 +23,7 @@ public class DiscountDTO {
 
     }
 
-    public DiscountDTO(boolean isPre, String discountOn, double discountPercentage, String description, String type, String operatorType, List<PredicateDTO> predicates) {
+    public DiscountDTO(boolean isPre, String discountOn, int discountPercentage, String description, String type, String operatorType, List<PredicateDTO> predicates) {
         this.isPre = isPre;
         this.discountOn = discountOn;
         this.discountPercentage = discountPercentage;

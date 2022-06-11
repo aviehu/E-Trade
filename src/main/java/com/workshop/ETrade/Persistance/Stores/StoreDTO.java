@@ -1,6 +1,8 @@
 package com.workshop.ETrade.Persistance.Stores;
 
 import com.workshop.ETrade.Domain.Stores.*;
+import com.workshop.ETrade.Domain.Stores.Discounts.Discount;
+import com.workshop.ETrade.Domain.Stores.Policies.Policy;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
@@ -9,7 +11,6 @@ import java.util.*;
 public class StoreDTO {
     @Id
     public String name;
-    @DBRef
     public List<ProductDTO> products;
     public int discountId;
     public int policyId;
@@ -21,9 +22,11 @@ public class StoreDTO {
     public List<MapDBobjDTO> ownersAppointments;
     public List<MapDBobjDTO> managersAppointments;
     public List<BidDTO> bids;
+    public List<DiscountDTO> discounts;
+    public List<PolicyDTO> policies;
     //public List<PurchaseDTO>  purchaseHistory;
 
-    public StoreDTO(String name, String founderName, int card, boolean closed, int bidId,  List<MapDBobjDTO> ownersAppointments, List<MapDBobjDTO> managersAppointments, List<ProductDTO> products, Map<String, String> managersPermissions, List<BidDTO> bids, int discountId, int policyId) {
+    public StoreDTO(String name, String founderName, int card, boolean closed, int bidId,  List<MapDBobjDTO> ownersAppointments, List<MapDBobjDTO> managersAppointments, List<ProductDTO> products, Map<String, String> managersPermissions, List<BidDTO> bids, int discountId, int policyId, List<DiscountDTO> discounts, List<PolicyDTO> policies) {
         this.name = name;
         this.products = products;
         this.founderName = founderName;
@@ -53,6 +56,8 @@ public class StoreDTO {
         this.bids = bids;
         this.discountId = discountId;
         this.policyId = policyId;
+        this.discounts = discounts;
+        this.policies = policies;
 //        this.purchaseHistory = purchaseHistory;
     }
 
@@ -63,7 +68,7 @@ public class StoreDTO {
     public StoreDTO(Store store) {
         name = store.getName();
         List<Product> ps= store.getProducts();
-       products = new ArrayList<>();
+        products = new ArrayList<>();
         for (Product p : ps) {
             products.add(new ProductDTO(p));
         }
@@ -89,6 +94,16 @@ public class StoreDTO {
         }
         policyId = store.getPolicyId();
         discountId = store.getDiscountId();
+        List<Discount> discs = store.getDiscounts();
+        discounts = new LinkedList<>();
+        for(Discount d : discs) {
+            discounts.add(d.init());
+        }
+        List<Policy> polys = store.getPolicies();
+        policies = new LinkedList<>();
+        for(Policy p : polys) {
+            policies.add(new PolicyDTO(p));
+        }
 
 //        List<Purchase> purchases = store.getPurchases();
 //        purchaseHistory = new ArrayList<>();

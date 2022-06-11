@@ -8,9 +8,9 @@ import java.util.Map;
 
 public class CategoryCalculator extends Calculator {
     private String category;
-    private double discountPercent;
+    private int discountPercent;
 
-    public CategoryCalculator(String category, double discountPercent) {
+    public CategoryCalculator(String category, int discountPercent) {
         this.category = category;
         this.discountPercent = discountPercent;
     }
@@ -41,7 +41,7 @@ public class CategoryCalculator extends Calculator {
     }
 
     @Override
-    public double getDiscountPercentage() {
+    public int getDiscountPercentage() {
         return discountPercent;
     }
 

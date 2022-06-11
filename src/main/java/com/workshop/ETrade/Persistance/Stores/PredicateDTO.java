@@ -13,6 +13,7 @@ public class PredicateDTO {
     public String productName;
     public LocalDate startTime;
     public LocalDate endTime;
+    public String type;
 
     public PredicateDTO() {
 
@@ -22,12 +23,13 @@ public class PredicateDTO {
         predicate.init();
     }
 
-    public PredicateDTO(double minAmount, double maxAmount, String productName, LocalDate startTime, LocalDate endTime) {
+    public PredicateDTO(double minAmount, double maxAmount, String productName, LocalDate startTime, LocalDate endTime,String type) {
         this.minAmount = minAmount;
         this.maxAmount = maxAmount;
         this.productName = productName;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.type = type;
     }
 
     public PredicateDTO(BasketValuePredicate predicate) {
@@ -36,6 +38,7 @@ public class PredicateDTO {
         productName = null;
         startTime = null;
         endTime = null;
+        type = "BASKET";
     }
 
     public PredicateDTO(ProductAmountPredicate predicate) {
@@ -44,6 +47,7 @@ public class PredicateDTO {
         productName = predicate.getProductName();
         startTime = null;
         endTime = null;
+        type = "AMOUNT";
     }
 
     public PredicateDTO(TimePredicate predicate) {
@@ -52,6 +56,7 @@ public class PredicateDTO {
         productName = null;
         startTime = predicate.getStartTime();
         endTime = predicate.getEndTime();
+        type = "TIME";
     }
 
 

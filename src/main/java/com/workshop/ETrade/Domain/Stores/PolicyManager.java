@@ -3,6 +3,12 @@ package com.workshop.ETrade.Domain.Stores;
 import com.workshop.ETrade.Domain.Stores.Discounts.*;
 import com.workshop.ETrade.Domain.Stores.Policies.*;
 import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
+import com.workshop.ETrade.Domain.Stores.Predicates.OperatorLeaf;
+import com.workshop.ETrade.Domain.Stores.Predicates.Predicate;
+import com.workshop.ETrade.Domain.Stores.Predicates.PredicateBuilder;
+import com.workshop.ETrade.Persistance.Stores.DiscountDTO;
+import com.workshop.ETrade.Persistance.Stores.PolicyDTO;
+import com.workshop.ETrade.Persistance.Stores.PredicateDTO;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.util.*;
@@ -20,6 +26,59 @@ public class PolicyManager {
         discounts = new LinkedList<>();
         policies = new LinkedList<>();
     }
+
+    public PolicyManager(List<PolicyDTO> policies, int policyId, List<DiscountDTO> discounts, int discountId) {
+        this.discounts = new LinkedList<>();
+        this.policies = new LinkedList<>();
+        for(PolicyDTO pdto : policies) {
+            List<Predicate> pres = new ArrayList<>();
+            for(PredicateDTO p : pdto.predicates) {
+                switch (p.type) {
+                    case ("TIME"): {
+                        pres.add(PredicateBuilder.getTimePredicate(p.startTime, p.endTime, true));
+                        break;
+                    }
+                    case ("AMOUNT"): {
+                        pres.add(PredicateBuilder.getProductAmountPredicate(p.productName, p.minAmount, p.maxAmount));
+                        break;
+                    }
+                    default: {
+                        pres.add(PredicateBuilder.getBasketValuePredicate(p.minAmount, p.maxAmount));
+                        break;
+                    }
+                }
+            }
+            OperatorLeaf ol = new OperatorLeaf(pdto.operatorType, pres);
+            addPolicy(pdto.policyOn, pdto.description,pdto.type,ol);
+        }
+        this.policyId = policyId;
+
+        for(DiscountDTO ddto : discounts) {
+            List<Predicate> pres = new ArrayList<>();
+            if(ddto.isPre) {
+                for(PredicateDTO p : ddto.predicates) {
+                    switch (p.type) {
+                        case ("TIME"): {
+                            pres.add(PredicateBuilder.getTimePredicate(p.startTime, p.endTime, true));
+                            break;
+                        }
+                        case ("AMOUNT"): {
+                            pres.add(PredicateBuilder.getProductAmountPredicate(p.productName, p.minAmount, p.maxAmount));
+                            break;
+                        }
+                        default: {
+                            pres.add(PredicateBuilder.getBasketValuePredicate(p.minAmount, p.maxAmount));
+                            break;
+                        }
+                    }
+                }
+                OperatorLeaf ol = new OperatorLeaf(ddto.operatorType, pres);
+                addPredicateDiscount(ddto.discountOn, ddto.discountPercentage, ddto.description, ddto.type,ol);
+            }
+        }
+        this.policyId = policyId;
+    }
+
 
     private Discount getDiscountById(int id) {
         for(Discount discount : discounts) {
@@ -138,5 +197,13 @@ public class PolicyManager {
 
     public int getDiscountId() {
         return discountId;
+    }
+
+    public List<Discount> getDiscounts() {
+        return discounts;
+    }
+
+    public List<Policy> getPolicies() {
+        return policies;
     }
 }

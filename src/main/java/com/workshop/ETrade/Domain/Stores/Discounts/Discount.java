@@ -5,6 +5,7 @@ import com.workshop.ETrade.Domain.Stores.Calculators.CategoryCalculator;
 import com.workshop.ETrade.Domain.Stores.Calculators.ProductCalculator;
 import com.workshop.ETrade.Domain.Stores.Calculators.StoreCalculator;
 import com.workshop.ETrade.Domain.Stores.Product;
+import com.workshop.ETrade.Persistance.Stores.DiscountDTO;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.util.Map;
@@ -55,7 +56,7 @@ public class Discount {
         return calculator.getDiscountOn();
     }
 
-    public double getDiscountPercentage() {
+    public int getDiscountPercentage() {
         return calculator.getDiscountPercentage();
     }
 
@@ -65,5 +66,9 @@ public class Discount {
 
     public DiscountType getType() {
         return type;
+    }
+
+    public DiscountDTO init() {
+        return new DiscountDTO(this);
     }
 }
