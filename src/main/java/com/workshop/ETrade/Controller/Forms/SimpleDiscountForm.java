@@ -7,6 +7,6 @@ public class SimpleDiscountForm {
     public int discountPercentage;
     public String description;
     public String type;
-    public List<Predicate> predicates;
+    public List<PredicateForm> predicateForms;
     public String connectionType;
 }

@@ -38,10 +38,10 @@ public class SystemServiceProxy implements ServiceInterface {
     }
 
     @Override
-    public Result<Integer> addPolicy(String userName, String store, String policyOn, String description, PolicyType policyType, List<Predicate> predicates, String connectionType) {
+    public Result<Integer> addPolicy(String userName, String store, String policyOn, String description, PolicyType policyType, List<PredicateForm> predicateForms, String connectionType) {
         if (real == null)
             throw new NotImplementedException();
-        return real.addPolicy(userName, store, policyOn, description, policyType, predicates, connectionType );
+        return real.addPolicy(userName, store, policyOn, description, policyType, predicateForms, connectionType );
     }
     @Override
     public Result<Integer> addDiscount(String userName, String store, String discountOn, int discountPercentage, String description, DiscountType discountType) {
@@ -79,10 +79,10 @@ public class SystemServiceProxy implements ServiceInterface {
     }
 
     @Override
-    public Result<Integer> addPreDiscount(String userName, String storeName, String discountOn, int discountPercentage, String description, DiscountType discountType, List<Predicate> predicates, String connectionType) {
+    public Result<Integer> addPreDiscount(String userName, String storeName, String discountOn, int discountPercentage, String description, DiscountType discountType, List<PredicateForm> predicateForms, String connectionType) {
         if (real == null)
             throw new NotImplementedException();
-        return real.addPreDiscount(userName, storeName, discountOn, discountPercentage, description, discountType, predicates, connectionType);
+        return real.addPreDiscount(userName, storeName, discountOn, discountPercentage, description, discountType, predicateForms, connectionType);
     }
 
     @Override

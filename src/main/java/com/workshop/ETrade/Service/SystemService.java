@@ -42,8 +42,8 @@ public class SystemService implements ServiceInterface {
     }
 
     @Override
-    public Result<Integer> addPolicy(String userName, String store, String policyOn, String description, PolicyType policyType, List<Predicate> predicates, String connectionType) {
-        return facade.addPolicy(userName, store, policyOn, description, policyType, predicates, connectionType);
+    public Result<Integer> addPolicy(String userName, String store, String policyOn, String description, PolicyType policyType, List<PredicateForm> predicateForms, String connectionType) {
+        return facade.addPolicy(userName, store, policyOn, description, policyType, predicateForms, connectionType);
     }
 
 
@@ -318,8 +318,8 @@ public class SystemService implements ServiceInterface {
     }
 
     @Override
-    public Result<Integer> addPreDiscount(String userName, String storeName, String discountOn, int discountPercentage, String description, DiscountType discountType, List<Predicate> predicates, String connectionType) {
-        return facade.addPreDiscount(userName, storeName, discountOn, discountPercentage, description, discountType, predicates, connectionType);
+    public Result<Integer> addPreDiscount(String userName, String storeName, String discountOn, int discountPercentage, String description, DiscountType discountType, List<PredicateForm> predicateForms, String connectionType) {
+        return facade.addPreDiscount(userName, storeName, discountOn, discountPercentage, description, discountType, predicateForms, connectionType);
     }
 
     @Override

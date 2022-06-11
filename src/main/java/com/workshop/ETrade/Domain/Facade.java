@@ -345,7 +345,7 @@ public class Facade implements SystemFacade {
             if (ret == null)
                 return new Result<>(true, null);
             else
-                return new Result<>(false,ret);
+                return new Result<>(null,ret);
         }
         return new Result<>(false, "User is not connected");
     }
@@ -589,8 +589,8 @@ public class Facade implements SystemFacade {
     }
 
     @Override
-    public Result<Integer> addPolicy(String userName, String store, String policyOn, String description, PolicyType policyType, List<Predicate> predicates, String connectionType) {
-        int ret = this.storesFacade.addPolicy(userName,store, policyOn, description, policyType, predicates, connectionType);
+    public Result<Integer> addPolicy(String userName, String store, String policyOn, String description, PolicyType policyType, List<PredicateForm> predicateForms, String connectionType) {
+        int ret = this.storesFacade.addPolicy(userName,store, policyOn, description, policyType, predicateForms, connectionType);
         if(ret >= 0) {
             return new Result<>(ret,null);
         }
@@ -606,8 +606,8 @@ public class Facade implements SystemFacade {
     }
 
     @Override
-    public Result<Integer> addPreDiscount(String userName, String storeName, String discountOn, int discountPercentage, String description, DiscountType discountType, List<Predicate> predicates, String connectionType) {
-        int ret = this.storesFacade.addPreDiscount(userName,storeName, discountOn, discountPercentage, description, discountType, predicates, connectionType);
+    public Result<Integer> addPreDiscount(String userName, String storeName, String discountOn, int discountPercentage, String description, DiscountType discountType, List<PredicateForm> predicateForms, String connectionType) {
+        int ret = this.storesFacade.addPreDiscount(userName,storeName, discountOn, discountPercentage, description, discountType, predicateForms, connectionType);
         if(ret == -1)
             return new Result<>(null,"ERROR\n");
         return new Result<>(ret,null);

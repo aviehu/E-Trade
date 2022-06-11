@@ -30,7 +30,7 @@ public class UserController {
         this.systemManagers = new ArrayList<>();
         users = new ArrayList<>();
         try {
-            Handler fileHandler = new FileHandler(System.getProperty("user.dir") + "/users.log", 2000, 5);
+            Handler fileHandler = new FileHandler(System.getProperty("user.dir") + "/usersLogs/users.log", 2000, 5);
             logger.addHandler(fileHandler);
         } catch (Exception e) {
             System.out.println("error while creating logger for users");
