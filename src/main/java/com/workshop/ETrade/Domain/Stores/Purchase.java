@@ -1,5 +1,6 @@
 package com.workshop.ETrade.Domain.Stores;
 
+import com.workshop.ETrade.Persistance.Stores.PurchaseDTO;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.time.LocalDate;
@@ -8,13 +9,12 @@ import java.util.Map;
 public class Purchase {
     private double price;
 
-    @DBRef(lazy = true)
-    private Map<Product, Integer> prods;
+    private Map<String, Integer> prods;
     private String buyer;
     private LocalDate purchaseTime;
     private int purchaseId;
 
-    public Purchase(double price, Map<Product, Integer> prods, String buyer, int purchaseId) {
+    public Purchase(double price, Map<String, Integer> prods, String buyer, int purchaseId) {
         this.price = price;
         this.buyer = buyer;
         this.purchaseTime = LocalDate.now();
@@ -22,20 +22,31 @@ public class Purchase {
         this.prods = prods;
     }
 
-    private String printProducts() {
-        String result = "";
-        for(Product product : prods.keySet()) {
-            result +=  "Product: " + product.getName() + "\tAmount :" + prods.get(product) + "\n";
-        }
-        return result;
+    public Purchase(PurchaseDTO pur) {
+        price = pur.price;
+        buyer = pur.buyer;
+        purchaseTime = pur.purchaseTime;
+        purchaseId = pur.purchaseId;
+        prods = pur.prods;
     }
 
-    public String toString() {
-        String result = "Purchase " + purchaseId + ":\n";
-        result +=       "Buyer: " + buyer + "\n";
-        result +=       "Products: \n" + printProducts();
-        result +=       "Price: " + price + "\n";
-        result +=       "Purchase Time: " + purchaseTime.toString() + "\n\n";
-        return result;
+    public double getPrice() {
+        return price;
+    }
+
+    public Map<String, Integer> getProds() {
+        return prods;
+    }
+
+    public String getBuyer() {
+        return buyer;
+    }
+
+    public LocalDate getPurchaseTime() {
+        return purchaseTime;
+    }
+
+    public int getPurchaseId() {
+        return purchaseId;
     }
 }

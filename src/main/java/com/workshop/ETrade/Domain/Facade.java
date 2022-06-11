@@ -32,14 +32,9 @@ public class Facade implements SystemFacade {
         storesFacade = new StoresFacade();
         userController = new UserController();
         externalSys = ExtSysController.getInstance();
-        init();
     }
     public void init(){
-        String guest = enterSystem().getVal();
-        login(guest,"domain","domain");
-        openStore("domain","SuperStore",123);
-        addProductToStore("domain","SuperStore","Bamba",200,5,"Snacks");
-        logOut("domain");
+        storesFacade.init();
     }
 
     @Override

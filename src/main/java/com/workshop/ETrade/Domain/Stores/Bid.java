@@ -2,6 +2,7 @@ package com.workshop.ETrade.Domain.Stores;
 
 import com.workshop.ETrade.Domain.Users.CreditCard;
 import com.workshop.ETrade.Domain.Users.SupplyAddress;
+import com.workshop.ETrade.Persistance.Stores.BidDTO;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.util.Map;
@@ -40,6 +41,19 @@ public class Bid {
         this.approvedByBidder = true;
         this.storeName = storeName;
         initMap(ownersNames);
+    }
+
+    public Bid(BidDTO bidDTO, Product prod) {
+        product = prod;
+        bidderName = bidDTO.bidderName;
+        price = bidDTO.price;
+        bidId = bidDTO.bidId;
+        awaitingApprove = bidDTO.awaitingApprove;
+        rejected = bidDTO.rejected;
+        creditCard = new CreditCard(bidDTO.cardNumber, bidDTO.month, bidDTO.year, bidDTO.cvv, bidDTO.id, bidDTO.holderName);
+        supplyAddress = new SupplyAddress(bidDTO.country, bidDTO.city, bidDTO.street, bidDTO.streetNum, bidDTO.apartmentNum, bidDTO.zip);
+        approvedByBidder = bidDTO.approvedByBidder;
+        storeName = bidDTO.storeName;
     }
 
     public String getProductName() {

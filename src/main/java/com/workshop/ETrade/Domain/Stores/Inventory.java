@@ -1,17 +1,25 @@
 package com.workshop.ETrade.Domain.Stores;
 
 import com.workshop.ETrade.Domain.purchaseOption;
+import com.workshop.ETrade.Persistance.Stores.ProductDTO;
+import com.workshop.ETrade.Persistance.Stores.StoreDTO;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.util.*;
 
 public class Inventory {
 
-    @DBRef
     private List<Product> products;
 
     public Inventory() {
         products = Collections.synchronizedList(new ArrayList<Product>());
+    }
+
+    public Inventory(List<ProductDTO> prods) {
+        products = Collections.synchronizedList(new ArrayList<>());
+        for(ProductDTO p : prods) {
+            products.add(new Product(p));
+        }
     }
 
     public Map<Product, Integer> getAmountsFromNames(Map<String, Integer> amounts) {

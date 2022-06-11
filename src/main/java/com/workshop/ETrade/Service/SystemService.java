@@ -6,17 +6,17 @@ import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
 import com.workshop.ETrade.Domain.Stores.Product;
-import com.workshop.ETrade.Domain.Stores.Store;
 import com.workshop.ETrade.Domain.Stores.managersPermission;
 import com.workshop.ETrade.Domain.Users.ExternalService.Payment.PaymentAdaptee;
 import com.workshop.ETrade.Domain.Users.ExternalService.Supply.SupplyAdaptee;
 import com.workshop.ETrade.Domain.purchaseOption;
-import com.workshop.ETrade.Persistance.StoreDTO;
+import com.workshop.ETrade.Persistance.Stores.StoreDTO;
 import com.workshop.ETrade.Repository.MemberRepository;
 import com.workshop.ETrade.Repository.ProductRepository;
 import com.workshop.ETrade.Repository.StoreRepository;
 import com.workshop.ETrade.Service.ResultPackge.Result;
 import com.workshop.ETrade.TestEntity;
+import com.workshop.ETrade.TestRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +25,7 @@ import java.util.List;
 
 @Service
 public class SystemService implements ServiceInterface {
-
+    private boolean initialize;
     private Facade facade;
 
     @Autowired
@@ -38,6 +38,7 @@ public class SystemService implements ServiceInterface {
     private StoreRepository storeRepository;
 
     public SystemService() {
+        initialize = false;
         init();
     }
 
@@ -90,6 +91,12 @@ public class SystemService implements ServiceInterface {
 
     @Override
     public Result<String> enterSystem() {
+        if(!initialize) {
+            List<StoreDTO> sss = storeRepository.findAll();
+            TestRepo.setRepo(storeRepository);
+            facade.init();
+            initialize = true;
+        }
         return facade.enterSystem();
     }
 
@@ -140,7 +147,6 @@ public class SystemService implements ServiceInterface {
 
     @Override
     public Result<Boolean> signUp(String userName, String newUserName, String password, String name, String lastName) {
-        memberRepository.save(new TestEntity(newUserName, password));
         return facade.signUp(userName, newUserName, password, name, lastName);
     }
 
@@ -206,15 +212,12 @@ public class SystemService implements ServiceInterface {
     @Override
     public Result<Boolean> openStore(String founderName, String storeName, int card) {
         Result<Boolean> res = facade.openStore(founderName, storeName, card);
-        if (res.isSuccess())
-            storeRepository.save(new StoreDTO(facade.storesFacade.getStore(storeName)));
         return res;
     }
 
     @Override
     public Result<Boolean> addProductToStore(String userName, String storeName, String productName, int amount, double price, String category) {
         Result<Boolean> res = facade.addProductToStore(userName, storeName, productName, amount, price, category);
-        if(res.isSuccess()) productRepository.save(new Product(productName, amount, price, category));
         return res;
     }
 
