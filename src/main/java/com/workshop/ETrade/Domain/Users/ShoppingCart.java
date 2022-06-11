@@ -14,6 +14,8 @@ import java.util.List;
 
 public class ShoppingCart {
 
+    private static Integer basketId = 0;
+
     private ExtSysController extSystems = null;
 
     private List<StoreBasket> baskets;
@@ -109,8 +111,11 @@ public class ShoppingCart {
             baskets.add(b);
             AllRepos.getStoreBasketRepo().save(new StoreBasketDTO(b));
         }
-        else
-            ret = b.addProd(quantity,prodName);
+        else {
+            ret = b.addProd(quantity, prodName);
+            StoreBasketDTO dto = AllRepos.getStoreBasketRepo().findByStoreAndUser(b.getStore().getName(), b.getUserName());
+            AllRepos.getStoreBasketRepo().save(new StoreBasketDTO(b, dto.getId()));
+        }
         if(ret.contains("successfully"))
             return ret+displayCart();
         else
@@ -123,6 +128,14 @@ public class ShoppingCart {
         }
         else {
             String ret = b.removeProd(quantity,prodName);
+            if(b.getProds().isEmpty()) {
+                StoreBasketDTO dto = AllRepos.getStoreBasketRepo().findByStoreAndUser(b.getStore().getName(), b.getUserName());
+                AllRepos.getStoreBasketRepo().delete(new StoreBasketDTO(b, dto.getId()));
+            }
+            else {
+                StoreBasketDTO dto = AllRepos.getStoreBasketRepo().findByStoreAndUser(b.getStore().getName(), b.getUserName());
+                AllRepos.getStoreBasketRepo().save(new StoreBasketDTO(b, dto.getId()));
+            }
             if (ret == null)
                 return "Successfully added "+quantity+" "+prodName+".\n"+displayCart();
             else
@@ -134,9 +147,13 @@ public class ShoppingCart {
         return baskets;
     }
     public void finishPurchase(){
-        for(StoreBasket b : baskets)
+        for(StoreBasket b : baskets) {
             b.finishPurchase();
+            StoreBasketDTO dto = AllRepos.getStoreBasketRepo().findByStoreAndUser(b.getStore().getName(), b.getUserName());
+            AllRepos.getStoreBasketRepo().delete(new StoreBasketDTO(b, dto.getId()));
+        }
         baskets.clear();
+
     }
 
     public void setDiscount(int discount) {
@@ -146,4 +163,6 @@ public class ShoppingCart {
     public void addBasket(StoreBasket storeBasket) {
         baskets.add(storeBasket);
     }
+
+
 }

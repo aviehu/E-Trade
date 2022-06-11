@@ -15,6 +15,10 @@ public class StoreBasket {
     private Store store;
     private String userName;
 
+    private String Id;
+
+
+
     public void setProds(HashMap<String, Integer> prods) {
         this.prods = prods;
     }

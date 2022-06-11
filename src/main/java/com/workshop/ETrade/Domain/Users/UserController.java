@@ -7,6 +7,7 @@ import com.workshop.ETrade.Domain.Stores.Bid;
 import com.workshop.ETrade.Domain.Stores.Product;
 import com.workshop.ETrade.Domain.Stores.Store;
 import com.workshop.ETrade.Persistance.Users.MemberDTO;
+import com.workshop.ETrade.Persistance.Users.SystemManagerDTO;
 import com.workshop.ETrade.Repository.ProductRepository;
 import com.workshop.ETrade.Service.ResultPackge.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Logger;
@@ -27,7 +29,7 @@ public class UserController {
     public static int memberDiscount;
 
     private List<Guest> guests;
-    private List<Member> systemManagers;
+    private List<String> systemManagers;
     private List<User> users;
     private Logger logger = Logger.getLogger("users");
 
@@ -50,11 +52,18 @@ public class UserController {
         //load from database
         Member systemManager = new Member("domain","domain", "domain","domain");
         members.add(systemManager);
-        systemManagers.add(systemManager);
+        systemManagers.add(systemManager.getUserName());
         loadMembers();
+        loadSystemManager();
         users.addAll(members);
         users.addAll(guests);
-        users.addAll(systemManagers);
+    }
+
+    private void loadSystemManager() {
+        List<SystemManagerDTO> smDTOS = AllRepos.getSystemManagerRepo().findAll();
+        for (SystemManagerDTO sm : smDTOS) {
+            systemManagers.add(sm.getSystemManager());
+        }
     }
 
     private void loadMembers () {
@@ -72,22 +81,24 @@ public class UserController {
    }
 
     public String addSystemManager(String userName,String managerToAdd){
-        Member u = getMember(userName);
-        if(systemManagers.contains(u)){
+        if(systemManagers.contains(userName)){
             Member m = getMember(managerToAdd);
-            if(!systemManagers.contains(m)){
-                if(m != null){
+            if(m != null){
+                if(!systemManagers.contains(m.getUserName())){
                     Member sm = new Member(m.getUserName(), m.getPassword(),m.getName(),m.getLastName());
                     members.remove(m);
-                    systemManagers.add(sm);
+                    systemManagers.add(sm.getUserName());
                     users.add(sm);
+                    AllRepos.getSystemManagerRepo().save(new SystemManagerDTO(sm.getUserName()));
                     logger.info("new system manager - " + managerToAdd);
                     return null;
                 }
                 else
-                    return managerToAdd+ " is not a registered member\n";
+                    return managerToAdd+" is already a system manager\n";
+
             }else
-                return managerToAdd+" is already a system manager\n";
+            return managerToAdd+ " is not a registered member\n";
+
         }
         else
             return "You don't have permission to add system manager\n";
@@ -166,6 +177,11 @@ public class UserController {
             if(m.getUserName().equals(userName))
                 return m;
         }
+//        Optional<MemberDTO> memberDTO = AllRepos.getMemberRepo().findById(userName);
+//        if (memberDTO.isPresent()) {
+//            Member member = new Member(memberDTO.get());
+//
+//        }
         return null;
     }
     public Guest getGuest(String userName){
@@ -198,8 +214,11 @@ public class UserController {
     }
     public String removeProductFromShoppingCart(String userName,Store s,int quantity,String prodName){
         User user = getUser(userName);
-        if(user != null)
-            return user.removeProd(s,quantity,prodName);
+        if(user != null) {
+            if (user.getClass().equals(Member.class))
+
+            return user.removeProd(s, quantity, prodName);
+        }
         return "User: "+userName+" does not exist\n";
     }
     public HashMap<String, Pair<Integer, String>> displayShoppingCart(String userName){
@@ -249,9 +268,9 @@ public class UserController {
         return false;
     }
     public Member getSysManager(String userName){
-        for(Member sm : systemManagers){
-            if(sm.getUserName().equals(userName))
-                return sm;
+        for(String sm : systemManagers){
+            if(sm.equals(userName))
+                return getMember(sm);
         }
         return null;
     }
@@ -263,7 +282,8 @@ public class UserController {
         if(sm1 != null && sm2 != null){
             Member m = new Member(sm2.getUserName(),sm2.getPassword(),sm2.getName(),sm2.getLastName());
             members.add(m);
-            systemManagers.remove(sm2);
+            systemManagers.remove(sm2.getUserName());
+            AllRepos.getSystemManagerRepo().delete(new SystemManagerDTO(sm2.getUserName()));
             logger.info("removed system manager - " + managerToRemove);
             return true;
         }
@@ -278,6 +298,7 @@ public class UserController {
             if(m != null){
                 members.remove(m);
                 users.remove(m);
+                AllRepos.getMemberRepo().delete(new MemberDTO(m));
                 //return "Successfully removed "+ memberToRemove+" from the system\n";
                 logger.info("removed member - " + memberToRemove);
                 return null;
@@ -315,7 +336,7 @@ public class UserController {
                 ret.add(m.getUserName());
             }
         }
-        ret.remove(getMember(userName));
+        ret.remove(userName);
         return ret;
     }
     public List<String> getOfflineMembers(String userName) {
