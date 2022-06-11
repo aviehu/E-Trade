@@ -162,7 +162,7 @@ public class Store implements Observable {
                 products.put(product, prods.get(productName));
             }
             storeHistory.addPurchase(policyManager.getTotalPrice(products), products, buyer);
-            purchased(prods.keySet().stream().toList(),buyer);
+            purchased(prods,buyer);
             return true;
         }
         return false;
@@ -186,9 +186,9 @@ public class Store implements Observable {
                 products.put(product, prods.get(productName));
             }
             storeHistory.addPurchase(policyManager.getTotalPrice(products), products, buyer.getUserName());
-            purchased(prods.keySet().stream().toList(),buyer.getUserName());
+            purchasedBid((String) prods.keySet().toArray()[0],buyer.getUserName());
             notifyUser("Your bid has been approved", name, buyer);
-            notifySubscribers("A bid for - " + prods.keySet().toArray()[0] + "  in " + name + " has been approved", buyer.getUserName());
+            //notifySubscribers("A bid for - " + prods.keySet().toArray()[0] + "  in " + name + " has been approved", buyer.getUserName());
 
             return true;
         }
@@ -475,11 +475,18 @@ public class Store implements Observable {
         return storeHistory.getHistory();
     }
 
-    public void purchased(List<String> products,String userNamePurchased){
-        String mess = "";
-        for(String p : products){
-            mess+=p+"\n";
+    public void purchased(Map<String,Integer> prods,String userNamePurchased){
+        String mess = userNamePurchased+ " has made A new purchase at the " + name+ " store:\n";
+        for(String p : prods.keySet()){
+            mess+=p+"\tx"+ prods.get(p)+"\n";
         }
+        notifySubscribers(mess,userNamePurchased);
+
+    }
+
+    public void purchasedBid(String prodName,String userNamePurchased){
+        String mess = "All management has confirmed "+userNamePurchased+"'s bid for the "+prodName+" product\nAnd the purchase of the product was completed successfully\n";
+
         notifySubscribers(mess,userNamePurchased);
 
     }

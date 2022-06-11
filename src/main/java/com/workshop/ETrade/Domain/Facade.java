@@ -27,7 +27,9 @@ public class Facade implements SystemFacade {
     public Facade() {
         storesFacade = new StoresFacade();
         userController = new UserController();
-        externalSys = ExtSysController.getInstance();
+        //need to change according to config file.
+        externalSys = ExtSysController.getInstance(true,true);
+        //
         init();
     }
     public void init(){
