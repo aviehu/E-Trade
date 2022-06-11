@@ -92,6 +92,7 @@ public class StoresFacade {
                 logger.info("store - " + storeName + "closed by admin");
                 return true;
             }
+            AllRepos.getStoreRepo().save(new StoreDTO(store));
         }
         return false;
     }
@@ -107,6 +108,7 @@ public class StoresFacade {
             return false;
         }
         stores.remove(store);
+        AllRepos.getStoreRepo().delete(new StoreDTO(store));
         return true;
     }
 
@@ -173,6 +175,7 @@ public class StoresFacade {
         }
         if(store.removeProduct(userName ,productName)) {
             logger.info("product - " + productName + " was removed from store");
+            AllRepos.getStoreRepo().save(new StoreDTO(store));
             return true;
         }
         return false;
@@ -228,6 +231,7 @@ public class StoresFacade {
         }
         if(store.addOwner(userName, newOwner)) {
             logger.info("new store owner for store - " + storeName);
+            AllRepos.getStoreRepo().save(new StoreDTO(store));
             return true;
         }
         return false;
@@ -285,6 +289,7 @@ public class StoresFacade {
         if(store != null) {
             if(store.closeStore(userName)) {
                 logger.info("store - " + storeName + " is now closed");
+                AllRepos.getStoreRepo().save(new StoreDTO(store));
                 return true;
             }
         }
@@ -296,6 +301,7 @@ public class StoresFacade {
         if(store != null) {
             if(store.changeStoreManagersPermission(userName, managerName, newPermission)) {
                 logger.info("changed permission for manger - " + managerName);
+                AllRepos.getStoreRepo().save(new StoreDTO(store));
                 return true;
             }
         }
@@ -344,7 +350,11 @@ public class StoresFacade {
         if(store == null) {
             return false;
         }
-        return store.removeOwner(userName, ownerToRemove);
+        if(store.removeOwner(userName, ownerToRemove)) {
+            AllRepos.getStoreRepo().save(new StoreDTO(store));
+            return true;
+        }
+        return false;
     }
 
     public boolean removeStoreManager(String userName, String storeName, String managerToRemove) {
@@ -352,7 +362,11 @@ public class StoresFacade {
         if(store == null) {
             return false;
         }
-        return store.removeManager(userName, managerToRemove);
+        if(store.removeManager(userName, managerToRemove)) {
+            AllRepos.getStoreRepo().save(new StoreDTO(store));
+            return true;
+        }
+        return false;
     }
 
     public int addPreDiscount(String userName, String storeName, String discountOn, int discountPercentage, String description, DiscountType discountType, List<PredicateForm> predicateForms, String connectionType) {
@@ -408,6 +422,7 @@ public class StoresFacade {
         if(store == null) {
             return null;
         }
+        AllRepos.getStoreRepo().save(new StoreDTO(store));
         return store.reviewBid(userName, bidId, approve);
     }
 
@@ -416,6 +431,7 @@ public class StoresFacade {
         if(store == null) {
             return false;
         }
+        AllRepos.getStoreRepo().save(new StoreDTO(store));
         return store.counterBid(bidId, newOffer);
     }
 
@@ -427,6 +443,7 @@ public class StoresFacade {
         HashMap<String, Integer> prods = new HashMap<>();
         prods.put(productName, 1);
         store.purchaseBid(prods,user);
+        AllRepos.getStoreRepo().save(new StoreDTO(store));
     }
 
     public List<Bid> userBids(String userName) {
@@ -442,6 +459,7 @@ public class StoresFacade {
         if(store == null) {
             return null;
         }
+        AllRepos.getStoreRepo().save(new StoreDTO(store));
         return store.counterBidReview(bidId, approve);
     }
 }

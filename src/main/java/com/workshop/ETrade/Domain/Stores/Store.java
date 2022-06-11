@@ -103,12 +103,12 @@ public class Store implements Observable {
     }
 
     public int addPredicateDiscount(String discountOn, int discountPercentage, String description, DiscountType discountType, OperatorComponent operatorComponent) {
-        return policyManager.addPredicateDiscount(discountOn, discountPercentage, description, discountType, operatorComponent);
+        return policyManager.addPredicateDiscount(policyManager.getDiscountId(),discountOn, discountPercentage, description, discountType, operatorComponent);
     }
 
     public int addPolicy(String userName,String policyOn, String description, PolicyType policyType, OperatorComponent operatorComponent) {
         if(isOwner(userName)) {
-            return policyManager.addPolicy(policyOn, description, policyType, operatorComponent);
+            return policyManager.addPolicy(policyManager.getPolicyId(), policyOn, description, policyType, operatorComponent);
         }
         return -1;
     }
@@ -205,7 +205,9 @@ public class Store implements Observable {
         if(bid == null) {
             return false;
         }
-        return bid.counterOffer(newOffer);
+        boolean ans = bid.counterOffer(newOffer);
+        AllRepos.getBidRepo().save(new BidDTO(bid));
+        return ans;
     }
 
     public synchronized boolean purchaseBid(Map<String,Integer> prods, User buyer){
@@ -272,7 +274,9 @@ public class Store implements Observable {
     public boolean addBid(String productName, double amount, String biddersName, CreditCard creditCard, SupplyAddress supplyAddress, String storeName) {
         Product product = inventory.getProductByName(productName);
         if(product != null && product.getSelectedOption() == purchaseOption.BID) {
-            bids.add(new Bid(product,biddersName,amount,ownersAppointments.keySet(), bidId, creditCard, supplyAddress, storeName));
+            Bid bid = new Bid(product,biddersName,amount,ownersAppointments.keySet(), bidId, creditCard, supplyAddress, storeName);
+            bids.add(bid);
+            AllRepos.getBidRepo().save(new BidDTO(bid));
             bidId++;
             return true;
         }
@@ -591,6 +595,7 @@ public class Store implements Observable {
                 return bid.approve(userName);
             }
             bid.reject();
+            AllRepos.getBidRepo().save(new BidDTO(bid));
         }
         return null;
     }
@@ -610,7 +615,9 @@ public class Store implements Observable {
         if(bid == null) {
             return null;
         }
-        return bid.counterOfferReview(approve);
+        Bid b = bid.counterOfferReview(approve);
+        AllRepos.getBidRepo().save(new BidDTO(b));
+        return b;
     }
 
     public String getFounderName() {
