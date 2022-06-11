@@ -94,6 +94,7 @@ public class UserController {
         Member m = new Member(userName, password,name,lastName);
         members.add(m);
         users.add(m);
+
         logger.info("new user - " + userName);
         return true;
     }

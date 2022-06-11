@@ -11,7 +11,6 @@ import java.util.List;
 //is paying and supply is known to store or the market responsible to supply?
 public class StoreBasket {
     private HashMap<String,Integer> prods; // <ProdName,quantity>
-    @DBRef(lazy = true)
     private Store store;
 
     public StoreBasket(Store store) {
