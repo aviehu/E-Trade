@@ -13,9 +13,9 @@ import com.workshop.ETrade.Service.ResultPackge.Result;
 import java.util.List;
 
 public interface ServiceInterface {
-    public void init();
+    public void init() throws Exception;
     public Result<Double> getCartPrice(String userName);
-    public Result<Integer> addPolicy(String userName, String store, String policyOn, String description, PolicyType policyType, List<Predicate> predicates, String connectionType);
+    public Result<Integer> addPolicy(String userName, String store, String policyOn, String description, PolicyType policyType, List<PredicateForm> predicateForms, String connectionType);
     public Result<List<String>> getOnlineMembers(String userName);
     public Result<List<String>> getOfflineMembers(String userName);
     public Result<Boolean> supplyServiceExists();
@@ -126,7 +126,7 @@ public interface ServiceInterface {
 
     public Result<Boolean> isAdmin(String userName);
 
-    Result<Integer> addPreDiscount(String userName, String storeName, String discountOn, int discountPercentage, String description, DiscountType discountType, List<Predicate> predicates, String connectionType);
+    Result<Integer> addPreDiscount(String userName, String storeName, String discountOn, int discountPercentage, String description, DiscountType discountType, List<PredicateForm> predicateForms, String connectionType);
 
     Result<Boolean> addBid(String userName, String storeName, String productName, double bidAmount, CreditCardForm creditCard, SupplyAddressForm supplyAddress);
 

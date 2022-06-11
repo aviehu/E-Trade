@@ -1,5 +1,6 @@
 package com.workshop.ETrade.Tests.Acceptance.User.Member;
 
+import com.workshop.ETrade.Controller.Forms.PredicateForm;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
 import com.workshop.ETrade.Domain.Stores.Predicates.OperatorLeaf;
 import com.workshop.ETrade.Domain.Stores.Predicates.Predicate;
@@ -18,8 +19,6 @@ import static org.junit.Assert.*;
 public class UpdatePurchasePolicyTest {
     private SystemService systemService;
     private String name;
-    private Predicate p;
-    private List<Predicate> l;
 
     @Before
     public void setUp() throws Exception {
@@ -30,10 +29,7 @@ public class UpdatePurchasePolicyTest {
         systemService.openStore("Andalus", "Mega", 123);
         systemService.addProductToStore("Andalus", "Mega", "Bamba", 100, 5, "snacks");
         systemService.addProductToStore("Andalus", "Mega", "Bisly", 200, 5, "snacks");
-        p = new PredicateBuilder().getProductAmountPredicate("Bamba", 30, 100);
         systemService.addProductToShoppingCart("Andalus", "Bamba", "Mega", 20);
-        l = new ArrayList<>();
-        l.add(p);
     }
 
     @After
@@ -42,13 +38,12 @@ public class UpdatePurchasePolicyTest {
 
     @Test
     public void UpdatePurchasePolicySuccessTest() {
-        Assert.assertTrue(systemService.purchase("Andalus", "123", 4,2024,"Andalus Andalus", 123,200000000,"Israel", "BeerSheva", "Masada", 12, 4,400000).getVal());
-        List<Predicate> opList = new ArrayList<>();
-        opList.add( PredicateBuilder.getProductAmountPredicate("Bamba", 5, 30));
-        Assert.assertTrue(systemService.addPolicy("Andalus", "Mega", "snacks", "", PolicyType.CATEGORY, new ArrayList<>(), "and").getVal() > 0);
+        Assert.assertTrue(systemService.purchase("Andalus", "123", 4,2024,"Andalus Andalus", 123,20000,"Israel", "BeerSheva", "Masada", 12, 4,400000).getVal());
+        List<PredicateForm> opList = new ArrayList<>();
+        opList.add(new PredicateForm("amount", "Bamba", 5, 300, null, null));
+        Assert.assertTrue(systemService.addPolicy("Andalus", "Mega", "snacks", "", PolicyType.CATEGORY, opList, "and").getVal() > 0);
         systemService.addProductToShoppingCart("Andalus", "Bamba", "Mega", 20);
-//        systemService.purchase("Andalus", 123, LocalTime.MAX, 123, "BeerSheva", "Masada", 12, 4);
-        Assert.assertTrue(systemService.purchase("Andalus", "123", 4,2024,"Andalus Andalus", 123,200000000,"Israel", "BeerSheva", "Masada", 12, 4,400000).isSuccess());
+        Assert.assertTrue(systemService.purchase("Andalus", "123", 4,2024,"Andalus Andalus", 123,20000,"Israel", "BeerSheva", "Masada", 12, 4,400000).isSuccess());
     }
 
     @Test

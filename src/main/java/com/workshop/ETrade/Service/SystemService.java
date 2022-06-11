@@ -10,6 +10,7 @@ import com.workshop.ETrade.Domain.Stores.managersPermission;
 import com.workshop.ETrade.Domain.Users.ExternalService.Payment.PaymentAdaptee;
 import com.workshop.ETrade.Domain.Users.ExternalService.Supply.SupplyAdaptee;
 import com.workshop.ETrade.Domain.purchaseOption;
+import com.workshop.ETrade.Service.InitExecuter.LoadServiceFromInitState;
 import com.workshop.ETrade.Persistance.Stores.StoreDTO;
 import com.workshop.ETrade.Repository.MemberRepository;
 import com.workshop.ETrade.Repository.ProductRepository;
@@ -20,6 +21,9 @@ import com.workshop.ETrade.TestRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,7 +31,6 @@ import java.util.List;
 public class SystemService implements ServiceInterface {
     private boolean initialize;
     private Facade facade;
-
     @Autowired
     private MemberRepository memberRepository;
 
@@ -41,9 +44,15 @@ public class SystemService implements ServiceInterface {
         initialize = false;
         init();
     }
+    private static SystemService myInstance = null;
+    public SystemService() throws Exception {
 
-    public void init(){
+
+    public void init() throws Exception {
         this.facade = new Facade();
+//        File file = new File("src\\main\\java\\com\\workshop\\ETrade\\Service\\InitExecuter\\initState.json");
+//        String path = file.getAbsolutePath();
+//        LoadServiceFromInitState.loadFromFile(path,this);
     }
 
     @Override
@@ -52,8 +61,8 @@ public class SystemService implements ServiceInterface {
     }
 
     @Override
-    public Result<Integer> addPolicy(String userName, String store, String policyOn, String description, PolicyType policyType, List<Predicate> predicates, String connectionType) {
-        return facade.addPolicy(userName, store, policyOn, description, policyType, predicates, connectionType);
+    public Result<Integer> addPolicy(String userName, String store, String policyOn, String description, PolicyType policyType, List<PredicateForm> predicateForms, String connectionType) {
+        return facade.addPolicy(userName, store, policyOn, description, policyType, predicateForms, connectionType);
     }
 
 
@@ -336,8 +345,8 @@ public class SystemService implements ServiceInterface {
     }
 
     @Override
-    public Result<Integer> addPreDiscount(String userName, String storeName, String discountOn, int discountPercentage, String description, DiscountType discountType, List<Predicate> predicates, String connectionType) {
-        return facade.addPreDiscount(userName, storeName, discountOn, discountPercentage, description, discountType, predicates, connectionType);
+    public Result<Integer> addPreDiscount(String userName, String storeName, String discountOn, int discountPercentage, String description, DiscountType discountType, List<PredicateForm> predicateForms, String connectionType) {
+        return facade.addPreDiscount(userName, storeName, discountOn, discountPercentage, description, discountType, predicateForms, connectionType);
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.workshop.ETrade.Domain.Stores;
 
-import com.workshop.ETrade.Controller.Forms.Predicate;
+import com.workshop.ETrade.Controller.Forms.PredicateForm;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
 import com.workshop.ETrade.Domain.Stores.Predicates.OperatorLeaf;
@@ -25,12 +25,13 @@ public class StoresFacade {
     public StoresFacade(){
         stores = Collections.synchronizedList(new ArrayList<Store>());
         try {
-            Handler fileHandler = new FileHandler(System.getProperty("user.dir") + "/stores.log", 2000, 5);
+            Handler fileHandler = new FileHandler(System.getProperty("user.dir") + "/storesLog/stores.log", 2000, 5);
             logger.addHandler(fileHandler);
         } catch (Exception e) {
             System.out.println("error while creating logger for stores");
         }
     }
+
     public void init() {
         long i = TestRepo.getRepo().count();
         List<StoreDTO> dtos = TestRepo.getRepo().findAll();
@@ -39,13 +40,13 @@ public class StoresFacade {
         }
     }
 
-    public int addPolicy(String userName,String storeName,String policyOn, String description, PolicyType policyType, List<Predicate> predicates, String connectionType){
+    public int addPolicy(String userName, String storeName, String policyOn, String description, PolicyType policyType, List<PredicateForm> predicateForms, String connectionType){
         Store store = getStoreByName(storeName);
         if(store == null) {
             return -1;
         }
         List<com.workshop.ETrade.Domain.Stores.Predicates.Predicate> pres = new LinkedList<>();
-        for(Predicate p: predicates) {
+        for(PredicateForm p: predicateForms) {
             switch (p.predicateType){
                 case "amount":
                     pres.add(PredicateBuilder.getProductAmountPredicate(p.preProduct, (int)p.minAmount, (int)p.maxAmount));
@@ -347,13 +348,13 @@ public class StoresFacade {
         return store.removeManager(userName, managerToRemove);
     }
 
-    public int addPreDiscount(String userName, String storeName, String discountOn, int discountPercentage, String description, DiscountType discountType, List<Predicate> predicates, String connectionType) {
+    public int addPreDiscount(String userName, String storeName, String discountOn, int discountPercentage, String description, DiscountType discountType, List<PredicateForm> predicateForms, String connectionType) {
         Store store = getStoreByName(storeName);
         if(store == null) {
             return -1;
         }
         List<com.workshop.ETrade.Domain.Stores.Predicates.Predicate> pres = new LinkedList<>();
-        for(Predicate p: predicates) {
+        for(PredicateForm p: predicateForms) {
             switch (p.predicateType){
                 case "amount":
                     pres.add(PredicateBuilder.getProductAmountPredicate(p.preProduct, (int)p.minAmount, (int)p.maxAmount));
