@@ -17,16 +17,22 @@ public class ExtSysController {
     private MyPaymentSys payment;
     private mySecuritySys security;
 
-    private ExtSysController() {
+    private ExtSysController(boolean isSupply,boolean isPayment) {
         HttpClient httpClient = new HttpClient();
-        payment = new MyPaymentSys(new PaymentAdapter(new PaymentAdaptee(httpClient)));
-        supply = new mySupplySys(new SupplyAdapter(new SupplyAdaptee(httpClient)));
+        if(isPayment)
+            payment = new MyPaymentSys(new PaymentAdapter(new PaymentAdaptee(httpClient)));
+        else
+            payment = new MyPaymentSys(new PaymentAdapter(null));
+        if(isSupply)
+            supply = new mySupplySys(new SupplyAdapter(new SupplyAdaptee(httpClient)));
+        else
+            supply = new mySupplySys(new SupplyAdapter(new SupplyAdaptee(null)));
         security = new mySecuritySys();
     }
 
-    public static ExtSysController getInstance(){
+    public static ExtSysController getInstance(boolean isSupply, boolean isPayment){
         if(myInstance == null){
-            myInstance = new ExtSysController();
+            myInstance = new ExtSysController(isSupply, isPayment);
         }
         return myInstance;
     }
@@ -47,10 +53,10 @@ public class ExtSysController {
         return supply.supply(name,address.getStreet(),address.getCity(),address.getCountry(),address.getZip());
     }
     public boolean isExistSupply(){
-        return getInstance().supply.isExist();
+        return getInstance(true,true).supply.isExist();
     }
     public boolean isExistPayment(){
-        return getInstance().payment.isExist();
+        return getInstance(true,true).payment.isExist();
     }
     public boolean changePayment(PaymentAdaptee paymentAdaptee){
         return this.payment.changePayment(paymentAdaptee);

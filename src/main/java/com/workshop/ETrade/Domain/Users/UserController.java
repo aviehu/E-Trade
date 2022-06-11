@@ -306,6 +306,7 @@ public class UserController {
                 ret.add(m.getUserName());
             }
         }
+        ret.remove(getMember(userName));
         return ret;
     }
     public List<String> getOfflineMembers(String userName) {

@@ -124,7 +124,7 @@ public abstract class User {
         int cvv = card.getCvv();
         int id = card.getId();
         String holderName = card.getHolderName();
-        ExtSysController extSystems = ExtSysController.getInstance();
+        ExtSysController extSystems = ExtSysController.getInstance(true,true);
         int payTransactionId = extSystems.pay(cardFrom, month,year,holderName, cvv,id);
         //payment
         if(payTransactionId != -1) {//can charge payment
