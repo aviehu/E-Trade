@@ -20,6 +20,16 @@ public class StoreCalculator extends Calculator{
         return newPrices;
     }
 
+    @Override
+    public String getDiscountOn() {
+        return "";
+    }
+
+    @Override
+    public double getDiscountPercentage() {
+        return discountPercent;
+    }
+
     private int getTotalAmount(Map<Product, Integer> amounts) {
         int result = 0;
         for(Product product : amounts.keySet()) {

@@ -16,6 +16,8 @@ public class Discount {
     private String description;
     private int id;
 
+    private DiscountType type;
+
     public Discount(int id) {
         this.calculator = null;
         description = null;
@@ -30,6 +32,7 @@ public class Discount {
             case PRODUCT -> calculator = new ProductCalculator(discountOn, discountPercentage);
             case STORE -> calculator = new StoreCalculator(discountPercentage);
         }
+        this.type = type;
     }
 
     public int getId() {
@@ -48,4 +51,19 @@ public class Discount {
         return true;
     }
 
+    public String getDiscountOn() {
+        return calculator.getDiscountOn();
+    }
+
+    public double getDiscountPercentage() {
+        return calculator.getDiscountPercentage();
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public DiscountType getType() {
+        return type;
+    }
 }

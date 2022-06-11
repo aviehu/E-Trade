@@ -10,8 +10,7 @@ import com.workshop.ETrade.Domain.Users.SupplyAddress;
 import com.workshop.ETrade.Domain.Users.User;
 import com.workshop.ETrade.Domain.purchaseOption;
 import com.workshop.ETrade.Persistance.Stores.StoreDTO;
-import com.workshop.ETrade.TestRepo;
-import org.bson.types.ObjectId;
+import com.workshop.ETrade.AllRepos;
 
 import java.util.*;
 import java.util.logging.FileHandler;
@@ -33,8 +32,8 @@ public class StoresFacade {
     }
 
     public void init() {
-        long i = TestRepo.getRepo().count();
-        List<StoreDTO> dtos = TestRepo.getRepo().findAll();
+        long i = AllRepos.getStoreRepo().count();
+        List<StoreDTO> dtos = AllRepos.getStoreRepo().findAll();
         for(StoreDTO storeDTO : dtos)  {
             stores.add(new Store(storeDTO));
         }
@@ -69,7 +68,9 @@ public class StoresFacade {
         if(store != null) {
             return false;
         }
-        stores.add(new Store(storeName, founderName, card));
+        Store newStore = new Store(storeName, founderName, card);
+        stores.add(newStore);
+        AllRepos.getStoreRepo().save(new StoreDTO(newStore));
         logger.info("store - " + storeName + "added by - " + founderName);
         return true;
     }
@@ -156,6 +157,7 @@ public class StoresFacade {
             return false;
         }
         if(store.addProduct(ownerName,productName,amount,price,category)) {
+            AllRepos.getStoreRepo().save(new StoreDTO(store));
             logger.info("product - " + productName + " was added to store");
             return true;
         }
@@ -236,6 +238,7 @@ public class StoresFacade {
         }
         if(store.addManager(userName, newManager)) {
             logger.info("new store manager for store - " + storeName);
+            AllRepos.getStoreRepo().save(new StoreDTO(store));
             return true;
         }
         return false;
@@ -378,7 +381,12 @@ public class StoresFacade {
         if(store == null) {
             return false;
         }
-        return store.addBid(productName, bidAmount, userName, creditCard, supplyAddress, storeName);
+        boolean res = store.addBid(productName, bidAmount, userName, creditCard, supplyAddress, storeName);
+        if(res) {
+            AllRepos.getStoreRepo().save(new StoreDTO(store));
+            return true;
+        }
+        return false;
     }
 
     public List<Bid> getStoreBids(String storeName) {

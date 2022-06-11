@@ -31,4 +31,14 @@ public class ProductCalculator extends Calculator{
         }
         return newPrices;
     }
+
+    @Override
+    public String getDiscountOn() {
+        return productName;
+    }
+
+    @Override
+    public double getDiscountPercentage() {
+        return discountPercent;
+    }
 }

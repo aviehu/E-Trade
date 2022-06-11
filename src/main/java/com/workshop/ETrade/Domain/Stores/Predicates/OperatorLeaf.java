@@ -32,4 +32,9 @@ public class OperatorLeaf extends OperatorComponent{
         }
         return ans;
     }
+
+    @Override
+    public List<Predicate> getPredicates() {
+        return predicates;
+    }
 }

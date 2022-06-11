@@ -2,39 +2,57 @@ package com.workshop.ETrade.Persistance.Stores;
 
 import com.workshop.ETrade.Domain.Stores.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class StoreDTO {
     @Id
     public String name;
-
-//    public List<ProductDTO> products;
-
+    @DBRef
+    public List<ProductDTO> products;
+    public int discountId;
+    public int policyId;
     public String founderName;
     public int card;
     public boolean closed;
     public int bidId;
-    //public Map<String, managersPermission> managersPermissions;
+    public Map<String, managersPermission> managersPermissions;
     public List<MapDBobjDTO> ownersAppointments;
     public List<MapDBobjDTO> managersAppointments;
-    //public List<BidDTO> bids;
+    public List<BidDTO> bids;
     //public List<PurchaseDTO>  purchaseHistory;
 
-    public StoreDTO(String name, String founderName, int card, boolean closed, int bidId,  List<MapDBobjDTO> ownersAppointments, List<MapDBobjDTO> managersAppointments) {
+    public StoreDTO(String name, String founderName, int card, boolean closed, int bidId,  List<MapDBobjDTO> ownersAppointments, List<MapDBobjDTO> managersAppointments, List<ProductDTO> products, Map<String, String> managersPermissions, List<BidDTO> bids, int discountId, int policyId) {
         this.name = name;
-//        this.products = products;
+        this.products = products;
         this.founderName = founderName;
         this.card = card;
         this.closed = closed;
         this.bidId = bidId;
-//        this.managersPermissions = managersPermissions;
+        this.managersPermissions = new HashMap<>();
+        for(String key : managersPermissions.keySet()) {
+            managersPermission mp;
+            switch (managersPermissions.get(key)) {
+                case "LOW": {
+                    mp = managersPermission.LOW;
+                    break;
+                }
+                case "MID": {
+                    mp = managersPermission.MID;
+                    break;
+                }
+                default: {
+                    mp = managersPermission.HIGH;
+                }
+            }
+            this.managersPermissions.put(key, mp);
+        }
         this.ownersAppointments = ownersAppointments;
         this.managersAppointments = managersAppointments;
-//        this.bids = bids;
+        this.bids = bids;
+        this.discountId = discountId;
+        this.policyId = policyId;
 //        this.purchaseHistory = purchaseHistory;
     }
 
@@ -44,20 +62,16 @@ public class StoreDTO {
 
     public StoreDTO(Store store) {
         name = store.getName();
-//        List<Product> ps= store.getProducts();
-//        products = new ArrayList<>();
-//        for (Product p : ps) {
-//            products.add(new ProductDTO(p));
-//        }
+        List<Product> ps= store.getProducts();
+       products = new ArrayList<>();
+        for (Product p : ps) {
+            products.add(new ProductDTO(p));
+        }
         founderName = store.getFounderName();
         card = store.getCard();
         closed = store.isClosed();
         bidId = store.getBidId();
-        Map<String, managersPermission> pers = store.getManagersPermissions();
-//        managersPermissions = new HashMap<>();
-//        for(String s : pers.keySet()) {
-//            managersPermissions.put(s, pers.get(s));
-//        }
+        managersPermissions =  store.getManagersPermissions();
         Map<String, List<String>> owns = store.getOwnersAppointments();
         ownersAppointments = new ArrayList<>();
         for(String name : owns.keySet()) {
@@ -68,11 +82,14 @@ public class StoreDTO {
         for(String name : owns.keySet()) {
             managersAppointments.add(new MapDBobjDTO(name, mangs.get(name)));
         }
-        //        bids = new ArrayList<>();
-//        List<Bid> bs = store.getBids();
-//        for (Bid b : bs) {
-//            bids.add(new BidDTO(b));
-//        }
+        bids = new ArrayList<>();
+        List<Bid> bs = store.getBids();
+        for (Bid b : bs) {
+            bids.add(new BidDTO(b));
+        }
+        policyId = store.getPolicyId();
+        discountId = store.getDiscountId();
+
 //        List<Purchase> purchases = store.getPurchases();
 //        purchaseHistory = new ArrayList<>();
 //        for(Purchase p : purchases) {
