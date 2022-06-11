@@ -122,7 +122,10 @@ public class Member extends User implements Observer {
 
     @Override
     public Result<List<String>> purchase(CreditCard card, SupplyAddress address) {
-        return myShopCart.purchaseCart(card,address,userName);
+        Result<List<String>> ret = myShopCart.purchaseCart(card,address,userName);
+        if(ret.isSuccess())
+            myShopCart.finishPurchase();
+        return ret;
 //        if(ret == null){
 //            for (StoreBasket b : myShopCart.getBaskets()){
 //                StoreBasket copy = b;

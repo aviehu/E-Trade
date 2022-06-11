@@ -106,7 +106,7 @@ public class SystemService implements ServiceInterface {
 
     @Override
     public Result<String> enterSystem() {
-        if(!initialize) {
+        while (!initialize) {
             AllRepos.setStoreRepo(storeRepository);
             AllRepos.setProductRepo(productRepository);
             AllRepos.setMemberRepo(memberRepository);
