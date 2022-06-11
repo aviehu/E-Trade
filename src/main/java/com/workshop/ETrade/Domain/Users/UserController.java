@@ -1,10 +1,12 @@
 package com.workshop.ETrade.Domain.Users;
 
+import com.workshop.ETrade.AllRepos;
 import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Pair;
 import com.workshop.ETrade.Domain.Stores.Bid;
 import com.workshop.ETrade.Domain.Stores.Product;
 import com.workshop.ETrade.Domain.Stores.Store;
+import com.workshop.ETrade.Persistance.Users.MemberDTO;
 import com.workshop.ETrade.Repository.ProductRepository;
 import com.workshop.ETrade.Service.ResultPackge.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,18 +44,24 @@ public class UserController {
         } catch (Exception e) {
             System.out.println("error while creating logger for users");
         }
-        init();
+//        init();
     }
     public void init(){
         //load from database
         Member systemManager = new Member("domain","domain", "domain","domain");
-//        Member member = new Member("member","member");
-//        members.add(member);
         members.add(systemManager);
         systemManagers.add(systemManager);
+        loadMembers();
         users.addAll(members);
         users.addAll(guests);
         users.addAll(systemManagers);
+    }
+
+    private void loadMembers () {
+        List<MemberDTO> memberDTOS = AllRepos.getMemberRepo().findAll();
+        for (MemberDTO m : memberDTOS) {
+            members.add(new Member(m));
+        }
     }
 
    public Double getCartPrice(String userName){
@@ -92,7 +100,7 @@ public class UserController {
         Member m = new Member(userName, password,name,lastName);
         members.add(m);
         users.add(m);
-
+        AllRepos.getMemberRepo().save(new MemberDTO(m));
         logger.info("new user - " + userName);
         return true;
     }

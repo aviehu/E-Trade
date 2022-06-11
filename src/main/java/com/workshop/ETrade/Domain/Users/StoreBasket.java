@@ -1,6 +1,7 @@
 package com.workshop.ETrade.Domain.Users;
 
 import com.workshop.ETrade.Domain.Stores.Store;
+import com.workshop.ETrade.Persistance.Users.StoreBasketDTO;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.util.HashMap;
@@ -12,9 +13,33 @@ import java.util.List;
 public class StoreBasket {
     private HashMap<String,Integer> prods; // <ProdName,quantity>
     private Store store;
+    private String userName;
 
-    public StoreBasket(Store store) {
+    public void setProds(HashMap<String, Integer> prods) {
+        this.prods = prods;
+    }
+
+    public void setStore(Store store) {
+        this.store = store;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public StoreBasket(Store store, String userName) {
         this.prods = new HashMap<>();
+        this.store = store;
+        this.userName = userName;
+    }
+
+    public StoreBasket(StoreBasketDTO sbDTO, Store store) {
+        this.prods = sbDTO.getProds();
+        this.userName = sbDTO.getUserName();
         this.store = store;
     }
 

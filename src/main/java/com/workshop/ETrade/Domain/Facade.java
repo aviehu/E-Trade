@@ -1,5 +1,6 @@
 package com.workshop.ETrade.Domain;
 
+import com.workshop.ETrade.AllRepos;
 import com.workshop.ETrade.Controller.Forms.*;
 import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Notifications.NotificationThread;
@@ -10,6 +11,7 @@ import com.workshop.ETrade.Domain.Users.*;
 import com.workshop.ETrade.Domain.Users.ExternalService.ExtSysController;
 import com.workshop.ETrade.Domain.Users.ExternalService.Payment.PaymentAdaptee;
 import com.workshop.ETrade.Domain.Users.ExternalService.Supply.SupplyAdaptee;
+import com.workshop.ETrade.Persistance.Users.StoreBasketDTO;
 import com.workshop.ETrade.Service.ResultPackge.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -36,6 +38,11 @@ public class Facade implements SystemFacade {
     }
     public void init(){
         storesFacade.init();
+        userController.init();
+        List<StoreBasketDTO> dtos = AllRepos.getStoreBasketRepo().findAll();
+        for(StoreBasketDTO sbDTO : dtos) {
+            userController.getMember(sbDTO.getUserName()).addBasket(new StoreBasket(sbDTO, storesFacade.getStore(sbDTO.getStore())));
+        }
     }
 
     @Override

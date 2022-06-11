@@ -3,6 +3,7 @@ package com.workshop.ETrade.Persistance.Users;
 import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Notifications.NotificationManager;
 import com.workshop.ETrade.Domain.Users.*;
+import org.springframework.data.annotation.Id;
 
 import java.util.HashMap;
 import java.util.List;
@@ -10,9 +11,9 @@ import java.util.List;
 public class MemberDTO {
 
     //User
-//    public ShoppingCart myShopCart;
     public SupplyAddress address;
     public boolean isConnected;
+    @Id
     public String userName;
     public CreditCard card;
 
@@ -45,4 +46,6 @@ public class MemberDTO {
         this.securityQuests = member.getSecurityQuests();
         this.discount = member.getDiscount();
     }
+
+    public MemberDTO() {}
 }

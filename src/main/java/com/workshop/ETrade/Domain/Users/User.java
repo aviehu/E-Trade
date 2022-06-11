@@ -25,7 +25,7 @@ public abstract class User {
     }
 
     public User() {
-        this.myShopCart = new ShoppingCart(0);
+        this.myShopCart = new ShoppingCart(0, userName);
         this.isConnected = false;
         this.address = null;
         this.card = null;
