@@ -5,6 +5,7 @@ import com.workshop.ETrade.Domain.Notifications.NotificationManager;
 import com.workshop.ETrade.Domain.Observer;
 import com.workshop.ETrade.Domain.Pair;
 import com.workshop.ETrade.Domain.Stores.Store;
+import com.workshop.ETrade.Persistance.Users.MemberDTO;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.util.ArrayList;
@@ -13,24 +14,29 @@ import java.util.List;
 
 public class Member extends User implements Observer {
 
-    @DBRef(lazy = true)
-    protected NotificationManager notificationManager;
-    @DBRef(lazy = true)
     protected List<Notification> awaitingNotification;
-    protected String userName;
     protected String password;
     protected int age;
     protected String name;
     protected String lastName;
     protected String mail;
-    @DBRef(lazy = true)
     private MemberPurchaseHistory pHistory;
     protected int securityLvl;
     protected HashMap<String,String> securityQuests;
 
-    @DBRef(lazy = true)
-    protected CreditCard card;
     protected int discount;
+
+    public List<Notification> getAwaitingNotification() {
+        return awaitingNotification;
+    }
+
+    public MemberPurchaseHistory getpHistory() {
+        return pHistory;
+    }
+
+    public HashMap<String, String> getSecurityQuests() {
+        return securityQuests;
+    }
 
     public void setName(String name) {
         this.name = name;
@@ -69,6 +75,23 @@ public class Member extends User implements Observer {
         this.address = null;
         this.notificationManager = new NotificationManager();
         this.awaitingNotification = new ArrayList<>();
+    }
+
+    public Member(MemberDTO memberDTO) {
+        super();
+        this.discount = memberDTO.discount;
+        this.myShopCart.setDiscount(discount);
+        this.securityLvl = memberDTO.securityLvl;
+        this.securityQuests = memberDTO.securityQuests;
+        this.pHistory = new MemberPurchaseHistory();
+        this.userName = memberDTO.userName;
+        this.password = memberDTO.password;
+        this.name = memberDTO.name;
+        this.lastName = memberDTO.lastName;
+        this.age = memberDTO.age;
+        this.mail = memberDTO.mail;
+        this.address = memberDTO.address;
+        this.awaitingNotification = memberDTO.awaitingNotification;
     }
 
     @Override

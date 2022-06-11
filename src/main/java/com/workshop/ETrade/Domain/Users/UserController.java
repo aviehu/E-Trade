@@ -22,17 +22,12 @@ import java.util.logging.Logger;
 
 public class UserController {
     public static int guestId;
-    @DBRef(lazy = true)
     List<Member> members;
     public static int memberDiscount;
 
-    @DBRef(lazy = true)
     private List<Guest> guests;
-    @DBRef(lazy = true)
     private List<Member> systemManagers;
-    @DBRef(lazy = true)
     private List<User> users;
-    @DBRef(lazy = true)
     private Logger logger = Logger.getLogger("users");
 
     public UserController() {

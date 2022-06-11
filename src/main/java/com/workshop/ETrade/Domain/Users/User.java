@@ -11,15 +11,11 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import java.util.HashMap;
 
 public abstract class User {
-    @DBRef(lazy = true)
     protected ShoppingCart myShopCart;
-    @DBRef(lazy = true)
     protected SupplyAddress address;
     protected boolean isConnected;
     protected String userName;
-    @DBRef(lazy = true)
     protected CreditCard card;
-    @DBRef(lazy = true)
     protected NotificationManager notificationManager;
 
     public ShoppingCart getMyShopCart() {
