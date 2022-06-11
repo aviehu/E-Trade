@@ -102,7 +102,7 @@ const DashboardContent = () => {
             description: data.get("description"),
             type: discountType,
             connectionType: connectionType,
-            predicates: cleanPreds()
+            predicateForms: cleanPreds()
         }
         try {
             const res = await post(body, `stores/addprediscount/${name}`)

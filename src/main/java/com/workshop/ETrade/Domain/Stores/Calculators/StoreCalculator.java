@@ -5,9 +5,9 @@ import com.workshop.ETrade.Domain.Stores.Product;
 import java.util.Map;
 
 public class StoreCalculator extends Calculator{
-    private double discountPercent;
+    private int discountPercent;
 
-    public StoreCalculator(double discountPercent){
+    public StoreCalculator(int discountPercent){
         this.discountPercent = discountPercent;
     }
 
@@ -26,7 +26,7 @@ public class StoreCalculator extends Calculator{
     }
 
     @Override
-    public double getDiscountPercentage() {
+    public int getDiscountPercentage() {
         return discountPercent;
     }
 

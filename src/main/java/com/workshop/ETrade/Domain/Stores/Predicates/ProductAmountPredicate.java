@@ -6,11 +6,11 @@ import com.workshop.ETrade.Persistance.Stores.PredicateDTO;
 import java.util.Map;
 
 public class ProductAmountPredicate implements Predicate{
-    int minAmount;
-    int maxAmount;
+    double minAmount;
+    double maxAmount;
     String productName;
 
-    public ProductAmountPredicate(String productName, int minAmount, int maxAmount) {
+    public ProductAmountPredicate(String productName, double minAmount, double maxAmount) {
         this.maxAmount = maxAmount;
         this.minAmount = minAmount;
         this.productName = productName;

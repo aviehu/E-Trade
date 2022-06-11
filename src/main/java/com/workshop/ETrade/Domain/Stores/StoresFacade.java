@@ -61,7 +61,9 @@ public class StoresFacade {
             }
         }
         OperatorLeaf ol = new OperatorLeaf(connectionType, pres);
-        return store.addPolicy(userName,policyOn, description, policyType, ol);
+        int ans = store.addPolicy(userName,policyOn, description, policyType, ol);
+        AllRepos.getStoreRepo().save(new StoreDTO(store));
+        return ans;
     }
     public boolean addStore(String storeName, String founderName,int card) {
         Store store = getStoreByName(storeName);
@@ -311,7 +313,9 @@ public class StoresFacade {
         Store s = getStoreByName(store);
         if(s == null)
             return -1;
-        return s.addDiscount(userName,discountOn, discountPercentage, description, discountType);
+        int ans = s.addDiscount(userName,discountOn, discountPercentage, description, discountType);
+        AllRepos.getStoreRepo().save(new StoreDTO(s));
+        return ans;
     }
 
     public List<Store> getStores() {
@@ -373,7 +377,9 @@ public class StoresFacade {
             }
         }
         OperatorLeaf ol = new OperatorLeaf(connectionType, pres);
-        return store.addPredicateDiscount(discountOn, discountPercentage, description,discountType, ol);
+        int ans = store.addPredicateDiscount(discountOn, discountPercentage, description,discountType, ol);
+        AllRepos.getStoreRepo().save(new StoreDTO(store));
+        return ans;
     }
 
     public boolean addBid(String userName, String storeName, String productName, double bidAmount, CreditCard creditCard, SupplyAddress supplyAddress) {
