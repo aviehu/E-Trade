@@ -1,5 +1,6 @@
 package com.workshop.ETrade.Domain.Stores;
 
+import com.workshop.ETrade.AllRepos;
 import com.workshop.ETrade.Domain.purchaseOption;
 import com.workshop.ETrade.Persistance.Stores.ProductDTO;
 import com.workshop.ETrade.Persistance.Stores.StoreDTO;
@@ -32,7 +33,9 @@ public class Inventory {
 
     public boolean addProduct(String name, int amount, double price, String category){
         if(getProductByName(name) == null) {
-            products.add(new Product(name, amount, price, category));
+            Product product = new Product(name, amount, price, category);
+            products.add(product);
+           // AllRepos.getProductRepo().save(new ProductDTO(product));
             return true;
         }
         return false;

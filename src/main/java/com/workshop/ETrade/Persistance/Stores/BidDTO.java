@@ -1,6 +1,7 @@
 package com.workshop.ETrade.Persistance.Stores;
 
 import com.workshop.ETrade.Domain.Stores.Bid;
+import org.springframework.data.annotation.Id;
 
 import java.util.Map;
 
@@ -9,6 +10,7 @@ public class BidDTO {
     public String bidderName;
     public double price;
     public Map<String, Boolean> awaitingApprove;
+    @Id
     public int bidId;
     public boolean approvedByBidder;
     public boolean rejected;
@@ -27,6 +29,10 @@ public class BidDTO {
     public int apartmentNum;
     public int zip;
     public String country;
+
+    public BidDTO() {
+
+    }
 
     public BidDTO(String productName, String bidderName, double price, Map<String, Boolean> awaitingApprove, int bidId, boolean approvedByBidder, boolean rejected, String storeName, String holderName, String cardNumber, int month, int year, int cvv, int id, String city, String street, int streetNum, int apartmentNum, int zip, String country) {
         this.productName = productName;
@@ -52,10 +58,13 @@ public class BidDTO {
     }
 
     public BidDTO(Bid bid) {
+        awaitingApprove = bid.getAwaitingApprove();
         productName = bid.getProductName();
         bidderName = bid.getBidderName();
         rejected = bid.getRejected();
         storeName = bid.getStoreName();
+        price = bid.getPrice();
+        bidId = bid.getId();
 
         holderName = bid.getCard().getHolderName();
         cardNumber = bid.getCard().getCardNumber();

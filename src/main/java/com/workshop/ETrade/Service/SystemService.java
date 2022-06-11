@@ -10,20 +10,14 @@ import com.workshop.ETrade.Domain.Stores.managersPermission;
 import com.workshop.ETrade.Domain.Users.ExternalService.Payment.PaymentAdaptee;
 import com.workshop.ETrade.Domain.Users.ExternalService.Supply.SupplyAdaptee;
 import com.workshop.ETrade.Domain.purchaseOption;
-import com.workshop.ETrade.Service.InitExecuter.LoadServiceFromInitState;
 import com.workshop.ETrade.Persistance.Stores.StoreDTO;
-import com.workshop.ETrade.Repository.MemberRepository;
 import com.workshop.ETrade.Repository.ProductRepository;
 import com.workshop.ETrade.Repository.StoreRepository;
 import com.workshop.ETrade.Service.ResultPackge.Result;
-import com.workshop.ETrade.TestEntity;
-import com.workshop.ETrade.TestRepo;
+import com.workshop.ETrade.AllRepos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,9 +25,6 @@ import java.util.List;
 public class SystemService implements ServiceInterface {
     private boolean initialize;
     private Facade facade;
-    @Autowired
-    private MemberRepository memberRepository;
-
     @Autowired
     private ProductRepository productRepository;
 
@@ -100,7 +91,8 @@ public class SystemService implements ServiceInterface {
     public Result<String> enterSystem() {
         if(!initialize) {
             List<StoreDTO> sss = storeRepository.findAll();
-            TestRepo.setRepo(storeRepository);
+            AllRepos.setStoreRepo(storeRepository);
+            AllRepos.setProductRepo(productRepository);
             facade.init();
             initialize = true;
         }
