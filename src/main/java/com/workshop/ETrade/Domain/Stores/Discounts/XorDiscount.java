@@ -1,11 +1,15 @@
 package com.workshop.ETrade.Domain.Stores.Discounts;
 
 import com.workshop.ETrade.Domain.Stores.Product;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.util.Map;
 
 public class XorDiscount extends Discount {
+
+    @DBRef(lazy = true)
     private Discount discount1;
+    @DBRef(lazy = true)
     private Discount discount2;
 
     public XorDiscount(int id,Discount discount1, Discount discount2) {

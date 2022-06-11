@@ -11,7 +11,14 @@ import com.workshop.ETrade.Domain.Users.ExternalService.Payment.PaymentAdaptee;
 import com.workshop.ETrade.Domain.Users.ExternalService.Supply.SupplyAdaptee;
 import com.workshop.ETrade.Domain.purchaseOption;
 import com.workshop.ETrade.Service.InitExecuter.LoadServiceFromInitState;
+import com.workshop.ETrade.Persistance.Stores.StoreDTO;
+import com.workshop.ETrade.Repository.MemberRepository;
+import com.workshop.ETrade.Repository.ProductRepository;
+import com.workshop.ETrade.Repository.StoreRepository;
 import com.workshop.ETrade.Service.ResultPackge.Result;
+import com.workshop.ETrade.TestEntity;
+import com.workshop.ETrade.TestRepo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -22,14 +29,24 @@ import java.util.List;
 
 @Service
 public class SystemService implements ServiceInterface {
+    private boolean initialize;
     private Facade facade;
+    @Autowired
+    private MemberRepository memberRepository;
 
-    private static SystemService myInstance = null;
-    public SystemService() throws Exception {
+    @Autowired
+    private ProductRepository productRepository;
+
+    @Autowired
+    private StoreRepository storeRepository;
+
+    public SystemService() {
+        initialize = false;
         init();
     }
+    private static SystemService myInstance = null;
 
-    public void init() throws Exception {
+    public void init(){
         this.facade = new Facade();
 //        File file = new File("src\\main\\java\\com\\workshop\\ETrade\\Service\\InitExecuter\\initState.json");
 //        String path = file.getAbsolutePath();
@@ -81,6 +98,12 @@ public class SystemService implements ServiceInterface {
 
     @Override
     public Result<String> enterSystem() {
+        if(!initialize) {
+            List<StoreDTO> sss = storeRepository.findAll();
+            TestRepo.setRepo(storeRepository);
+            facade.init();
+            initialize = true;
+        }
         return facade.enterSystem();
     }
 
@@ -195,12 +218,14 @@ public class SystemService implements ServiceInterface {
 
     @Override
     public Result<Boolean> openStore(String founderName, String storeName, int card) {
-        return facade.openStore(founderName, storeName, card);
+        Result<Boolean> res = facade.openStore(founderName, storeName, card);
+        return res;
     }
 
     @Override
     public Result<Boolean> addProductToStore(String userName, String storeName, String productName, int amount, double price, String category) {
-        return facade.addProductToStore(userName, storeName, productName, amount, price, category);
+        Result<Boolean> res = facade.addProductToStore(userName, storeName, productName, amount, price, category);
+        return res;
     }
 
     @Override

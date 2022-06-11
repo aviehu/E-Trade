@@ -5,13 +5,17 @@ import com.workshop.ETrade.Domain.Notifications.NotificationManager;
 import com.workshop.ETrade.Domain.Observer;
 import com.workshop.ETrade.Domain.Pair;
 import com.workshop.ETrade.Domain.Stores.Store;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class Member extends User implements Observer {
+
+    @DBRef(lazy = true)
     protected NotificationManager notificationManager;
+    @DBRef(lazy = true)
     protected List<Notification> awaitingNotification;
     protected String userName;
     protected String password;
@@ -19,10 +23,12 @@ public class Member extends User implements Observer {
     protected String name;
     protected String lastName;
     protected String mail;
+    @DBRef(lazy = true)
     private MemberPurchaseHistory pHistory;
     protected int securityLvl;
     protected HashMap<String,String> securityQuests;
 
+    @DBRef(lazy = true)
     protected CreditCard card;
     protected int discount;
 

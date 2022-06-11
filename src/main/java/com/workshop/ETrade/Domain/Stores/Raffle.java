@@ -7,14 +7,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class Raffle {
 
-    private Product product;
     private int raffleId;
     private double price;
     private LocalDate raffleEnd;
     private Map<String, Double> usersShares;
     Random rand = new Random();
 
-    public Raffle(Product product, double price, LocalDate raffleEnd, int raffleId) {
+    public Raffle(double price, LocalDate raffleEnd, int raffleId) {
         this.raffleId = raffleId;
         this.price = price;
         this.raffleEnd = raffleEnd;
@@ -73,7 +72,6 @@ public class Raffle {
 
     public String toString() {
         String result = "Raffle " + raffleId + ":\n";
-        result +=       "Product: " + product.getName() + "\n";
         result +=       "Price: " + price + "\n";
         result +=       "Shares: \n" + sharesToString();
         result +=       "Raffle Ends At: " + raffleEnd.toString() + "\n\n";

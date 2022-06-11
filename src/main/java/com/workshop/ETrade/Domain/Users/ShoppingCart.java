@@ -3,13 +3,16 @@ package com.workshop.ETrade.Domain.Users;
 import com.workshop.ETrade.Domain.Pair;
 import com.workshop.ETrade.Domain.Stores.Store;
 import com.workshop.ETrade.Domain.Users.ExternalService.ExtSysController;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class ShoppingCart {
+    @DBRef(lazy = true)
     private ExtSysController extSystems = null;
+    @DBRef(lazy = true)
     private List<StoreBasket> baskets;
     private int discount;
 

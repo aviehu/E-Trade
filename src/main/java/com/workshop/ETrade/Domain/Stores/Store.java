@@ -11,6 +11,13 @@ import com.workshop.ETrade.Domain.Users.Member;
 import com.workshop.ETrade.Domain.Users.SupplyAddress;
 import com.workshop.ETrade.Domain.Users.User;
 import com.workshop.ETrade.Domain.purchaseOption;
+import com.workshop.ETrade.Persistance.Stores.BidDTO;
+import com.workshop.ETrade.Persistance.Stores.MapDBobjDTO;
+import com.workshop.ETrade.Persistance.Stores.ProductDTO;
+import com.workshop.ETrade.Persistance.Stores.StoreDTO;
+import com.workshop.ETrade.TestRepo;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -18,7 +25,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class Store implements Observable {
 
-    private boolean closedByAdmin;
     private String name;
     private String founderName;
     private int card;
@@ -26,6 +32,7 @@ public class Store implements Observable {
     private int auctionId;
     private int bidId;
     private int raffleId;
+
     private Inventory inventory;
     private Map<String, managersPermission> managersPermissions;
     private PolicyManager policyManager;
@@ -36,7 +43,41 @@ public class Store implements Observable {
     private List<Bid> bids;
     private List<Auction> auctions;
     private List<Member> subscribers;
-    private NotificationManager notificationManager;
+    private MongoRepository<StoreDTO,String> storeRepo;
+
+    public Store(StoreDTO storeDTO) {
+        name = storeDTO.name;
+        founderName = storeDTO.founderName;
+        card = storeDTO.card;
+        closed = storeDTO.closed;
+        bidId = storeDTO.bidId;
+//        inventory = new Inventory(storeDTO.products);
+        inventory = new Inventory();
+//        managersPermissions = storeDTO.managersPermissions;
+        managersPermissions = new HashMap<>();
+        policyManager = new PolicyManager(); // TODO
+//        storeHistory = new StorePurchaseHistory(storeDTO.purchaseHistory);
+        storeHistory = new StorePurchaseHistory();
+        List<MapDBobjDTO> dts = storeDTO.ownersAppointments;
+        ownersAppointments = new HashMap<>();
+        managersAppointments = new HashMap<>();
+        for(MapDBobjDTO d : dts) {
+            ownersAppointments.put(d.key, d.val);
+        }
+        dts = storeDTO.managersAppointments;
+        for(MapDBobjDTO d : dts) {
+            managersAppointments.put(d.key, d.val);
+        }
+//        ownersAppointments = new HashMap<>();
+//        managersAppointments = storeDTO.managersAppointments;
+
+        bids = new LinkedList<>();
+
+//        for(BidDTO b : storeDTO.bids) {
+//            bids.add(new Bid(b, inventory.getProductByName(b.productName)));
+//        }
+        closed = false;
+    }
 
     public Store(String storeName, String founderName,int card) {
         name = storeName;
@@ -57,9 +98,9 @@ public class Store implements Observable {
         bidId = 1;
         raffleId = 1;
         managersPermissions = new ConcurrentHashMap<>();
-        closedByAdmin = false;
-        notificationManager = new NotificationManager();
         subscribers = new ArrayList<>();
+        storeRepo = TestRepo.getRepo();
+        storeRepo.save(new StoreDTO(this));
     }
 
     public int addDiscount(String userName,String discountOn, int discountPercentage, String description, DiscountType discountType) {
@@ -145,7 +186,6 @@ public class Store implements Observable {
     public boolean adminCloseStore() {
         if(!closed) {
             closed = true;
-            closedByAdmin = true;
             notifySubscribers("A system manager closed the store "+ getName()+"\n",name);
             return true;
         }
@@ -161,8 +201,8 @@ public class Store implements Observable {
                 Product product = inventory.getProductByName(productName);
                 products.put(product, prods.get(productName));
             }
-            storeHistory.addPurchase(policyManager.getTotalPrice(products), products, buyer);
-            purchased(prods,buyer);
+            storeHistory.addPurchase(policyManager.getTotalPrice(products), prods, buyer);
+            purchased(prods.keySet().stream().toList(),buyer);
             return true;
         }
         return false;
@@ -185,10 +225,10 @@ public class Store implements Observable {
                 Product product = inventory.getProductByName(productName);
                 products.put(product, prods.get(productName));
             }
-            storeHistory.addPurchase(policyManager.getTotalPrice(products), products, buyer.getUserName());
-            purchasedBid((String) prods.keySet().toArray()[0],buyer.getUserName());
+            storeHistory.addPurchase(policyManager.getTotalPrice(products), prods, buyer.getUserName());
+            purchased(prods.keySet().stream().toList(),buyer.getUserName());
             notifyUser("Your bid has been approved", name, buyer);
-            //notifySubscribers("A bid for - " + prods.keySet().toArray()[0] + "  in " + name + " has been approved", buyer.getUserName());
+            notifySubscribers("A bid for - " + prods.keySet().toArray()[0] + "  in " + name + " has been approved", buyer.getUserName());
 
             return true;
         }
@@ -250,7 +290,7 @@ public class Store implements Observable {
     public boolean startRaffle(String productName, LocalDate raffleEnd, double price) {
         Product product = inventory.getProductByName(productName);
         if(product != null && product.getSelectedOption() == purchaseOption.RAFFLE) {
-            raffles.add(new Raffle(product,price, raffleEnd, raffleId));
+            raffles.add(new Raffle(price, raffleEnd, raffleId));
             return true;
         }
         return false;
@@ -271,6 +311,7 @@ public class Store implements Observable {
         if(!isManager(nameToAdd) && !isOwner(nameToAdd) && isOwner(ownerName)){
             managersAppointments.get(ownerName).add(nameToAdd);
             managersPermissions.put(nameToAdd, managersPermission.LOW);
+            storeRepo.save(new StoreDTO(this));
             return true;
         }
         return false;
@@ -297,7 +338,10 @@ public class Store implements Observable {
 
     public boolean addProduct(String userName, String productName, int amount, double price, String category) {
         if(hasHighPermission(userName)) {
-            return inventory.addProduct(productName, amount, price, category);
+            if(inventory.addProduct(productName, amount, price, category)) {
+                storeRepo.save(new StoreDTO(this));
+                return true;
+            }
         }
         return false;
     }
@@ -475,18 +519,11 @@ public class Store implements Observable {
         return storeHistory.getHistory();
     }
 
-    public void purchased(Map<String,Integer> prods,String userNamePurchased){
-        String mess = userNamePurchased+ " has made A new purchase at the " + name+ " store:\n";
-        for(String p : prods.keySet()){
-            mess+=p+"\tx"+ prods.get(p)+"\n";
+    public void purchased(List<String> products,String userNamePurchased){
+        String mess = "";
+        for(String p : products){
+            mess+=p+"\n";
         }
-        notifySubscribers(mess,userNamePurchased);
-
-    }
-
-    public void purchasedBid(String prodName,String userNamePurchased){
-        String mess = "All management has confirmed "+userNamePurchased+"'s bid for the "+prodName+" product\nAnd the purchase of the product was completed successfully\n";
-
         notifySubscribers(mess,userNamePurchased);
 
     }
@@ -584,5 +621,29 @@ public class Store implements Observable {
             return null;
         }
         return bid.counterOfferReview(approve);
+    }
+
+    public String getFounderName() {
+        return founderName;
+    }
+
+    public int getBidId() {
+        return bidId;
+    }
+
+    public Map<String, managersPermission> getManagersPermissions() {
+        return managersPermissions;
+    }
+
+    public Map<String, List<String>> getOwnersAppointments() {
+        return ownersAppointments;
+    }
+
+    public Map<String, List<String>> getManagersAppointments() {
+        return managersAppointments;
+    }
+
+    public List<Purchase> getPurchases() {
+        return storeHistory.getPurchases();
     }
 }

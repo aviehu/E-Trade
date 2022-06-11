@@ -1,11 +1,15 @@
 package com.workshop.ETrade.Domain.Stores.Discounts;
 
 import com.workshop.ETrade.Domain.Stores.Product;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.util.Map;
 
 public class MaxDiscount extends Discount{
+
+    @DBRef(lazy = true)
     private Discount discount1;
+    @DBRef(lazy = true)
     private Discount discount2;
 
 

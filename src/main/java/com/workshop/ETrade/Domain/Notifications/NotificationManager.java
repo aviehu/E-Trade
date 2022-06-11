@@ -1,16 +1,19 @@
 package com.workshop.ETrade.Domain.Notifications;
 
 
-import com.workshop.ETrade.Controller.Forms.MessageController;
+import com.workshop.ETrade.Controller.MessageController;
 import com.workshop.ETrade.Domain.Users.User;
 import org.springframework.context.ApplicationContext;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.time.LocalDate;
 
 
 public class NotificationManager {
    // List<Notification> awaitingNotifications;
+    @DBRef(lazy = true)
    protected ApplicationContext context;
+    @DBRef(lazy = true)
     protected MessageController messageController;
 
 

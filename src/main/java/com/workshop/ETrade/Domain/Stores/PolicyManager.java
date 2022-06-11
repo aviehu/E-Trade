@@ -3,6 +3,7 @@ package com.workshop.ETrade.Domain.Stores;
 import com.workshop.ETrade.Domain.Stores.Discounts.*;
 import com.workshop.ETrade.Domain.Stores.Policies.*;
 import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.util.*;
 
@@ -10,7 +11,9 @@ public class PolicyManager {
 
     private int discountId;
     private int policyId;
+    @DBRef(lazy = true)
     private List<Discount> discounts;
+    @DBRef(lazy = true)
     private List<Policy> policies;
 
     public PolicyManager() {

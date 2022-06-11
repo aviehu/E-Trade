@@ -5,11 +5,13 @@ import com.workshop.ETrade.Domain.Stores.Calculators.CategoryCalculator;
 import com.workshop.ETrade.Domain.Stores.Calculators.ProductCalculator;
 import com.workshop.ETrade.Domain.Stores.Calculators.StoreCalculator;
 import com.workshop.ETrade.Domain.Stores.Product;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.util.Map;
 
 public class Discount {
 
+    @DBRef(lazy = true)
     private Calculator calculator;
     private String description;
     private int id;

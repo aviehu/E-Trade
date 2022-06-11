@@ -1,6 +1,7 @@
 package com.workshop.ETrade.Domain.Stores;
 
 import com.workshop.ETrade.Domain.purchaseOption;
+import com.workshop.ETrade.Persistance.Stores.ProductDTO;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,6 +23,15 @@ public class Product {
         this.category = category;
         this.keywords = Collections.synchronizedList(new ArrayList<String>());
         selectedOption = purchaseOption.IMMEDIATE;
+    }
+
+    public Product(ProductDTO prod) {
+        name = prod.name;
+        amount = prod.amount;
+        price = prod.price;
+        category = prod.category;
+        keywords = prod.keywords;
+        selectedOption = prod.selectedOption;
     }
 
     public purchaseOption getSelectedOption() {

@@ -2,6 +2,7 @@ package com.workshop.ETrade.Domain.Stores.Policies;
 
 import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
 import com.workshop.ETrade.Domain.Stores.Product;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.Map;
 
 public class CategoryPolicy implements Policy {
 
+    @DBRef(lazy = true)
     private OperatorComponent operatorComponent;
     private String categoryName;
     private int id;

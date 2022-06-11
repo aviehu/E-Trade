@@ -3,7 +3,15 @@ package com.workshop.ETrade.Domain.Users;
 import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Pair;
 import com.workshop.ETrade.Domain.Stores.Bid;
+import com.workshop.ETrade.Domain.Stores.Product;
 import com.workshop.ETrade.Domain.Stores.Store;
+import com.workshop.ETrade.Repository.MemberRepository;
+import com.workshop.ETrade.Repository.ProductRepository;
+import com.workshop.ETrade.TestEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,12 +22,17 @@ import java.util.logging.Logger;
 
 public class UserController {
     public static int guestId;
+    @DBRef(lazy = true)
     List<Member> members;
     public static int memberDiscount;
 
+    @DBRef(lazy = true)
     private List<Guest> guests;
+    @DBRef(lazy = true)
     private List<Member> systemManagers;
+    @DBRef(lazy = true)
     private List<User> users;
+    @DBRef(lazy = true)
     private Logger logger = Logger.getLogger("users");
 
     public UserController() {

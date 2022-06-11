@@ -13,14 +13,18 @@ import com.workshop.ETrade.Domain.Users.Member;
 import com.workshop.ETrade.Domain.Users.SupplyAddress;
 import com.workshop.ETrade.Domain.Users.UserController;
 import com.workshop.ETrade.Service.ResultPackge.Result;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Facade implements SystemFacade {
-    private StoresFacade storesFacade;
+
+    public StoresFacade storesFacade;
     private UserController userController;
+
     private ExtSysController externalSys;
     private String myUserName;
 
@@ -30,15 +34,9 @@ public class Facade implements SystemFacade {
         //need to change according to config file.
         externalSys = ExtSysController.getInstance(true,true);
         //
-        init();
     }
     public void init(){
-        Member domain = userController.getMember("domain");
-        String guest = enterSystem().getVal();
-        login(guest,"domain","domain");
-        openStore("domain","SuperStore",123);
-        addProductToStore("domain","SuperStore","Bamba",200,5,"Snacks");
-        logOut("domain");
+        storesFacade.init();
     }
 
     @Override
