@@ -61,6 +61,7 @@ public class ShoppingCart {
             }
         }else{
             return new Result<>(null, "Failed! can't charge your credit card\n");
+           // return new Result<>(null, "Failed! can't charge your credit card\n");
         }
         return new Result<>(storesToNotify, null);
     }

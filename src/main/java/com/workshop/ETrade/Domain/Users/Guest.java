@@ -17,6 +17,7 @@ public class Guest extends User {
 
     public Guest(String userName) {
         super();
+        this.myShopCart = new ShoppingCart(0,userName);
         this.userName = userName;
     }
 
@@ -31,19 +32,18 @@ public class Guest extends User {
         return super.exitSystem();
     }
 
-    @Override
     public String addProdToCart(Store s, int quantity, String prodName) {
-        return super.addProdToCart(s, quantity, prodName);
+        return myShopCart.addProd(s, quantity, prodName);
     }
 
     @Override
     public String removeProd(Store s, int quantity, String prodName) {
-        return super.removeProd(s, quantity, prodName);
+        return myShopCart.removeProd(s, quantity, prodName);
     }
 
     @Override
     public HashMap<String, Pair<Integer,String>> displayCart() {
-        return super.displayCart();
+        return myShopCart.displayCart();
     }
 
     @Override

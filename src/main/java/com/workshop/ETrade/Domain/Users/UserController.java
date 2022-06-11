@@ -183,11 +183,17 @@ public class UserController {
         return null;
     }
     public String addProductToShoppingCart(String userName, String productName, Store storeName, int quantity){
-       User user = getUser(userName);
-       if(user != null) {
+       Member m = getMember(userName);
+       if(m != null) {
            logger.info("product - " + productName + " has been added to cart");
-           return user.addProdToCart(storeName,quantity,productName);
+           return m.addProdToCart(storeName,quantity,productName);
        }
+       Guest g = getGuest(userName);
+       if(g!= null){
+            logger.info("product - " + productName + " has been added to cart");
+            return g.addProdToCart(storeName,quantity,productName);
+        }
+
        return "User "+userName+" does not exist\n";
     }
     public String removeProductFromShoppingCart(String userName,Store s,int quantity,String prodName){

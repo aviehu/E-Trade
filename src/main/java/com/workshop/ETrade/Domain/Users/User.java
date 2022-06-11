@@ -25,7 +25,7 @@ public abstract class User {
     }
 
     public User() {
-        this.myShopCart = new ShoppingCart(0, userName);
+        //this.myShopCart = new ShoppingCart(0, userName);
         this.isConnected = false;
         this.address = null;
         this.card = null;
@@ -44,9 +44,9 @@ public abstract class User {
     // guest loosing his shopCart and not consider as guest(users.2)
 //    public abstract void exitSystem();
 
-    public String addProdToCart(Store s, int quantity, String prodName){
-            return myShopCart.addProd(s,quantity,prodName);
-    }
+//    public String addProdToCart(Store s, int quantity, String prodName){
+//            return myShopCart.addProd(s,quantity,prodName);
+//    }
 
 
     public String removeProd(Store s,int quantity,String prodName){
