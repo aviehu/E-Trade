@@ -5,6 +5,7 @@ import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Discounts.PredicateDiscount;
 import com.workshop.ETrade.Domain.Stores.Predicates.OperatorComponent;
 import com.workshop.ETrade.Domain.Stores.Predicates.Predicate;
+import org.springframework.data.annotation.Id;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,8 @@ public class DiscountDTO {
     public int discountPercentage;
     public String description;
     public DiscountType type;
+    @Id
+    public String discountId;
 
     public String operatorType;
     public List<PredicateDTO> predicates;
@@ -23,11 +26,12 @@ public class DiscountDTO {
 
     }
 
-    public DiscountDTO(boolean isPre, String discountOn, int discountPercentage, String description, String type, String operatorType, List<PredicateDTO> predicates) {
+    public DiscountDTO(boolean isPre, String discountOn,String discountId, int discountPercentage, String description, String type, String operatorType, List<PredicateDTO> predicates) {
         this.isPre = isPre;
         this.discountOn = discountOn;
         this.discountPercentage = discountPercentage;
         this.description = description;
+        this.discountId = discountId;
         DiscountType dt;
         switch (type) {
             case "STORE": {
@@ -56,6 +60,7 @@ public class DiscountDTO {
         type = discount.getType();
         operatorType = "";
         predicates = new ArrayList<>();
+        discountId = Integer.toString(discount.getId());
     }
 
     public DiscountDTO(PredicateDiscount discount) {
@@ -69,5 +74,6 @@ public class DiscountDTO {
         for(Predicate pre : discount.getPredicates()){
             predicates.add(pre.init());
         }
+        discountId = Integer.toString(discount.getId());
     }
 }

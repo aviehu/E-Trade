@@ -11,10 +11,7 @@ import com.workshop.ETrade.Domain.Users.ExternalService.Payment.PaymentAdaptee;
 import com.workshop.ETrade.Domain.Users.ExternalService.Supply.SupplyAdaptee;
 import com.workshop.ETrade.Domain.purchaseOption;
 import com.workshop.ETrade.Persistance.Stores.StoreDTO;
-import com.workshop.ETrade.Repository.MemberRepository;
-import com.workshop.ETrade.Repository.ProductRepository;
-import com.workshop.ETrade.Repository.StoreBasketRepository;
-import com.workshop.ETrade.Repository.StoreRepository;
+import com.workshop.ETrade.Repository.*;
 import com.workshop.ETrade.Service.ResultPackge.Result;
 import com.workshop.ETrade.AllRepos;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +35,15 @@ public class SystemService implements ServiceInterface {
 
     @Autowired
     private StoreBasketRepository storeBasketRepository;
+
+    @Autowired
+    private BidRepository bidRepository;
+
+    @Autowired
+    private PolicyRepository policyRepository;
+
+    @Autowired
+    private DiscountRepository discountRepository;
 
     public SystemService() {
         initialize = false;
@@ -102,6 +108,9 @@ public class SystemService implements ServiceInterface {
             AllRepos.setProductRepo(productRepository);
             AllRepos.setMemberRepo(memberRepository);
             AllRepos.setStoreBasketRepo(storeBasketRepository);
+            AllRepos.setBidRepo(bidRepository);
+            AllRepos.setPolicyRepo(policyRepository);
+            AllRepos.setDiscountRepo(discountRepository);
             facade.init();
             initialize = true;
         }
