@@ -14,22 +14,25 @@ public class LoadServiceFromInitState {
 
     public static SystemService loadFromFile(String path, SystemService service ) throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
-        try{
+        try {
             Invoker<?>[] ins = objectMapper.readValue(new File(path), Invoker[].class);
             int command_num = 0;
-            for(Invoker<?> inv : ins) {
-                Result<?> res = inv.Invoke(service);
-                if (!res.isSuccess())
-                    throw new IllegalArgumentException(String.format("Illegal commands. failed at command %d in file %s", command_num, path));
-                command_num++;
+            for (Invoker<?> inv : ins) {
+                try {
+                    Result<?> res = inv.Invoke(service);
+                    command_num++;
+                }catch (Exception e){
+                    command_num++;
+                }
             }
-        }catch (Exception ex){
-            System.out.println(ex.getCause());
+
+        } catch (Exception e) {
+            System.out.println("e");
         }
         return service;
     }
 
-    public static void main(String[] args) throws Exception {
+        public static void main(String[] args) throws Exception {
 //        ObjectMapper objectMapper = new ObjectMapper();
         SystemService s = new SystemService();
 //        c.setPersistence_unit("Market");

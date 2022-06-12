@@ -37,12 +37,15 @@ public class Facade implements SystemFacade {
         //
     }
     public void init(){
+        String encodeDomain = this.externalSys.encode("domain");
         storesFacade.init();
-        userController.init();
+        userController.init(encodeDomain);
         List<StoreBasketDTO> dtos = AllRepos.getStoreBasketRepo().findAll();
         for(StoreBasketDTO sbDTO : dtos) {
             userController.getMember(sbDTO.getUserName()).addBasket(new StoreBasket(sbDTO, storesFacade.getStore(sbDTO.getStore())));
         }
+
+
     }
 
     @Override

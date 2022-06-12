@@ -5,6 +5,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.messaging.MessagingException;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
@@ -24,7 +25,12 @@ public class MessageController implements ApplicationContextAware {
      public void setApplicationContext(ApplicationContext context) throws BeansException {
          myContext = context;
      }
-     public void sendNotification(Notification notification){
-         smt.convertAndSend("/topic/"+notification.getSentTo(),notification);
+     public int sendNotification(Notification notification){
+         try {
+             smt.convertAndSend("/topic/" + notification.getSentTo(), notification);
+             return 0;
+         }catch (MessagingException me){
+             return -1;
+         }
      }
  }

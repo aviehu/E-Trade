@@ -12,53 +12,29 @@ import com.workshop.ETrade.Domain.Users.ExternalService.Supply.SupplyAdaptee;
 import com.workshop.ETrade.Domain.purchaseOption;
 import com.workshop.ETrade.Persistance.Stores.StoreDTO;
 import com.workshop.ETrade.Repository.*;
+import com.workshop.ETrade.Service.InitExecuter.LoadServiceFromInitState;
 import com.workshop.ETrade.Service.ResultPackge.Result;
 import com.workshop.ETrade.AllRepos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
 @Service
 public class SystemService implements ServiceInterface {
-    private boolean initialize;
     private Facade facade;
-    @Autowired
-    private ProductRepository productRepository;
 
-    @Autowired
-    private StoreRepository storeRepository;
-
-    @Autowired
-    private MemberRepository memberRepository;
-
-    @Autowired
-    private StoreBasketRepository storeBasketRepository;
-
-    @Autowired
-    private SystemManagerRepository systemManagerRepository;
-
-    @Autowired
-    private BidRepository bidRepository;
-
-    @Autowired
-    private PolicyRepository policyRepository;
-
-    @Autowired
-    private DiscountRepository discountRepository;
-
-    public SystemService() {
-        initialize = false;
+    public SystemService() throws Exception {
+       // initialize = false;
         init();
     }
     private static SystemService myInstance = null;
 
-    public void init(){
+    public void init() throws Exception {
         this.facade = new Facade();
-//        File file = new File("src\\main\\java\\com\\workshop\\ETrade\\Service\\InitExecuter\\initState.json");
-//        String path = file.getAbsolutePath();
-//        LoadServiceFromInitState.loadFromFile(path,this);
+
     }
 
     @Override
@@ -106,18 +82,7 @@ public class SystemService implements ServiceInterface {
 
     @Override
     public Result<String> enterSystem() {
-        while (!initialize) {
-            AllRepos.setStoreRepo(storeRepository);
-            AllRepos.setProductRepo(productRepository);
-            AllRepos.setMemberRepo(memberRepository);
-            AllRepos.setStoreBasketRepo(storeBasketRepository);
-            AllRepos.setSystemManagerRepo(systemManagerRepository);
-            AllRepos.setBidRepo(bidRepository);
-            AllRepos.setPolicyRepo(policyRepository);
-            AllRepos.setDiscountRepo(discountRepository);
-            facade.init();
-            initialize = true;
-        }
+
         return facade.enterSystem();
     }
 
@@ -397,6 +362,9 @@ public class SystemService implements ServiceInterface {
 
     public Result<Boolean> addKeyword(String userName, String productName, String storeName, String keyWord) {
         return facade.addKeyword(userName, productName, storeName, keyWord);
+    }
+    public void initFacade(){
+        this.facade.init();
     }
 
 }

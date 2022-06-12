@@ -8,13 +8,11 @@ import org.apache.http.message.BasicNameValuePair;
 
 import java.net.HttpURLConnection;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class PaymentAdaptee {
     private HttpClient httpClient;
+
 
     public PaymentAdaptee(HttpClient httpClient) {
         this.httpClient = httpClient;
@@ -29,9 +27,19 @@ public class PaymentAdaptee {
         urlParameters.add(new BasicNameValuePair("holder", holder));
         urlParameters.add(new BasicNameValuePair("ccv", String.valueOf(cvv)));
         urlParameters.add(new BasicNameValuePair("id",String.valueOf(id)));
-        String result = this.httpClient.start(urlParameters);
+        String result = "";
+        try {
 
-        return Integer.parseInt(result);
+            result = this.httpClient.start(urlParameters);
+        }
+        catch (Exception e){
+            return -1;
+        }
+        try {
+            return Integer.parseInt(result);
+        }catch (NumberFormatException e){
+            return -1;
+        }
     }
     public boolean canPay(int cardFrom, LocalTime expDate, int cvv,double price){
         return false;
@@ -42,11 +50,14 @@ public class PaymentAdaptee {
 
     public int cancelPayment(int transId) {
         List<NameValuePair> urlParameters = new ArrayList<>();
-        urlParameters.add(new BasicNameValuePair("action_type", "cancel_payment"));
+        urlParameters.add(new BasicNameValuePair("action_type", "cancel_pay"));
         urlParameters.add(new BasicNameValuePair("transaction_id", String.valueOf(transId)));
         String result = this.httpClient.start(urlParameters);
-
+    try {
         return Integer.parseInt(result);
+    }catch (NumberFormatException e){
+        return -1;
+    }
     }
     public boolean handShake(){
         List<NameValuePair> urlParameters = new ArrayList<>();
