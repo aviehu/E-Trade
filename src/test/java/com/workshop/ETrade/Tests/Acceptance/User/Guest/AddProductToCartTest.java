@@ -4,9 +4,13 @@ import com.workshop.ETrade.Controller.Forms.ProductForm;
 import com.workshop.ETrade.Service.SystemService;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
-
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class AddProductToCartTest {
 
     private SystemService systemService;
@@ -31,10 +35,19 @@ public class AddProductToCartTest {
         List<ProductForm> cartInfo = systemService.displayShoppingCart("Andalus").getVal();
         Assert.assertTrue(cartInfo.isEmpty());
         systemService.addProductToShoppingCart("Andalus", "Bamba", "Mega", 5);
-        //System.out.println(systemService.displayShoppingCart("Andalus").getVal());
         cartInfo = systemService.displayShoppingCart("Andalus").getVal();
         Assert.assertEquals("Bamba", cartInfo.get(0).productName);
     }
+
+    @Test
+    public void addProductToCartAndLogoutSuccessTest(){
+        String guest = systemService.logOut("Andalus").getVal();
+        Assert.assertTrue(systemService.addProductToShoppingCart(guest, "Bamba", "Mega", 10).isSuccess()); //added successfully
+        Assert.assertTrue(!systemService.displayShoppingCart(guest).getVal().isEmpty()); //added successfully
+        String newGuest = systemService.logOut(guest).getVal();
+        Assert.assertNull(systemService.displayShoppingCart(newGuest).getVal());
+    }
+
 
     @Test
     public void addProductToCartFailTest(){
