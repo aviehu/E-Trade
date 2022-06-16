@@ -21,10 +21,8 @@ public class Bid {
 
     private boolean approvedByBidder;
 
-    @DBRef(lazy = true)
     private CreditCard creditCard;
 
-    @DBRef(lazy = true)
     private SupplyAddress supplyAddress;
 
     private boolean rejected;

@@ -11,6 +11,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -31,6 +32,16 @@ public class StoresController {
     @GetMapping("/info/{store}")
     public Result<List<ProductForm>> getStoreInfo(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName) {
         return systemService.getStoreInfo(userName, storeName);
+    }
+
+    @GetMapping("/approveowner/getwaiting/{store}")
+    public Result<Map<String, Map<String, Boolean>>> getOwnersWaitingForApprove(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName ) {
+        return systemService.getOwnersWaitingForApprove(userName, storeName);
+    }
+
+    @PostMapping("/approveowner/approve/{store}")
+    public Result<String> approveOwner(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName, @RequestBody ApproveAppointmentForm form) {
+        return systemService.approveNewOwner(userName, storeName, form.appointee, form.approve);
     }
 
     @GetMapping("/")
@@ -169,7 +180,7 @@ public class StoresController {
     }
 
     @PostMapping("/appointowner/{store}")
-    public Result<Boolean> appointStoreOwner(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName, @RequestBody AppointForm form) {
+    public Result<String> appointStoreOwner(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName, @RequestBody AppointForm form) {
         return systemService.appointStoreOwner(userName, storeName, form.appointee);
     }
 

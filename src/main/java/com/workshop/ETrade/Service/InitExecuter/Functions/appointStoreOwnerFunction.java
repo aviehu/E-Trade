@@ -2,7 +2,7 @@ package com.workshop.ETrade.Service.InitExecuter.Functions;
 
 import com.workshop.ETrade.Service.ResultPackge.Result;
 
-public class appointStoreOwnerFunction extends Function<Boolean>{
+public class appointStoreOwnerFunction extends Function<String>{
 
     private String userName;
     private String storeName;
@@ -42,7 +42,7 @@ public class appointStoreOwnerFunction extends Function<Boolean>{
     }
 
     @Override
-    public Result<Boolean> execute() {
+    public Result<String> execute() {
         return this.service.appointStoreOwner(userName, storeName, newOwner);
     }
 }
