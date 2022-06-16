@@ -4,12 +4,15 @@ import com.workshop.ETrade.Persistance.Stores.*;
 import com.workshop.ETrade.Persistance.Users.MemberDTO;
 import com.workshop.ETrade.Persistance.Users.StoreBasketDTO;
 import com.workshop.ETrade.Persistance.Users.SystemManagerDTO;
+import com.workshop.ETrade.Persistance.Users.TrafficDTO;
 import com.workshop.ETrade.Repository.StoreBasketRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
+import java.time.LocalDate;
+
 public class AllRepos {
-    private static boolean isTest = true;
+    private static boolean isTest = false;
 
 
 
@@ -40,6 +43,7 @@ public class AllRepos {
     private static MongoRepository<PolicyDTO, String> policyRepo;
     private static MongoRepository<DiscountDTO, String> discountRepo;
     private static MongoRepository<SystemManagerDTO, String> systemManagerRepo;
+    private static MongoRepository<TrafficDTO, LocalDate> trafficRepo;
 
 
 
@@ -141,6 +145,18 @@ public class AllRepos {
             return new MockRepo<>();
         }
         return storeRepo;
+    }
+
+    public static MongoRepository<TrafficDTO, LocalDate> getTrafficRepo() {
+        if(isTest) {
+            return new MockRepo<>();
+        }
+        return trafficRepo;
+    }
+    public static void setTrafficRepo(MongoRepository<TrafficDTO, LocalDate> rep) {
+        if(trafficRepo == null) {
+            trafficRepo = rep;
+        }
     }
 
 }

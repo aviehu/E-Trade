@@ -23,7 +23,6 @@ import java.io.File;
 
 @SpringBootApplication
 @EnableMongoRepositories(basePackages = "com.workshop.ETrade.Repository")
-@ComponentScan("com.workshop.ETrade")
 public class ETradeApplication implements CommandLineRunner {
 	private boolean initialize;
 
@@ -50,6 +49,8 @@ public class ETradeApplication implements CommandLineRunner {
 
 	@Autowired
 	private DiscountRepository discountRepository;
+	@Autowired
+	private TrafficRepository trafficRepository;
 @Autowired
 	SystemService service;
 	public static void main(String[] args) {
@@ -67,6 +68,7 @@ public class ETradeApplication implements CommandLineRunner {
 			AllRepos.setBidRepo(bidRepository);
 			AllRepos.setPolicyRepo(policyRepository);
 			AllRepos.setDiscountRepo(discountRepository);
+			AllRepos.setTrafficRepo(trafficRepository);
 			initialize = true;
 		}
 		try {
@@ -75,7 +77,7 @@ public class ETradeApplication implements CommandLineRunner {
 			String path = file.getAbsolutePath();
 			LoadServiceFromInitState.loadFromFile(path, service);
 		}catch (Exception e){
-
+			System.out.println(e);
 		}
 	}
 //

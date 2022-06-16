@@ -8,13 +8,17 @@ import com.workshop.ETrade.Domain.Stores.Product;
 import com.workshop.ETrade.Domain.Stores.Store;
 import com.workshop.ETrade.Persistance.Users.MemberDTO;
 import com.workshop.ETrade.Persistance.Users.SystemManagerDTO;
+import com.workshop.ETrade.Persistance.Users.TrafficDTO;
 import com.workshop.ETrade.Repository.ProductRepository;
 import com.workshop.ETrade.Service.ResultPackge.Result;
+import org.elasticsearch.search.DocValueFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +28,7 @@ import java.util.logging.Handler;
 import java.util.logging.Logger;
 
 public class UserController {
+    private HashMap<LocalDate,TrafficInfo> trafficHistory;
     public static int guestId;
     List<Member> members;
     public static int memberDiscount;
@@ -34,6 +39,7 @@ public class UserController {
     private Logger logger = Logger.getLogger("users");
 
     public UserController() {
+        trafficHistory = new HashMap<>();
         guestId = 0;
         memberDiscount = 0;
         this.members = new ArrayList<>();
@@ -58,8 +64,18 @@ public class UserController {
         logIn("domain",enc);
         loadMembers();
         loadSystemManager();
+        loadTraffic();
         users.addAll(members);
         users.addAll(guests);
+    }
+
+    private void loadTraffic() {
+        List<TrafficDTO> trafficDTOS = AllRepos.getTrafficRepo().findAll();
+        for(TrafficDTO tf : trafficDTOS){
+            LocalDate date = LocalDate.of(tf.getDate().getYear(),tf.getDate().getMonth(),tf.getDate().getDay());
+            TrafficInfo trafficInfo = new TrafficInfo(tf.getGuests(),tf.getSimpleMembers(),tf.getManagersMembers(),tf.getOwnersMembers(),tf.getSysManagers(),date);
+            this.trafficHistory.put(date,trafficInfo);
+        }
     }
 
     private void loadSystemManager() {
@@ -90,7 +106,7 @@ public class UserController {
             if(m != null){
                 if(!systemManagers.contains(m.getUserName())){
                     Member sm = new Member(m.getUserName(), m.getPassword(),m.getName(),m.getLastName());
-                    members.remove(m);
+                    //members.remove(m);
                     systemManagers.add(sm.getUserName());
                     users.add(sm);
                     AllRepos.getSystemManagerRepo().save(new SystemManagerDTO(sm.getUserName()));
@@ -140,9 +156,11 @@ public class UserController {
                     return null;
 
                 }
+
                 else
                     return "Invalid Username or Password\n";
             }
+
         }
         return "Invalid Username or Password\n";
     }
@@ -377,4 +395,96 @@ public class UserController {
         }
         user.purchaseBid(approved);
     }
+    public synchronized void incGuestsTraffic(String userName){
+        LocalDate today = LocalDate.now();
+        if(this.trafficHistory.containsKey(today)) {
+            trafficHistory.get(today).incGuests(userName);
+            AllRepos.getTrafficRepo().save(new TrafficDTO(trafficHistory.get(today)));
+            return;
+        }
+        TrafficInfo ti = new TrafficInfo();
+        ti.incGuests(userName);
+        trafficHistory.put(today,ti);
+        AllRepos.getTrafficRepo().save(new TrafficDTO(trafficHistory.get(today)));
+
+    }
+
+    public synchronized void incSimpMembersTraffic(String userName){
+        LocalDate today = LocalDate.now();
+        if(this.trafficHistory.containsKey(today)) {
+            trafficHistory.get(today).incSimpleMembers(userName);
+            AllRepos.getTrafficRepo().save(new TrafficDTO(trafficHistory.get(today)));
+            return;
+        }
+        TrafficInfo ti = new TrafficInfo();
+        ti.incSimpleMembers(userName);
+        trafficHistory.put(today,ti);
+        AllRepos.getTrafficRepo().save(new TrafficDTO(trafficHistory.get(today)));
+
+    }
+    public synchronized void incStoreManagerTraffic(String userName){
+        LocalDate today = LocalDate.now();
+        if(this.trafficHistory.containsKey(today)) {
+            TrafficInfo trafficInfo = trafficHistory.get(today);
+            trafficInfo.incStoreManagersMembers(userName);
+            if(trafficInfo.getSimpleMembers().contains(userName))
+                trafficInfo.getSimpleMembers().remove(userName);
+
+            AllRepos.getTrafficRepo().save(new TrafficDTO(trafficInfo));
+            return;
+        }
+        TrafficInfo ti = new TrafficInfo();
+        ti.incStoreManagersMembers(userName);
+        trafficHistory.put(today,ti);
+        AllRepos.getTrafficRepo().save(new TrafficDTO(trafficHistory.get(today)));
+
+    }
+    public synchronized void incStoreOwnerTraffic(String userName){
+        LocalDate today = LocalDate.now();
+        if(this.trafficHistory.containsKey(today)) {
+            TrafficInfo trafficInfo = trafficHistory.get(today);
+            trafficInfo.incOwnersMembers(userName);
+            if(trafficInfo.getSimpleMembers().contains(userName))
+                trafficInfo.getSimpleMembers().remove(userName);
+            else if(trafficInfo.getManagersMembers().contains(userName))
+                trafficInfo.getManagersMembers().remove(userName);
+            AllRepos.getTrafficRepo().save(new TrafficDTO(trafficInfo));
+            return;
+        }
+        TrafficInfo ti = new TrafficInfo();
+        ti.incOwnersMembers(userName);
+        trafficHistory.put(today,ti);
+        AllRepos.getTrafficRepo().save(new TrafficDTO(trafficHistory.get(today)));
+
+    }
+
+    public synchronized void incSysManagersTraffic(String userName){
+        LocalDate today = LocalDate.now();
+        if(this.trafficHistory.containsKey(today)) {
+            TrafficInfo trafficInfo =  trafficHistory.get(today);
+           trafficInfo.incSysManagers(userName);
+            if(trafficInfo.getSimpleMembers().contains(userName))
+                trafficInfo.getSimpleMembers().remove(userName);
+            else if(trafficInfo.getManagersMembers().contains(userName))
+                trafficInfo.getManagersMembers().remove(userName);
+            else if(trafficInfo.getOwnersMembers().contains(userName))
+                trafficInfo.getOwnersMembers().remove(userName);
+            AllRepos.getTrafficRepo().save(new TrafficDTO(trafficInfo));
+            return;
+        }
+        TrafficInfo ti = new TrafficInfo();
+        ti.incSysManagers(userName);
+        trafficHistory.put(today,ti);
+        AllRepos.getTrafficRepo().save(new TrafficDTO(trafficHistory.get(today)));
+
+    }
+    public boolean isMember(String userName){
+        return getMember(userName) != null;
+    }
+    public TrafficInfo getTrafficByDate(LocalDate date){
+        if(trafficHistory.containsKey(date))
+            return trafficHistory.get(date);
+        return null;
+    }
+
 }

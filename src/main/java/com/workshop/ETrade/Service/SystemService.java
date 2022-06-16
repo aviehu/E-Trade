@@ -377,4 +377,11 @@ public class SystemService implements ServiceInterface {
         this.facade.init();
     }
 
+    public Result<TrafficForm> getTrafficByDate(int year,int month,int day){
+        return this.facade.getTrafficByDate(year, month, day);
+    }
+    public void guestEnteredMarket(String userName){
+        facade.guestEnteredMarket(userName);
+    }
+
 }

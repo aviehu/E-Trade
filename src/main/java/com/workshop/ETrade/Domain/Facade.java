@@ -16,6 +16,7 @@ import com.workshop.ETrade.Service.ResultPackge.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -236,6 +237,7 @@ public class Facade implements SystemFacade {
             String ret = userController.logIn(memberUserName, pass);
             if (ret == null){
                 this.myUserName = memberUserName;
+                updateTraffic(memberUserName);
                 return new Result<Boolean>(true, null);
             }
             else
@@ -823,5 +825,40 @@ public class Facade implements SystemFacade {
     public void notifyUser(String message, String sendFrom, String sendTo) {
         User user = userController.getUser(sendTo);
         user.update(message,sendFrom);
+    }
+    public void updateTraffic(String userName){
+        if(userController.isUserSysManager(userName)) {
+            userController.incSysManagersTraffic(userName);
+            return;
+        }
+
+        List<String> currStores = storesFacade.getStoresOfUser(userName);
+        if(currStores.isEmpty()){
+            userController.incSimpMembersTraffic(userName);
+            return;
+        }
+        for(String store : currStores){
+            Store s = storesFacade.getStore(store);
+            if(s.isOwner(userName)){
+                userController.incStoreOwnerTraffic(userName);
+                return;
+            }
+
+        }
+        userController.incStoreManagerTraffic(userName);
+    }
+    public void guestEnteredMarket(String userName){
+        userController.incGuestsTraffic(userName);
+    }
+    public Result<TrafficForm> getTrafficByDate(int year,int month,int day){
+        LocalDate date = LocalDate.of(year,month,day);
+        if(date.isAfter(LocalDate.now()))
+            return new Result<>(null,"Invalid date\n");
+        TrafficInfo trafficInfo = userController.getTrafficByDate(date);
+        if(trafficInfo == null){
+            return new Result<>(null,"No such date in history\n");
+        }
+        TrafficForm trafficForm =new TrafficForm(trafficInfo);
+        return new Result<>(trafficForm,null);
     }
 }

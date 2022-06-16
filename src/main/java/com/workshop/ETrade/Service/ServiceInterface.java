@@ -143,7 +143,7 @@ public interface ServiceInterface {
     Result<List<BidForm>> userBids(String userName);
 
     Result<Boolean> counterBidReview(String userName, String storeName, int bidId, boolean approve);
-
+     Result<TrafficForm> getTrafficByDate(int year,int month,int day);
 //    public newResult<Boolean> exitSystem();
-
+    void guestEnteredMarket(String userName);
 }
