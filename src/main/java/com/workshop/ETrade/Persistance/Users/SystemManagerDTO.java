@@ -6,17 +6,18 @@ import java.util.List;
 
 public class SystemManagerDTO {
     @Id
-    private String systemManager;
-
-    public SystemManagerDTO(String systemManagers) {
-        this.systemManager = systemManagers;
-    }
-
+    public String systemManager;
     public String getSystemManager() {
         return systemManager;
     }
 
-    public void setSystemManager(String systemManagers) {
-        this.systemManager = systemManagers;
+    public SystemManagerDTO(String systemManager) {
+        this.systemManager = systemManager;
+    }
+
+
+
+    public void setSystemManager(String systemManager) {
+        this.systemManager = systemManager;
     }
 }

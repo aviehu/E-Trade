@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public class AllRepos {
-    private static boolean isTest = true;
+    private static boolean isTest = false;
 
 
 

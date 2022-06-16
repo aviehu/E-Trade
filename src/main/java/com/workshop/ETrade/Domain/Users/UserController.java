@@ -48,11 +48,14 @@ public class UserController {
         }
 //        init();
     }
-    public void init(){
+    public void init(String enc){
         //load from database
-        Member systemManager = new Member("domain","domain", "domain","domain");
+
+        Member systemManager = new Member("domain",enc, "domain","domain");
+
         members.add(systemManager);
         systemManagers.add(systemManager.getUserName());
+        logIn("domain",enc);
         loadMembers();
         loadSystemManager();
         users.addAll(members);
@@ -62,7 +65,8 @@ public class UserController {
     private void loadSystemManager() {
         List<SystemManagerDTO> smDTOS = AllRepos.getSystemManagerRepo().findAll();
         for (SystemManagerDTO sm : smDTOS) {
-            systemManagers.add(sm.getSystemManager());
+            if(!systemManagers.contains(sm.getSystemManager()))
+                systemManagers.add(sm.getSystemManager());
         }
     }
 
@@ -231,21 +235,27 @@ public class UserController {
         User user = getUser(userName);
         SupplyAddress sa;
         if(user != null) {
-            logger.info("new purchase by - " + userName);
+
             if(user.getCard() == null) {
                 CreditCard card = new CreditCard(creditCard, month,year, cvv,id,holderName);
                 if (user.getAddress() == null) {
                     sa = new SupplyAddress(country,city,street,stNum,apartmentNum,zip);
+                    logger.info("new purchase by - " + userName);
                     return user.purchase(card, sa);
                 } else {
+                    logger.info("new purchase by - " + userName);
                     return user.purchase(card, user.getAddress());
                 }
+
             }
             else if (user.getAddress() == null) {
                 sa = new SupplyAddress(country,city,street,stNum,apartmentNum,zip);
+                logger.info("new purchase by - " + userName);
                 return user.purchase(user.getCard(), sa);
-            } else
+            } else {
+                logger.info("new purchase by - " + userName);
                 return user.purchase(user.getCard(), user.getAddress());
+            }
         }
         return new Result<>(null, "FAIL!User: "+userName+" does not exist\n");
     }

@@ -19,6 +19,7 @@ public class ExtSysController {
 
     private ExtSysController(boolean isSupply,boolean isPayment) {
         HttpClient httpClient = new HttpClient();
+
         if(isPayment)
             payment = new MyPaymentSys(new PaymentAdapter(new PaymentAdaptee(httpClient)));
         else

@@ -25,8 +25,13 @@ public class SupplyAdaptee {
         String result = this.httpClient.start(urlParameters);
 
 
-
+    try {
         return Integer.parseInt(result);
+    }catch (NumberFormatException e){
+        return -1;
+    }
+
+        //return  -1;
 
     }
 
@@ -35,7 +40,11 @@ public class SupplyAdaptee {
         urlParameters.add(new BasicNameValuePair("action_type", "cancel_supply"));
         urlParameters.add(new BasicNameValuePair("transaction_id",String.valueOf(transId)));
         String result = httpClient.start(urlParameters);
-        return Integer.parseInt(result);
+        try {
+            return Integer.parseInt(result);
+        }catch (NumberFormatException e){
+            return -1;
+        }
     }
     public boolean handShake(){
         List<NameValuePair> urlParameters = new ArrayList<>();

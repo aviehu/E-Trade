@@ -21,6 +21,7 @@ import get from "../util/get";
 import post from "../util/post";
 import SocketProvider from "../util/SocketProvider";
 import MessageDialog from '../util/MessageDialog'
+import MyError from "../util/MyError";
 
 
 const steps = ['Your cart','Shipping address', 'Payment details'];
@@ -45,6 +46,8 @@ const theme = createTheme();
 
 export default function Checkout() {
     const [activeStep, setActiveStep] = React.useState(0);
+    const [error, setError] = React.useState("")
+    const [hasError, setHasError] = React.useState(false)
     const [totalPrice, setTotalPrice] = React.useState(0);
     const [streetNum, setStreetNum] = useState(0);
     const [address, setAddress] = useState("")
@@ -107,6 +110,14 @@ export default function Checkout() {
                     navigate('/etrade');
                 }, 5000)
             }
+            else{
+                setError(res.err)
+                setHasError(true)
+                setTimeout(() => {
+                    navigate('/etrade');
+                }, 5000)
+            }
+
         } else {
             setActiveStep(activeStep + 1);
         }
@@ -123,6 +134,7 @@ export default function Checkout() {
         <ThemeProvider theme={theme}>
             <MessageDialog message={message} open={message !== null} handleClose={() => setMessage(null)}/>
             <CssBaseline />
+            <MyError open={hasError} setOpen={setHasError} error={error}/>
             <AppBar
                 position="absolute"
                 color="default"
