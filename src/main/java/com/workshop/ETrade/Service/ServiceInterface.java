@@ -11,6 +11,7 @@ import com.workshop.ETrade.Domain.purchaseOption;
 import com.workshop.ETrade.Service.ResultPackge.Result;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ServiceInterface {
 
@@ -93,7 +94,7 @@ public interface ServiceInterface {
 
     public Result<Boolean> changePurchaseOption(String userName, String storeName, String ProductName, purchaseOption newOption);
 
-    public Result<Boolean> appointStoreOwner(String userName, String storeName, String newOwner);
+    public Result<String> appointStoreOwner(String userName, String storeName, String newOwner);
 
     public Result<Boolean> removeStoreOwner(String userName, String storeName, String ownerToRemove);
 
@@ -143,6 +144,10 @@ public interface ServiceInterface {
     Result<List<BidForm>> userBids(String userName);
 
     Result<Boolean> counterBidReview(String userName, String storeName, int bidId, boolean approve);
+
+    Result<Map<String, Map<String, Boolean>>> getOwnersWaitingForApprove(String userName, String storeName);
+
+    Result<String> approveNewOwner(String userName, String storeName, String appointee, boolean approve);
 
 //    public newResult<Boolean> exitSystem();
 

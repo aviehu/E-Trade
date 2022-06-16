@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class SystemService implements ServiceInterface {
@@ -243,7 +244,7 @@ public class SystemService implements ServiceInterface {
     }
 
     @Override
-    public Result<Boolean> appointStoreOwner(String userName, String storeName, String newOwner) {
+    public Result<String> appointStoreOwner(String userName, String storeName, String newOwner) {
         return facade.appointStoreOwner(userName, storeName, newOwner);
     }
 
@@ -364,6 +365,16 @@ public class SystemService implements ServiceInterface {
     @Override
     public Result<Boolean> counterBidReview(String userName, String storeName, int bidId, boolean approve) {
         return facade.counterBidReview(userName, storeName, bidId, approve);
+    }
+
+    @Override
+    public Result<Map<String, Map<String, Boolean>>> getOwnersWaitingForApprove(String userName, String storeName) {
+        return facade.getOwnersWaitingForApprove(userName, storeName);
+    }
+
+    @Override
+    public Result<String> approveNewOwner(String userName, String storeName, String appointee, boolean approve) {
+        return facade.approveOwner(userName, storeName,appointee, approve);
     }
 
     public Result<Integer> getProductAmount(String storeName, String prodName){

@@ -29,8 +29,10 @@ public class StoreDTO {
     @DBRef
     public List<PolicyDTO> policies;
     //public List<PurchaseDTO>  purchaseHistory;
+    @DBRef
+    public List<AwaitingAppointmentDTO> awaitingAppointment;
 
-    public StoreDTO(String name, String founderName, int card, boolean closed, int bidId,  List<MapDBobjDTO> ownersAppointments, List<MapDBobjDTO> managersAppointments, List<ProductDTO> products, Map<String, String> managersPermissions, List<BidDTO> bids, int discountId, int policyId, List<DiscountDTO> discounts, List<PolicyDTO> policies) {
+    public StoreDTO(String name, String founderName, int card, boolean closed, int bidId,  List<MapDBobjDTO> ownersAppointments, List<MapDBobjDTO> managersAppointments, List<ProductDTO> products, Map<String, String> managersPermissions, List<BidDTO> bids, int discountId, int policyId, List<DiscountDTO> discounts, List<PolicyDTO> policies, List<AwaitingAppointmentDTO> awaitingAppointment) {
         this.name = name;
         this.products = products;
         this.founderName = founderName;
@@ -62,6 +64,7 @@ public class StoreDTO {
         this.policyId = policyId;
         this.discounts = discounts;
         this.policies = policies;
+        this.awaitingAppointment = awaitingAppointment;
 //        this.purchaseHistory = purchaseHistory;
     }
 
@@ -108,7 +111,11 @@ public class StoreDTO {
         for(Policy p : polys) {
             policies.add(new PolicyDTO(p));
         }
-
+        Map<String, Map<String, Boolean>> ownersAppointmentAgreement = store.getOwnersWaitingForApprove();
+        awaitingAppointment = new ArrayList<>();
+        for(String ownerWaiting : ownersAppointmentAgreement.keySet()) {
+            awaitingAppointment.add(new AwaitingAppointmentDTO(ownerWaiting, ownersAppointmentAgreement.get(ownerWaiting)));
+        }
 //        List<Purchase> purchases = store.getPurchases();
 //        purchaseHistory = new ArrayList<>();
 //        for(Purchase p : purchases) {

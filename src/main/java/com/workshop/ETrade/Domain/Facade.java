@@ -16,10 +16,7 @@ import com.workshop.ETrade.Service.ResultPackge.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class Facade implements SystemFacade {
 
@@ -478,20 +475,30 @@ public class Facade implements SystemFacade {
     }
 
     @Override
-    public Result<Boolean> appointStoreOwner(String userName, String storeName, String newOwner) {
+    public Result<String> appointStoreOwner(String userName, String storeName, String newOwner) {
         if(userController.isConnected(userName) && userController.isUserNameExist(newOwner)){
-            if(storesFacade.appointStoreOwner(userName, storeName, newOwner)) {
+            String ans = storesFacade.appointStoreOwner(userName, storeName, newOwner);
+            if(ans.equals(newOwner + " has been added as store owner")) {
                 //subscribe new owner
                 Store s = this.storesFacade.getStore(storeName);
                 Member m = this.userController.getMember(newOwner);
                 s.attach(m);
                 notifyOne("You have been appointed to store Owner at " +storeName,userName,newOwner);
 
-                return new Result<>(true, null);
+                return new Result<>(ans, null);
             }
-            return new Result<>(false, "Could Not Appoint Store Owner");
+            return new Result<>(null, ans);
         }
-        return new Result<>(false, "User Is Not Connected");
+        return new Result<>(null, "User Is Not Connected");
+    }
+
+    @Override
+    public Result<String> approveOwner(String userName, String storeName, String ownerToApprove, boolean approve) {
+        if(userController.isConnected(userName)) {
+            return new Result<>(storesFacade.approveOwner(userName, storeName, ownerToApprove, approve), null);
+        } else {
+            return new Result<>(null, "User Is Not Connected");
+        }
     }
 
     @Override
@@ -823,5 +830,16 @@ public class Facade implements SystemFacade {
     public void notifyUser(String message, String sendFrom, String sendTo) {
         User user = userController.getUser(sendTo);
         user.update(message,sendFrom);
+    }
+
+    public Result<Map<String, Map<String, Boolean>>> getOwnersWaitingForApprove(String userName, String storeName) {
+        if(userController.isConnected(userName)) {
+            Map<String, Map<String, Boolean>> res = storesFacade.getOwnersWaitingForApprove(userName, storeName);
+            if(res != null) {
+                return new Result<>(res,null);
+            }
+            return new Result<>(null, "Cannot get Owners waiting for approve");
+        }
+        return new Result<>(null, "User Is Not Connected");
     }
 }

@@ -12,10 +12,7 @@ import com.workshop.ETrade.Domain.Users.Member;
 import com.workshop.ETrade.Domain.Users.SupplyAddress;
 import com.workshop.ETrade.Domain.Users.User;
 import com.workshop.ETrade.Domain.purchaseOption;
-import com.workshop.ETrade.Persistance.Stores.BidDTO;
-import com.workshop.ETrade.Persistance.Stores.MapDBobjDTO;
-import com.workshop.ETrade.Persistance.Stores.ProductDTO;
-import com.workshop.ETrade.Persistance.Stores.StoreDTO;
+import com.workshop.ETrade.Persistance.Stores.*;
 import com.workshop.ETrade.AllRepos;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
@@ -37,6 +34,7 @@ public class Store implements Observable {
     private Map<String, managersPermission> managersPermissions;
     private PolicyManager policyManager;
     private StorePurchaseHistory storeHistory;
+    private Map<String, AppointmentAgreement> ownersAppointmentAgreement;
     private Map<String, List<String>> ownersAppointments;
     private Map<String, List<String>> managersAppointments;
     private List<Raffle> raffles;
@@ -71,6 +69,10 @@ public class Store implements Observable {
             bids.add(new Bid(b, inventory.getProductByName(b.productName)));
         }
         closed = false;
+        ownersAppointmentAgreement = new HashMap<>();
+        for(AwaitingAppointmentDTO adto : storeDTO.awaitingAppointment) {
+            ownersAppointmentAgreement.put(adto.awaitingUser, new AppointmentAgreement(adto.approvedBy));
+        }
     }
 
     public Store(String storeName, String founderName,int card) {
@@ -93,6 +95,7 @@ public class Store implements Observable {
         raffleId = 1;
         managersPermissions = new ConcurrentHashMap<>();
         subscribers = new ArrayList<>();
+        ownersAppointmentAgreement = new HashMap<>();
     }
 
     public int addDiscount(String userName,String discountOn, int discountPercentage, String description, DiscountType discountType) {
@@ -312,14 +315,48 @@ public class Store implements Observable {
         return false;
     }
 
-    public boolean addOwner(String ownersName, String nameToAdd){
-        if(isOwner(ownersName)  && !isOwner(nameToAdd)){
+
+    private Map<String, Boolean> getAwaiting(String owner) {
+        Map<String, Boolean> awaiting = new HashMap<>();
+        for(String name : getOwners(owner)) {
+            if(owner.equals(name)) {
+                awaiting.put(name, true);
+            } else {
+                awaiting.put(name, false);
+            }
+        }
+        return awaiting;
+    }
+    public String addOwner(String ownersName, String nameToAdd){
+        if(!isOwner(ownersName)) {
+            return ownersName + " is not an owner in this store";
+        }
+        if(isOwner(nameToAdd)) {
+            return nameToAdd + " is already an owner in this store";
+        }
+
+        ownersAppointmentAgreement.put(nameToAdd, new AppointmentAgreement(getAwaiting(ownersName)));
+        AppointmentAgreement aa = ownersAppointmentAgreement.get(nameToAdd);
+        aa.approve(ownersName, true);
+        if(aa.isApproved()){
            ownersAppointments.get(ownersName).add(nameToAdd);
            ownersAppointments.put(nameToAdd, new LinkedList<>());
            managersAppointments.put(nameToAdd, new LinkedList<>());
-           return true;
+           return nameToAdd + " has been added as store owner";
         }
-        return false;
+
+        return nameToAdd + " has been added to review as store owner";
+    }
+
+    public String approveOwner(String ownersName, String nameToApprove, boolean approve) {
+        String ans = ownersAppointmentAgreement.get(nameToApprove).approve(ownersName, approve);
+        AppointmentAgreement aa = ownersAppointmentAgreement.get(nameToApprove);
+        if(aa.isApproved()) {
+            ownersAppointments.get(ownersName).add(nameToApprove);
+            ownersAppointments.put(nameToApprove, new LinkedList<>());
+            managersAppointments.put(nameToApprove, new LinkedList<>());
+        }
+        return ans;
     }
 
     public double getPrice(Map<String, Integer> items) {
@@ -662,5 +699,13 @@ public class Store implements Observable {
 
     public int addComplexDiscount(String discountOn, int discountPercentage, String description, DiscountType discountType, OperatorComponent component) {
         return policyManager.addPredicateDiscount(policyManager.getDiscountId(),discountOn, discountPercentage, description, discountType, component);
+    }
+
+    public Map<String, Map<String, Boolean>> getOwnersWaitingForApprove() {
+        Map<String, Map<String, Boolean>> ans = new HashMap<>();
+        for(String name : ownersAppointmentAgreement.keySet()) {
+            ans.put(name, ownersAppointmentAgreement.get(name).getWaiting());
+        }
+        return ans;
     }
 }

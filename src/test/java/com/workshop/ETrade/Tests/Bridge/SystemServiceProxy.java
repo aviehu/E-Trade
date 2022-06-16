@@ -13,6 +13,7 @@ import com.workshop.ETrade.Service.ServiceInterface;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.List;
+import java.util.Map;
 
 public class SystemServiceProxy implements ServiceInterface {
 
@@ -132,6 +133,16 @@ public class SystemServiceProxy implements ServiceInterface {
 
     @Override
     public Result<Boolean> counterBidReview(String userName, String storeName, int bidId, boolean approve) {
+        return null;
+    }
+
+    @Override
+    public Result<Map<String, Map<String, Boolean>>> getOwnersWaitingForApprove(String userName, String storeName) {
+        return null;
+    }
+
+    @Override
+    public Result<String> approveNewOwner(String userName, String storeName, String appointee, boolean approve) {
         return null;
     }
 
@@ -383,7 +394,7 @@ public class SystemServiceProxy implements ServiceInterface {
     }
 
     @Override
-    public Result<Boolean> appointStoreOwner(String userName, String storeName, String newOwner) {
+    public Result<String> appointStoreOwner(String userName, String storeName, String newOwner) {
         if (real == null)
             throw new NotImplementedException();
         return real.appointStoreOwner(userName, storeName, newOwner);
