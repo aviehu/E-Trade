@@ -44,7 +44,7 @@ public class ShoppingCart {
                 int supTransactionId =extSystems.supply(userName, address);
                 if (supTransactionId == -1) {
                     extSystems.cancelPayment(payTransactionId);
-                    extSystems.cancelSup(supTransactionId);
+                    //extSystems.cancelSup(supTransactionId);
                     return new Result<List<String>>(null, "Failed! can't supply your shopping cart\n");
                 }
 

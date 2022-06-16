@@ -11,6 +11,7 @@ public class InitiateSystemTest {
     @org.junit.Before
     public void setUp() throws Exception {
         systemService = new SystemService();
+        systemService.initFacade();
     }
 
     @org.junit.After
@@ -20,6 +21,7 @@ public class InitiateSystemTest {
     @Test
     public void atLeastOneAdmin() throws Exception {
         systemService.init();
+        systemService.initFacade();
         systemService.enterSystem();
         Assert.assertTrue(systemService.hasAdmin().getVal());
     }

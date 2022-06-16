@@ -39,8 +39,8 @@ public class PaymentTest {
 
         systemService.login(systemService.enterSystem().getVal(),"Andalus2","100");
         systemService.addProductToShoppingCart("Andalus2","chips","Mega",2);
-        Assert.assertFalse(systemService.purchase("Andalus2","123",4,2023,"aa",100,2033,"jj","ff","dd",123,123,123).getVal());
-        Assert.assertEquals(100,systemService.getProdAmount("Mega","chips"));
+        Assert.assertFalse(systemService.purchase("Andalus2","123",4,2023,"aa",986,2033,"jj","ff","dd",123,123,123).isSuccess());
+        Assert.assertEquals(100,systemService.getProdAmount("Mega","chips").getVal(),0);
     }
 
 }
