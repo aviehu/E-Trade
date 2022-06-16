@@ -6,9 +6,13 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
-
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class UpdateCartTest {
     private SystemService systemService;
 
@@ -35,6 +39,7 @@ public class UpdateCartTest {
         systemService.removeProductFromShoppingCart("Andalus", "Mega", 5, "Bamba");
         Assert.assertFalse(systemService.displayShoppingCart("Andalus").getVal().contains("Bamba"));
     }
+
 
     private boolean isInList(List<ProductForm> productForms, String productName)  {
         for(ProductForm pf : productForms) {

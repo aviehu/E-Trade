@@ -5,7 +5,7 @@ import com.workshop.ETrade.Service.SystemService;
 
 public class Driver {
 
-    public ServiceInterface getService(){
+    public ServiceInterface getService() throws Exception {
         SystemServiceProxy proxy = new SystemServiceProxy();
         proxy.setReal(new SystemService());
         return proxy;
