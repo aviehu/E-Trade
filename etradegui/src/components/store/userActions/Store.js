@@ -30,6 +30,7 @@ const DashboardContent = () => {
     const [products, setProducts] = useState(null);
     const [error, setError] = React.useState("")
     const [hasError, setHasError] = React.useState(false)
+    const [myStores, setMyStores] = React.useState([]);
 
     useEffect(() => {
         async function getStore() {
@@ -38,7 +39,16 @@ const DashboardContent = () => {
             const products = ans.val
             setProducts(products)
         }
+
+        async function getMyStores() {
+            const res = await get(`stores/ofuser`)
+            const ans = await res.json()
+            const myS = ans.val
+            setMyStores(myS);
+            console.log(myS)
+        }
         getStore()
+        getMyStores()
     }, [])
 
     async function handleAdding(){
@@ -135,12 +145,20 @@ const DashboardContent = () => {
                                     {products ? renderProducts() : <h2>Loading...</h2>}
                                 </main>
                             </Grid>
+                            {myStores.includes(name) ?
+                                <Grid item xs={12}>
+                                    <Button onClick={() => navigate(`/store/edit/${name}`)}>Edit Store</Button>
+                                </Grid>
+                                :
+                                null
+                            }
                         </Grid>
                     </Container>
                 </Box>
             </Box>
             {immediateDialog ? <AddProductDialog open={immediateDialog} handleAdding={handleAdding} setAmount={setAmount}/> : null}
             {bidDialog ? <BidDialog productName={product} open={bidDialog} setOpen={setBidDialog} handleBid={sendBid}  /> : null}
+
         </ThemeProvider>
     );
 }
