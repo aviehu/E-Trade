@@ -13,7 +13,12 @@ import com.workshop.ETrade.Service.ResultPackge.Result;
 import java.util.List;
 
 public interface ServiceInterface {
+
     public void init() throws Exception;
+    public Result<Integer> addComplexPolicy(String userName, String store, String policyOn, String description, PolicyType policyType, ComponentPredicateForm predicateForms, String connectionType);
+
+    public Result<Integer> addComplexDiscount(String userName, String storeName, String discountOn, int discountPercentage, String description, DiscountType discountType, ComponentPredicateForm predicateForms, String connectionType);
+
     public Result<Double> getCartPrice(String userName);
     public Result<Integer> addPolicy(String userName, String store, String policyOn, String description, PolicyType policyType, List<PredicateForm> predicateForms, String connectionType);
     public Result<List<String>> getOnlineMembers(String userName);
