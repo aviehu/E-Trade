@@ -49,6 +49,23 @@ public class Facade implements SystemFacade {
     }
 
     @Override
+    public Result<Integer> addComplexDiscount(String userName, String storeName, String discountOn, int discountPercentage, String description, DiscountType discountType, ComponentPredicateForm predicateForms, String connectionType) {
+        int ret = this.storesFacade.addComplexDiscount(userName,storeName, discountOn, discountPercentage, description, discountType, predicateForms, connectionType);
+        if(ret == -1)
+            return new Result<>(null,"ERROR\n");
+        return new Result<>(ret,null);
+    }
+
+    @Override
+    public Result<Integer> addComplexPolicy(String userName, String store, String policyOn, String description, PolicyType policyType, ComponentPredicateForm predicateForms, String connectionType) {
+        int ret = this.storesFacade.addComplexPolicy(userName,store, policyOn, description, policyType, predicateForms, connectionType);
+        if(ret >= 0) {
+            return new Result<>(ret,null);
+        }
+        return new Result<>(null, "cannot add policy");
+    }
+
+    @Override
     public Result<Double> getCartPrice(String userName) {
         Double p = this.userController.getCartPrice(userName);
         if(p == -1)

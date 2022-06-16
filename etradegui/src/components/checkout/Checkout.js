@@ -117,7 +117,6 @@ export default function Checkout() {
                     navigate('/etrade');
                 }, 5000)
             }
-
         } else {
             setActiveStep(activeStep + 1);
         }
