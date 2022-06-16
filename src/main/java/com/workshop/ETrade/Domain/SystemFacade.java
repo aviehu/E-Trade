@@ -81,7 +81,9 @@ public interface SystemFacade {
 
     public Result<Boolean> changePurchaseOption(String userName, String storeName, String ProductName, purchaseOption newOption);
 
-    public Result<Boolean> appointStoreOwner(String userName, String storeName, String newOwner);
+    public Result<String> appointStoreOwner(String userName, String storeName, String newOwner);
+
+    public Result<String> approveOwner(String userName, String storeName, String ownerToApprove, boolean approve);
 
     public Result<Boolean> removeStoreOwner(String userName, String storeName, String ownerToRemove);
 

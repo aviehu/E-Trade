@@ -225,17 +225,25 @@ public class StoresFacade {
         return false;
     }
 
-    public boolean appointStoreOwner(String userName, String storeName, String newOwner) {
+    public String appointStoreOwner(String userName, String storeName, String newOwner) {
         Store store = getStoreByName(storeName);
         if(store == null) {
-            return false;
+            return "no such store " + storeName;
         }
-        if(store.addOwner(userName, newOwner)) {
+        String ans = store.addOwner(userName, newOwner);
+        if(ans.equals(newOwner + " has been added as store owner")) {
             logger.info("new store owner for store - " + storeName);
             AllRepos.getStoreRepo().save(new StoreDTO(store));
-            return true;
         }
-        return false;
+        return ans;
+    }
+
+    public String approveOwner(String ownersName,String storeName, String nameToApprove, boolean approve) {
+        Store store = getStoreByName(storeName);
+        if(store == null) {
+            return "no such store";
+        }
+        return store.approveOwner(ownersName,nameToApprove, approve);
     }
 
     public boolean appointStoreManager(String userName, String storeName, String newManager) {
@@ -482,5 +490,13 @@ public class StoresFacade {
         int ans = store.addPolicy(userName,policyOn, description, policyType, predicateForms.getComponent());
         AllRepos.getStoreRepo().save(new StoreDTO(store));
         return ans;
+    }
+
+    public Map<String, Map<String, Boolean>> getOwnersWaitingForApprove(String userName, String storeName) {
+        Store store = getStoreByName(storeName);
+        if(store == null) {
+            return null;
+        }
+        return store.getOwnersWaitingForApprove();
     }
 }
