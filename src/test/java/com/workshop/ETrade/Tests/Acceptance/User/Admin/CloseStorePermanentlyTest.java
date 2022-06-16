@@ -18,10 +18,10 @@ public class CloseStorePermanentlyTest {
 
     @org.junit.Before
     public void setUp() throws Exception {
-        systemService = new SystemService();
+        //systemService = new SystemService();
         String guestName = systemService.enterSystem().getVal();
         systemService.login(guestName, "domain", "domain");
-        systemService.openStore("domain", "Mega", 123);
+        systemService.openStore("domain", "itay", 123);
     }
 
     @org.junit.After
@@ -30,9 +30,9 @@ public class CloseStorePermanentlyTest {
 
     @Test
     public void closeStorePermanentlySuccessTest(){
-        Assert.assertTrue(systemService.getStoreInfo("domain", "Mega").isSuccess());
-        systemService.adminCloseStorePermanently("domain", "Mega");
-        Assert.assertFalse(systemService.getStoreInfo("domain", "Mega").isSuccess());
+        Assert.assertTrue(systemService.getStoreInfo("domain", "itay").isSuccess());
+        systemService.adminCloseStorePermanently("domain", "itay");
+        Assert.assertFalse(systemService.getStoreInfo("domain", "itay").isSuccess());
     }
 
 }
