@@ -659,4 +659,8 @@ public class Store implements Observable {
     public List<Policy> getPolicies() {
         return policyManager.getPolicies();
     }
+
+    public int addComplexDiscount(String discountOn, int discountPercentage, String description, DiscountType discountType, OperatorComponent component) {
+        return policyManager.addPredicateDiscount(policyManager.getDiscountId(),discountOn, discountPercentage, description, discountType, component);
+    }
 }

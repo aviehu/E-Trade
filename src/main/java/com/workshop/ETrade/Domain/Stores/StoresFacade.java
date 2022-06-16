@@ -1,5 +1,6 @@
 package com.workshop.ETrade.Domain.Stores;
 
+import com.workshop.ETrade.Controller.Forms.ComponentPredicateForm;
 import com.workshop.ETrade.Controller.Forms.PredicateForm;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
@@ -461,5 +462,25 @@ public class StoresFacade {
         }
         AllRepos.getStoreRepo().save(new StoreDTO(store));
         return store.counterBidReview(bidId, approve);
+    }
+
+    public int addComplexDiscount(String userName, String storeName, String discountOn, int discountPercentage, String description, DiscountType discountType, ComponentPredicateForm predicateForm, String connectionType) {
+        Store store = getStoreByName(storeName);
+        if(store == null) {
+            return -1;
+        }
+        int ans = store.addComplexDiscount(discountOn, discountPercentage, description,discountType, predicateForm.getComponent());
+        AllRepos.getStoreRepo().save(new StoreDTO(store));
+        return ans;
+    }
+
+    public int addComplexPolicy(String userName, String storeName, String policyOn, String description, PolicyType policyType, ComponentPredicateForm predicateForms, String connectionType) {
+        Store store = getStoreByName(storeName);
+        if(store == null) {
+            return -1;
+        }
+        int ans = store.addPolicy(userName,policyOn, description, policyType, predicateForms.getComponent());
+        AllRepos.getStoreRepo().save(new StoreDTO(store));
+        return ans;
     }
 }

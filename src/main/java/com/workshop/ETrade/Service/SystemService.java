@@ -38,6 +38,16 @@ public class SystemService implements ServiceInterface {
     }
 
     @Override
+    public Result<Integer> addComplexPolicy(String userName, String store, String policyOn, String description, PolicyType policyType, ComponentPredicateForm predicateForms, String connectionType) {
+        return facade.addComplexPolicy(userName, store, policyOn, description, policyType, predicateForms, connectionType);
+    }
+
+    @Override
+    public Result<Integer> addComplexDiscount(String userName, String storeName, String discountOn, int discountPercentage, String description, DiscountType discountType, ComponentPredicateForm predicateForms, String connectionType) {
+        return facade.addComplexDiscount(userName, storeName, discountOn, discountPercentage, description, discountType, predicateForms, connectionType);
+    }
+
+    @Override
     public Result<Double> getCartPrice(String userName) {
         return facade.getCartPrice(userName);
     }
