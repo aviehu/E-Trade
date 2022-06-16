@@ -31,15 +31,6 @@ export const mainListItems = (
             </ListItemButton>
         </Link>
 
-        <Link href="/mystores">
-            <ListItemButton>
-                <ListItemIcon>
-                    <DashboardIcon/>
-                </ListItemIcon>
-                <ListItemText primary="My stores"/>
-            </ListItemButton>
-        </Link>
-
         <Link href="/mybids">
             <ListItemButton>
                 <ListItemIcon>

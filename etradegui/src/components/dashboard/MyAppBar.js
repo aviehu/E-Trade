@@ -89,7 +89,7 @@ export default function MyAppBar({open, toggleDrawer, title}) {
                     noWrap
                     sx={{flexGrow: 1}}
                 >
-                    E-trade - {title}
+                    {localStorage.getItem("userName")} - {title}
                 </Typography>
                 <IconButton color="inherit">
                     <Badge color="secondary">
