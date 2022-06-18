@@ -18,16 +18,19 @@ export default function StoreAwaitingApproval({storeName}) {
     }, [])
 
     const calcStatus = (newOwner) => {
-        const awaitings = awaitingApproval[newOwner];
-        const count = Object.keys(awaitings).length
-        const hasApproved = Object.keys(awaitings).reduce((prev, curr) => {
-            if(awaitings[curr]) {
+        const agreement = awaitingApproval[newOwner];
+        const count = Object.keys(agreement.waiting).length
+        const hasApproved = Object.keys(agreement.waiting).reduce((prev, curr) => {
+            if(agreement.waiting[curr]) {
                 return prev + 1
             }
             return prev
         } , 0)
         if(hasApproved === count) {
             return 'Approved'
+        }
+        if(agreement.isRejected) {
+            return 'Rejected'
         }
         return `${hasApproved} / ${count}`
     }
@@ -44,6 +47,21 @@ export default function StoreAwaitingApproval({storeName}) {
         }
     }
 
+    const isAccepted = (agreement) => {
+        const keys = Object.keys(agreement.waiting)
+        const count = keys.length;
+        const approved = keys.reduce((prev, curr) => {
+            if(agreement.waiting[curr]) {
+                return prev + 1;
+            }
+            return prev;
+        }, 0)
+        if(count == approved) {
+            return true;
+        }
+        return false
+    }
+
     const renderAwaiting = () => {
         const userName = localStorage.getItem("userName");
         return <ul className='stores'>
@@ -57,8 +75,8 @@ export default function StoreAwaitingApproval({storeName}) {
                     </div>
                 </div>
                 <div className="store-footer">
-                    <Button disabled={awaitingApproval[newOwner][userName]} onClick={() => handleSubmit(true, newOwner)}>Approve</Button>
-                    <Button disabled={awaitingApproval[newOwner][userName]} onClick={() => handleSubmit(false, newOwner)}>Reject</Button>
+                    <Button disabled={awaitingApproval[newOwner].waiting[userName] || awaitingApproval[newOwner].isRejected || isAccepted(awaitingApproval[newOwner]) } onClick={() => handleSubmit(true, newOwner)}>Approve</Button>
+                    <Button disabled={awaitingApproval[newOwner].waiting[userName] || awaitingApproval[newOwner].isRejected || isAccepted(awaitingApproval[newOwner])} onClick={() => handleSubmit(false, newOwner)}>Reject</Button>
                 </div>
             </li>))}
         </ul>

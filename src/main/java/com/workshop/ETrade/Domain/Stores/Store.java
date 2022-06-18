@@ -1,5 +1,6 @@
 package com.workshop.ETrade.Domain.Stores;
 
+import com.workshop.ETrade.Controller.Forms.OwnerWaitingForApproveForm;
 import com.workshop.ETrade.Domain.Notifications.NotificationThread;
 import com.workshop.ETrade.Domain.Observable;
 import com.workshop.ETrade.Domain.Stores.Discounts.Discount;
@@ -51,7 +52,6 @@ public class Store implements Observable {
         inventory = new Inventory(storeDTO.products);
         managersPermissions = storeDTO.managersPermissions;
         policyManager = new PolicyManager(storeDTO.policies, storeDTO.policyId, storeDTO.discounts, storeDTO.discountId);
-//        storeHistory = new StorePurchaseHistory(storeDTO.purchaseHistory);
         storeHistory = new StorePurchaseHistory();
         List<MapDBobjDTO> dts = storeDTO.ownersAppointments;
         ownersAppointments = new HashMap<>();
@@ -71,7 +71,7 @@ public class Store implements Observable {
         closed = false;
         ownersAppointmentAgreement = new HashMap<>();
         for(AwaitingAppointmentDTO adto : storeDTO.awaitingAppointment) {
-            ownersAppointmentAgreement.put(adto.awaitingUser, new AppointmentAgreement(adto.approvedBy));
+            ownersAppointmentAgreement.put(adto.awaitingUser, new AppointmentAgreement(adto.approvedBy, adto.isRejected));
         }
     }
 
@@ -335,7 +335,7 @@ public class Store implements Observable {
             return nameToAdd + " is already an owner in this store";
         }
 
-        ownersAppointmentAgreement.put(nameToAdd, new AppointmentAgreement(getAwaiting(ownersName)));
+        ownersAppointmentAgreement.put(nameToAdd, new AppointmentAgreement(getAwaiting(ownersName), false));
         AppointmentAgreement aa = ownersAppointmentAgreement.get(nameToAdd);
         aa.approve(ownersName, true);
         if(aa.isApproved()){
@@ -701,11 +701,16 @@ public class Store implements Observable {
         return policyManager.addPredicateDiscount(policyManager.getDiscountId(),discountOn, discountPercentage, description, discountType, component);
     }
 
-    public Map<String, Map<String, Boolean>> getOwnersWaitingForApprove() {
-        Map<String, Map<String, Boolean>> ans = new HashMap<>();
+    public Map<String, OwnerWaitingForApproveForm> getOwnersWaitingForApprove() {
+        Map<String, OwnerWaitingForApproveForm> ans = new HashMap<>();
         for(String name : ownersAppointmentAgreement.keySet()) {
-            ans.put(name, ownersAppointmentAgreement.get(name).getWaiting());
+            AppointmentAgreement aa = ownersAppointmentAgreement.get(name);
+            ans.put(name, new OwnerWaitingForApproveForm(aa.getWaiting(),aa.isRejected(), aa.isApproved()));
         }
         return ans;
+    }
+
+    public Map<String, AppointmentAgreement> getAppointmentAgreements() {
+        return ownersAppointmentAgreement;
     }
 }

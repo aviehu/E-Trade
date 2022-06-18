@@ -137,12 +137,22 @@ public class SystemServiceProxy implements ServiceInterface {
     }
 
     @Override
-    public Result<Map<String, Map<String, Boolean>>> getOwnersWaitingForApprove(String userName, String storeName) {
+    public Result<Map<String, OwnerWaitingForApproveForm>> getOwnersWaitingForApprove(String userName, String storeName) {
         return null;
     }
 
     @Override
     public Result<String> approveNewOwner(String userName, String storeName, String appointee, boolean approve) {
+        return null;
+    }
+
+    @Override
+    public Result<TrafficForm> getTrafficByDate(int year, int month, int day) {
+        return null;
+    }
+
+    @Override
+    public Result<Boolean> guestEnteredMarket(String userName) {
         return null;
     }
 

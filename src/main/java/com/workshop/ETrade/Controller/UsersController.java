@@ -53,6 +53,11 @@ public class UsersController {
         return systemService.addSystemManager(userName, managerToAdd);
     }
 
+    @GetMapping("/enterasguest")
+    public Result<Boolean> guestEnteredMarket(@RequestHeader("Authorization") String userName) {
+        return systemService.guestEnteredMarket(userName);
+    }
+
     @GetMapping("/removesysmanager/{member}")
     public Result<Boolean> removeSystemManager(String userName, @PathVariable("member") String managerToRemove) {
         return systemService.removeSystemManager(userName, managerToRemove);

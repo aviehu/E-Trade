@@ -8,9 +8,13 @@ public class AppointmentAgreement {
 
     private boolean isRejected;
 
-    public AppointmentAgreement(Map<String, Boolean> awaitingApproval) {
+    private boolean isAccepted;
+
+    public AppointmentAgreement(Map<String, Boolean> awaitingApproval, boolean isRejected) {
         this.awaitingApproval = awaitingApproval;
+        this.isRejected = isRejected;
     }
+
 
     public boolean isApproved() {
         for(String owner : awaitingApproval.keySet()) {
@@ -40,5 +44,9 @@ public class AppointmentAgreement {
 
     public Map<String, Boolean> getWaiting() {
         return awaitingApproval;
+    }
+
+    public boolean isRejected() {
+        return isRejected;
     }
 }
