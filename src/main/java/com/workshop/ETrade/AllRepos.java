@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.time.LocalDate;
 
 public class AllRepos {
-    private static boolean isTest = true;
+    private static boolean isTest = false;
 
 
 

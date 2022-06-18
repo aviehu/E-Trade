@@ -412,8 +412,11 @@ public class UserController {
     public synchronized void incSimpMembersTraffic(String userName){
         LocalDate today = LocalDate.now();
         if(this.trafficHistory.containsKey(today)) {
+            TrafficInfo trafficInfo = trafficHistory.get(today);
+            if(trafficInfo.getManagersMembers().contains(userName) || trafficInfo.getOwnersMembers().contains(userName) || trafficInfo.getSysManagers().contains(userName))
+                return;
             trafficHistory.get(today).incSimpleMembers(userName);
-            AllRepos.getTrafficRepo().save(new TrafficDTO(trafficHistory.get(today)));
+            AllRepos.getTrafficRepo().save(new TrafficDTO(trafficInfo));
             return;
         }
         TrafficInfo ti = new TrafficInfo();
@@ -426,6 +429,8 @@ public class UserController {
         LocalDate today = LocalDate.now();
         if(this.trafficHistory.containsKey(today)) {
             TrafficInfo trafficInfo = trafficHistory.get(today);
+            if(trafficInfo.getOwnersMembers().contains(userName) || trafficInfo.getSysManagers().contains(userName))
+                return;
             trafficInfo.incStoreManagersMembers(userName);
             if(trafficInfo.getSimpleMembers().contains(userName))
                 trafficInfo.getSimpleMembers().remove(userName);
@@ -443,6 +448,8 @@ public class UserController {
         LocalDate today = LocalDate.now();
         if(this.trafficHistory.containsKey(today)) {
             TrafficInfo trafficInfo = trafficHistory.get(today);
+            if(trafficInfo.getSysManagers().contains(userName))
+                return;
             trafficInfo.incOwnersMembers(userName);
             if(trafficInfo.getSimpleMembers().contains(userName))
                 trafficInfo.getSimpleMembers().remove(userName);
