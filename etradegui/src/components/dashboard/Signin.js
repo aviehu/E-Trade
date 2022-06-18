@@ -13,6 +13,7 @@ import {useNavigate} from 'react-router-dom';
 import {useEffect} from "react";
 import post from '../util/post'
 import MyError from "../util/MyError";
+import get from "../util/get";
 
 const theme = createTheme();
 
@@ -102,7 +103,7 @@ export default function SignIn() {
                             </Link>
                         </Grid>
                         <Grid container justifyContent="flex-start">
-                            <Link href="/etrade" variant="body2" sx={{mt: 5}}>
+                            <Link onClick={async () => await get('users/enterasguest')} href="/etrade" variant="body2" sx={{mt: 5}}>
                                 {"Don't want to sign up? login as a guest"}
                             </Link>
                         </Grid>

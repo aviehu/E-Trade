@@ -484,7 +484,7 @@ public class Facade implements SystemFacade {
     public Result<String> appointStoreOwner(String userName, String storeName, String newOwner) {
         if(userController.isConnected(userName) && userController.isUserNameExist(newOwner)){
             String ans = storesFacade.appointStoreOwner(userName, storeName, newOwner);
-            if(ans.equals(newOwner + " has been added as store owner")) {
+            if(ans.equals(newOwner + " has been added as store owner") || ans.equals(newOwner + " has been added to review as store owner")) {
                 //subscribe new owner
                 Store s = this.storesFacade.getStore(storeName);
                 Member m = this.userController.getMember(newOwner);
@@ -838,9 +838,9 @@ public class Facade implements SystemFacade {
         user.update(message,sendFrom);
     }
 
-    public Result<Map<String, Map<String, Boolean>>> getOwnersWaitingForApprove(String userName, String storeName) {
+    public Result<Map<String, OwnerWaitingForApproveForm>> getOwnersWaitingForApprove(String userName, String storeName) {
         if(userController.isConnected(userName)) {
-            Map<String, Map<String, Boolean>> res = storesFacade.getOwnersWaitingForApprove(userName, storeName);
+            Map<String, OwnerWaitingForApproveForm> res = storesFacade.getOwnersWaitingForApprove(userName, storeName);
             if(res != null) {
                 return new Result<>(res,null);
             }
@@ -869,8 +869,9 @@ public class Facade implements SystemFacade {
         }
         userController.incStoreManagerTraffic(userName);
     }
-    public void guestEnteredMarket(String userName){
+    public Result<Boolean> guestEnteredMarket(String userName){
         userController.incGuestsTraffic(userName);
+        return new Result<>(true, null);
     }
     public Result<TrafficForm> getTrafficByDate(int year,int month,int day){
         LocalDate date = LocalDate.of(year,month,day);

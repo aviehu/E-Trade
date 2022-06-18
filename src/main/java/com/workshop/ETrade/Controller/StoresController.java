@@ -35,7 +35,7 @@ public class StoresController {
     }
 
     @GetMapping("/approveowner/getwaiting/{store}")
-    public Result<Map<String, Map<String, Boolean>>> getOwnersWaitingForApprove(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName ) {
+    public Result<Map<String, OwnerWaitingForApproveForm>> getOwnersWaitingForApprove(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName ) {
         return systemService.getOwnersWaitingForApprove(userName, storeName);
     }
 

@@ -145,11 +145,11 @@ public interface ServiceInterface {
 
     Result<Boolean> counterBidReview(String userName, String storeName, int bidId, boolean approve);
 
-    Result<Map<String, Map<String, Boolean>>> getOwnersWaitingForApprove(String userName, String storeName);
+    Result<Map<String,OwnerWaitingForApproveForm>> getOwnersWaitingForApprove(String userName, String storeName);
 
     Result<String> approveNewOwner(String userName, String storeName, String appointee, boolean approve);
 
      Result<TrafficForm> getTrafficByDate(int year,int month,int day);
 //    public newResult<Boolean> exitSystem();
-    void guestEnteredMarket(String userName);
+    Result<Boolean> guestEnteredMarket(String userName);
 }

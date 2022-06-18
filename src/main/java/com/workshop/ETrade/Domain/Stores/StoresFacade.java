@@ -1,6 +1,7 @@
 package com.workshop.ETrade.Domain.Stores;
 
 import com.workshop.ETrade.Controller.Forms.ComponentPredicateForm;
+import com.workshop.ETrade.Controller.Forms.OwnerWaitingForApproveForm;
 import com.workshop.ETrade.Controller.Forms.PredicateForm;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
@@ -492,7 +493,7 @@ public class StoresFacade {
         return ans;
     }
 
-    public Map<String, Map<String, Boolean>> getOwnersWaitingForApprove(String userName, String storeName) {
+    public Map<String, OwnerWaitingForApproveForm> getOwnersWaitingForApprove(String userName, String storeName) {
         Store store = getStoreByName(storeName);
         if(store == null) {
             return null;

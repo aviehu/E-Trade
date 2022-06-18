@@ -111,16 +111,12 @@ public class StoreDTO {
         for(Policy p : polys) {
             policies.add(new PolicyDTO(p));
         }
-        Map<String, Map<String, Boolean>> ownersAppointmentAgreement = store.getOwnersWaitingForApprove();
+        Map<String, AppointmentAgreement> appointmentAgreementMap = store.getAppointmentAgreements();
         awaitingAppointment = new ArrayList<>();
-        for(String ownerWaiting : ownersAppointmentAgreement.keySet()) {
-            awaitingAppointment.add(new AwaitingAppointmentDTO(ownerWaiting, ownersAppointmentAgreement.get(ownerWaiting)));
+        for(String ownerWaiting : appointmentAgreementMap.keySet()) {
+            AppointmentAgreement aa = appointmentAgreementMap.get(ownerWaiting);
+            awaitingAppointment.add(new AwaitingAppointmentDTO(ownerWaiting, aa.getWaiting(), aa.isRejected()));
         }
-//        List<Purchase> purchases = store.getPurchases();
-//        purchaseHistory = new ArrayList<>();
-//        for(Purchase p : purchases) {
-//            purchaseHistory.add(new PurchaseDTO(p));
-//        }
     }
 
 

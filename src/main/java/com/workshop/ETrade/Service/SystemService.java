@@ -368,7 +368,7 @@ public class SystemService implements ServiceInterface {
     }
 
     @Override
-    public Result<Map<String, Map<String, Boolean>>> getOwnersWaitingForApprove(String userName, String storeName) {
+    public Result<Map<String, OwnerWaitingForApproveForm>> getOwnersWaitingForApprove(String userName, String storeName) {
         return facade.getOwnersWaitingForApprove(userName, storeName);
     }
 
@@ -391,8 +391,8 @@ public class SystemService implements ServiceInterface {
     public Result<TrafficForm> getTrafficByDate(int year,int month,int day){
         return this.facade.getTrafficByDate(year, month, day);
     }
-    public void guestEnteredMarket(String userName){
-        facade.guestEnteredMarket(userName);
+    public Result<Boolean> guestEnteredMarket(String userName){
+        return facade.guestEnteredMarket(userName);
     }
 
 }
