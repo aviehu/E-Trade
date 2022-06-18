@@ -21,6 +21,7 @@ import SearchMarket from './components/dashboard/SearchMarket'
 import AddDiscount from './components/store/editStore/policies/AddDiscount'
 import AddPolicy from './components/store/editStore/policies/AddPolicy'
 import MyBids from './components/dashboard/MyBids'
+import Stats from './components/Admin/Stats'
 
 function App() {
     return (
@@ -46,6 +47,7 @@ function App() {
                <Route path="/store/edit/:name/removemanager" element={<RemoveManager/>} />
                <Route path="/store/edit/:name/adddiscount" element={<AddDiscount />} />
                <Route path="/store/edit/:name/addpolicy" element={<AddPolicy />} />
+               <Route path="/admin/viewtraffic" element={<Stats/>}/>
            </Routes>
        </Router>
     )

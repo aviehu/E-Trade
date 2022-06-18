@@ -1,9 +1,6 @@
 package com.workshop.ETrade.Controller;
 
-import com.workshop.ETrade.Controller.Forms.AppointForm;
-import com.workshop.ETrade.Controller.Forms.BidForm;
-import com.workshop.ETrade.Controller.Forms.LoginForm;
-import com.workshop.ETrade.Controller.Forms.SignUpForm;
+import com.workshop.ETrade.Controller.Forms.*;
 import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Service.ResultPackge.Result;
 import com.workshop.ETrade.Service.ServiceInterface;
@@ -61,6 +58,11 @@ public class UsersController {
     @GetMapping("/removesysmanager/{member}")
     public Result<Boolean> removeSystemManager(String userName, @PathVariable("member") String managerToRemove) {
         return systemService.removeSystemManager(userName, managerToRemove);
+    }
+
+    @PostMapping("/viewtraffic")
+    public Result<TrafficForm> viewTraffic(@RequestHeader("Authorization") String userName, @RequestBody DateForm form) {
+        return systemService.getTrafficByDate(form.year, form.month, form.day);
     }
 
     @GetMapping("/exitsystem")
