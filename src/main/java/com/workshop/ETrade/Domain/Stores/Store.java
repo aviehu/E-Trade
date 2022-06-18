@@ -500,7 +500,7 @@ public class Store implements Observable {
         return inventory.toString();
     }
 
-    private boolean isOwner(String nameToSearch) {
+    public boolean isOwner(String nameToSearch) {
         for(String owner : ownersAppointments.keySet()) {
             if(owner.equals(nameToSearch)){
                 return true;

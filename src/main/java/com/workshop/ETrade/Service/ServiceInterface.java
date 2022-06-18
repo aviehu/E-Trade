@@ -149,6 +149,7 @@ public interface ServiceInterface {
 
     Result<String> approveNewOwner(String userName, String storeName, String appointee, boolean approve);
 
+     Result<TrafficForm> getTrafficByDate(int year,int month,int day);
 //    public newResult<Boolean> exitSystem();
-
+    void guestEnteredMarket(String userName);
 }

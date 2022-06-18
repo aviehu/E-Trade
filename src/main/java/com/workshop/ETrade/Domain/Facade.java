@@ -18,6 +18,12 @@ import org.springframework.stereotype.Component;
 
 import java.util.*;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+
 public class Facade implements SystemFacade {
 
     public StoresFacade storesFacade;
@@ -841,5 +847,40 @@ public class Facade implements SystemFacade {
             return new Result<>(null, "Cannot get Owners waiting for approve");
         }
         return new Result<>(null, "User Is Not Connected");
+    }
+    public void updateTraffic(String userName){
+        if(userController.isUserSysManager(userName)) {
+            userController.incSysManagersTraffic(userName);
+            return;
+        }
+
+        List<String> currStores = storesFacade.getStoresOfUser(userName);
+        if(currStores.isEmpty()){
+            userController.incSimpMembersTraffic(userName);
+            return;
+        }
+        for(String store : currStores){
+            Store s = storesFacade.getStore(store);
+            if(s.isOwner(userName)){
+                userController.incStoreOwnerTraffic(userName);
+                return;
+            }
+
+        }
+        userController.incStoreManagerTraffic(userName);
+    }
+    public void guestEnteredMarket(String userName){
+        userController.incGuestsTraffic(userName);
+    }
+    public Result<TrafficForm> getTrafficByDate(int year,int month,int day){
+        LocalDate date = LocalDate.of(year,month,day);
+        if(date.isAfter(LocalDate.now()))
+            return new Result<>(null,"Invalid date\n");
+        TrafficInfo trafficInfo = userController.getTrafficByDate(date);
+        if(trafficInfo == null){
+            return new Result<>(null,"No such date in history\n");
+        }
+        TrafficForm trafficForm =new TrafficForm(trafficInfo);
+        return new Result<>(trafficForm,null);
     }
 }
