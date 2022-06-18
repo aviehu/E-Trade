@@ -16,6 +16,7 @@ import get from "../util/get";
 import {styled} from "@mui/material/styles";
 import MuiDrawer from "@mui/material/Drawer";
 import SearchIcon from '@mui/icons-material/Search';
+import EqualizerIcon from '@mui/icons-material/Equalizer';
 
 
 const drawerWidth = 240;
@@ -99,6 +100,14 @@ export default function MyDrawer({open, setOpen}) {
                             <RemoveShoppingCartIcon/>
                         </ListItemIcon>
                         <ListItemText primary="Close Shop"/>
+                    </ListItemButton>
+                </Link> : null}
+                {isAdmin ? <Link href="/admin/viewtraffic">
+                    <ListItemButton>
+                        <ListItemIcon>
+                            <EqualizerIcon/>
+                        </ListItemIcon>
+                        <ListItemText primary="View Traffic"/>
                     </ListItemButton>
                 </Link> : null}
             </List>
