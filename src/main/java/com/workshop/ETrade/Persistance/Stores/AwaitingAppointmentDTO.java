@@ -8,6 +8,9 @@ public class AwaitingAppointmentDTO {
 
     public boolean isRejected;
 
+    public AwaitingAppointmentDTO() {
+    }
+
     public AwaitingAppointmentDTO(String awaitingUser, Map<String, Boolean> approvedBy, boolean isRejected) {
         this.awaitingUser = awaitingUser;
         this.approvedBy = approvedBy;

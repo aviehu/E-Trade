@@ -239,6 +239,7 @@ public class Facade implements SystemFacade {
             String ret = userController.logIn(memberUserName, pass);
             if (ret == null){
                 this.myUserName = memberUserName;
+                updateTraffic(memberUserName);
                 return new Result<Boolean>(true, null);
             }
             else
