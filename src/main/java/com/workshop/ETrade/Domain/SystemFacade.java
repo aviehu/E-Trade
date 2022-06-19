@@ -8,6 +8,7 @@ import com.workshop.ETrade.Domain.Stores.Product;
 import com.workshop.ETrade.Domain.Stores.managersPermission;
 import com.workshop.ETrade.Domain.Users.ExternalService.Payment.PaymentAdaptee;
 import com.workshop.ETrade.Domain.Users.ExternalService.Supply.SupplyAdaptee;
+import com.workshop.ETrade.Domain.Users.TotalTraffic;
 import com.workshop.ETrade.Service.ResultPackge.Result;
 
 import java.util.List;
@@ -122,6 +123,7 @@ public interface SystemFacade {
     Result<List<BidForm>> userBids(String userName);
 
     Result<Boolean> counterBidReview(String userName, String storeName, int bidId, boolean approve);
+    public Result<TotalTraffic> getTrafficByDates(int startYear, int startMonth, int startDay, int endYear, int endMonth, int endDay);
 
 //    public newResult<Boolean> exitSystem();
 

@@ -16,10 +16,12 @@ import com.workshop.ETrade.Service.ResultPackge.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -874,7 +876,8 @@ public class Facade implements SystemFacade {
         userController.incGuestsTraffic(userName);
         return new Result<>(true, null);
     }
-    public Result<TrafficForm> getTrafficByDate(int year,int month,int day){
+    public Result<TrafficInfo> getTrafficByDate(int year,int month,int day){
+
         LocalDate date = LocalDate.of(year,month,day);
         if(date.isAfter(LocalDate.now()))
             return new Result<>(null,"Invalid date\n");
@@ -882,7 +885,24 @@ public class Facade implements SystemFacade {
         if(trafficInfo == null){
             return new Result<>(null,"No such date in history\n");
         }
-        TrafficForm trafficForm =new TrafficForm(trafficInfo);
-        return new Result<>(trafficForm,null);
+        //TrafficForm trafficForm =new TrafficForm(trafficInfo);
+        return new Result<>(trafficInfo,null);
     }
+    public Result<TotalTraffic> getTrafficByDates(int startYear,int startMonth,int startDay, int endYear, int endMonth,int endDay){
+
+
+        TotalTraffic totalTraffic = new TotalTraffic();
+        LocalDate startDate = LocalDate.of(startYear,startMonth,startDay);
+        LocalDate endDate = LocalDate.of(endYear,endMonth,endDay);
+        String d ="";
+        if(startDate.isAfter(endDate))
+            return new Result<>(null,"Invalid dates\n");
+        while(startDate.isBefore(endDate)){
+            totalTraffic.addTraffic(getTrafficByDate(startDate.getYear(),startDate.getMonthValue(),startDate.getDayOfMonth()).getVal());
+             d = startDate.getYear()+"-"+startDate.getMonthValue()+"-"+startDate.getDayOfMonth();
+            startDate = LocalDate.parse(d).plusDays(1);
+        }
+        return new Result<>(totalTraffic,null);
+    }
+
 }

@@ -2,6 +2,7 @@ package com.workshop.ETrade.Controller;
 
 import com.workshop.ETrade.Controller.Forms.*;
 import com.workshop.ETrade.Domain.Notifications.Notification;
+import com.workshop.ETrade.Domain.Users.TotalTraffic;
 import com.workshop.ETrade.Service.ResultPackge.Result;
 import com.workshop.ETrade.Service.ServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,8 +62,8 @@ public class UsersController {
     }
 
     @PostMapping("/viewtraffic")
-    public Result<TrafficForm> viewTraffic(@RequestHeader("Authorization") String userName, @RequestBody DateForm form) {
-        return systemService.getTrafficByDate(form.year, form.month, form.day);
+    public Result<TotalTraffic> viewTraffic(@RequestHeader("Authorization") String userName, @RequestBody DatesForm form) {
+        return systemService.getTrafficByDates(form.startYear, form.startMonth, form.startDay,form.endYear,form.endMonth,form.endDay);
     }
 
     @GetMapping("/exitsystem")
