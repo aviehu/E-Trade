@@ -77,4 +77,5 @@ public class TrafficInfo {
     public LocalDate getDate() {
         return this.date;
     }
+
 }

@@ -9,6 +9,7 @@ import com.workshop.ETrade.Domain.Stores.Product;
 import com.workshop.ETrade.Domain.Stores.managersPermission;
 import com.workshop.ETrade.Domain.Users.ExternalService.Payment.PaymentAdaptee;
 import com.workshop.ETrade.Domain.Users.ExternalService.Supply.SupplyAdaptee;
+import com.workshop.ETrade.Domain.Users.TotalTraffic;
 import com.workshop.ETrade.Domain.purchaseOption;
 import com.workshop.ETrade.Persistance.Stores.StoreDTO;
 import com.workshop.ETrade.Repository.*;
@@ -388,8 +389,9 @@ public class SystemService implements ServiceInterface {
         this.facade.init();
     }
 
-    public Result<TrafficForm> getTrafficByDate(int year,int month,int day){
-        return this.facade.getTrafficByDate(year, month, day);
+    public Result<TotalTraffic> getTrafficByDates(int startYear, int startMonth, int startDay, int endYear, int endMonth, int endDay){
+        return this.facade.getTrafficByDates(startYear, startMonth, startDay, endYear, endMonth, endDay);
+
     }
     public Result<Boolean> guestEnteredMarket(String userName){
         return facade.guestEnteredMarket(userName);
