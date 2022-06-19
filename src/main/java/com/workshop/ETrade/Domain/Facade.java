@@ -780,7 +780,8 @@ public class Facade implements SystemFacade {
             List<String> res = new LinkedList<>();
             List<Store> stores = storesFacade.getStores();
             for(Store store : stores) {
-                res.add(store.getName());
+                if(!store.isClosed())
+                    res.add(store.getName());
             }
             return new Result<>(res, null);
         }
@@ -883,7 +884,7 @@ public class Facade implements SystemFacade {
             return new Result<>(null,"Invalid date\n");
         TrafficInfo trafficInfo = userController.getTrafficByDate(date);
         if(trafficInfo == null){
-            return new Result<>(null,"No such date in history\n");
+            return new Result<>(new TrafficInfo(),null);
         }
         //TrafficForm trafficForm =new TrafficForm(trafficInfo);
         return new Result<>(trafficInfo,null);
@@ -897,9 +898,9 @@ public class Facade implements SystemFacade {
         String d ="";
         if(startDate.isAfter(endDate))
             return new Result<>(null,"Invalid dates\n");
-        while(startDate.isBefore(endDate)){
+        while(startDate.isBefore(endDate.plusDays(1))){
             totalTraffic.addTraffic(getTrafficByDate(startDate.getYear(),startDate.getMonthValue(),startDate.getDayOfMonth()).getVal());
-             d = startDate.getYear()+"-"+startDate.getMonthValue()+"-"+startDate.getDayOfMonth();
+             d = startDate.toString();
             startDate = LocalDate.parse(d).plusDays(1);
         }
         return new Result<>(totalTraffic,null);
