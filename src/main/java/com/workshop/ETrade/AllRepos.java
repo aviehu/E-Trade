@@ -13,28 +13,6 @@ import java.time.LocalDate;
 
 public class AllRepos {
     private static boolean isTest = false;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     private static MongoRepository<StoreDTO, String> storeRepo;
     private static MongoRepository<ProductDTO, String> productRepo;
     private static MongoRepository<MemberDTO, String> memberRepo;

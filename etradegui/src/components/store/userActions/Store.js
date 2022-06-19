@@ -19,7 +19,7 @@ import BidDialog from './BidDialog';
 
 const mdTheme = createTheme();
 
-const DashboardContent = () => {
+const DashboardContent = ({setSuccessMsg}) => {
     const { name } = useParams();
     const navigate = useNavigate();
     const [open, setOpen] = React.useState(true);
@@ -60,6 +60,7 @@ const DashboardContent = () => {
         const res = await post(body, 'stores/addproducttocart')
         const ans = await res.json()
         if(ans.val) {
+            setSuccessMsg(`product ${product} has been added to your cart`)
             navigate("/etrade");
             setImmediateDialog(false);
         } else {
@@ -83,6 +84,7 @@ const DashboardContent = () => {
         const ans = await res.json()
         if(ans.val) {
             navigate("/etrade");
+            setSuccessMsg('your bid has been submited')
             setBidDialog(false);
         } else {
             setError(ans.err)
@@ -163,7 +165,7 @@ const DashboardContent = () => {
     );
 }
 
-export default function Dashboard() {
-    return <DashboardContent />;
+export default function Dashboard({setSuccessMsg}) {
+    return <DashboardContent setSuccessMsg={setSuccessMsg}/>;
 }
 

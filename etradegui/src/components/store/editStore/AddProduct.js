@@ -16,7 +16,7 @@ import MyError from "../../util/MyError";
 
 const mdTheme = createTheme();
 
-const DashboardContent = () => {
+const DashboardContent = ({setSuccessMsg}) => {
     const { name } = useParams()
     const [open, setOpen] = React.useState(true);
     const [error, setError] = React.useState("")
@@ -37,6 +37,7 @@ const DashboardContent = () => {
             const res = await post(body, 'stores/addproducttostore')
             const boolRes = await res.json()
             if(boolRes.val) {
+                setSuccessMsg(`product ${data.get("productName")} has been added to your store`)
                 navigate("/etrade");
             } else {
                 setError(boolRes.err)
@@ -144,7 +145,7 @@ const DashboardContent = () => {
     );
 }
 
-export default function Dashboard() {
-    return <DashboardContent/>;
+export default function Dashboard({setSuccessMsg}) {
+    return <DashboardContent setSuccessMsg={setSuccessMsg}/>;
 }
 

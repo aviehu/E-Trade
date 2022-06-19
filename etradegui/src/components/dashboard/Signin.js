@@ -17,7 +17,7 @@ import get from "../util/get";
 
 const theme = createTheme();
 
-export default function SignIn() {
+export default function SignIn({setSuccessMsg}) {
     const [error, setError] = React.useState("")
     const [hasError, setHasError] = React.useState(false)
     const navigate = useNavigate();
@@ -34,6 +34,7 @@ export default function SignIn() {
             const boolRes = await res.json()
             if(boolRes.val) {
                 localStorage.setItem("userName", email)
+                setSuccessMsg(`${email} has logged in` )
                 navigate("/etrade")
             } else {
                 setError(boolRes.err)

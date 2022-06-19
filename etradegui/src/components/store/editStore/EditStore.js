@@ -19,7 +19,7 @@ import StoreAwaitingApproval from "./StoreAwaitingApproval";
 
 const mdTheme = createTheme();
 
-const DashboardContent = () => {
+const DashboardContent = ({setSuccessMsg}) => {
     const { name } = useParams()
     const [products, setProducts] = useState(null);
     const [open, setOpen] = React.useState(true);
@@ -49,6 +49,7 @@ const DashboardContent = () => {
         const res = await post(body, `stores/changepurchaseoption/${name}`)
         const ans = await res.json()
         if(ans.val) {
+            setSuccessMsg(`product ${productToChange.productName} purchase type has been change to ${typeToChange}`)
             await getStore()
             setOpenDialog(false)
         }
@@ -66,6 +67,7 @@ const DashboardContent = () => {
         const res = await post(body, `stores/removeproductfromstore/${name}`)
         const ans = await res.json()
         if(ans.val) {
+            setSuccessMsg(`product - ${product.title} has been removed from the store`)
             await getStore()
         }
     }
@@ -137,9 +139,9 @@ const DashboardContent = () => {
                                                         <h2>Products:</h2>
                                                         {products ? renderProducts(products) : <h2>Loading...</h2>}
                                                         <h2>Bids:</h2>
-                                                        <StoreBids storeName={name}/>
+                                                        <StoreBids setSuccessMsg={setSuccessMsg} storeName={name}/>
                                                         <h2>Appointed Owners:</h2>
-                                                        <StoreAwaitingApproval storeName={name}/>
+                                                        <StoreAwaitingApproval setSuccessMsg={setSuccessMsg} storeName={name}/>
                                                     </main>
                                                 </Grid>
                                             </Grid>
@@ -181,7 +183,7 @@ const DashboardContent = () => {
     );
 }
 
-export default function Dashboard() {
-    return <DashboardContent/>;
+export default function Dashboard({setSuccessMsg}) {
+    return <DashboardContent setSuccessMsg={setSuccessMsg}/>;
 }
 

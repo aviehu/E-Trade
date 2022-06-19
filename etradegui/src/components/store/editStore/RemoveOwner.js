@@ -16,7 +16,7 @@ import MyError from "../../util/MyError";
 
 const mdTheme = createTheme();
 
-const DashboardContent = () => {
+const DashboardContent = ({setSuccessMsg}) => {
     const { name } = useParams()
     const [open, setOpen] = React.useState(true);
     const [error, setError] = React.useState("")
@@ -33,6 +33,7 @@ const DashboardContent = () => {
             const res = await post(body, `stores/removeowner/${name}`)
             const boolRes = await res.json()
             if(boolRes.val) {
+                setSuccessMsg(`you have removed ${data.get("newOwner")} from the store's owners`)
                 navigate(`/store/edit/${name}`);
             } else {
                 setError(boolRes.err)
@@ -110,7 +111,7 @@ const DashboardContent = () => {
     );
 }
 
-export default function Dashboard() {
-    return <DashboardContent/>;
+export default function Dashboard({setSuccessMsg}) {
+    return <DashboardContent setSuccessMsg={setSuccessMsg}/>;
 }
 

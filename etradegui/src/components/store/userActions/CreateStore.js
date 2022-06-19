@@ -1,27 +1,13 @@
 import * as React from 'react';
-import {styled, createTheme, ThemeProvider} from '@mui/material/styles';
+import {createTheme, ThemeProvider} from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import MuiDrawer from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
-import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import MenuIcon from '@mui/icons-material/Menu';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import {mainListItems} from '../../util/listItems';
 import '../../../css/Dashboard.css';
-import Avatar from "@mui/material/Avatar";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import Link from "@mui/material/Link";
-import {Card} from "@mui/material";
 import {useNavigate} from 'react-router-dom';
 import post from "../../util/post";
 import MyAppBar from "../../dashboard/MyAppBar";
@@ -30,7 +16,7 @@ import MyError from "../../util/MyError";
 
 const mdTheme = createTheme();
 
-const DashboardContent = () => {
+const DashboardContent = ({setSuccessMsg}) => {
     const [open, setOpen] = React.useState(true);
     const [error, setError] = React.useState("")
     const [hasError, setHasError] = React.useState(false)
@@ -47,6 +33,7 @@ const DashboardContent = () => {
             const res = await post(body, 'stores/openstore')
             const boolRes = await res.json()
             if(boolRes.val) {
+                setSuccessMsg(`store - ${data.get("storeName")} has been created`)
                 navigate("/etrade");
             } else {
                 setError(boolRes.err)
@@ -135,7 +122,7 @@ const DashboardContent = () => {
     );
 }
 
-export default function Dashboard() {
-    return <DashboardContent/>;
+export default function Dashboard({setSuccessMsg}) {
+    return <DashboardContent setSuccessMsg={setSuccessMsg}/>;
 }
 

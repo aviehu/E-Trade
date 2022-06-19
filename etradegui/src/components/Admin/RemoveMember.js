@@ -17,7 +17,7 @@ import get from "../util/get";
 
 const mdTheme = createTheme();
 
-const DashboardContent = () => {
+const DashboardContent = ({setSuccessMsg}) => {
     const [open, setOpen] = React.useState(true);
     const [error, setError] = React.useState("")
     const [hasError, setHasError] = React.useState(false)
@@ -61,6 +61,7 @@ const DashboardContent = () => {
             const res = await post(body, `users/remove`)
             const boolRes = await res.json()
             if(boolRes.val) {
+                setSuccessMsg(`user - ${userName} has been removed`)
                 navigate(`/etrade`);
             } else {
                 setError(boolRes.err)
@@ -164,7 +165,7 @@ const DashboardContent = () => {
     );
 }
 
-export default function Dashboard() {
-    return <DashboardContent/>;
+export default function Dashboard({setSuccessMsg}) {
+    return <DashboardContent setSuccessMsg={setSuccessMsg}/>;
 }
 
