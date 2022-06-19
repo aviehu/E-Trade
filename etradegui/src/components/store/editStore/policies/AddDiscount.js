@@ -23,7 +23,7 @@ import {useEffect, useState} from "react";
 
 const mdTheme = createTheme();
 
-const DashboardContent = () => {
+const DashboardContent = ({setSuccessMsg}) => {
     const { name } = useParams()
     const [open, setOpen] = React.useState(true);
     const [error, setError] = React.useState("")
@@ -66,6 +66,7 @@ const DashboardContent = () => {
             const res = await post(body, `stores/addsimplediscount/${name}`)
             const boolRes = await res.json()
             if(boolRes.val) {
+                setSuccessMsg('your discount has been added to the store')
                 navigate(`/store/edit/${name}`);
             } else {
                 setError(boolRes.err)
@@ -108,6 +109,7 @@ const DashboardContent = () => {
             const res = await post(body, `stores/addprediscount/${name}`)
             const boolRes = await res.json()
             if(boolRes.val) {
+                setSuccessMsg('your discount has been added to the store')
                 navigate(`/store/edit/${name}`);
             } else {
                 setError(boolRes.err)
@@ -287,7 +289,7 @@ const DashboardContent = () => {
     );
 }
 
-export default function Dashboard() {
-    return <DashboardContent/>;
+export default function Dashboard({ setSuccessMsg}) {
+    return <DashboardContent  setSuccessMsg={setSuccessMsg}/>;
 }
 

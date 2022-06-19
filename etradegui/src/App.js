@@ -48,9 +48,9 @@ function App() {
                <Route path="/store/edit/:name/addowner" element={<AddOwner setSuccessMsg={setSuccessMsg}/>} />
                <Route path="/store/edit/:name/addmanager" element={<AddManager setSuccessMsg={setSuccessMsg}/>} />
                <Route path="/store/edit/:name/removeowner" element={<RemoveOwner setSuccessMsg={setSuccessMsg}/>} />
-               <Route path="/store/edit/:name/removemanager" element={<RemoveManager/>} />
-               <Route path="/store/edit/:name/adddiscount" element={<AddDiscount />} />
-               <Route path="/store/edit/:name/addpolicy" element={<AddPolicy />} />
+               <Route path="/store/edit/:name/removemanager" element={<RemoveManager setSuccessMsg={setSuccessMsg}/>} />
+               <Route path="/store/edit/:name/adddiscount" element={<AddDiscount setSuccessMsg={setSuccessMsg}/>} />
+               <Route path="/store/edit/:name/addpolicy" element={<AddPolicy setSuccessMsg={setSuccessMsg}/>} />
                <Route path="/admin/viewtraffic" element={<Stats/>}/>
            </Routes>
            <Snackbar anchorOrigin={{ vertical:'bottom', horizontal:'right' }} open={successMsg.length > 0} autoHideDuration={4000} onClose={() => setSuccessMsg("")}>
