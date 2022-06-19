@@ -22,7 +22,7 @@ import PredicatesGen from "./PredicatesGen";
 
 const mdTheme = createTheme();
 
-const DashboardContent = () => {
+const DashboardContent = ({setSuccessMsg}) => {
     const { name } = useParams()
     const [open, setOpen] = React.useState(true);
     const [error, setError] = React.useState("")
@@ -76,6 +76,7 @@ const DashboardContent = () => {
             const res = await post(body, `stores/addpolicy/${name}`)
             const boolRes = await res.json()
             if(boolRes.val) {
+                setSuccessMsg('your policy has been added to store')
                 navigate(`/store/edit/${name}`);
             } else {
                 setError(boolRes.err)
@@ -227,7 +228,7 @@ const DashboardContent = () => {
     );
 }
 
-export default function Dashboard() {
-    return <DashboardContent/>;
+export default function Dashboard({setSuccessMsg}) {
+    return <DashboardContent setSuccessMsg={setSuccessMsg}/>;
 }
 

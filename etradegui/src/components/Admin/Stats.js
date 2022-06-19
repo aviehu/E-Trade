@@ -12,6 +12,7 @@ import Grid from "@mui/material/Grid";
 import CanvasJSReact from './canvasjs.react';
 import {TextField} from "@mui/material";
 import Button from "@mui/material/Button";
+import MyError from "../util/MyError";
 
 const CanvasJS = CanvasJSReact.CanvasJS;
 const CanvasJSChart = CanvasJSReact.CanvasJSChart;
@@ -27,7 +28,8 @@ export default function Stats() {
     const [endYear, setEndYear] = useState(2022)
     const [endMonth, setEndMonth] = useState(6)
     const [endDay, setEndDay] = useState(2);
-
+    const [error, setError] = useState("")
+    const [hasError, setHasError] = useState(false)
 
     const getStats = async () => {
         const body = {
@@ -40,7 +42,12 @@ export default function Stats() {
         }
         const res = await post(body, 'users/viewtraffic');
         const ans = await res.json()
-        setStats(ans.val)
+        if(ans.val) {
+            setStats(ans.val)
+        } else {
+            setError(ans.err)
+            setHasError(true)
+        }
     }
 
     useEffect(() => {
@@ -95,6 +102,7 @@ export default function Stats() {
         <ThemeProvider theme={mdTheme}>
             <Box sx={{ display: 'flex' }}>
                 <CssBaseline />
+                <MyError open={hasError} setOpen={setHasError} error={error}/>
                 <MyAppBar title={"My Stores"} open={open} toggleDrawer={() => {setOpen(!open)}}/>
                 <MyDrawer open={open} setOpen={setOpen}/>
                 <Box
