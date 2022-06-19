@@ -21,15 +21,22 @@ const mdTheme = createTheme();
 export default function Stats() {
     const [stats, setStats] = useState(null);
     const [open, setOpen] = useState(true)
-    const [year, setYear] = useState(2022)
-    const [month, setMonth] = useState(6)
-    const [day, setDay] = useState(1);
+    const [startYear, setStartYear] = useState(2022)
+    const [startMonth, setStartMonth] = useState(6)
+    const [startDay, setStartDay] = useState(1);
+    const [endYear, setEndYear] = useState(2022)
+    const [endMonth, setEndMonth] = useState(6)
+    const [endDay, setEndDay] = useState(2);
+
 
     const getStats = async () => {
         const body = {
-            year,
-            month,
-            day
+            startDay,
+            startMonth,
+            startYear,
+            endDay,
+            endMonth,
+            endYear
         }
         const res = await post(body, 'users/viewtraffic');
         const ans = await res.json()
@@ -44,23 +51,23 @@ export default function Stats() {
         return [
             {
                 label: "Guests",
-                y: stats.guests.length
+                y: stats.guests
             },
             {
                 label: 'Simple Members',
-                y: stats.simpleMembers.length
+                y: stats.simpleMembers
             },
             {
                 label: 'Manager Members',
-                y: stats.managersMembers.length
+                y: stats.storeManagers
             },
             {
                 label: 'Owner Members',
-                y: stats.ownersMembers.length
+                y: stats.storeOwners
             },
             {
                 label: 'System Manager',
-                y: stats.sysManagers.length
+                y: stats.sysManagers
             }
         ]
     }
@@ -68,7 +75,7 @@ export default function Stats() {
     const renderStats = () => {
         const options = {
             title: {
-                text: `Traffic for ${day}.${month}.${year}`
+                text: `Traffic for ${startDay}.${startMonth}.${startYear} - ${endDay}.${endMonth}.${endYear}`
             },
             data: [
                 {
@@ -110,22 +117,37 @@ export default function Stats() {
                                     {stats ? renderStats() : <h2>Loading...</h2>}
                                 </main>
                             </Grid>
-                            <Grid item xs={3}>
+                            <Grid item xs={4}>
                                 <main>
-                                    <TextField value={day} onChange={(event) => {setDay(event.target.value)}} label={"day"}></TextField>
+                                    <TextField value={startDay} onChange={(event) => {setStartDay(event.target.value)}} label={"Starting Day"}></TextField>
                                 </main>
                             </Grid>
-                            <Grid item xs={3}>
+                            <Grid item xs={4}>
                                 <main>
-                                    <TextField value={month} onChange={(event) => {setMonth(event.target.value)}} label={"Month"}></TextField>
+                                    <TextField value={startMonth} onChange={(event) => {setStartMonth(event.target.value)}} label={"Starting Month"}></TextField>
                                 </main>
                             </Grid>
-                            <Grid item xs={3}>
+                            <Grid item xs={4}>
                                 <main>
-                                    <TextField value={year} onChange={(event) => {setYear(event.target.value)}} label={"Year"}></TextField>
+                                    <TextField value={startYear} onChange={(event) => {setStartYear(event.target.value)}} label={"Starting Year"}></TextField>
                                 </main>
                             </Grid>
-                            <Grid item xs={3}>
+                            <Grid item xs={4}>
+                                <main>
+                                    <TextField value={endDay} onChange={(event) => {setEndDay(event.target.value)}} label={"End Day"}></TextField>
+                                </main>
+                            </Grid>
+                            <Grid item xs={4}>
+                                <main>
+                                    <TextField value={endMonth} onChange={(event) => {setEndMonth(event.target.value)}} label={"End Month"}></TextField>
+                                </main>
+                            </Grid>
+                            <Grid item xs={4}>
+                                <main>
+                                    <TextField value={endYear} onChange={(event) => {setEndYear(event.target.value)}} label={"End Year"}></TextField>
+                                </main>
+                            </Grid>
+                            <Grid item xs={4}>
                                 <main>
                                     <Button onClick={getStats}>Get Traffic</Button>
                                 </main>

@@ -12,7 +12,7 @@ import Box from "@mui/material/Box";
 import {useState} from "react";
 import post from "../../util/post";
 
-export default function CounterBid({open, setOpen, bidId, storeName}) {
+export default function CounterBid({setSuccessMsg ,open, setOpen, bidId, storeName}) {
     const [newOffer, setNewOffer] = useState(0)
     const mdTheme = createTheme();
 
@@ -23,6 +23,7 @@ export default function CounterBid({open, setOpen, bidId, storeName}) {
         }
         const res = await post(body, `stores/counterbid/${storeName}`)
         const ans = await res.json()
+        setSuccessMsg(`a counter bid for - ${newOffer} has been submited`)
         setOpen(false)
     }
 

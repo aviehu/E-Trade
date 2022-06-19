@@ -25,7 +25,7 @@ import MyError from "../util/MyError";
 
 const mdTheme = createTheme();
 
-const DashboardContent = () => {
+const DashboardContent = ({setSuccessMsg}) => {
     const [open, setOpen] = React.useState(true);
     const [error, setError] = React.useState("")
     const [hasError, setHasError] = React.useState(false)
@@ -39,6 +39,7 @@ const DashboardContent = () => {
             const res = await get(`stores/admin/closepermanent/${storeName}`)
             const boolRes = await res.json()
             if(boolRes.val) {
+                setSuccessMsg(`the shop - ${storeName} has been closed`)
                 navigate(`/etrade`);
             } else {
                 setError(boolRes.err)
@@ -116,7 +117,7 @@ const DashboardContent = () => {
     );
 }
 
-export default function Dashboard() {
-    return <DashboardContent/>;
+export default function Dashboard({setSuccessMsg}) {
+    return <DashboardContent setSuccessMsg={setSuccessMsg}/>;
 }
 

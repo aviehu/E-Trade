@@ -16,7 +16,7 @@ import post from "../util/post";
 
 const mdTheme = createTheme();
 
-const DashboardContent = () => {
+const DashboardContent = ({setSuccessMsg}) => {
     const [bids, setBids] = React.useState(null);
     const [open, setOpen] = React.useState(true);
     const toggleDrawer = () => {
@@ -40,6 +40,7 @@ const DashboardContent = () => {
         }
         const res = await post(body, `stores/offerreview/${storeName}`)
         await res.json()
+        setSuccessMsg(`the counter offer has been ${approve ? 'approved' : 'rejected'} by you`)
         await getMyBids()
     }
 
@@ -102,7 +103,7 @@ const DashboardContent = () => {
     );
 }
 
-export default function Dashboard() {
-    return <DashboardContent />;
+export default function Dashboard({setSuccessMsg}) {
+    return <DashboardContent setSuccessMsg={setSuccessMsg} />;
 }
 

@@ -15,7 +15,7 @@ import MyError from "../util/MyError";
 
 const theme = createTheme();
 
-export default function SignUp() {
+export default function SignUp({setSuccessMsg}) {
     const navigate = useNavigate();
     const [error, setError] = React.useState("")
     const [hasError, setHasError] = React.useState(false)
@@ -32,6 +32,7 @@ export default function SignUp() {
         const res = await post(body, 'users/signup');
         const boolRes = await res.json();
         if(boolRes.val) {
+            setSuccessMsg(`${data.get('email')} has signed up in`)
             navigate("/")
         } else {
             setError(boolRes.err)

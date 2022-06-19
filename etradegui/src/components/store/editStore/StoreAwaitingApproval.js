@@ -3,7 +3,7 @@ import get from "../../util/get";
 import Button from "@mui/material/Button";
 import post from "../../util/post";
 
-export default function StoreAwaitingApproval({storeName}) {
+export default function StoreAwaitingApproval({setSuccessMsg,storeName}) {
     const [awaitingApproval, setAwaitingApproval] = useState(null)
 
     const getAwaiting = async () => {
@@ -43,6 +43,7 @@ export default function StoreAwaitingApproval({storeName}) {
         const res = await post(body, `stores/approveowner/approve/${storeName}`)
         const ans = await res.json()
         if(ans.val) {
+            setSuccessMsg(`${ownersName} has been ${approved ? 'approved' : 'rejected'} by you`)
             await getAwaiting()
         }
     }

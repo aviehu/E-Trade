@@ -5,7 +5,7 @@ import get from "../../util/get";
 import post from "../../util/post";
 import CounterBid from "./CounterBid";
 
-export default function StoreBids({storeName}) {
+export default function StoreBids({setSuccessMsg ,storeName}) {
 
     const [bids, setBids] = useState(null)
     const [counterDialog, setCounterDialog] = useState(false);
@@ -27,6 +27,7 @@ export default function StoreBids({storeName}) {
             approve: approve
         }
         await post(body, `stores/reviewbid/${storeName}`)
+        setSuccessMsg(`the bid has been ${approve ? 'approved' : 'rejected'} by you`)
         await getBids()
     }
 
@@ -69,6 +70,6 @@ export default function StoreBids({storeName}) {
     }
     return (<div>
         {bids ? renderBids() : <h5>No Bids For Now...</h5>}
-        {counterDialog ? <CounterBid bidId={bidId} setOpen={setCounterDialog} open={counterDialog} storeName={storeName}></CounterBid> : null}
+        {counterDialog ? <CounterBid setSuccessMsg={setSuccessMsg} bidId={bidId} setOpen={setCounterDialog} open={counterDialog} storeName={storeName}></CounterBid> : null}
     </div>)
 }
