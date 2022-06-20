@@ -26,12 +26,13 @@ export default function Stats() {
     const [open, setOpen] = useState(true)
     const [startYear, setStartYear] = useState(2022)
     const [startMonth, setStartMonth] = useState(6)
-    const [startDay, setStartDay] = useState(1);
+    const [startDay, setStartDay] = useState(18);
     const [endYear, setEndYear] = useState(2022)
     const [endMonth, setEndMonth] = useState(6)
-    const [endDay, setEndDay] = useState(2);
+    const [endDay, setEndDay] = useState(20);
     const [error, setError] = useState("")
     const [hasError, setHasError] = useState(false)
+    const [hasNewStats, setHasNewStats] = useState(false)
 
 
 
@@ -55,8 +56,9 @@ export default function Stats() {
             setError(ans.err)
             setHasError(true)
         }
-
+        setHasNewStats(false)
     }
+
     function checkStats(ans){
         if(!stats){
             return true;
@@ -80,7 +82,7 @@ export default function Stats() {
         stompClient.connect({}, function (frame) {
             stompClient.subscribe(`/topic/stats`, async function (greeting) {
 
-                await getStats()
+                setHasNewStats(true)
                 //you can execute any function here
             });
         });
@@ -111,6 +113,10 @@ export default function Stats() {
         ]
     }
 
+    const StatsHelper = () => {
+        getStats();
+        return null
+    }
 
 
     const renderStats = () => {
@@ -194,16 +200,11 @@ export default function Stats() {
                                     <Button onClick={getStats}>Get Traffic</Button>
                                 </main>
                             </Grid>
-
                         </Grid>
                     </Container>
                 </Box>
             </Box>
+            {hasNewStats ? <StatsHelper/> : null}
         </ThemeProvider>
         )
-
-
-
-
-
 }
