@@ -338,7 +338,7 @@ public class Store {
             ownersAppointmentAgreement.put(nameToAdd, new AppointmentAgreement(ownersName, getAwaiting(ownersName), false));
             AppointmentAgreement aa = ownersAppointmentAgreement.get(nameToAdd);
             aa.approve(ownersName, true);
-            if(aa.isApproved()) {
+            if (aa.isApproved()) {
                 ownersAppointments.get(aa.getMainOwner()).add(nameToAdd);
                 ownersAppointments.put(nameToAdd, new LinkedList<>());
                 managersAppointments.put(nameToAdd, new LinkedList<>());
@@ -346,19 +346,8 @@ public class Store {
             }
 
             return nameToAdd + " has been added to review as store owner";
-        } else {
-            AppointmentAgreement aa = ownersAppointmentAgreement.get(nameToAdd);
-            aa.approve(ownersName, true);
-            if (aa.isApproved()) {
-                ownersAppointments.get(aa.getMainOwner()).add(nameToAdd);
-                ownersAppointments.put(nameToAdd, new LinkedList<>());
-                managersAppointments.put(nameToAdd, new LinkedList<>());
-                return nameToAdd + " has been added as store owner";
-            }
-            else
-                return ownersName+ " add approve\n";
-
         }
+        return "User is already waiting for approval";
     }
 
     public String approveOwner(String ownersName, String nameToApprove, boolean approve) {
