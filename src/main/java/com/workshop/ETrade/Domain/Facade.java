@@ -38,7 +38,7 @@ public class Facade implements SystemFacade {
         storesFacade = new StoresFacade();
         userController = new UserController();
         //need to change according to config file.
-        externalSys = ExtSysController.getInstance(true,true);
+        externalSys = ExtSysController.getInstance();
         //
     }
     public void init(){
@@ -242,6 +242,7 @@ public class Facade implements SystemFacade {
             if (ret == null){
                 this.myUserName = memberUserName;
                 updateTraffic(memberUserName);
+                userController.getMember(memberUserName).updateStats();
                 return new Result<Boolean>(true, null);
             }
             else
@@ -487,15 +488,24 @@ public class Facade implements SystemFacade {
     public Result<String> appointStoreOwner(String userName, String storeName, String newOwner) {
         if(userController.isConnected(userName) && userController.isUserNameExist(newOwner)){
             String ans = storesFacade.appointStoreOwner(userName, storeName, newOwner);
-            if(ans.equals(newOwner + " has been added as store owner") || ans.equals(newOwner + " has been added to review as store owner")) {
-                //subscribe new owner
-                Store s = this.storesFacade.getStore(storeName);
-                Member m = this.userController.getMember(newOwner);
-                s.attach(m);
-                notifyOne("You have been appointed to store Owner at " +storeName,userName,newOwner);
+            if(ans.equals(newOwner + " has been added to review as store owner")) {
+                notifyOne("You have been added to review as store owner at " + storeName, userName, newOwner);
 
                 return new Result<>(ans, null);
             }
+                if(ans.equals(newOwner + " has been added as store owner")) {
+                    //subscribe new owner
+                    Store s = this.storesFacade.getStore(storeName);
+                    Member m = this.userController.getMember(newOwner);
+                    s.attach(m);
+                    notifyOne("You have been appointed to store Owner at " + storeName, userName, newOwner);
+
+                    return new Result<>(ans, null);
+                }
+                if(ans.equals(userName+" add approve\n"))
+                    return new Result<>(ans,null);
+
+
             return new Result<>(null, ans);
         }
         return new Result<>(null, "User Is Not Connected");
@@ -504,10 +514,20 @@ public class Facade implements SystemFacade {
     @Override
     public Result<String> approveOwner(String userName, String storeName, String ownerToApprove, boolean approve) {
         if(userController.isConnected(userName)) {
-            return new Result<>(storesFacade.approveOwner(userName, storeName, ownerToApprove, approve), null);
-        } else {
-            return new Result<>(null, "User Is Not Connected");
-        }
+            String ans = "";
+            ans = storesFacade.approveOwner(userName, storeName, ownerToApprove, approve);
+            if (ans.equals(userName + " is now a store owner")) {
+                Store s = this.storesFacade.getStore(storeName);
+                Member m = this.userController.getMember(ownerToApprove);
+                s.attach(m);
+                notifyOne("You have been appointed to store Owner at " + storeName, userName, ownerToApprove);
+                return new Result<>(ans, null);
+            }else
+                return new Result<>(ans,null);
+            } else {
+                return new Result<>(null, "User Is Not Connected");
+            }
+
     }
 
     @Override
@@ -521,7 +541,7 @@ public class Facade implements SystemFacade {
                 s.detach(m);
                 return new Result<>(true, null);
             }
-            return new Result<>(false, "Could Not Remove Store Owner");
+            return new Result<>(false, "Can't remove owner, You did not appoint "+ownerToRemove);
         }
         return new Result<>(false, "User Is Not Connected");
     }
@@ -601,6 +621,8 @@ public class Facade implements SystemFacade {
     @Override
     public Result<Boolean> adminCloseStorePermanently(String adminName, String storeName) {
         if(storesFacade.adminCloseStore(storeName) && userController.isUserSysManager(adminName)){
+            Store s = storesFacade.getStore(storeName);
+            notifySubscribers(s.getSubscribers(),"Your Store "+ storeName+" has been close permanently by Admin",adminName);
             return new Result<Boolean>(true, null);
         }
         return new Result<Boolean>(false , "Cannot Close Store Permanently");
@@ -780,7 +802,8 @@ public class Facade implements SystemFacade {
             List<String> res = new LinkedList<>();
             List<Store> stores = storesFacade.getStores();
             for(Store store : stores) {
-                res.add(store.getName());
+                if(!store.isClosed())
+                    res.add(store.getName());
             }
             return new Result<>(res, null);
         }
@@ -874,6 +897,7 @@ public class Facade implements SystemFacade {
     }
     public Result<Boolean> guestEnteredMarket(String userName){
         userController.incGuestsTraffic(userName);
+        userController.getMember("domain").updateStats();
         return new Result<>(true, null);
     }
     public Result<TrafficInfo> getTrafficByDate(int year,int month,int day){
@@ -883,7 +907,7 @@ public class Facade implements SystemFacade {
             return new Result<>(null,"Invalid date\n");
         TrafficInfo trafficInfo = userController.getTrafficByDate(date);
         if(trafficInfo == null){
-            return new Result<>(null,"No such date in history\n");
+            return new Result<>(new TrafficInfo(),null);
         }
         //TrafficForm trafficForm =new TrafficForm(trafficInfo);
         return new Result<>(trafficInfo,null);
@@ -892,17 +916,26 @@ public class Facade implements SystemFacade {
 
 
         TotalTraffic totalTraffic = new TotalTraffic();
-        LocalDate startDate = LocalDate.of(startYear,startMonth,startDay);
-        LocalDate endDate = LocalDate.of(endYear,endMonth,endDay);
+        LocalDate startDate = null;
+        LocalDate endDate= null;
+        try {
+           startDate = LocalDate.of(startYear, startMonth, startDay);
+           endDate = LocalDate.of(endYear, endMonth, endDay);
+        }catch (Exception e){
+            return new Result<>(new TotalTraffic(),null);
+        }
         String d ="";
         if(startDate.isAfter(endDate))
             return new Result<>(null,"Invalid dates\n");
-        while(startDate.isBefore(endDate)){
+        while(startDate.isBefore(endDate.plusDays(1))){
             totalTraffic.addTraffic(getTrafficByDate(startDate.getYear(),startDate.getMonthValue(),startDate.getDayOfMonth()).getVal());
-             d = startDate.getYear()+"-"+startDate.getMonthValue()+"-"+startDate.getDayOfMonth();
+             d = startDate.toString();
             startDate = LocalDate.parse(d).plusDays(1);
         }
         return new Result<>(totalTraffic,null);
     }
 
+    public void allLogOut() {
+        this.userController.allLogOut();
+    }
 }

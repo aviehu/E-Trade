@@ -397,4 +397,8 @@ public class SystemService implements ServiceInterface {
         return facade.guestEnteredMarket(userName);
     }
 
+    public void allLogOut(){
+        this.facade.allLogOut();
+    }
+
 }

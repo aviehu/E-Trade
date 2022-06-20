@@ -16,24 +16,22 @@ public class ExtSysController {
     private mySupplySys supply;
     private MyPaymentSys payment;
     private mySecuritySys security;
+    private MyPaymentSys realPay;
+    private mySupplySys realSup;
 
-    private ExtSysController(boolean isSupply,boolean isPayment) {
+    private ExtSysController() {
         HttpClient httpClient = new HttpClient();
-
-        if(isPayment)
-            payment = new MyPaymentSys(new PaymentAdapter(new PaymentAdaptee(httpClient)));
-        else
-            payment = new MyPaymentSys(new PaymentAdapter(null));
-        if(isSupply)
-            supply = new mySupplySys(new SupplyAdapter(new SupplyAdaptee(httpClient)));
-        else
-            supply = new mySupplySys(new SupplyAdapter(new SupplyAdaptee(null)));
+        realPay = new MyPaymentSys(new PaymentAdapter(new PaymentAdaptee(httpClient)));
+        realSup = new mySupplySys(new SupplyAdapter(new SupplyAdaptee(httpClient)));
+        payment = realPay;
+        supply = realSup;
         security = new mySecuritySys();
+
     }
 
-    public static ExtSysController getInstance(boolean isSupply, boolean isPayment){
+    public static ExtSysController getInstance(){
         if(myInstance == null){
-            myInstance = new ExtSysController(isSupply, isPayment);
+            myInstance = new ExtSysController();
         }
         return myInstance;
     }
@@ -54,10 +52,10 @@ public class ExtSysController {
         return supply.supply(name,address.getStreet(),address.getCity(),address.getCountry(),address.getZip());
     }
     public boolean isExistSupply(){
-        return getInstance(true,true).supply.isExist();
+        return getInstance().supply.isExist();
     }
     public boolean isExistPayment(){
-        return getInstance(true,true).payment.isExist();
+        return getInstance().payment.isExist();
     }
     public boolean changePayment(PaymentAdaptee paymentAdaptee){
         return this.payment.changePayment(paymentAdaptee);
@@ -78,6 +76,17 @@ public class ExtSysController {
     public int getBalance(int card, LocalTime exp, int cvv) {
         return payment.getBalance(card, exp, cvv);
     }
-
+    public void setPayment(boolean isRealPayment){
+        if(isRealPayment)
+            this.payment =realPay;
+        else
+            this.payment = new MyPaymentSys(new PaymentAdapter(new PaymentAdaptee(null)));
+    }
+    public void setSupply(boolean isRealSup){
+        if(isRealSup)
+            this.supply =realSup;
+        else
+            this.supply = new mySupplySys(new SupplyAdapter(new SupplyAdaptee(null)));
+    }
 
 }

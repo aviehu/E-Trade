@@ -9,6 +9,8 @@ import org.springframework.messaging.MessagingException;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
+import java.time.LocalDate;
+
 @Controller
 public class MessageController implements ApplicationContextAware {
 
@@ -32,5 +34,8 @@ public class MessageController implements ApplicationContextAware {
          }catch (MessagingException me){
              return -1;
          }
+     }
+     public void updateStats(){
+         smt.convertAndSend("/topic/stats",new Notification(LocalDate.now(),"","",""));
      }
  }

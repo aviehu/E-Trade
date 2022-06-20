@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.time.LocalDate;
 
 public class AllRepos {
-    private static boolean isTest = false;
+    private static boolean isTest = true;
     private static MongoRepository<StoreDTO, String> storeRepo;
     private static MongoRepository<ProductDTO, String> productRepo;
     private static MongoRepository<MemberDTO, String> memberRepo;
@@ -22,7 +22,6 @@ public class AllRepos {
     private static MongoRepository<DiscountDTO, String> discountRepo;
     private static MongoRepository<SystemManagerDTO, String> systemManagerRepo;
     private static MongoRepository<TrafficDTO, LocalDate> trafficRepo;
-
 
 
     public static MongoRepository<DiscountDTO, String> getDiscountRepo() {
@@ -137,4 +136,7 @@ public class AllRepos {
         }
     }
 
+    public static void setIsTest(boolean isTest) {
+        AllRepos.isTest = isTest;
+    }
 }

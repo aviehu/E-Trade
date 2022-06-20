@@ -115,7 +115,7 @@ public class StoreDTO {
         awaitingAppointment = new ArrayList<>();
         for(String ownerWaiting : appointmentAgreementMap.keySet()) {
             AppointmentAgreement aa = appointmentAgreementMap.get(ownerWaiting);
-            awaitingAppointment.add(new AwaitingAppointmentDTO(ownerWaiting, aa.getWaiting(), aa.isRejected()));
+            awaitingAppointment.add(new AwaitingAppointmentDTO(aa.getMainOwner(),ownerWaiting, aa.getWaiting(), aa.isRejected()));
         }
     }
 
