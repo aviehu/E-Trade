@@ -22,10 +22,13 @@ public class AppointNewOwnerTest {
         //systemService = new SystemService();
         guestName = systemService.enterSystem().getVal();
         systemService.signUp(guestName, "Mira", "200","Mira","Mira");
+        systemService.signUp(guestName, "Mira1", "200","Mira","Mira");
+        systemService.signUp(guestName, "Mira2", "200","Mira","Mira");
         systemService.signUp(guestName, "Andalus", "100","Andalus","Andalus");
         systemService.signUp(guestName, "Andalus2", "102","Andalus2","Andalus2");
         systemService.login(guestName, "Andalus", "100");
-        systemService.openStore("Andalus", "Mega", 123);
+        systemService.openStore("Andalus", "jj", 123);
+        systemService.openStore("Andalus", "gg", 123);
         //systemService.appointStoreManager("Andalus", "Mega", "Mira");
     }
 
@@ -35,44 +38,46 @@ public class AppointNewOwnerTest {
 
     @Test
     public void AppointNewOwnerSuccessTest(){
-        Assert.assertTrue(systemService.appointStoreOwner("Andalus", "Mega", "Mira").isSuccess());
-        String guestName = systemService.logOut("Andalus").getVal();
-        systemService.login(guestName, "Mira", "200");
-        Assert.assertTrue(systemService.appointStoreOwner("Mira", "Mega", "Andalus2").isSuccess());
         systemService.login(guestName, "Andalus", "100");
-        systemService.removeStoreOwner("Andalus","Mega","Mira");
+        Assert.assertTrue(systemService.appointStoreOwner("Andalus", "gg", "Mira1").isSuccess());
+        String guestName = systemService.logOut("Andalus").getVal();
+        systemService.login(guestName, "Mira1", "200");
+        Assert.assertTrue(systemService.appointStoreOwner("Mira1", "gg", "Andalus2").isSuccess());
+        systemService.login(guestName, "Andalus", "100");
+        systemService.removeStoreOwner("Andalus","gg","Mira1");
 
     }
 
     @Test
     public void AppointNewOwnerFailTest() {
-        Assert.assertFalse(systemService.appointStoreOwner("Andalus", "Mega", "Itay").isSuccess());
+        Assert.assertFalse(systemService.appointStoreOwner("Andalus", "jj", "Itay").isSuccess());
     }
 
     @Test
     public void AppointNewOwnerRemoveAndAppintAsManager() {
-        Assert.assertTrue(systemService.appointStoreOwner("Andalus", "Mega", "Mira").isSuccess());
-        Assert.assertTrue(systemService.removeStoreOwner("Andalus", "Mega", "Mira").isSuccess());
-        Assert.assertTrue(systemService.appointStoreManager("Andalus", "Mega", "Mira").isSuccess());
+        Assert.assertTrue(systemService.appointStoreOwner("Andalus", "jj", "Mira2").isSuccess());
+        Assert.assertTrue(systemService.removeStoreOwner("Andalus", "jj", "Mira2").isSuccess());
+        Assert.assertTrue(systemService.appointStoreManager("Andalus", "jj", "Mira2").isSuccess());
+        systemService.removeStoreManager("Andalus", "jj", "Mira2").isSuccess();
 
     }
     @Test
     public void AppointThreeManagersTreeTest() {
         systemService.signUp(guestName,"Andalus2","102","Andalus","Andalus");
         systemService.login(guestName, "Andalus", "100");
-        systemService.appointStoreOwner("Andalus","Mega","Andalus2");
+        systemService.appointStoreOwner("Andalus","jj","Andalus2");
         String guest2 = systemService.enterSystem().getVal();
         systemService.login(guest2,"Andalus2", "102");
-        systemService.appointStoreOwner("Andalus2","Mega","Mira");
+        systemService.appointStoreOwner("Andalus2","jj","Mira");
         String guest3 = systemService.enterSystem().getVal();
         systemService.login(guest3,"Mira","200");
         // mira cant remove her appointee
-        Assert.assertFalse(systemService.removeStoreOwner("Mira","Mega","Andalus2").getVal());
+        Assert.assertFalse(systemService.removeStoreOwner("Mira","jj","Andalus2").getVal());
         // Andalus2 cant remove her appointee
-        Assert.assertFalse(systemService.removeStoreOwner("Andalus2","Mega","Andalus").getVal());
-        Assert.assertTrue(systemService.removeStoreOwner("Andalus","Mega","Andalus2").getVal());
-        boolean b1 = systemService.getStoresManagement("Andalus","Mega").getVal().contains("Andalus2");
-        boolean b2 = systemService.getStoresManagement("Andalus","Mega").getVal().contains("Mira");
+        Assert.assertFalse(systemService.removeStoreOwner("Andalus2","jj","Andalus").getVal());
+        Assert.assertTrue(systemService.removeStoreOwner("Andalus","jj","Andalus2").getVal());
+        boolean b1 = systemService.getStoresManagement("Andalus","jj").getVal().contains("Andalus2");
+        boolean b2 = systemService.getStoresManagement("Andalus","jj").getVal().contains("Mira");
         Assert.assertTrue(!b1);
         Assert.assertTrue(!b2);
 

@@ -18,7 +18,7 @@ public class StoreOwnerCircularTest {
         String guestName = systemService.enterSystem().getVal();
         systemService.signUp(guestName, "Andalus", "100","Andalus","Andalus");
         systemService.signUp(guestName, "Andalus2", "100","Andalus2","Andalus2");
-        systemService.signUp(guestName, "Andalus3", "100","Andalus3","Andalus3");
+        systemService.signUp(guestName, "Andalus30", "100","Andalus3","Andalus3");
         systemService.login(guestName, "Andalus", "100");
         systemService.openStore("Andalus", "Mega", 123);
         systemService.appointStoreOwner("Andalus", "Mega", "Andalus2");
@@ -42,15 +42,18 @@ public class StoreOwnerCircularTest {
     public void removeAllOwnersUnderOwner(){
         String newGuest = systemService.logOut("Andalus").getVal();
         systemService.login(newGuest, "Andalus2", "100");
-        systemService.appointStoreOwner("Andalus2", "Mega", "Andalus3");
+        systemService.appointStoreOwner("Andalus2", "Mega", "Andalus30");
         newGuest = systemService.logOut("Andalus2").getVal();
-        systemService.login(newGuest, "Andalus3", "100");
-        Assert.assertFalse(systemService.getStoresOfUser("Andalus3").getVal().isEmpty());
-        newGuest = systemService.logOut("Andalus3").getVal();
+        systemService.login(newGuest,"Andalus","100");
+        systemService.approveNewOwner("Andalus","Mega","Andalus30",true);
+        newGuest = systemService.logOut("Andalus").getVal();
+        systemService.login(newGuest, "Andalus30", "100");
+        Assert.assertFalse(systemService.getStoresOfUser("Andalus30").getVal().isEmpty());
+        newGuest = systemService.logOut("Andalus30").getVal();
         systemService.login(newGuest, "Andalus", "100");
         systemService.removeStoreOwner("Andalus","Mega", "Andalus2");
         newGuest = systemService.logOut("Andalus").getVal();
-        systemService.login(newGuest, "Andalus3", "100");
-        Assert.assertTrue(systemService.getStoresOfUser("Andalus3").getVal().isEmpty());
+        systemService.login(newGuest, "Andalus30", "100");
+        Assert.assertTrue(systemService.getStoresOfUser("Andalus30").getVal().isEmpty());
     }
 }

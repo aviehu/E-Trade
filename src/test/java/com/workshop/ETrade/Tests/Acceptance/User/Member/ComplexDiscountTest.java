@@ -9,12 +9,16 @@ import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Service.SystemService;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class ComplexDiscountTest {
 
     @Autowired
@@ -22,15 +26,15 @@ public class ComplexDiscountTest {
 
     @org.junit.Before
     public void setUp() throws Exception {
-        systemService = new SystemService();
+        //systemService = new SystemService();
         String guestName = systemService.enterSystem().getVal();
-        systemService.signUp(guestName, "Andalus", "100","Andalus","Andalus");
-        systemService.login(guestName, "Andalus", "100");
-        systemService.openStore("Andalus", "Mega", 123);
-        systemService.appointStoreOwner("Andalus", "Mega", "Andalus2");
-        systemService.addProductToStore("Andalus", "Mega",
+        systemService.signUp(guestName, "Andaluss", "100","Andalus","Andalus");
+        systemService.login(guestName, "Andaluss", "100");
+        systemService.openStore("Andaluss", "bb", 123);
+        systemService.appointStoreOwner("Andaluss", "bb", "Andalus2");
+        systemService.addProductToStore("Andaluss", "bb",
                 "Bamba", 100, 5,"snacks");
-        systemService.addProductToStore("Andalus", "Mega",
+        systemService.addProductToStore("Andaluss", "bb",
                 "Bisly", 100, 5,"snacks");
         List<ComponentPredicateForm> lpfs = new ArrayList<>();
         List<PredicateForm> forms1 = new LinkedList<>();
@@ -39,20 +43,27 @@ public class ComplexDiscountTest {
         List<PredicateForm> forms2 = new LinkedList<>();
         forms2.add(new PredicateForm("amount", "Bisly", 2, 10, null, null));
         lpfs.add(new LeafPredicateForm("or", forms2));
-        systemService.addComplexDiscount("Andalus", "Mega", "Bamba", 50, "blablabla", DiscountType.PRODUCT,new ComplexPredicateForm("and", lpfs), "and");
+        systemService.addComplexDiscount("Andaluss", "bb", "Bamba", 50, "blablabla", DiscountType.PRODUCT,new ComplexPredicateForm("and", lpfs), "and");
         //if  10 > bamba amount > 2 and 10 > bisly amount > 2 then apply discount 50% on bamba
+    }
+    @Test
+    public void purchaseWithDiscountFail(){
+        systemService.purchase("Andaluss", "123", 4,2024,"Andalus Andalus", 776,200000000,"Israel",
+                "BeerSheva", "Andaluss", 7, 7,399949);
+        systemService.addProductToShoppingCart("Andaluss", "Bamba", "bb", 5);
+        Assert.assertEquals(25,systemService.getCartPrice("Andaluss").getVal(), 0.0);
+
     }
 
     @Test
     public void purchaseWithDiscountSuccess(){
-        systemService.addProductToShoppingCart("Andalus", "Bamba", "Mega", 5);
-        systemService.addProductToShoppingCart("Andalus", "Bisly", "Mega", 5);
-        Assert.assertNotEquals(50,systemService.getCartPrice("Andalus").getVal(), 0.0);
+        systemService.purchase("Andaluss", "123", 4,2024,"Andalus Andalus", 776,200000000,"Israel",
+                "BeerSheva", "Andaluss", 7, 7,399949);
+        systemService.addProductToShoppingCart("Andaluss", "Bamba", "bb", 5);
+        systemService.addProductToShoppingCart("Andaluss", "Bisly", "bb", 5);
+        Assert.assertEquals(37.5,systemService.getCartPrice("Andaluss").getVal(), 0.0);
+
     }
 
-    @Test
-    public void purchaseWithDiscountFail(){
-        systemService.addProductToShoppingCart("Andalus", "Bamba", "Mega", 5);
-        Assert.assertEquals(25,systemService.getCartPrice("Andalus").getVal(), 0.0);
-    }
+
 }
