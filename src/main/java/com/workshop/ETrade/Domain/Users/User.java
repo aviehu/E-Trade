@@ -112,6 +112,9 @@ public abstract class User {
     public void update(String message, String from) {
         notificationManager.sendNotification(this,message,from);
     }
+    public void updateStats(){
+        notificationManager.updateStats();
+    }
 
     public void purchaseBid(Bid approved) {
         CreditCard card = approved.getCard();
@@ -122,7 +125,7 @@ public abstract class User {
         int cvv = card.getCvv();
         int id = card.getId();
         String holderName = card.getHolderName();
-        ExtSysController extSystems = ExtSysController.getInstance(true,true);
+        ExtSysController extSystems = ExtSysController.getInstance();
         int payTransactionId = extSystems.pay(cardFrom, month,year,holderName, cvv,id);
         //payment
         if(payTransactionId != -1) {//can charge payment

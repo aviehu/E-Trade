@@ -21,7 +21,7 @@ public class PaymentTest {
 
     @Before
     public void setUp() throws Exception {
-        ExtSysController extSysController = ExtSysController.getInstance(true,false);
+        ExtSysController extSysController = ExtSysController.getInstance();
         //systemService = new SystemService();
         guestName = systemService.enterSystem().getVal();
         systemService.signUp(guestName, "Andalus", "100","Andalus","Andalus");

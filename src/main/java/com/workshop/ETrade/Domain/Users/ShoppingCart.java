@@ -25,7 +25,7 @@ public class ShoppingCart {
         this.userName = userName;
         this.discount = discount;
         this.baskets = new ArrayList<>();
-        extSystems = ExtSysController.getInstance(true,true);
+        extSystems = ExtSysController.getInstance();
     }
 
     public Result<List<String>> purchaseCart(CreditCard card,SupplyAddress address,String userName){

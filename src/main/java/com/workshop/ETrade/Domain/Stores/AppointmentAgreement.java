@@ -5,14 +5,16 @@ import java.util.Map;
 public class AppointmentAgreement {
 
     private Map<String, Boolean> awaitingApproval;
+    private String mainOwner;
 
     private boolean isRejected;
 
     private boolean isAccepted;
 
-    public AppointmentAgreement(Map<String, Boolean> awaitingApproval, boolean isRejected) {
+    public AppointmentAgreement(String mainOwner,Map<String, Boolean> awaitingApproval, boolean isRejected) {
         this.awaitingApproval = awaitingApproval;
         this.isRejected = isRejected;
+        this.mainOwner = mainOwner;
     }
 
 
@@ -48,5 +50,9 @@ public class AppointmentAgreement {
 
     public boolean isRejected() {
         return isRejected;
+    }
+
+    public String getMainOwner() {
+        return mainOwner;
     }
 }

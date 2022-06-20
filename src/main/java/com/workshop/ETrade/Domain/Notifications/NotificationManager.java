@@ -34,6 +34,9 @@ public class NotificationManager {
         user.addToAwaitingNotification(notification);
         return false;
     }
+    public void updateStats(){
+        messageController.updateStats();
+    }
 //    public void sendAllNotification(HashMap<Member,Notification> notifications) {
 //        for (Member user : notifications.keySet()) {
 //            if (user.isConnected()) {

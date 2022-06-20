@@ -13,6 +13,8 @@ import CanvasJSReact from './canvasjs.react';
 import {TextField} from "@mui/material";
 import Button from "@mui/material/Button";
 import MyError from "../util/MyError";
+import SockJS from "sockjs-client";
+import Stomp from "stompjs";
 
 const CanvasJS = CanvasJSReact.CanvasJS;
 const CanvasJSChart = CanvasJSReact.CanvasJSChart;
@@ -31,6 +33,9 @@ export default function Stats() {
     const [error, setError] = useState("")
     const [hasError, setHasError] = useState(false)
 
+
+
+
     const getStats = async () => {
         const body = {
             startDay,
@@ -43,15 +48,42 @@ export default function Stats() {
         const res = await post(body, 'users/viewtraffic');
         const ans = await res.json()
         if(ans.val) {
-            setStats(ans.val)
+            if(checkStats(ans.val)) {
+                setStats(ans.val)
+            }
         } else {
             setError(ans.err)
             setHasError(true)
         }
+
+    }
+    function checkStats(ans){
+        if(!stats){
+            return true;
+        }
+        if(ans.guests !== 0 || ans.simpleMembers !== 0 || ans.storeManagers !== 0 || ans.storeOwners !== 0 || ans.sysManagers !== 0 ){
+            return true;
+        }
+        return false;
     }
 
     useEffect(() => {
+
         getStats()
+        const sock = new SockJS('http://localhost:8080/real-stats');
+
+        let stompClient = Stomp.over(sock);
+
+        sock.onopen = function() {
+            console.log('open');
+        }
+        stompClient.connect({}, function (frame) {
+            stompClient.subscribe(`/topic/stats`, async function (greeting) {
+
+                await getStats()
+                //you can execute any function here
+            });
+        });
     }, [])
 
     const getDataPoints = () => {
@@ -78,6 +110,8 @@ export default function Stats() {
             }
         ]
     }
+
+
 
     const renderStats = () => {
         const options = {
@@ -167,6 +201,8 @@ export default function Stats() {
             </Box>
         </ThemeProvider>
         )
+
+
 
 
 

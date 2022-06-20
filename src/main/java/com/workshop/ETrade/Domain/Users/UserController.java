@@ -180,6 +180,7 @@ public class UserController {
         if(m != null){
             //save to date base
             m.setConnected(false);
+            logger.info(userName + " has logged out");
             return enterSystem();
         }
         return null;
@@ -494,4 +495,9 @@ public class UserController {
         return null;
     }
 
+    public void allLogOut() {
+        for(Member m : members){
+            m.isConnected = false;
+        }
+    }
 }

@@ -21,7 +21,7 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class Store implements Observable {
+public class Store {
 
     private String name;
     private String founderName;
@@ -71,7 +71,7 @@ public class Store implements Observable {
         closed = false;
         ownersAppointmentAgreement = new HashMap<>();
         for(AwaitingAppointmentDTO adto : storeDTO.awaitingAppointment) {
-            ownersAppointmentAgreement.put(adto.awaitingUser, new AppointmentAgreement(adto.approvedBy, adto.isRejected));
+            ownersAppointmentAgreement.put(adto.awaitingUser, new AppointmentAgreement(adto.mainOwner,adto.approvedBy, adto.isRejected));
         }
     }
 
@@ -172,7 +172,7 @@ public class Store implements Observable {
     public boolean closeStore(String name) {
         if(isFounder(name) && !closed) {
             closed = true;
-            notifySubscribers(name+" closed the store "+ getName()+"\n",name);
+           // notifySubscribers(name+" closed the store "+ getName()+"\n",name);
             return true;
         }
         return false;
@@ -181,7 +181,7 @@ public class Store implements Observable {
     public boolean adminCloseStore() {
         if(!closed) {
             closed = true;
-            notifySubscribers("A system manager closed the store "+ getName()+"\n",name);
+            //notifySubscribers("A system manager closed the store "+ getName()+"\n",name);
             return true;
         }
         return false;
@@ -224,8 +224,8 @@ public class Store implements Observable {
             }
             storeHistory.addPurchase(policyManager.getTotalPrice(products), prods, buyer.getUserName());
             purchased(prods.keySet().stream().toList(),buyer.getUserName());
-            notifyUser("Your bid has been approved", name, buyer);
-            notifySubscribers("A bid for - " + prods.keySet().toArray()[0] + "  in " + name + " has been approved", buyer.getUserName());
+            //notifyUser("Your bid has been approved", name, buyer);
+            //notifySubscribers("A bid for - " + prods.keySet().toArray()[0] + "  in " + name + " has been approved", buyer.getUserName());
 
             return true;
         }
@@ -327,32 +327,45 @@ public class Store implements Observable {
         }
         return awaiting;
     }
-    public String addOwner(String ownersName, String nameToAdd){
-        if(!isOwner(ownersName)) {
+    public String addOwner(String ownersName, String nameToAdd) {
+        if (!isOwner(ownersName)) {
             return ownersName + " is not an owner in this store";
         }
-        if(isOwner(nameToAdd)) {
+        if (isOwner(nameToAdd)) {
             return nameToAdd + " is already an owner in this store";
         }
+        if (!ownersAppointmentAgreement.containsKey(nameToAdd)) {
+            ownersAppointmentAgreement.put(nameToAdd, new AppointmentAgreement(ownersName, getAwaiting(ownersName), false));
+            AppointmentAgreement aa = ownersAppointmentAgreement.get(nameToAdd);
+            aa.approve(ownersName, true);
+            if(aa.isApproved()) {
+                ownersAppointments.get(aa.getMainOwner()).add(nameToAdd);
+                ownersAppointments.put(nameToAdd, new LinkedList<>());
+                managersAppointments.put(nameToAdd, new LinkedList<>());
+                return nameToAdd + " has been added as store owner";
+            }
 
-        ownersAppointmentAgreement.put(nameToAdd, new AppointmentAgreement(getAwaiting(ownersName), false));
-        AppointmentAgreement aa = ownersAppointmentAgreement.get(nameToAdd);
-        aa.approve(ownersName, true);
-        if(aa.isApproved()){
-           ownersAppointments.get(ownersName).add(nameToAdd);
-           ownersAppointments.put(nameToAdd, new LinkedList<>());
-           managersAppointments.put(nameToAdd, new LinkedList<>());
-           return nameToAdd + " has been added as store owner";
+            return nameToAdd + " has been added to review as store owner";
+        } else {
+            AppointmentAgreement aa = ownersAppointmentAgreement.get(nameToAdd);
+            aa.approve(ownersName, true);
+            if (aa.isApproved()) {
+                ownersAppointments.get(aa.getMainOwner()).add(nameToAdd);
+                ownersAppointments.put(nameToAdd, new LinkedList<>());
+                managersAppointments.put(nameToAdd, new LinkedList<>());
+                return nameToAdd + " has been added as store owner";
+            }
+            else
+                return ownersName+ " add approve\n";
+
         }
-
-        return nameToAdd + " has been added to review as store owner";
     }
 
     public String approveOwner(String ownersName, String nameToApprove, boolean approve) {
         String ans = ownersAppointmentAgreement.get(nameToApprove).approve(ownersName, approve);
         AppointmentAgreement aa = ownersAppointmentAgreement.get(nameToApprove);
         if(aa.isApproved()) {
-            ownersAppointments.get(ownersName).add(nameToApprove);
+            ownersAppointments.get(aa.getMainOwner()).add(nameToApprove);
             ownersAppointments.put(nameToApprove, new LinkedList<>());
             managersAppointments.put(nameToApprove, new LinkedList<>());
         }
@@ -393,7 +406,7 @@ public class Store implements Observable {
                 removeManager(ownerToRemove, o);
             }
             ownersAppointments.remove(ownerToRemove);
-            notifyOne("You are no longer Owner at " + getName(),ownersName,ownerToRemove);
+            //notifyOne("You are no longer Owner at " + getName(),ownersName,ownerToRemove);
             return true;
         }
         return false;
@@ -402,7 +415,7 @@ public class Store implements Observable {
     public boolean removeManager(String ownersName ,String managerName) {
         if(isOwner(ownersName) && managersAppointments.get(ownersName).contains(managerName)) {
             managersAppointments.get(ownersName).remove(managerName);
-            notifyOne("You are no longer Manager at " + getName()+"\n",ownersName,managerName);
+            //notifyOne("You are no longer Manager at " + getName()+"\n",ownersName,managerName);
             return true;
         }
         return false;
@@ -555,52 +568,52 @@ public class Store implements Observable {
         for(String p : products){
             mess+=p+"\n";
         }
-        notifySubscribers(mess,userNamePurchased);
+        //notifySubscribers(mess,userNamePurchased);
 
     }
 
-    @Override
+
     public void attach(Member user) {
         if(!subscribers.contains(user))
             subscribers.add(user);
 
     }
 
-    @Override
+
     public void detach(Member user) {
         if(subscribers.contains(user))
             subscribers.remove(user);
     }
 
-    @Override
-    public void notifySubscribers(String message,String sendFrom) {
-        List<Thread> threads = new ArrayList<>();
-        for(Member user: subscribers) {
-            threads.add(new NotificationThread(user, message, sendFrom));
-        }
-        for(Thread t : threads) {
-            t.run();
-        }
-        for(Thread t : threads) {
-            try {
-                t.join();
-            } catch (Exception e) {
-            }
-        }
+//    @Override
+//    public void notifySubscribers(String message,String sendFrom) {
+//        List<Thread> threads = new ArrayList<>();
+//        for(Member user: subscribers) {
+//            threads.add(new NotificationThread(user, message, sendFrom));
+//        }
+//        for(Thread t : threads) {
+//            t.run();
+//        }
+//        for(Thread t : threads) {
+//            try {
+//                t.join();
+//            } catch (Exception e) {
+//            }
+//        }
+//
+//    }
+//    public void notifyOne(String message,String sendFrom,String sendTo) {
+//        //
+//        for(Member user: subscribers) {
+//            if(user.getUserName().equals(sendTo))
+//                user.update(message, sendFrom);
+//        }
+//    }
 
-    }
-    public void notifyOne(String message,String sendFrom,String sendTo) {
-        //
-        for(Member user: subscribers) {
-            if(user.getUserName().equals(sendTo))
-                user.update(message, sendFrom);
-        }
-    }
-
-    public void notifyUser(String message,String sendFrom,User sendTo) {
-        //
-        sendTo.update(message,sendFrom);
-    }
+//    public void notifyUser(String message,String sendFrom,User sendTo) {
+//        //
+//        sendTo.update(message,sendFrom);
+//    }
     public List<String> getSubscribers(){
         List<String> subs = new ArrayList<>();
         for (Member m: this.subscribers){
