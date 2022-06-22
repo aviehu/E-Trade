@@ -62,6 +62,5 @@ public class PurchaseCartTest {
         Assert.assertEquals(prodAmount, (int)systemService.getProductAmount("Mega", "Bamba").getVal());
         // store purchase history didn't change
         Assert.assertEquals(storePurchaseHistory, systemService.getStoresPurchaseHistory("Andalus", "Mega").getVal());
-
     }
 }

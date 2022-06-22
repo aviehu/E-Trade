@@ -146,7 +146,7 @@ public class Store {
     }
 
     public boolean changeStoreManagersPermission(String userName, String managerName, managersPermission newPermission){
-        if(!isOwner(userName) || !isManager(managerName) || !managersAppointments.get(userName).equals(managerName)) {
+        if(!isOwner(userName) || !isManager(managerName) || !managersAppointments.get(userName).contains(managerName)) {
             return false;
         }
         managersPermissions.computeIfPresent(managerName, (K, V) -> V = newPermission);
@@ -613,6 +613,7 @@ public class Store {
     public List<Product> getProducts() {
         return inventory.getProducts();
     }
+
 
     public List<Bid> getBids() {
         return bids;

@@ -1,6 +1,8 @@
 package com.workshop.ETrade.Tests.Acceptance.System;
 
 import com.workshop.ETrade.Domain.Users.ExternalService.ExtSysController;
+import com.workshop.ETrade.Domain.Users.ExternalService.HttpClient;
+import com.workshop.ETrade.Domain.Users.ExternalService.Payment.PaymentAdaptee;
 import com.workshop.ETrade.Service.SystemService;
 import org.junit.After;
 import org.junit.Assert;
@@ -22,7 +24,8 @@ public class PaymentTest {
     @Before
     public void setUp() throws Exception {
         ExtSysController extSysController = ExtSysController.getInstance();
-        //systemService = new SystemService();
+        systemService = new SystemService();
+        systemService.initFacade();
         guestName = systemService.enterSystem().getVal();
         systemService.signUp(guestName, "Andalus", "100","Andalus","Andalus");
         systemService.signUp(guestName, "Andalus2", "100","Andalus","Andalus");
@@ -34,9 +37,17 @@ public class PaymentTest {
     @After
     public void tearDown() throws Exception {
     }
-    @Test
-    public void paymentFail(){
 
+    @Test
+    public void paymentSuccess(){
+        systemService.login(systemService.enterSystem().getVal(),"Andalus2","100");
+        systemService.addProductToShoppingCart("Andalus2","chips","Mega",2);
+        Assert.assertTrue(systemService.purchase("Andalus2","123",4,2023,"aa",100,2033,"jj","ff","dd",123,123,123).isSuccess());
+        Assert.assertEquals(98,systemService.getProdAmount("Mega","chips").getVal(),0);
+    }
+
+    @Test
+    public void paymentFail(){ //invalid cvv
         systemService.login(systemService.enterSystem().getVal(),"Andalus2","100");
         systemService.addProductToShoppingCart("Andalus2","chips","Mega",2);
         Assert.assertFalse(systemService.purchase("Andalus2","123",4,2023,"aa",986,2033,"jj","ff","dd",123,123,123).isSuccess());

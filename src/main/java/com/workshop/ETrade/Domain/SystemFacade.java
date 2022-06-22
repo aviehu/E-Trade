@@ -12,6 +12,7 @@ import com.workshop.ETrade.Domain.Users.TotalTraffic;
 import com.workshop.ETrade.Service.ResultPackge.Result;
 
 import java.util.List;
+import java.util.Map;
 
 public interface SystemFacade {
 
@@ -47,6 +48,8 @@ public interface SystemFacade {
     public Result<Boolean> login(String userName, String memberUserName, String password);
 
     public Result<List<Product>> getStoreInfo(String userName, String storeName);
+
+    Result<Map<String, managersPermission>> getStaffInfo(String userName, String storeName);
 
     public Result<List<String>> searchByKeyword(String userName, String keyword);
 

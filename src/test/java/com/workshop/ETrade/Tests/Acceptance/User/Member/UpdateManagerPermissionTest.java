@@ -1,14 +1,19 @@
 package com.workshop.ETrade.Tests.Acceptance.User.Member;
 
 import com.workshop.ETrade.Controller.Forms.ProductForm;
+import com.workshop.ETrade.Domain.Stores.managersPermission;
 import com.workshop.ETrade.Service.SystemService;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
-
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class UpdateManagerPermissionTest {
     private SystemService systemService;
 
@@ -17,10 +22,10 @@ public class UpdateManagerPermissionTest {
         systemService = new SystemService();
         String guestName = systemService.enterSystem().getVal();
         systemService.signUp(guestName, "Andalus", "100","Andalus","Andalus");
+        systemService.signUp(guestName, "Andalus2", "100","Andalus","Andalus");
         systemService.login(guestName, "Andalus", "100");
         systemService.openStore("Andalus", "Mega", 123);
-        systemService.addProductToStore("Andalus", "Mega",
-                "Bamba", 100, 5,"snacks");
+        systemService.appointStoreManager("Andalus", "Mega", "Andalus2");
     }
 
     @org.junit.After
@@ -28,25 +33,13 @@ public class UpdateManagerPermissionTest {
     }
 
     @Test
-    public void updateManagerPermissionSuccessTest(){
-        Assert.assertTrue(isInList(systemService.getStoreInfo("Andalus", "Mega").getVal(), "Bamba"));
-        systemService.removeProductFromStore("Andalus", "Mega", "Bamba");
-        Assert.assertFalse(systemService.getStoreInfo("Andalus", "Mega").getVal().contains("Bamba"));
+    public void updateManagerPermissionSuccessTest() {
+        Assert.assertTrue(systemService.changeStoreManagersPermission("Andalus", "Mega", "Andalus2", managersPermission.MID).isSuccess());
     }
 
-    private boolean isInList(List<ProductForm> productForms, String productName)  {
-        for(ProductForm pf : productForms) {
-            if(pf.productName.equals(productName)) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     @Test
-    public void removeProductFromStoreFailTest(){
-        Assert.assertTrue(isInList(systemService.getStoreInfo("Andalus", "Mega").getVal(), "Bamba"));
-        Assert.assertFalse(systemService.removeProductFromStore("Andalus", "Mega", "Bisly").isSuccess());
-        Assert.assertTrue(isInList(systemService.getStoreInfo("Andalus", "Mega").getVal(), "Bamba"));
+    public void updateManagerPermissionFailTest() {
+        Assert.assertFalse(systemService.changeStoreManagersPermission("Andalus", "Mega", "Anda", managersPermission.MID).isSuccess());
     }
 }
