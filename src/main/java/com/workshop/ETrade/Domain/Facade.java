@@ -57,7 +57,7 @@ public class Facade implements SystemFacade {
     public Result<Integer> addComplexDiscount(String userName, String storeName, String discountOn, int discountPercentage, String description, DiscountType discountType, ComponentPredicateForm predicateForms, String connectionType) {
         int ret = this.storesFacade.addComplexDiscount(userName,storeName, discountOn, discountPercentage, description, discountType, predicateForms, connectionType);
         if(ret == -1)
-            return new Result<>(null,"ERROR\n");
+            return new Result<>(null,"add discount failed because the store doesnt exist\n");
         return new Result<>(ret,null);
     }
 
@@ -67,21 +67,21 @@ public class Facade implements SystemFacade {
         if(ret >= 0) {
             return new Result<>(ret,null);
         }
-        return new Result<>(null, "cannot add policy");
+        return new Result<>(null, "cannot add policy because the store not exist");
     }
 
     @Override
     public Result<Double> getCartPrice(String userName) {
         Double p = this.userController.getCartPrice(userName);
         if(p == -1)
-            return new Result<>(null,"no such user\n");
+            return new Result<>(null,"no such user name\n");
         return new Result<>(p,null);
     }
 
     public Result<List<String>> getOnlineMembers(String userName){
         List<String> ret =  this.userController.getOnlineMembers(userName);
         if(ret == null){
-            return new Result<>(null,"PERMISSION DENIED\n");
+            return new Result<>(null,"PERMISSION DENIED you must be system manager\n");
         }
 //        if (ret.size() == 0){
 //            return new newResult<>(null, "There are no connected members in the market\n");
@@ -92,7 +92,7 @@ public class Facade implements SystemFacade {
     public Result<List<String>> getOfflineMembers(String userName){
         List<String> ret = this.userController.getOfflineMembers(userName);
         if(ret == null){
-            return  new Result<>(null,"PERMISSION DENIED\n");
+            return  new Result<>(null,"PERMISSION DENIED you must be system manager\n");
         }
 //        if (ret.equals("")){
 //            return new newResult<String>("There are no members in the market\n",null);
@@ -104,7 +104,7 @@ public class Facade implements SystemFacade {
     public Result<Boolean> removeMember(String userName, String memberToRemove) {
         if(userController.isConnected(userName)){
             if(!userController.isUserSysManager(userName)){
-                return new Result<Boolean>(false,"PERMISSION DENIED\n");
+                return new Result<Boolean>(false,"PERMISSION DENIED you must be system manager\n");
             }
             if(isInManagment(userName,memberToRemove)){
                 return new Result<Boolean>(false,"Can't remove " + memberToRemove+ ", "+ memberToRemove+" is in Management\n");
@@ -170,7 +170,7 @@ public class Facade implements SystemFacade {
                     return new Result<Boolean>(true, null);
                 return new Result<Boolean>(false, "Failed to change payment service\n");
             }
-            return new Result<Boolean>(false,"PERMISSION DENIED\n");
+            return new Result<Boolean>(false,"PERMISSION DENIED you be system manager\n");
         }
         return new Result<Boolean>(false, "User is not connected\n");
     }
@@ -193,7 +193,7 @@ public class Facade implements SystemFacade {
                     return new Result<Boolean>(true, null);
                 return new Result<Boolean>(false,"Failed to change supply Service");
             }
-            return new Result<Boolean>(false,"PERMISSION DENIED\n");
+            return new Result<Boolean>(false,"PERMISSION DENIED you must be system manager\n");
         }
         return new Result<Boolean>(false, "User is not connected\n");
     }
@@ -655,7 +655,7 @@ public class Facade implements SystemFacade {
             if(storesFacade.addKeyword(userName, storeName, productName, keyWord)) {
                 return new Result<Boolean>(true, null);
             }
-            return new Result<Boolean>(false, "Cannot add keyword");
+            return new Result<Boolean>(false, "Cannot add keyword - store doesnt exists");
         }
         return new Result<Boolean>(false, "User Is Not Connected");
     }
@@ -666,14 +666,14 @@ public class Facade implements SystemFacade {
         if(ret >= 0) {
             return new Result<>(ret,null);
         }
-        return new Result<>(null, "cannot add policy");
+        return new Result<>(null, "cannot add policy because the store doesnt exist");
     }
 
     @Override
     public Result<Integer> addDiscount(String userName, String store, String discountOn, int discountPercentage, String description, DiscountType discountType) {
         int ret = this.storesFacade.addDiscount(userName,store, discountOn, discountPercentage, description, discountType);
         if(ret == -1)
-            return new Result<>(null,"ERROR\n");
+            return new Result<>(null,"ERROR - the store doesnt exists\n");
         return new Result<>(ret,null);
     }
 
@@ -681,7 +681,7 @@ public class Facade implements SystemFacade {
     public Result<Integer> addPreDiscount(String userName, String storeName, String discountOn, int discountPercentage, String description, DiscountType discountType, List<PredicateForm> predicateForms, String connectionType) {
         int ret = this.storesFacade.addPreDiscount(userName,storeName, discountOn, discountPercentage, description, discountType, predicateForms, connectionType);
         if(ret == -1)
-            return new Result<>(null,"ERROR\n");
+            return new Result<>(null,"ERROR - the store doesnt exists\n");
         return new Result<>(ret,null);
     }
 
@@ -693,7 +693,7 @@ public class Facade implements SystemFacade {
         if(added) {
             return new Result<>(true, null);
         }
-        return new Result<>(null, "Cannot add bid");
+        return new Result<>(null, "Cannot add bid because the store doesnt exits");
     }
 
     @Override
@@ -706,7 +706,7 @@ public class Facade implements SystemFacade {
             }
             return new Result<>(bidForms, null);
         }
-        return new Result<>(null, "Cannot Get Bids");
+        return new Result<>(null, "Cannot Get Bids because the store doesnt exist");
     }
 
     @Override
