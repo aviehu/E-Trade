@@ -13,15 +13,11 @@ import com.workshop.ETrade.Domain.Users.ExternalService.Payment.PaymentAdaptee;
 import com.workshop.ETrade.Domain.Users.ExternalService.Supply.SupplyAdaptee;
 import com.workshop.ETrade.Persistance.Users.StoreBasketDTO;
 import com.workshop.ETrade.Service.ResultPackge.Result;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -91,6 +87,30 @@ public class Facade implements SystemFacade {
     }
     public Result<List<String>> getOfflineMembers(String userName){
         List<String> ret = this.userController.getOfflineMembers(userName);
+        if(ret == null){
+            return  new Result<>(null,"PERMISSION DENIED you must be system manager\n");
+        }
+//        if (ret.equals("")){
+//            return new newResult<String>("There are no members in the market\n",null);
+//        }
+        return new Result<>(ret,null);
+
+    }
+
+    public Result<List<String>> getOnlineGuests(){
+        List<String> ret =  this.userController.getOnlineGuests();
+        if(ret == null){
+            return new Result<>(null,"PERMISSION DENIED you must be system manager\n");
+        }
+//        if (ret.size() == 0){
+//            return new newResult<>(null, "There are no connected members in the market\n");
+//        }
+        return new Result<>(ret,null);
+
+    }
+
+    public Result<List<String>> getOfflineGuests(){
+        List<String> ret = this.userController.getOfflineGuests();
         if(ret == null){
             return  new Result<>(null,"PERMISSION DENIED you must be system manager\n");
         }
@@ -259,6 +279,21 @@ public class Facade implements SystemFacade {
                 return new Result<>(ans, null);
             }
             return new Result<>(null, "No Such Store" + storeName);
+        }
+        return new Result<>(null, "User Is Not Connected");
+    }
+
+    @Override
+    public Result<Map<String, managersPermission>> getStaffInfo(String userName, String storeName) {
+        if(userController.isConnected(userName)){
+            Store s = storesFacade.getStore(storeName);
+            if (s == null)
+                return new Result<>(null, "No Such Store" + storeName);
+            Map<String, managersPermission> ans = storesFacade.displayStoreStaff(userName, storeName);
+            if(ans != null) {
+                return new Result<>(ans, null);
+            }
+            return new Result<>(null, userName + " doesn't have permission to see staffInfo");
         }
         return new Result<>(null, "User Is Not Connected");
     }
@@ -595,7 +630,7 @@ public class Facade implements SystemFacade {
         if(storesFacade.changeStoreManagersPermission(userName, storeName, managerName, newPermission) && userController.isConnected(userName)){
             return new Result<>(true, null);
         }
-        return new Result<>(false , "Cannot Close Store");
+        return new Result<>(false , "Cannot change permission");
     }
 
     @Override

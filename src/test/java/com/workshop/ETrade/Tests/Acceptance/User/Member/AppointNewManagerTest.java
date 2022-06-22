@@ -42,7 +42,4 @@ public class AppointNewManagerTest {
     public void AppointNewManagerFailTest() {
         Assert.assertFalse(systemService.appointStoreManager("Andalus", "Mega", "Itay").isSuccess());
     }
-
-
-
 }
