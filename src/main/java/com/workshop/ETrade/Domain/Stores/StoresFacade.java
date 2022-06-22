@@ -180,7 +180,7 @@ public class StoresFacade {
         }
         if(store.addProduct(ownerName,productName,amount,price,category)) {
             AllRepos.getStoreRepo().save(new StoreDTO(store));
-            logger.info("product - " + productName + " was added to store");
+            logger.info("product - " + productName + " was added to store - "+ storeName);
             return true;
         }
         return false;
