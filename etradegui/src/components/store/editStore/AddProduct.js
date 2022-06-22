@@ -38,7 +38,7 @@ const DashboardContent = ({setSuccessMsg}) => {
             const boolRes = await res.json()
             if(boolRes.val) {
                 setSuccessMsg(`product ${data.get("productName")} has been added to your store`)
-                navigate("/etrade");
+                navigate(`/store/edit/${name}`);
             } else {
                 setError(boolRes.err)
                 setHasError(true)
