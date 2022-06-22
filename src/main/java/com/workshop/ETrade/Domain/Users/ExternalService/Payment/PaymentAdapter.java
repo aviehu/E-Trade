@@ -13,7 +13,7 @@ public class PaymentAdapter implements IPay {
     @Override
     public int pay(String cardNumber, int month,int year,String holder, int cvv, int id) {
         if(paymentAdaptee == null)
-            return -1;
+            return 1;
         else {
 
             return paymentAdaptee.payment(cardNumber, month,year,holder, cvv,id);

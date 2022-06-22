@@ -25,9 +25,8 @@ public class SupplyAdapter implements ISupply{
     @Override
     public int supply(String name,String street,String city,String country,int zip) {
         if(supplyAdaptee == null) {
-            if (checkCity(city))
-                return 1;
-            return -1;
+
+            return 1;
         }
         else
             return supplyAdaptee.supply(name, street, city, country, zip);
