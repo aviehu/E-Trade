@@ -512,6 +512,18 @@ public class Facade implements SystemFacade {
     }
 
     @Override
+    public Result<List<Purchase>> getStorePurchaseHistory(String userName, String storeName) {
+        if(userController.isConnected(userName)) {
+            List<Purchase> ans = storesFacade.getStorePurchaseHistory(storeName);
+            if(ans == null) {
+                return new Result<>(null, "No such store " + storeName);
+            }
+            return new Result<>(ans, null);
+        }
+        return new Result<>(null, "User Is Not Connected");
+    }
+
+    @Override
     public Result<String> approveOwner(String userName, String storeName, String ownerToApprove, boolean approve) {
         if(userController.isConnected(userName)) {
             String ans = "";
@@ -738,7 +750,7 @@ public class Facade implements SystemFacade {
             Bid bid = storesFacade.counterBidReview(storeName, bidId, approve);
             if(bid != null) {
                 userController.purchaseBid(userName, bid);
-                storesFacade.purchaseBid(storeName,bid.getProductName(), userController.getUser(bid.getBidderName()));
+                storesFacade.purchaseBid(storeName,bid.getProductName(), userController.getUser(bid.getBidderName()), bid.getPrice());
                 return new Result<>(true, null);
             }
             return new Result<>(false, null);
@@ -753,7 +765,7 @@ public class Facade implements SystemFacade {
             Bid approved = storesFacade.reviewBid(userName, storeName, bidId, approve);
             if(approved != null) {
                 userController.purchaseBid(userName, approved);
-                storesFacade.purchaseBid(storeName,approved.getProductName(), userController.getUser(approved.getBidderName()));
+                storesFacade.purchaseBid(storeName,approved.getProductName(), userController.getUser(approved.getBidderName()), approved.getPrice());
                 notifyUser("Your bid has been approved", storeName, approved.getBidderName());
                 notifySubscribers(storesFacade.getStore(storeName).getSubscribers(),"A bid for - " + approved.getProductName() + "  in " + storeName + " has been approved", approved.getBidderName());
                 return new Result<>(true, null);

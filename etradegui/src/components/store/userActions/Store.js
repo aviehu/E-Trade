@@ -31,6 +31,7 @@ const DashboardContent = ({setSuccessMsg}) => {
     const [error, setError] = React.useState("")
     const [hasError, setHasError] = React.useState(false)
     const [myStores, setMyStores] = React.useState([]);
+    const [isAdmin, setIsAdmin] = React.useState(false);
 
     useEffect(() => {
         async function getStore() {
@@ -47,6 +48,16 @@ const DashboardContent = ({setSuccessMsg}) => {
             setMyStores(myS);
             console.log(myS)
         }
+
+        async function checkAdmin() {
+            const res = await get('users/isadmin')
+            const ans = await res.json()
+            if(ans.val) {
+                setIsAdmin(ans.val);
+            }
+        }
+
+        checkAdmin()
         getStore()
         getMyStores()
     }, [])
@@ -61,7 +72,6 @@ const DashboardContent = ({setSuccessMsg}) => {
         const ans = await res.json()
         if(ans.val) {
             setSuccessMsg(`product ${product} has been added to your cart`)
-            navigate("/etrade");
             setImmediateDialog(false);
         } else {
             setError(ans.err)
@@ -83,7 +93,6 @@ const DashboardContent = ({setSuccessMsg}) => {
         const res = await post(body, `stores/addbid/${name}`)
         const ans = await res.json()
         if(ans.val) {
-            navigate("/etrade");
             setSuccessMsg('your bid has been submited')
             setBidDialog(false);
         } else {
@@ -150,6 +159,13 @@ const DashboardContent = ({setSuccessMsg}) => {
                             {myStores.includes(name) ?
                                 <Grid item xs={12}>
                                     <Button onClick={() => navigate(`/store/edit/${name}`)}>Edit Store</Button>
+                                </Grid>
+                                :
+                                null
+                            }
+                            {myStores.includes(name) || isAdmin ?
+                                <Grid item xs={12}>
+                                    <Button onClick={() => navigate(`/store/purchasehistory/${name}`)}>Purchase History</Button>
                                 </Grid>
                                 :
                                 null

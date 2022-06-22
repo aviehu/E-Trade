@@ -445,14 +445,14 @@ public class StoresFacade {
         return store.counterBid(bidId, newOffer);
     }
 
-    public void purchaseBid(String storeName, String productName, User user) {
+    public void purchaseBid(String storeName, String productName, User user, double price) {
         Store store = getStoreByName(storeName);
         if(store == null) {
             return ;
         }
         HashMap<String, Integer> prods = new HashMap<>();
         prods.put(productName, 1);
-        store.purchaseBid(prods,user);
+        store.purchaseBid(prods,user, price);
         AllRepos.getStoreRepo().save(new StoreDTO(store));
     }
 
@@ -471,6 +471,14 @@ public class StoresFacade {
         }
         AllRepos.getStoreRepo().save(new StoreDTO(store));
         return store.counterBidReview(bidId, approve);
+    }
+
+    public List<Purchase> getStorePurchaseHistory(String storeName) {
+        Store store = getStoreByName(storeName);
+        if(store == null) {
+            return null;
+        }
+        return store.getPurchases();
     }
 
     public int addComplexDiscount(String userName, String storeName, String discountOn, int discountPercentage, String description, DiscountType discountType, ComponentPredicateForm predicateForm, String connectionType) {
