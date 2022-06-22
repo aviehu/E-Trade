@@ -6,20 +6,15 @@ import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
 import com.workshop.ETrade.Domain.Stores.Product;
+import com.workshop.ETrade.Domain.Stores.Purchase;
 import com.workshop.ETrade.Domain.Stores.managersPermission;
 import com.workshop.ETrade.Domain.Users.ExternalService.Payment.PaymentAdaptee;
 import com.workshop.ETrade.Domain.Users.ExternalService.Supply.SupplyAdaptee;
 import com.workshop.ETrade.Domain.Users.TotalTraffic;
 import com.workshop.ETrade.Domain.purchaseOption;
-import com.workshop.ETrade.Persistance.Stores.StoreDTO;
-import com.workshop.ETrade.Repository.*;
-import com.workshop.ETrade.Service.InitExecuter.LoadServiceFromInitState;
 import com.workshop.ETrade.Service.ResultPackge.Result;
-import com.workshop.ETrade.AllRepos;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -70,6 +65,14 @@ public class SystemService implements ServiceInterface {
         return facade.getOfflineMembers(userName);
     }
 
+    @Override
+    public Result<List<String>> getOnlineGuests() {
+        return facade.getOnlineGuests();
+    }
+    @Override
+    public Result<List<String>> getOfflineGuests() {
+        return facade.getOfflineGuests();
+    }
     public Result<Boolean> supplyServiceExists(){
         return facade.supplyServiceExists();
     }
@@ -164,6 +167,15 @@ public class SystemService implements ServiceInterface {
             formProds.add(new ProductForm(p, storeName));
         }
         return new Result(formProds, null);
+    }
+
+    @Override
+    public Result<Map<String, managersPermission>> getStaffInfo(String userName, String storeName) {
+        Map<String, managersPermission> staff = facade.getStaffInfo(userName, storeName).getVal();
+        if(staff == null) {
+            return new Result<>(null, "Store Doesn't Exist");
+        }
+        return new Result(staff, null);
     }
 
     @Override
@@ -376,6 +388,11 @@ public class SystemService implements ServiceInterface {
     @Override
     public Result<String> approveNewOwner(String userName, String storeName, String appointee, boolean approve) {
         return facade.approveOwner(userName, storeName,appointee, approve);
+    }
+
+    @Override
+    public Result<List<Purchase>> getStorePurchaseHistory(String userName, String storeName) {
+        return facade.getStorePurchaseHistory(userName, storeName);
     }
 
     public Result<Integer> getProductAmount(String storeName, String prodName){

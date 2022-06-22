@@ -23,6 +23,7 @@ import AddPolicy from './components/store/editStore/policies/AddPolicy'
 import MyBids from './components/dashboard/MyBids'
 import Stats from './components/Admin/Stats'
 import {Alert, Snackbar} from "@mui/material";
+import PurchaseHistory from "./components/store/userActions/PurchaseHistory";
 
 
 function App() {
@@ -43,6 +44,7 @@ function App() {
                <Route path="/admin/removemember" element={<RemoveMember setSuccessMsg={setSuccessMsg}/>}/>
                <Route path="/admin/closestore" element={<CloseStore setSuccessMsg={setSuccessMsg}/>}/>
                <Route path="/store/:name" element={<Store setSuccessMsg={setSuccessMsg}/>} />
+               <Route path="/store/purchasehistory/:name" element={<PurchaseHistory/>}/>
                <Route path="/store/edit/:name" element={<EditStore setSuccessMsg={setSuccessMsg}/>} />
                <Route path="/store/edit/:name/addproduct" element={<AddProduct setSuccessMsg={setSuccessMsg}/>} />
                <Route path="/store/edit/:name/addowner" element={<AddOwner setSuccessMsg={setSuccessMsg}/>} />
@@ -52,6 +54,7 @@ function App() {
                <Route path="/store/edit/:name/adddiscount" element={<AddDiscount setSuccessMsg={setSuccessMsg}/>} />
                <Route path="/store/edit/:name/addpolicy" element={<AddPolicy setSuccessMsg={setSuccessMsg}/>} />
                <Route path="/admin/viewtraffic" element={<Stats/>}/>
+
            </Routes>
            <Snackbar anchorOrigin={{ vertical:'bottom', horizontal:'right' }} open={successMsg.length > 0} autoHideDuration={4000} onClose={() => setSuccessMsg("")}>
                <Alert onClose={() => setSuccessMsg("")} severity="success" sx={{ width: '100%' }}>

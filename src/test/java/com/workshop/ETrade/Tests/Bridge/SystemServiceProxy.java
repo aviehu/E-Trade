@@ -4,6 +4,7 @@ import com.workshop.ETrade.Controller.Forms.*;
 import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
+import com.workshop.ETrade.Domain.Stores.Purchase;
 import com.workshop.ETrade.Domain.Stores.managersPermission;
 import com.workshop.ETrade.Domain.Users.ExternalService.Payment.PaymentAdaptee;
 import com.workshop.ETrade.Domain.Users.ExternalService.Supply.SupplyAdaptee;
@@ -148,6 +149,11 @@ public class SystemServiceProxy implements ServiceInterface {
     }
 
     @Override
+    public Result<List<Purchase>> getStorePurchaseHistory(String userName, String storeName) {
+        return null;
+    }
+
+    @Override
     public Result<TotalTraffic> getTrafficByDates(int startYear, int startMonth, int startDay, int endYear, int endMonth, int endDay) {
         return null;
     }
@@ -171,6 +177,20 @@ public class SystemServiceProxy implements ServiceInterface {
         if (real == null)
             throw new NotImplementedException();
         return real.getOfflineMembers(userName);
+    }
+
+    @Override
+    public Result<List<String>> getOnlineGuests() {
+        if (real == null)
+            throw new NotImplementedException();
+        return real.getOnlineGuests();
+    }
+
+    @Override
+    public Result<List<String>> getOfflineGuests() {
+        if (real == null)
+            throw new NotImplementedException();
+        return real.getOfflineGuests();
     }
 
     @Override
@@ -297,6 +317,13 @@ public class SystemServiceProxy implements ServiceInterface {
         if (real == null)
             throw new NotImplementedException();
         return real.getStoreInfo(userName, storeName);
+    }
+
+    @Override
+    public Result<Map<String, managersPermission>> getStaffInfo(String userName, String storeName) {
+        if (real == null)
+            throw new NotImplementedException();
+        return real.getStaffInfo(userName, storeName);
     }
 
     @Override

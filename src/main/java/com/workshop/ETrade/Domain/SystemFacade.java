@@ -5,6 +5,7 @@ import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
 import com.workshop.ETrade.Domain.Stores.Product;
+import com.workshop.ETrade.Domain.Stores.Purchase;
 import com.workshop.ETrade.Domain.Stores.managersPermission;
 import com.workshop.ETrade.Domain.Users.ExternalService.Payment.PaymentAdaptee;
 import com.workshop.ETrade.Domain.Users.ExternalService.Supply.SupplyAdaptee;
@@ -12,6 +13,7 @@ import com.workshop.ETrade.Domain.Users.TotalTraffic;
 import com.workshop.ETrade.Service.ResultPackge.Result;
 
 import java.util.List;
+import java.util.Map;
 
 public interface SystemFacade {
 
@@ -47,6 +49,8 @@ public interface SystemFacade {
     public Result<Boolean> login(String userName, String memberUserName, String password);
 
     public Result<List<Product>> getStoreInfo(String userName, String storeName);
+
+    Result<Map<String, managersPermission>> getStaffInfo(String userName, String storeName);
 
     public Result<List<String>> searchByKeyword(String userName, String keyword);
 
@@ -84,6 +88,7 @@ public interface SystemFacade {
 
     public Result<String> appointStoreOwner(String userName, String storeName, String newOwner);
 
+    public Result<List<Purchase>> getStorePurchaseHistory(String userName, String storeName);
     public Result<String> approveOwner(String userName, String storeName, String ownerToApprove, boolean approve);
 
     public Result<Boolean> removeStoreOwner(String userName, String storeName, String ownerToRemove);
