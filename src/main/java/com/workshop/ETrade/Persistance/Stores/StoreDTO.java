@@ -76,9 +76,13 @@ public class StoreDTO {
         name = store.getName();
         List<Product> ps= store.getProducts();
         products = new ArrayList<>();
-        for (Product p : ps) {
-            products.add(new ProductDTO(p));
+//        store.lockProducts();
+        synchronized (ps) {
+            for (Product p : ps) {
+                products.add(new ProductDTO(p));
+            }
         }
+//        store.unlockProducts();
         founderName = store.getFounderName();
         card = store.getCard();
         closed = store.isClosed();

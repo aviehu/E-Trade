@@ -50,9 +50,11 @@ public class Inventory {
     }
 
     public Product getProductByName(String ProductName) {
-        for (Product product : products) {
-            if(product.getName().equals(ProductName)) {
-                return product;
+        synchronized (products) {
+            for (Product product : products) {
+                if (product.getName().equals(ProductName)) {
+                    return product;
+                }
             }
         }
         return null;
@@ -187,6 +189,7 @@ public class Inventory {
     }
 
     public boolean purchase(Map<String, Integer> prods) {
+
         for(String productName : prods.keySet()) {
             Product product = getProductByName(productName);
             if(product == null || !product.setAmount(product.getAmount() - prods.get(productName))) {
