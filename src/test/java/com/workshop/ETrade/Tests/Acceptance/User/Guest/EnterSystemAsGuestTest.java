@@ -7,11 +7,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class EnterSystemAsGuestTest {
-    private SystemService systemService;
+    SystemService systemService;
+    String name;
 
     @Before
     public void setUp() throws Exception {
-        systemService = new SystemService();
     }
 
     @After
@@ -19,8 +19,21 @@ public class EnterSystemAsGuestTest {
     }
 
     @Test
-    public void EnterSystemAsGuestTest(){
-        String name = systemService.enterSystem().getVal();
+    public void EnterSystemAsGuestTestSuccess() throws Exception {
+        systemService = new SystemService();
+        name = systemService.enterSystem().getVal();
         Assert.assertTrue(name.contains("guest"));
+    }
+
+    @Test
+    public void EnterSystemAsGuestTestFail(){
+        try {
+            name = systemService.enterSystem().getVal();
+        }
+        catch (Exception e){
+            Assert.assertNull(name);
+        }
+
+
     }
 }

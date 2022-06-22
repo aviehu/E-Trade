@@ -5,7 +5,12 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class ExitSystemAsGuestTest {
 
     private SystemService systemService;
@@ -21,5 +26,12 @@ public class ExitSystemAsGuestTest {
     @Test
     public void exitSystemAsGuestTest(){
         Assert.assertTrue(true);
+    }
+
+    @Test
+    public void exitSystemAsGuestTestSuccess(){
+        String guestName = systemService.enterSystem().getVal();
+        systemService.login(guestName,"domain", "domain");
+        Assert.assertTrue(systemService.getOnlineGuests().getVal().contains(guestName));
     }
 }

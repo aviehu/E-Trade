@@ -1,4 +1,4 @@
-package com.workshop.ETrade.Tests.Acceptance.User.Admin;
+package com.workshop.ETrade.Tests.Acceptance.User.Member;
 
 import com.workshop.ETrade.Service.SystemService;
 import org.junit.After;
@@ -8,8 +8,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -39,13 +37,19 @@ public class GetStorePurchaseHistoryTest {
     }
 
     @Test
-    public void GetStorePurchaseHistoryTest(){
-        systemService.login(guestName, "domain", "domain");
-        String purchaseHistory = systemService.adminGetStoresPurchaseHistory("domain", "Mega").getVal();
+    public void GetStorePurchaseHistorySuccessTest(){
+        systemService.login(guestName, "Andalus", "100");
+        String purchaseHistory = systemService.getStoresPurchaseHistory("Andalus", "Mega").getVal();
         Assert.assertTrue(purchaseHistory.contains("Bamba"));
         Assert.assertTrue(purchaseHistory.contains("10"));
         Assert.assertTrue(purchaseHistory.contains("Bisly"));
         Assert.assertTrue(purchaseHistory.contains("8"));
+    }
+
+    @Test
+    public void GetStorePurchaseHistoryFailTest(){
+        systemService.login(guestName, "Andalus2", "100");
+        Assert.assertEquals("",systemService.getStoresPurchaseHistory("Andalus2", "Mega").getVal());
 
     }
 }

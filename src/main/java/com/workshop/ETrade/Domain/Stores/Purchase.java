@@ -56,4 +56,12 @@ public class Purchase {
     public int getPurchaseId() {
         return purchaseId;
     }
+
+    public String toString(){
+        String ans = "purchase ID: " + this.purchaseId +"\npurchased by: " + this.buyer +"\npurchased: ";
+        for (String prod : prods.keySet()){
+            ans += prods.get(prod).toString() + " " + prod + ", ";
+        }
+        return ans;
+    }
 }

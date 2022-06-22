@@ -26,6 +26,11 @@ public interface ServiceInterface {
     public Result<Integer> addPolicy(String userName, String store, String policyOn, String description, PolicyType policyType, List<PredicateForm> predicateForms, String connectionType);
     public Result<List<String>> getOnlineMembers(String userName);
     public Result<List<String>> getOfflineMembers(String userName);
+
+    Result<List<String>> getOnlineGuests();
+
+    Result<List<String>> getOfflineGuests();
+
     public Result<Boolean> supplyServiceExists();
 
     public Result<Boolean> paymentServiceExists();
@@ -63,6 +68,8 @@ public interface ServiceInterface {
     public Result<Boolean> login(String userName, String memberUserName, String password);
 
     public Result<List<ProductForm>> getStoreInfo(String userName, String storeName);
+
+    Result<Map<String, managersPermission>> getStaffInfo(String userName, String storeName);
 
     public Result<List<String>> searchByKeyword(String userName, String keyword);
 

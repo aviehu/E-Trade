@@ -180,6 +180,20 @@ public class SystemServiceProxy implements ServiceInterface {
     }
 
     @Override
+    public Result<List<String>> getOnlineGuests() {
+        if (real == null)
+            throw new NotImplementedException();
+        return real.getOnlineGuests();
+    }
+
+    @Override
+    public Result<List<String>> getOfflineGuests() {
+        if (real == null)
+            throw new NotImplementedException();
+        return real.getOfflineGuests();
+    }
+
+    @Override
     public Result<Boolean> supplyServiceExists() {
         if (real == null)
             throw new NotImplementedException();
@@ -303,6 +317,13 @@ public class SystemServiceProxy implements ServiceInterface {
         if (real == null)
             throw new NotImplementedException();
         return real.getStoreInfo(userName, storeName);
+    }
+
+    @Override
+    public Result<Map<String, managersPermission>> getStaffInfo(String userName, String storeName) {
+        if (real == null)
+            throw new NotImplementedException();
+        return real.getStaffInfo(userName, storeName);
     }
 
     @Override

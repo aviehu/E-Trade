@@ -381,6 +381,26 @@ public class UserController {
         return ret;
     }
 
+    public List<String>  getOnlineGuests() {
+        List<String> ret = new ArrayList<>();
+        for(Guest g : guests){
+            if(isConnected(g.getUserName())){
+                ret.add(g.getUserName());
+            }
+        }
+        return ret;
+    }
+    public List<String> getOfflineGuests() {
+        List<String> ret = new ArrayList<>();
+        for(Guest g : guests){
+            if(!isConnected(g.getUserName())){
+                ret.add(g.getUserName());
+            }
+        }
+        return ret;
+    }
+
+
     public List<Notification> getMessages(String userName) {
         Member member = getMember(userName);
         if(member == null) {

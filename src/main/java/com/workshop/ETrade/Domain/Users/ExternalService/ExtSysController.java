@@ -80,13 +80,19 @@ public class ExtSysController {
         if(isRealPayment)
             this.payment =realPay;
         else
-            this.payment = new MyPaymentSys(new PaymentAdapter(new PaymentAdaptee(null)));
+            getInstance().setPayments(new MyPaymentSys(new PaymentAdapter(null)));
     }
     public void setSupply(boolean isRealSup){
         if(isRealSup)
             this.supply =realSup;
         else
-            this.supply = new mySupplySys(new SupplyAdapter(new SupplyAdaptee(null)));
+            getInstance().setSupplies(new mySupplySys(new SupplyAdapter(new SupplyAdaptee(null))));
+    }
+    public void setPayments(MyPaymentSys payment){
+        this.payment = payment;
+    }
+    public void setSupplies(mySupplySys sup){
+        this.supply = sup;
     }
 
 }

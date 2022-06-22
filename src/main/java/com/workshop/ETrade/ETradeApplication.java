@@ -72,11 +72,11 @@ public class ETradeApplication implements CommandLineRunner {
 			initialize = true;
 		}
 		try {
-
+			LoadServiceFromInitState.loadConfig(args[0]);
 			this.service.initFacade();
 			File file = new File("src\\main\\java\\com\\workshop\\ETrade\\Service\\InitExecuter\\initState.json");
 			String path = file.getAbsolutePath();
-			LoadServiceFromInitState.loadConfig(args[0]);
+
 			LoadServiceFromInitState.loadFromFile(path, service);
 			this.service.allLogOut();
 		}catch (Exception e){
