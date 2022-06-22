@@ -24,6 +24,7 @@ public class PurchaseCartTest {
         systemService = new SystemService();
         String guestName = systemService.enterSystem().getVal();
         systemService.signUp(guestName, "Andalus", "100","Andalus","Andalus");
+        systemService.signUp(guestName, "Andalus2", "100","Andalus","Andalus");
         systemService.login(guestName, "Andalus", "100");
         systemService.openStore("Andalus", "Mega", 123);
         systemService.addProductToStore("Andalus", "Mega",
@@ -50,17 +51,25 @@ public class PurchaseCartTest {
 
     @Test
     public void purchaseCartFailTest(){
-        List<ProductForm> cart = systemService.displayShoppingCart("Andalus").getVal();
-        int prodAmount = systemService.getProductAmount("Mega", "Bamba").getVal(); //100
+        systemService.addProductToShoppingCart("Andalus", "Bamba", "Mega", 50);
+        String guestName = systemService.logOut("Andalus").getVal();
+        systemService.login(guestName, "Andalus2", "100");
+        systemService.addProductToShoppingCart("Andalus2", "Bamba", "Mega", 80);
+        boolean purchased = systemService.purchase("Andalus2", "123", 4,2024,"Andalus Andalus", 100,200000000,"Israel",
+                "BeerSheva", "Andalus", 7, 7,399949).getVal();
+        guestName = systemService.logOut("Andalus2").getVal();
+        systemService.login(guestName, "Andalus", "100");
         String storePurchaseHistory = systemService.getStoresPurchaseHistory("Andalus", "Mega").getVal();
-        systemService.addProductToShoppingCart("Andalus", "Bamba", "Mega", 200);
+        int prodAmount = systemService.getProductAmount("Mega", "Bamba").getVal(); //20
         systemService.purchase("Andalus", "123", 4,2024,"Andalus Andalus", 776,200000000,"Israel",
                 "BeerSheva", "Andalus", 7, 7,399949);
         // the cart didn't change
-        Assert.assertEquals(cart, systemService.displayShoppingCart("Andalus").getVal());
+        List<ProductForm> cart = systemService.displayShoppingCart("Andalus").getVal();
+        Assert.assertTrue(cart.get(0).productName.equals("Bamba") && cart.get(0).amount == 50);
         // the amount in the store didn't change
         Assert.assertEquals(prodAmount, (int)systemService.getProductAmount("Mega", "Bamba").getVal());
         // store purchase history didn't change
-        Assert.assertEquals(storePurchaseHistory, systemService.getStoresPurchaseHistory("Andalus", "Mega").getVal());
+        String newHistory = systemService.getStoresPurchaseHistory("Andalus", "Mega").getVal();
+        Assert.assertEquals(storePurchaseHistory, newHistory);
     }
 }
