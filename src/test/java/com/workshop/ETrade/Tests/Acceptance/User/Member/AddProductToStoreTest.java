@@ -48,6 +48,6 @@ public class AddProductToStoreTest {
         systemService.addProductToStore("Andalus", "Mega",
                 "Bamba", 100, 5,"snacks");
         Assert.assertFalse(systemService.addProductToStore("Andalus", "Mega",
-                "Bamba", 100, 5,"snacks").isSuccess());
+                "Bamba", 100, 5,"snacks").isSuccess()); //already exists
     }
 }

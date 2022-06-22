@@ -54,7 +54,7 @@ public class AppointNewOwnerTest {
     }
 
     @Test
-    public void AppointNewOwnerRemoveAndAppintAsManager() {
+    public void AppointNewOwnerRemoveAndAppointAsManager() {
         Assert.assertTrue(systemService.appointStoreOwner("Andalus", "jj", "Mira2").isSuccess());
         Assert.assertTrue(systemService.removeStoreOwner("Andalus", "jj", "Mira2").isSuccess());
         Assert.assertTrue(systemService.appointStoreManager("Andalus", "jj", "Mira2").isSuccess());
@@ -80,10 +80,6 @@ public class AppointNewOwnerTest {
         boolean b2 = systemService.getStoresManagement("Andalus","jj").getVal().contains("Mira");
         Assert.assertTrue(!b1);
         Assert.assertTrue(!b2);
-
-
-
-
 
     }
 

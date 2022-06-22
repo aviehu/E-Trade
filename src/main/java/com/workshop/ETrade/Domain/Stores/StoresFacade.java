@@ -157,6 +157,22 @@ public class StoresFacade {
         }
     }
 
+    public Map<String, managersPermission> displayStoreStaff(String owner, String storeName) {
+        Store store = getStoreByName(storeName);
+        if(store != null && !store.isClosed() && store.isOwner(owner) ) {
+            Map<String, managersPermission> ans = store.getManagersPermissions();
+            for (String s : store.getOwners(owner)) {
+                ans.put(s, managersPermission.HIGH);
+            }
+            return ans;
+        }
+        else {
+            return null;
+        }
+    }
+
+
+
     public boolean addProductToStore(String ownerName, String storeName, String productName, int amount, double price, String category) {
         Store store = getStoreByName(storeName);
         if(store == null) {
