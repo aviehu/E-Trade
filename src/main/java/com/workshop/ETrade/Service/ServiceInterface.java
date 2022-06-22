@@ -4,6 +4,7 @@ import com.workshop.ETrade.Controller.Forms.*;
 import com.workshop.ETrade.Domain.Notifications.Notification;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
+import com.workshop.ETrade.Domain.Stores.Purchase;
 import com.workshop.ETrade.Domain.Stores.managersPermission;
 import com.workshop.ETrade.Domain.Users.ExternalService.Payment.PaymentAdaptee;
 import com.workshop.ETrade.Domain.Users.ExternalService.Supply.SupplyAdaptee;
@@ -150,6 +151,7 @@ public interface ServiceInterface {
 
     Result<String> approveNewOwner(String userName, String storeName, String appointee, boolean approve);
 
+    public Result<List<Purchase>> getStorePurchaseHistory(String userName, String storeName);
     public Result<TotalTraffic> getTrafficByDates(int startYear, int startMonth, int startDay, int endYear, int endMonth, int endDay);
 //    public newResult<Boolean> exitSystem();
     Result<Boolean> guestEnteredMarket(String userName);

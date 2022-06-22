@@ -3,6 +3,7 @@ package com.workshop.ETrade.Controller;
 import com.workshop.ETrade.Controller.Forms.*;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
+import com.workshop.ETrade.Domain.Stores.Purchase;
 import com.workshop.ETrade.Domain.Stores.managersPermission;
 import com.workshop.ETrade.Service.ResultPackge.Result;
 import com.workshop.ETrade.Service.ServiceInterface;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -177,6 +179,19 @@ public class StoresController {
     @GetMapping("/getcartprice")
     public Result<Double> getCartPrice(@RequestHeader("Authorization") String userName) {
         return systemService.getCartPrice(userName);
+    }
+
+    @GetMapping("/storepurchasehistory/{store}")
+    public Result<List<PurchaseHistoryForm>> getStorePurchaseHistory(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName) {
+        Result<List<Purchase>> serviceAns = systemService.getStorePurchaseHistory(userName,storeName);
+        if(serviceAns.isSuccess()) {
+            List<PurchaseHistoryForm> ans = new ArrayList<>();
+            for(Purchase p : serviceAns.getVal()) {
+                ans.add(new PurchaseHistoryForm(p));
+            }
+            return new Result<>(ans, null);
+        }
+        return new Result<>(null, serviceAns.getErr());
     }
 
     @PostMapping("/appointowner/{store}")

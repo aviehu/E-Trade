@@ -3,13 +3,10 @@ package com.workshop.ETrade.Domain.Stores;
 import com.workshop.ETrade.Persistance.Stores.PurchaseDTO;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class StorePurchaseHistory {
-    @DBRef(lazy = true)
+
     private List<Purchase> purchases;
     private int purchaseId;
 
@@ -31,7 +28,12 @@ public class StorePurchaseHistory {
     }
 
     public boolean addPurchase(double totalPrice, Map<String, Integer> products, String buyer) {
-        Purchase purchase = new Purchase(totalPrice, products, buyer, purchaseId);
+        Map<String, Integer> prods = new HashMap<>();
+        for(String key : products.keySet()) {
+            prods.put(key, products.get(key));
+        }
+        Purchase purchase = new Purchase(totalPrice, prods, buyer, purchaseId);
+        purchases.add(purchase);
         purchaseId++;
         return true;
     }

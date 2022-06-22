@@ -1,8 +1,6 @@
 package com.workshop.ETrade.Domain.Stores;
 
 import com.workshop.ETrade.Controller.Forms.OwnerWaitingForApproveForm;
-import com.workshop.ETrade.Domain.Notifications.NotificationThread;
-import com.workshop.ETrade.Domain.Observable;
 import com.workshop.ETrade.Domain.Stores.Discounts.Discount;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.Policy;
@@ -15,7 +13,6 @@ import com.workshop.ETrade.Domain.Users.User;
 import com.workshop.ETrade.Domain.purchaseOption;
 import com.workshop.ETrade.Persistance.Stores.*;
 import com.workshop.ETrade.AllRepos;
-import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -213,7 +210,7 @@ public class Store {
         return ans;
     }
 
-    public synchronized boolean purchaseBid(Map<String,Integer> prods, User buyer){
+    public synchronized boolean purchaseBid(Map<String,Integer> prods, User buyer, double price){
         Map<Product,Integer> amounts = inventory.getAmountsFromNames(prods);
         if(policyManager.canPurchase(amounts) && inventory.canPurchase(prods)) {
             inventory.purchase(prods);
@@ -222,7 +219,7 @@ public class Store {
                 Product product = inventory.getProductByName(productName);
                 products.put(product, prods.get(productName));
             }
-            storeHistory.addPurchase(policyManager.getTotalPrice(products), prods, buyer.getUserName());
+            storeHistory.addPurchase(price, prods, buyer.getUserName());
             purchased(prods.keySet().stream().toList(),buyer.getUserName());
             //notifyUser("Your bid has been approved", name, buyer);
             //notifySubscribers("A bid for - " + prods.keySet().toArray()[0] + "  in " + name + " has been approved", buyer.getUserName());
@@ -631,7 +628,12 @@ public class Store {
         if(isOwner(userName)) {
             Bid bid = getBidById(bidId);
             if(approve) {
-                return bid.approve(userName);
+                Bid ans = bid.approve(userName);
+                if(ans != null) {
+                    HashMap<String, Integer> mapHelper = new HashMap<>();
+                    mapHelper.put(ans.getProductName(), 1);
+                }
+                return ans;
             }
             bid.reject();
             AllRepos.getBidRepo().save(new BidDTO(bid));
@@ -655,7 +657,12 @@ public class Store {
             return null;
         }
         Bid b = bid.counterOfferReview(approve);
-        AllRepos.getBidRepo().save(new BidDTO(b));
+        AllRepos.getBidRepo().save(new BidDTO(bid));
+        if(b != null) {
+            HashMap<String, Integer> mapHelper = new HashMap<>();
+            mapHelper.put(b.getProductName(), 1);
+            storeHistory.addPurchase(b.getPrice(), mapHelper, b.getBidderName());
+        }
         return b;
     }
 
