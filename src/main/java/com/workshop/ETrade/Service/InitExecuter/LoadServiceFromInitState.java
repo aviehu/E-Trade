@@ -54,6 +54,8 @@ public class LoadServiceFromInitState {
                 AllRepos.setIsTest(true);
                 ExtSysController.getInstance().setPayment(false);
                 ExtSysController.getInstance().setSupply(false);
+            }else{
+                AllRepos.setIsTest(false);
             }
 
 

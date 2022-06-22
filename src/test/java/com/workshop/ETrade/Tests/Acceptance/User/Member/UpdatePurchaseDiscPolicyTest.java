@@ -6,16 +6,22 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class UpdatePurchaseDiscPolicyTest {
-
+@Autowired
     private SystemService systemService;
     String guestName;
 
 
     @Before
     public void setUp() throws Exception {
-        systemService = new SystemService();
+        //systemService = new SystemService();
         guestName = systemService.enterSystem().getVal();
         systemService.signUp(guestName, "Andalus", "100", "Anda", "lus");
         systemService.login(guestName, "Andalus", "100");
