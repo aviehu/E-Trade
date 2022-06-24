@@ -316,6 +316,31 @@ public class Store {
         return false;
     }
 
+    public boolean addManager(String ownerName, String nameToAdd, String permission){
+        managersPermission mp;
+        switch (permission) {
+            case "LOW": {
+                mp = managersPermission.LOW;
+                break;
+            }
+            case "MID": {
+                mp = managersPermission.MID;
+                break;
+            }
+            default: {
+                mp = managersPermission.HIGH;
+                break;
+            }
+        }
+
+        if(!isManager(nameToAdd) && !isOwner(nameToAdd) && isOwner(ownerName)){
+            managersAppointments.get(ownerName).add(nameToAdd);
+            managersPermissions.put(nameToAdd, mp);
+            return true;
+        }
+        return false;
+    }
+
 
     private Map<String, Boolean> getAwaiting(String owner) {
         Map<String, Boolean> awaiting = new HashMap<>();
@@ -726,5 +751,9 @@ public class Store {
 
     public Map<String, AppointmentAgreement> getAppointmentAgreements() {
         return ownersAppointmentAgreement;
+    }
+
+    public boolean editProduct(String productName, int amount, int price) {
+        return inventory.editProduct(productName,amount, price);
     }
 }

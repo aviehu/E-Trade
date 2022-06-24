@@ -95,6 +95,8 @@ public interface SystemFacade {
 
     public Result<Boolean> appointStoreManager(String userName, String storeName, String newManager);
 
+    public Result<Boolean> appointStoreManager(String userName, String storeName, String newManager, String permission);
+
     public Result<Boolean> removeStoreManager(String userName, String storeName, String managerToRemove);
 
     public Result<Boolean> changeStoreManagersPermission(String userName, String storeName, String managerName, managersPermission newPermission);
@@ -129,6 +131,8 @@ public interface SystemFacade {
 
     Result<Boolean> counterBidReview(String userName, String storeName, int bidId, boolean approve);
     public Result<TotalTraffic> getTrafficByDates(int startYear, int startMonth, int startDay, int endYear, int endMonth, int endDay);
+
+    Result<Boolean> editProduct(String userName, String storeName,String productName, int amount, int price);
 
 //    public newResult<Boolean> exitSystem();
 
