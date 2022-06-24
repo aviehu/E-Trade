@@ -109,6 +109,8 @@ public interface ServiceInterface {
 
     public Result<Boolean> appointStoreManager(String userName, String storeName, String newManager);
 
+    public Result<Boolean> appointStoreManager(String userName, String storeName, String newManager, String permission);
+
     public Result<Boolean> removeStoreManager(String userName, String storeName, String managerToRemove);
 
     public Result<Boolean> changeStoreManagersPermission(String userName, String storeName, String managerName, managersPermission newPermission);
@@ -163,4 +165,5 @@ public interface ServiceInterface {
 //    public newResult<Boolean> exitSystem();
     Result<Boolean> guestEnteredMarket(String userName);
 
+    Result<Boolean> editProduct(String userName, String storeName, String productName, int amount, int price);
 }

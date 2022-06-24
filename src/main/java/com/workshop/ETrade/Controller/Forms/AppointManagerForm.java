@@ -1,5 +1,6 @@
 package com.workshop.ETrade.Controller.Forms;
 
-public class AppointForm {
+public class AppointManagerForm {
     public String appointee;
+    public String permission;
 }

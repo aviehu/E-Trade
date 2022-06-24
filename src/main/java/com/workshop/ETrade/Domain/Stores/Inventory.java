@@ -213,4 +213,17 @@ public class Inventory {
     public List<Product> getProducts() {
         return products;
     }
+
+    public boolean editProduct(String productName, int amount, int price) {
+        Product product = getProductByName(productName);
+        if(product == null) {
+            return false;
+        }
+        if(amount < 0 || price < 0) {
+            return false;
+        }
+        product.setAmount(amount);
+        product.setPrice(price);
+        return true;
+    }
 }

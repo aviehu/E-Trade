@@ -613,6 +613,22 @@ public class Facade implements SystemFacade {
     }
 
     @Override
+    public Result<Boolean> appointStoreManager(String userName, String storeName, String newManager, String permission) {
+        if(userController.isConnected(userName)){
+            if(storesFacade.appointStoreManager(userName, storeName, newManager, permission)) {
+                //subscribe new manager
+                Store s = this.storesFacade.getStore(storeName);
+                Member m = this.userController.getMember(newManager);
+                s.attach(m);
+                notifyOne("You have been appointed to store Manager at " +storeName,userName,newManager);
+                return new Result<>(true, null);
+            }
+            return new Result<>(false, "Could Not Appoint Store Manager");
+        }
+        return new Result<>(false, "User Is Not Connected");
+    }
+
+    @Override
     public Result<Boolean> removeStoreManager(String userName, String storeName, String managerToRemove) {
         if(userController.isConnected(userName) && userController.isUserNameExist(managerToRemove)){
             if(storesFacade.removeStoreManager(userName, storeName, managerToRemove)) {
@@ -985,6 +1001,17 @@ public class Facade implements SystemFacade {
             startDate = LocalDate.parse(d).plusDays(1);
         }
         return new Result<>(totalTraffic,null);
+    }
+
+    @Override
+    public Result<Boolean> editProduct(String userName, String storeName,String productName, int amount, int price) {
+        if(userController.isConnected(userName)) {
+            if(storesFacade.editProduct(userName, storeName, productName, amount, price)) {
+                return new Result<>(true, null);
+            }
+            return new Result<>(null, "could not edit product");
+        }
+        return new Result<>(null, "User Is Not Connected");
     }
 
     public void allLogOut() {

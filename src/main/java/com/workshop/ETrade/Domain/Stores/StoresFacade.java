@@ -278,6 +278,19 @@ public class StoresFacade {
         }
         return false;
     }
+
+    public boolean appointStoreManager(String userName, String storeName, String newManager, String permission) {
+        Store store = getStoreByName(storeName);
+        if(store == null) {
+            return false;
+        }
+        if(store.addManager(userName, newManager, permission)) {
+            logger.info("new store manager for store - " + storeName);
+            new RepoThread<>(AllRepos.getStoreRepo(), new StoreDTO(store)).start();
+            return true;
+        }
+        return false;
+    }
     public Store getStore(String storeName){
         synchronized (stores) {
             for (Store s : stores) {
@@ -530,5 +543,13 @@ public class StoresFacade {
             return null;
         }
         return store.getOwnersWaitingForApprove();
+    }
+
+    public boolean editProduct(String userName, String storeName, String productName, int amount, int price) {
+        Store store = getStoreByName(storeName);
+        if(store == null) {
+            return false;
+        }
+        return store.editProduct(productName, amount, price);
     }
 }
