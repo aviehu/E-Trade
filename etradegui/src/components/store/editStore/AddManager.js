@@ -13,6 +13,9 @@ import post from "../../util/post";
 import MyAppBar from "../../dashboard/MyAppBar";
 import MyDrawer from "../../dashboard/MyDrawer";
 import MyError from "../../util/MyError";
+import InputLabel from "@mui/material/InputLabel";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 
 const mdTheme = createTheme();
 
@@ -21,12 +24,14 @@ const DashboardContent = ({setSuccessMsg}) => {
     const [open, setOpen] = React.useState(true);
     const [error, setError] = React.useState("")
     const [hasError, setHasError] = React.useState(false)
+    const [permission, setPermission] = React.useState("LOW")
     const navigate = useNavigate();
     const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         const body = {
-            appointee: data.get("newManager")
+            appointee: data.get("newManager"),
+            permission: permission
         }
         try {
             const res = await post(body, `stores/appointmanager/${name}`)
@@ -88,6 +93,20 @@ const DashboardContent = ({setSuccessMsg}) => {
                                                         name="newManager"
                                                         autoComplete="newManager"
                                                     />
+                                                    <br/>
+                                                    <br/>
+                                                    <InputLabel id="demo-simple-select-label">Choose permission</InputLabel>
+                                                    <Select
+                                                        label="Choose permission"
+                                                        required
+                                                        value={permission}
+                                                        fullWidth
+                                                        onChange={(event) => setPermission(event.target.value)}
+                                                    >
+                                                        <MenuItem value={"LOW"}>low permissions</MenuItem>
+                                                        <MenuItem value={"MID"}>medium permissions</MenuItem>
+                                                        <MenuItem value={"HIGH"}>high permissions</MenuItem>
+                                                    </Select>
                                                 </Grid>
                                             </Grid>
                                             <Button
