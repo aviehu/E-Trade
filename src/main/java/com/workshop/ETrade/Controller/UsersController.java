@@ -37,7 +37,7 @@ public class UsersController {
 //    }
 
     @PostMapping("/remove")
-    public Result<Boolean> removeMember(@RequestHeader("Authorization") String userName, @RequestBody AppointForm form) {
+    public Result<Boolean> removeMember(@RequestHeader("Authorization") String userName, @RequestBody AppointOwnerForm form) {
         return systemService.removeMember(userName, form.appointee);
     }
 

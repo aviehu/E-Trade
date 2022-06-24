@@ -37,7 +37,7 @@ const DashboardContent = ({setSuccessMsg}) => {
             const res = await post(body, `stores/appointmanager/${name}`)
             const boolRes = await res.json()
             if(boolRes.val) {
-                setSuccessMsg(`your request to appoint ${data.get("newOwner")} as manager has been submitted`)
+                setSuccessMsg(`your request to appoint ${data.get("newManager")} as manager has been submitted`)
                 navigate(`/store/edit/${name}`);
             } else {
                 setError(boolRes.err)

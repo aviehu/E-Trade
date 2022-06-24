@@ -31,6 +31,11 @@ public class StoresController {
         return systemService.changePurchaseOption(userName, storeName, form.productName, form.purchaseOption);
     }
 
+    @PostMapping("/editproduct/{store}")
+    public Result<Boolean> editProduct(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName, @RequestBody EditProductForm form) {
+        return systemService.editProduct(userName, storeName,form.productName,form.amount, form.price);
+    }
+
     @GetMapping("/info/{store}")
     public Result<List<ProductForm>> getStoreInfo(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName) {
         return systemService.getStoreInfo(userName, storeName);
@@ -195,23 +200,23 @@ public class StoresController {
     }
 
     @PostMapping("/appointowner/{store}")
-    public Result<String> appointStoreOwner(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName, @RequestBody AppointForm form) {
+    public Result<String> appointStoreOwner(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName, @RequestBody AppointOwnerForm form) {
         return systemService.appointStoreOwner(userName, storeName, form.appointee);
     }
 
     @PostMapping("/removeowner/{store}")
-    public Result<Boolean> removeStoreOwner(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName, @RequestBody AppointForm form) {
+    public Result<Boolean> removeStoreOwner(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName, @RequestBody AppointOwnerForm form) {
         Result<Boolean> res = systemService.removeStoreOwner(userName, storeName, form.appointee);
         return res;
     }
 
     @PostMapping("/appointmanager/{store}")
-    public Result<Boolean> appointStoreManager(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName, @RequestBody AppointForm form) {
-        return systemService.appointStoreManager(userName, storeName, form.appointee);
+    public Result<Boolean> appointStoreManager(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName, @RequestBody AppointManagerForm form) {
+        return systemService.appointStoreManager(userName, storeName, form.appointee, form.permission);
     }
 
     @PostMapping("/removemanager/{store}")
-    public Result<Boolean> removeStoreManager(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName, @RequestBody AppointForm form) {
+    public Result<Boolean> removeStoreManager(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName, @RequestBody AppointOwnerForm form) {
         Result<Boolean> res = systemService.removeStoreManager(userName, storeName, form.appointee);
         return res;
     }
@@ -249,10 +254,5 @@ public class StoresController {
     @GetMapping("/productamount/{store}/{product}")
     public Result<Integer> getProductAmount(@PathVariable("store") String storeName, @PathVariable("product") String prodName){
         return systemService.getProductAmount(storeName,prodName);
-    }
-
-    @PostMapping("/addkeyword/{keyword}")
-    public Result<Boolean> addKeyword(String userName, EditProductForm form, String keyWord) {
-        return systemService.addKeyword(userName, form.productName, form.storeName, keyWord);
     }
 }

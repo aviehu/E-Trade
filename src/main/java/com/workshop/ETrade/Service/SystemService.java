@@ -272,6 +272,11 @@ public class SystemService implements ServiceInterface {
     }
 
     @Override
+    public Result<Boolean> appointStoreManager(String userName, String storeName, String newManager, String permission) {
+        return facade.appointStoreManager(userName, storeName, newManager, permission);
+    }
+
+    @Override
     public Result<Boolean> removeStoreManager(String userName, String storeName, String managerToRemove) {
         return facade.removeStoreManager(userName, storeName, managerToRemove);
     }
@@ -412,6 +417,11 @@ public class SystemService implements ServiceInterface {
     }
     public Result<Boolean> guestEnteredMarket(String userName){
         return facade.guestEnteredMarket(userName);
+    }
+
+    @Override
+    public Result<Boolean> editProduct(String userName, String storeName,String productName, int amount, int price) {
+        return facade.editProduct(userName, storeName,productName, amount, price);
     }
 
     public void allLogOut(){
