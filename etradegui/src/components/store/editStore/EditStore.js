@@ -13,6 +13,7 @@ import get from "../../util/get";
 import {useEffect, useState} from "react";
 import MyAppBar from "../../dashboard/MyAppBar";
 import ChangePurchaseType from './ChangePurchaseType'
+import EditProduct from "./EditProduct";
 import MyDrawer from "../../dashboard/MyDrawer";
 import StoreBids from './StoreBids';
 import StoreAwaitingApproval from "./StoreAwaitingApproval";
@@ -26,6 +27,9 @@ const DashboardContent = ({setSuccessMsg}) => {
     const [productToChange, setProductToChange] = useState(null)
     const [typeToChange, setTypeToChange] = useState("IMMEDIATE")
     const [openDialog, setOpenDialog] = useState(false)
+    const [openEditDialog, setOpenEditDialog] = useState(false)
+    const [amount, setAmount] = useState(0)
+    const [price, setPrice] = useState(0)
 
     async function getStore() {
         const res = await get(`stores/info/${name}`)
@@ -40,6 +44,21 @@ const DashboardContent = ({setSuccessMsg}) => {
 
 
     const navigate = useNavigate();
+
+    async function handleEdit(){
+        const body = {
+            productName: productToChange.productName,
+            amount,
+            price
+        }
+        const res = await post(body, `stores/editproduct/${name}`)
+        const ans = await res.json()
+        if(ans.val) {
+            setSuccessMsg(`product ${productToChange.productName} has been edited`)
+            await getStore()
+            setOpenEditDialog(false)
+        }
+    }
 
     async function handleChange() {
         const body = {
@@ -93,6 +112,12 @@ const DashboardContent = ({setSuccessMsg}) => {
 
                 <div className="store-footer">
                     <Button onClick={async () => await handleProduct(prod)}>Remove</Button>
+                    <Button onClick={ () => {
+                        setProductToChange(prod);
+                        setAmount(prod.amount);
+                        setPrice(prod.price);
+                        setOpenEditDialog(true);
+                    } }>Edit</Button>
                     <Button onClick={async () => await changePurchaseType(prod)}>Change Purchase Type</Button>
                 </div>
             </li>))}
@@ -179,6 +204,8 @@ const DashboardContent = ({setSuccessMsg}) => {
                 </Box>
             </Box>
             {openDialog ? <ChangePurchaseType open={openDialog} type={typeToChange} setType={setTypeToChange} handleChange={handleChange} ></ChangePurchaseType> : null}
+            {openEditDialog ? <EditProduct open={openEditDialog} handleChange={handleEdit} amount={amount} setAmount={setAmount} price={price} setPrice={setPrice}></EditProduct> : null}
+
         </ThemeProvider>
     );
 }
