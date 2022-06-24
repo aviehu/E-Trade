@@ -138,9 +138,12 @@ public class Facade implements SystemFacade {
         return new Result<Boolean>(false, "User is not connected");
     }
     public boolean isInManagment(String admin,String memberToRemove){
-        for(Store s : this.storesFacade.getStores()){
-            if(this.storesFacade.getStoresManagement(admin,s.getName()).contains(memberToRemove))
-                return true;
+        List<Store> stores = this.storesFacade.getStores();
+        synchronized (stores) {
+            for (Store s : stores) {
+                if (this.storesFacade.getStoresManagement(admin, s.getName()).contains(memberToRemove))
+                    return true;
+            }
         }
         return false;
     }
@@ -357,7 +360,7 @@ public class Facade implements SystemFacade {
             Store s = null;
             String result;
             if((s = storesFacade.getStore(storeName)) == null)
-                return new Result<>(null, "No such store");
+                return new Result<>(null, "No such store "+storeName);
             else {
                 result = userController.addProductToShoppingCart(userName, productName, s, quantity);
 
@@ -848,9 +851,11 @@ public class Facade implements SystemFacade {
         if(userController.isConnected(userName)) {
             List<String> res = new LinkedList<>();
             List<Store> stores = storesFacade.getStores();
-            for(Store store : stores) {
-                if(!store.isClosed())
-                    res.add(store.getName());
+            synchronized (stores) {
+                for (Store store : stores) {
+                    if (!store.isClosed())
+                        res.add(store.getName());
+                }
             }
             return new Result<>(res, null);
         }

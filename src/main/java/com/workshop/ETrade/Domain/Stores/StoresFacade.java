@@ -13,6 +13,7 @@ import com.workshop.ETrade.Domain.Users.User;
 import com.workshop.ETrade.Domain.purchaseOption;
 import com.workshop.ETrade.Persistance.Stores.StoreDTO;
 import com.workshop.ETrade.AllRepos;
+import com.workshop.ETrade.RepoThread;
 
 import java.util.*;
 import java.util.logging.FileHandler;
@@ -64,7 +65,7 @@ public class StoresFacade {
         }
         OperatorLeaf ol = new OperatorLeaf(connectionType, pres);
         int ans = store.addPolicy(userName,policyOn, description, policyType, ol);
-        AllRepos.getStoreRepo().save(new StoreDTO(store));
+        new RepoThread<>(AllRepos.getStoreRepo(), new StoreDTO(store)).start();
         return ans;
     }
     public boolean addStore(String storeName, String founderName,int card) {
@@ -74,7 +75,7 @@ public class StoresFacade {
         }
         Store newStore = new Store(storeName, founderName, card);
         stores.add(newStore);
-        AllRepos.getStoreRepo().save(new StoreDTO(newStore));
+        new RepoThread<>(AllRepos.getStoreRepo(), new StoreDTO(newStore)).start();
         logger.info("store - " + storeName + "added by - " + founderName);
         return true;
     }
@@ -94,7 +95,7 @@ public class StoresFacade {
                 logger.info("store - " + storeName + "closed by admin");
                 return true;
             }
-            AllRepos.getStoreRepo().save(new StoreDTO(store));
+            new RepoThread<>(AllRepos.getStoreRepo(), new StoreDTO(store)).start();
         }
         return false;
     }
@@ -139,9 +140,11 @@ public class StoresFacade {
     }
 
     private Store getStoreByName(String storeName) {
-        for(Store store : stores) {
-            if(store.getName().equals(storeName)) {
-                return store;
+        synchronized (stores) {
+            for (Store store : stores) {
+                if (store.getName().equals(storeName)) {
+                    return store;
+                }
             }
         }
         return null;
@@ -179,7 +182,7 @@ public class StoresFacade {
             return false;
         }
         if(store.addProduct(ownerName,productName,amount,price,category)) {
-            AllRepos.getStoreRepo().save(new StoreDTO(store));
+            new RepoThread<>(AllRepos.getStoreRepo(), new StoreDTO(store)).start();
             logger.info("product - " + productName + " was added to store - "+ storeName);
             return true;
         }
@@ -193,7 +196,7 @@ public class StoresFacade {
         }
         if(store.removeProduct(userName ,productName)) {
             logger.info("product - " + productName + " was removed from store");
-            AllRepos.getStoreRepo().save(new StoreDTO(store));
+            new RepoThread<>(AllRepos.getStoreRepo(), new StoreDTO(store)).start();
             return true;
         }
         return false;
@@ -250,7 +253,7 @@ public class StoresFacade {
         String ans = store.addOwner(userName, newOwner);
         if(ans.equals(newOwner + " has been added as store owner")) {
             logger.info("new store owner for store - " + storeName);
-            AllRepos.getStoreRepo().save(new StoreDTO(store));
+            new RepoThread<>(AllRepos.getStoreRepo(), new StoreDTO(store)).start();
         }
         return ans;
     }
@@ -270,15 +273,17 @@ public class StoresFacade {
         }
         if(store.addManager(userName, newManager)) {
             logger.info("new store manager for store - " + storeName);
-            AllRepos.getStoreRepo().save(new StoreDTO(store));
+            new RepoThread<>(AllRepos.getStoreRepo(), new StoreDTO(store)).start();
             return true;
         }
         return false;
     }
     public Store getStore(String storeName){
-        for(Store s : stores){
-            if(s.getName().equals(storeName))
-                return s;
+        synchronized (stores) {
+            for (Store s : stores) {
+                if (s.getName().equals(storeName))
+                    return s;
+            }
         }
         return null;
     }
@@ -315,7 +320,7 @@ public class StoresFacade {
         if(store != null) {
             if(store.closeStore(userName)) {
                 logger.info("store - " + storeName + " is now closed");
-                AllRepos.getStoreRepo().save(new StoreDTO(store));
+                new RepoThread<>(AllRepos.getStoreRepo(), new StoreDTO(store)).start();
                 return true;
             }
         }
@@ -327,7 +332,7 @@ public class StoresFacade {
         if(store != null) {
             if(store.changeStoreManagersPermission(userName, managerName, newPermission)) {
                 logger.info("changed permission for manger - " + managerName);
-                AllRepos.getStoreRepo().save(new StoreDTO(store));
+                new RepoThread<>(AllRepos.getStoreRepo(), new StoreDTO(store)).start();
                 return true;
             }
         }
@@ -346,7 +351,7 @@ public class StoresFacade {
         if(s == null)
             return -1;
         int ans = s.addDiscount(userName,discountOn, discountPercentage, description, discountType);
-        AllRepos.getStoreRepo().save(new StoreDTO(s));
+        new RepoThread<>(AllRepos.getStoreRepo(), new StoreDTO(s)).start();
         return ans;
     }
 
@@ -356,10 +361,12 @@ public class StoresFacade {
 
     public List<String> getStoresOfUser(String userName) {
         List<String> res = new LinkedList<>();
-        for(Store store : stores) {
-            Set<String> management = store.getAllManagement(userName);
-            if(management != null && management.contains(userName)) {
-                res.add(store.getName());
+        synchronized (stores) {
+            for (Store store : stores) {
+                Set<String> management = store.getAllManagement(userName);
+                if (management != null && management.contains(userName)) {
+                    res.add(store.getName());
+                }
             }
         }
         return res;
@@ -377,7 +384,7 @@ public class StoresFacade {
             return false;
         }
         if(store.removeOwner(userName, ownerToRemove)) {
-            AllRepos.getStoreRepo().save(new StoreDTO(store));
+            new RepoThread<>(AllRepos.getStoreRepo(), new StoreDTO(store)).start();
             return true;
         }
         return false;
@@ -389,7 +396,7 @@ public class StoresFacade {
             return false;
         }
         if(store.removeManager(userName, managerToRemove)) {
-            AllRepos.getStoreRepo().save(new StoreDTO(store));
+            new RepoThread<>(AllRepos.getStoreRepo(), new StoreDTO(store)).start();
             return true;
         }
         return false;
@@ -418,7 +425,7 @@ public class StoresFacade {
         }
         OperatorLeaf ol = new OperatorLeaf(connectionType, pres);
         int ans = store.addPredicateDiscount(discountOn, discountPercentage, description,discountType, ol);
-        AllRepos.getStoreRepo().save(new StoreDTO(store));
+        new RepoThread<>(AllRepos.getStoreRepo(), new StoreDTO(store)).start();
         return ans;
     }
 
@@ -429,7 +436,7 @@ public class StoresFacade {
         }
         boolean res = store.addBid(productName, bidAmount, userName, creditCard, supplyAddress, storeName);
         if(res) {
-            AllRepos.getStoreRepo().save(new StoreDTO(store));
+            new RepoThread<>(AllRepos.getStoreRepo(), new StoreDTO(store)).start();
             return true;
         }
         return false;
@@ -448,7 +455,7 @@ public class StoresFacade {
         if(store == null) {
             return null;
         }
-        AllRepos.getStoreRepo().save(new StoreDTO(store));
+        new RepoThread<>(AllRepos.getStoreRepo(), new StoreDTO(store)).start();
         return store.reviewBid(userName, bidId, approve);
     }
 
@@ -457,7 +464,7 @@ public class StoresFacade {
         if(store == null) {
             return false;
         }
-        AllRepos.getStoreRepo().save(new StoreDTO(store));
+        new RepoThread<>(AllRepos.getStoreRepo(), new StoreDTO(store)).start();
         return store.counterBid(bidId, newOffer);
     }
 
@@ -469,7 +476,7 @@ public class StoresFacade {
         HashMap<String, Integer> prods = new HashMap<>();
         prods.put(productName, 1);
         store.purchaseBid(prods,user, price);
-        AllRepos.getStoreRepo().save(new StoreDTO(store));
+        new RepoThread<>(AllRepos.getStoreRepo(), new StoreDTO(store)).start();
     }
 
     public List<Bid> userBids(String userName) {
@@ -485,7 +492,7 @@ public class StoresFacade {
         if(store == null) {
             return null;
         }
-        AllRepos.getStoreRepo().save(new StoreDTO(store));
+        new RepoThread<>(AllRepos.getStoreRepo(), new StoreDTO(store)).start();
         return store.counterBidReview(bidId, approve);
     }
 
@@ -503,7 +510,7 @@ public class StoresFacade {
             return -1;
         }
         int ans = store.addComplexDiscount(discountOn, discountPercentage, description,discountType, predicateForm.getComponent());
-        AllRepos.getStoreRepo().save(new StoreDTO(store));
+        new RepoThread<>(AllRepos.getStoreRepo(), new StoreDTO(store)).start();
         return ans;
     }
 
@@ -513,7 +520,7 @@ public class StoresFacade {
             return -1;
         }
         int ans = store.addPolicy(userName,policyOn, description, policyType, predicateForms.getComponent());
-        AllRepos.getStoreRepo().save(new StoreDTO(store));
+        new RepoThread<>(AllRepos.getStoreRepo(), new StoreDTO(store)).start();
         return ans;
     }
 

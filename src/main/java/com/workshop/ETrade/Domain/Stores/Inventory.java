@@ -4,6 +4,7 @@ import com.workshop.ETrade.AllRepos;
 import com.workshop.ETrade.Domain.purchaseOption;
 import com.workshop.ETrade.Persistance.Stores.ProductDTO;
 import com.workshop.ETrade.Persistance.Stores.StoreDTO;
+import com.workshop.ETrade.RepoThread;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.util.*;
@@ -35,7 +36,7 @@ public class Inventory {
         if(getProductByName(name) == null) {
             Product product = new Product(name, amount, price, category);
             products.add(product);
-            AllRepos.getProductRepo().save(new ProductDTO(product));
+            new RepoThread<>(AllRepos.getProductRepo(), new ProductDTO(product)).start();
             return true;
         }
         return false;
@@ -64,7 +65,7 @@ public class Inventory {
         Product product = getProductByName(oldName);
         if(product != null && getProductByName(newName) != null){
             product.setName(newName);
-            AllRepos.getProductRepo().save(new ProductDTO(product));
+            new RepoThread<>(AllRepos.getProductRepo(), new ProductDTO(product)).start();
             return true;
         }
         return false;
@@ -94,7 +95,7 @@ public class Inventory {
         Product product = getProductByName(productName);
         if(product != null){
             product.setPrice(newPrice);
-            AllRepos.getProductRepo().save(new ProductDTO(product));
+            new RepoThread<>(AllRepos.getProductRepo(), new ProductDTO(product)).start();
             return true;
         }
         return false;
@@ -104,7 +105,7 @@ public class Inventory {
         Product product = getProductByName(productName);
         if(product != null) {
             product.addKeyword(keyword);
-            AllRepos.getProductRepo().save(new ProductDTO(product));
+            new RepoThread<>(AllRepos.getProductRepo(), new ProductDTO(product)).start();
             return true;
         }
         return false;
@@ -168,7 +169,7 @@ public class Inventory {
             return false;
         }
         product.setSelectedOption(option);
-        AllRepos.getProductRepo().save(new ProductDTO(product));
+        new RepoThread<>(AllRepos.getProductRepo(), new ProductDTO(product)).start();
         return true;
     }
 
@@ -195,7 +196,7 @@ public class Inventory {
             if(product == null || !product.setAmount(product.getAmount() - prods.get(productName))) {
                 return false;
             }
-            AllRepos.getProductRepo().save(new ProductDTO(product));
+            new RepoThread<>(AllRepos.getProductRepo(), new ProductDTO(product)).start();
         }
         return true;
     }
@@ -205,7 +206,7 @@ public class Inventory {
         if(product == null) {
             return false;
         }
-        AllRepos.getProductRepo().save(new ProductDTO(product));
+        new RepoThread<>(AllRepos.getProductRepo(), new ProductDTO(product)).start();
         return product.setAmount(newQuantity);
     }
 

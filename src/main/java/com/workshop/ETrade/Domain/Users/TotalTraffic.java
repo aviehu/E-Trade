@@ -15,6 +15,8 @@ public class TotalTraffic {
         sysManagers = 0;
     }
     public TotalTraffic addTraffic(TrafficInfo trafficInfo){
+        if (trafficInfo == null)
+            return this;
         guests+= trafficInfo.getGuests().size();
         simpleMembers+= trafficInfo.getSimpleMembers().size();
         storeManagers += trafficInfo.getManagersMembers().size();

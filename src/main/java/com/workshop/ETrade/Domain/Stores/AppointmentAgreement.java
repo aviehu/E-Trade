@@ -9,8 +9,6 @@ public class AppointmentAgreement {
 
     private boolean isRejected;
 
-    private boolean isAccepted;
-
     public AppointmentAgreement(String mainOwner,Map<String, Boolean> awaitingApproval, boolean isRejected) {
         this.awaitingApproval = awaitingApproval;
         this.isRejected = isRejected;

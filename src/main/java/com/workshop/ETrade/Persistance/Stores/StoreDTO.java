@@ -28,11 +28,10 @@ public class StoreDTO {
     public List<DiscountDTO> discounts;
     @DBRef
     public List<PolicyDTO> policies;
-    //public List<PurchaseDTO>  purchaseHistory;
-    @DBRef
+    public List<Purchase>  purchaseHistory;
     public List<AwaitingAppointmentDTO> awaitingAppointment;
 
-    public StoreDTO(String name, String founderName, int card, boolean closed, int bidId,  List<MapDBobjDTO> ownersAppointments, List<MapDBobjDTO> managersAppointments, List<ProductDTO> products, Map<String, String> managersPermissions, List<BidDTO> bids, int discountId, int policyId, List<DiscountDTO> discounts, List<PolicyDTO> policies, List<AwaitingAppointmentDTO> awaitingAppointment) {
+    public StoreDTO(String name, String founderName, int card, boolean closed, int bidId,  List<MapDBobjDTO> ownersAppointments, List<MapDBobjDTO> managersAppointments, List<ProductDTO> products, Map<String, String> managersPermissions, List<BidDTO> bids, int discountId, int policyId, List<DiscountDTO> discounts, List<PolicyDTO> policies, List<Purchase> purchaseHistory, List<AwaitingAppointmentDTO> awaitingAppointment) {
         this.name = name;
         this.products = products;
         this.founderName = founderName;
@@ -65,7 +64,7 @@ public class StoreDTO {
         this.discounts = discounts;
         this.policies = policies;
         this.awaitingAppointment = awaitingAppointment;
-//        this.purchaseHistory = purchaseHistory;
+        this.purchaseHistory = purchaseHistory;
     }
 
     public StoreDTO() {
@@ -116,7 +115,9 @@ public class StoreDTO {
             policies.add(new PolicyDTO(p));
         }
         Map<String, AppointmentAgreement> appointmentAgreementMap = store.getAppointmentAgreements();
+        purchaseHistory = store.getPurchases();
         awaitingAppointment = new ArrayList<>();
+
         for(String ownerWaiting : appointmentAgreementMap.keySet()) {
             AppointmentAgreement aa = appointmentAgreementMap.get(ownerWaiting);
             awaitingAppointment.add(new AwaitingAppointmentDTO(aa.getMainOwner(),ownerWaiting, aa.getWaiting(), aa.isRejected()));
