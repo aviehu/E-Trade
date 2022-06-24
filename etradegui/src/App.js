@@ -24,7 +24,7 @@ import MyBids from './components/dashboard/MyBids'
 import Stats from './components/Admin/Stats'
 import {Alert, Snackbar} from "@mui/material";
 import PurchaseHistory from "./components/store/userActions/PurchaseHistory";
-
+import ViewManagement from "./components/store/editStore/ViewManagement";
 
 function App() {
     const [successMsg, setSuccessMsg] = useState("")
@@ -53,6 +53,7 @@ function App() {
                <Route path="/store/edit/:name/removemanager" element={<RemoveManager setSuccessMsg={setSuccessMsg}/>} />
                <Route path="/store/edit/:name/adddiscount" element={<AddDiscount setSuccessMsg={setSuccessMsg}/>} />
                <Route path="/store/edit/:name/addpolicy" element={<AddPolicy setSuccessMsg={setSuccessMsg}/>} />
+               <Route path="/store/edit/:name/viewmanagement" element={<ViewManagement/>}/>
                <Route path="/admin/viewtraffic" element={<Stats/>}/>
 
            </Routes>

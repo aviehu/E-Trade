@@ -1,6 +1,7 @@
 package com.workshop.ETrade.Domain.Stores;
 
 import com.workshop.ETrade.Controller.Forms.OwnerWaitingForApproveForm;
+import com.workshop.ETrade.Domain.Pair;
 import com.workshop.ETrade.Domain.Stores.Discounts.Discount;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.Policy;
@@ -755,5 +756,14 @@ public class Store {
 
     public boolean editProduct(String productName, int amount, int price) {
         return inventory.editProduct(productName,amount, price);
+    }
+
+    public Pair<List<String>, Map<String, String>> getStoreManagement(String userName, boolean userSysManager) {
+        List<String> owners = ownersAppointments.keySet().stream().toList();
+        HashMap<String, String> managersPermissions = new HashMap<>();
+        for(String man : this.managersPermissions.keySet()) {
+            managersPermissions.put(man, this.managersPermissions.get(man).toString());
+        }
+        return new Pair<>(owners, managersPermissions);
     }
 }

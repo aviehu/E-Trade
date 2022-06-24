@@ -170,6 +170,13 @@ const DashboardContent = ({setSuccessMsg}) => {
                                 :
                                 null
                             }
+                            {myStores.includes(name) || isAdmin ?
+                                <Grid item xs={12}>
+                                    <Button onClick={() => navigate(`/store/edit/${name}/viewmanagement`)}>View Management</Button>
+                                </Grid>
+                                :
+                                null
+                            }
                         </Grid>
                     </Container>
                 </Box>

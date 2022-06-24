@@ -134,6 +134,8 @@ public interface SystemFacade {
 
     Result<Boolean> editProduct(String userName, String storeName,String productName, int amount, int price);
 
+    Result<ManagementForm> getStoreManagement(String userName, String storeName);
+
 //    public newResult<Boolean> exitSystem();
 
 }

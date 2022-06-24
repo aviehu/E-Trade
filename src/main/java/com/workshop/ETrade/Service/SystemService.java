@@ -424,6 +424,11 @@ public class SystemService implements ServiceInterface {
         return facade.editProduct(userName, storeName,productName, amount, price);
     }
 
+    @Override
+    public Result<ManagementForm> getStoreManagement(String userName, String storeName) {
+        return facade.getStoreManagement(userName, storeName);
+    }
+
     public void allLogOut(){
         this.facade.allLogOut();
     }

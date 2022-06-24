@@ -3,6 +3,7 @@ package com.workshop.ETrade.Domain.Stores;
 import com.workshop.ETrade.Controller.Forms.ComponentPredicateForm;
 import com.workshop.ETrade.Controller.Forms.OwnerWaitingForApproveForm;
 import com.workshop.ETrade.Controller.Forms.PredicateForm;
+import com.workshop.ETrade.Domain.Pair;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
 import com.workshop.ETrade.Domain.Stores.Predicates.OperatorLeaf;
@@ -551,5 +552,13 @@ public class StoresFacade {
             return false;
         }
         return store.editProduct(productName, amount, price);
+    }
+
+    public Pair<List<String>, Map<String, String>> getStoreManagement(String userName, String storeName, boolean userSysManager) {
+        Store store = getStoreByName(storeName);
+        if(store == null) {
+            return null;
+        }
+        return store.getStoreManagement(userName, userSysManager);
     }
 }
