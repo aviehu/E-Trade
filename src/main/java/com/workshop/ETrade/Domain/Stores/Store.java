@@ -13,6 +13,7 @@ import com.workshop.ETrade.Domain.Users.User;
 import com.workshop.ETrade.Domain.purchaseOption;
 import com.workshop.ETrade.Persistance.Stores.*;
 import com.workshop.ETrade.AllRepos;
+import com.workshop.ETrade.RepoThread;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -49,7 +50,7 @@ public class Store {
         inventory = new Inventory(storeDTO.products);
         managersPermissions = storeDTO.managersPermissions;
         policyManager = new PolicyManager(storeDTO.policies, storeDTO.policyId, storeDTO.discounts, storeDTO.discountId);
-        storeHistory = new StorePurchaseHistory();
+        storeHistory = new StorePurchaseHistory(storeDTO.purchaseHistory);
         List<MapDBobjDTO> dts = storeDTO.ownersAppointments;
         ownersAppointments = new HashMap<>();
         managersAppointments = new HashMap<>();
@@ -66,6 +67,7 @@ public class Store {
             bids.add(new Bid(b, inventory.getProductByName(b.productName)));
         }
         closed = false;
+
         ownersAppointmentAgreement = new HashMap<>();
         for(AwaitingAppointmentDTO adto : storeDTO.awaitingAppointment) {
             ownersAppointmentAgreement.put(adto.awaitingUser, new AppointmentAgreement(adto.mainOwner,adto.approvedBy, adto.isRejected));
@@ -194,6 +196,7 @@ public class Store {
                 products.put(product, prods.get(productName));
             }
             storeHistory.addPurchase(policyManager.getTotalPrice(products), prods, buyer);
+            new RepoThread<>(AllRepos.getStoreRepo(), new StoreDTO(this)).start();
             purchased(prods.keySet().stream().toList(),buyer);
             return true;
         }
@@ -220,6 +223,7 @@ public class Store {
                 products.put(product, prods.get(productName));
             }
             storeHistory.addPurchase(price, prods, buyer.getUserName());
+            new RepoThread<>(AllRepos.getStoreRepo(), new StoreDTO(this)).start();
             purchased(prods.keySet().stream().toList(),buyer.getUserName());
             //notifyUser("Your bid has been approved", name, buyer);
             //notifySubscribers("A bid for - " + prods.keySet().toArray()[0] + "  in " + name + " has been approved", buyer.getUserName());

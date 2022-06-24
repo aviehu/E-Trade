@@ -7,6 +7,7 @@ import com.workshop.ETrade.Domain.Users.ExternalService.ExtSysController;
 import com.workshop.ETrade.Persistance.Users.StoreBasketDTO;
 import com.workshop.ETrade.Service.ResultPackge.Result;
 import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.security.core.parameters.P;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,6 +29,23 @@ public class ShoppingCart {
         extSystems = ExtSysController.getInstance();
     }
 
+
+    public Pair<Integer, Integer> payAndSupply(String cardForm, int month, int yead, String holderName, int cvv, int id, String userName, SupplyAddress address) {
+        Answer payAns = new Answer();
+        Answer supAns = new Answer();
+        Thread payT = new PaymentThread(cardForm, month, yead,holderName,cvv,id,payAns);
+        Thread supT = new SupplyThread(userName, address, supAns);
+        try {
+            payT.start();
+            supT.start();
+            payT.join();
+            supT.join();
+
+        }catch (Exception e) {
+
+        }
+        return new Pair<>(payAns.ans, supAns.ans);
+    }
     public Result<List<String>> purchaseCart(CreditCard card,SupplyAddress address,String userName){
         List<String> storesToNotify = new ArrayList<>();
         String cardFrom = card.getCardNumber();
@@ -36,12 +54,15 @@ public class ShoppingCart {
         int cvv = card.getCvv();
         int id = card.getId();
         String holderName = card.getHolderName();
-        int payTransactionId = extSystems.pay(cardFrom, month,year,holderName, cvv,id);
+//        int payTransactionId = extSystems.pay(cardFrom, month,year,holderName, cvv,id);
+        Pair<Integer, Integer> paySupAns = payAndSupply(cardFrom, month, year, holderName, cvv, id, userName, address);
+        int payTransactionId = paySupAns.first;
+        int supTransactionId = paySupAns.second;
         //payment
         if(payTransactionId != -1) {//can charge payment
             String ret = canPurchase();
             if (ret == null) { //can purchase
-                int supTransactionId =extSystems.supply(userName, address);
+//                int supTransactionId =extSystems.supply(userName, address);
                 if (supTransactionId == -1) {
                     extSystems.cancelPayment(payTransactionId);
                     //extSystems.cancelSup(supTransactionId);

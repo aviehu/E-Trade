@@ -86,7 +86,7 @@ public class ExtSysController {
         if(isRealSup)
             this.supply =realSup;
         else
-            getInstance().setSupplies(new mySupplySys(new SupplyAdapter(new SupplyAdaptee(null))));
+            getInstance().setSupplies(new mySupplySys(new SupplyAdapter(null)));
     }
     public void setPayments(MyPaymentSys payment){
         this.payment = payment;

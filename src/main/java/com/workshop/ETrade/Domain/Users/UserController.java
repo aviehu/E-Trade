@@ -19,10 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Logger;
@@ -42,10 +39,10 @@ public class UserController {
         trafficHistory = new HashMap<>();
         guestId = 0;
         memberDiscount = 0;
-        this.members = new ArrayList<>();
-        this.guests = new ArrayList<>();
-        this.systemManagers = new ArrayList<>();
-        users = new ArrayList<>();
+        this.members = Collections.synchronizedList(new ArrayList<>());
+        this.guests = Collections.synchronizedList(new ArrayList<>());
+        this.systemManagers = Collections.synchronizedList(new ArrayList<>());
+        users = Collections.synchronizedList(new ArrayList<>());
         try {
             Handler fileHandler = new FileHandler(System.getProperty("user.dir") + "/usersLogs/users.log", 2000, 5);
             logger.addHandler(fileHandler);
@@ -124,9 +121,11 @@ public class UserController {
             return "You don't have permission to add system manager\n";
     }
     public boolean signUp(String userName,String password,String name,String lastName) {
-        for (Member m : members) {
-            if (userName.equals(m.getUserName()))
-                return false;
+        synchronized (members) {
+            for (Member m : members) {
+                if (userName.equals(m.getUserName()))
+                    return false;
+            }
         }
         Member m = new Member(userName, password,name,lastName);
         members.add(m);
@@ -145,22 +144,22 @@ public class UserController {
         return online.getUserName();
     }
     public String logIn(String userName,String password){
-        for(Member m : members){
-            if(m.getUserName().equals(userName)) {
-                if (m.getPassword().equals(password)) {
+        synchronized (members) {
+            for (Member m : members) {
+                if (m.getUserName().equals(userName)) {
+                    if (m.getPassword().equals(password)) {
 //                    if(isConnected(m.userName)){
 //                        return  "You are already connected\n";
 //                    }
-                    m.setConnected(true);
-                    logger.info(userName + " has logged in");
-                    return null;
+                        m.setConnected(true);
+                        logger.info(userName + " has logged in");
+                        return null;
 
+                    } else
+                        return "Invalid Username or Password\n";
                 }
 
-                else
-                    return "Invalid Username or Password\n";
             }
-
         }
         return "Invalid Username or Password\n";
     }
@@ -196,9 +195,11 @@ public class UserController {
             return false;
     }
     public Member getMember(String userName){
-        for(Member m : members){
-            if(m.getUserName().equals(userName))
-                return m;
+        synchronized (members) {
+            for (Member m : members) {
+                if (m.getUserName().equals(userName))
+                    return m;
+            }
         }
 //        Optional<MemberDTO> memberDTO = AllRepos.getMemberRepo().findById(userName);
 //        if (memberDTO.isPresent()) {
@@ -215,9 +216,11 @@ public class UserController {
         return null;
     }
     public User getUser(String userName){
-        for(User u : users){
-            if(u.getUserName().equals(userName))
-                return u;
+        synchronized (users) {
+            for (User u : users) {
+                if (u.getUserName().equals(userName))
+                    return u;
+            }
         }
         return null;
     }
@@ -360,9 +363,11 @@ public class UserController {
             return null;
         }
         List<String> ret = new ArrayList<>();
-        for(Member m : members){
-            if(isConnected(m.getUserName())){
-                ret.add(m.getUserName());
+        synchronized (members) {
+            for (Member m : members) {
+                if (isConnected(m.getUserName())) {
+                    ret.add(m.getUserName());
+                }
             }
         }
         ret.remove(userName);
@@ -373,9 +378,11 @@ public class UserController {
             return null;
         }
         List<String> ret = new ArrayList<>();
-        for(Member m : members){
-            if(!isConnected(m.getUserName())){
-                ret.add(m.getUserName());
+        synchronized (members) {
+            for (Member m : members) {
+                if (!isConnected(m.getUserName())) {
+                    ret.add(m.getUserName());
+                }
             }
         }
         return ret;
