@@ -60,15 +60,14 @@ public class ShoppingCart {
         int supTransactionId = paySupAns.second;
         //payment
         if(payTransactionId != -1) {//can charge payment
+            if (supTransactionId == -1) {
+                extSystems.cancelPayment(payTransactionId);
+                //extSystems.cancelSup(supTransactionId);
+                return new Result<List<String>>(null, "Failed! can't supply your shopping cart\n");
+            }
             String ret = canPurchase();
             if (ret == null) { //can purchase
 //                int supTransactionId =extSystems.supply(userName, address);
-                if (supTransactionId == -1) {
-                    extSystems.cancelPayment(payTransactionId);
-                    //extSystems.cancelSup(supTransactionId);
-                    return new Result<List<String>>(null, "Failed! can't supply your shopping cart\n");
-                }
-
                 for (StoreBasket b : baskets) {
                     //extSystems.pay(cardFrom, month,year, cvv, id);
                     if (!b.purchase(userName)){
@@ -83,7 +82,10 @@ public class ShoppingCart {
                 return new Result<>(null, "Failed! can't purchase your cart");
             }
         }else{
-
+            if (supTransactionId != -1) {
+                extSystems.cancelSup(supTransactionId);
+                return new Result<List<String>>(null, "Failed! can't supply your shopping cart\n");
+            }
             return new Result<>(null, "Failed! can't charge your credit card\n");
            // return new Result<>(null, "Failed! can't charge your credit card\n");
         }
