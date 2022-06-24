@@ -1014,6 +1014,18 @@ public class Facade implements SystemFacade {
         return new Result<>(null, "User Is Not Connected");
     }
 
+    @Override
+    public Result<ManagementForm> getStoreManagement(String userName, String storeName) {
+        if(userController.isConnected(userName)) {
+            Pair<List<String>, Map<String, String>> pair = storesFacade.getStoreManagement(userName, storeName, userController.isUserSysManager(userName));
+            if(pair != null) {
+                return new Result<>(new ManagementForm(pair.first, pair.second), null);
+            }
+            return new Result<>(null, "User Doesn't have permission to view this");
+        }
+        return new Result<>(null, "User Is Not Connected");
+    }
+
     public void allLogOut() {
         this.userController.allLogOut();
     }

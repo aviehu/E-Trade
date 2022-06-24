@@ -31,6 +31,11 @@ public class StoresController {
         return systemService.changePurchaseOption(userName, storeName, form.productName, form.purchaseOption);
     }
 
+    @GetMapping("/getmanagement/{store}")
+    public Result<ManagementForm> getStoreManagement(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName){
+        return systemService.getStoreManagement(userName, storeName);
+    }
+
     @PostMapping("/editproduct/{store}")
     public Result<Boolean> editProduct(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName, @RequestBody EditProductForm form) {
         return systemService.editProduct(userName, storeName,form.productName,form.amount, form.price);
