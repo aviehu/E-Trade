@@ -18,7 +18,9 @@ public class CloseStorePermanentlyTest {
 
     @org.junit.Before
     public void setUp() throws Exception {
+
         //systemService = new SystemService();
+        systemService.initFacade();
         String guestName = systemService.enterSystem().getVal();
         systemService.login(guestName, "domain", "domain");
         systemService.openStore("domain", "itay", 123);

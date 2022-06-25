@@ -612,7 +612,11 @@ public class Store {
     }
 
     public int getProductAmount(String prodName) {
-        return inventory.getProductByName(prodName).getAmount();
+        Product p = inventory.getProductByName(prodName);
+        if (p != null) {
+            return p.getAmount();
+        }
+        return -1;
     }
 
     public String getHistory() {
