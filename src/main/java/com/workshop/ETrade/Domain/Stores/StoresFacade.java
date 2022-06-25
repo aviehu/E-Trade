@@ -392,28 +392,32 @@ public class StoresFacade {
         return s.getProductAmount(prod);
     }
 
-    public boolean removeStoreOwner(String userName, String storeName, String ownerToRemove) {
+    public List<String> removeStoreOwner(String userName, String storeName, String ownerToRemove) {
+        List<String> ret = new ArrayList<>();
         Store store = getStoreByName(storeName);
         if(store == null) {
-            return false;
+            return ret;
         }
-        if(store.removeOwner(userName, ownerToRemove)) {
+        ret = store.removeOwner(userName, ownerToRemove);
+        if(!ret.isEmpty()) {
             new RepoThread<>(AllRepos.getStoreRepo(), new StoreDTO(store)).start();
-            return true;
+            return ret;
         }
-        return false;
+        return ret; // false cause ret is empty
     }
 
-    public boolean removeStoreManager(String userName, String storeName, String managerToRemove) {
+    public List<String> removeStoreManager(String userName, String storeName, String managerToRemove) {
+        List<String> ret = new ArrayList<>();
         Store store = getStoreByName(storeName);
         if(store == null) {
-            return false;
+            return ret;
         }
-        if(store.removeManager(userName, managerToRemove)) {
+        ret = store.removeManager(userName, managerToRemove);
+        if(!ret.isEmpty()) {
             new RepoThread<>(AllRepos.getStoreRepo(), new StoreDTO(store)).start();
-            return true;
+            return ret;
         }
-        return false;
+        return ret;
     }
 
     public int addPreDiscount(String userName, String storeName, String discountOn, int discountPercentage, String description, DiscountType discountType, List<PredicateForm> predicateForms, String connectionType) {

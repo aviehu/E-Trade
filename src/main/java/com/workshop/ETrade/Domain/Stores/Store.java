@@ -55,27 +55,27 @@ public class Store {
         List<MapDBobjDTO> dts = storeDTO.ownersAppointments;
         ownersAppointments = new HashMap<>();
         managersAppointments = new HashMap<>();
-        for(MapDBobjDTO d : dts) {
+        for (MapDBobjDTO d : dts) {
             ownersAppointments.put(d.key, d.val);
         }
         dts = storeDTO.managersAppointments;
-        for(MapDBobjDTO d : dts) {
+        for (MapDBobjDTO d : dts) {
             managersAppointments.put(d.key, d.val);
         }
         subscribers = new ArrayList<>();
         bids = new LinkedList<>();
-        for(BidDTO b : storeDTO.bids) {
+        for (BidDTO b : storeDTO.bids) {
             bids.add(new Bid(b, inventory.getProductByName(b.productName)));
         }
         closed = false;
 
         ownersAppointmentAgreement = new HashMap<>();
-        for(AwaitingAppointmentDTO adto : storeDTO.awaitingAppointment) {
-            ownersAppointmentAgreement.put(adto.awaitingUser, new AppointmentAgreement(adto.mainOwner,adto.approvedBy, adto.isRejected));
+        for (AwaitingAppointmentDTO adto : storeDTO.awaitingAppointment) {
+            ownersAppointmentAgreement.put(adto.awaitingUser, new AppointmentAgreement(adto.mainOwner, adto.approvedBy, adto.isRejected));
         }
     }
 
-    public Store(String storeName, String founderName,int card) {
+    public Store(String storeName, String founderName, int card) {
         name = storeName;
         inventory = new Inventory();
         this.founderName = founderName;
@@ -98,19 +98,19 @@ public class Store {
         ownersAppointmentAgreement = new HashMap<>();
     }
 
-    public int addDiscount(String userName,String discountOn, int discountPercentage, String description, DiscountType discountType) {
-        if(isOwner(userName)) {
+    public int addDiscount(String userName, String discountOn, int discountPercentage, String description, DiscountType discountType) {
+        if (isOwner(userName)) {
             return policyManager.addDiscount(discountOn, discountPercentage, description, discountType);
         }
         return -1;
     }
 
     public int addPredicateDiscount(String discountOn, int discountPercentage, String description, DiscountType discountType, OperatorComponent operatorComponent) {
-        return policyManager.addPredicateDiscount(policyManager.getDiscountId(),discountOn, discountPercentage, description, discountType, operatorComponent);
+        return policyManager.addPredicateDiscount(policyManager.getDiscountId(), discountOn, discountPercentage, description, discountType, operatorComponent);
     }
 
-    public int addPolicy(String userName,String policyOn, String description, PolicyType policyType, OperatorComponent operatorComponent) {
-        if(isOwner(userName)) {
+    public int addPolicy(String userName, String policyOn, String description, PolicyType policyType, OperatorComponent operatorComponent) {
+        if (isOwner(userName)) {
             return policyManager.addPolicy(policyManager.getPolicyId(), policyOn, description, policyType, operatorComponent);
         }
         return -1;
@@ -125,28 +125,28 @@ public class Store {
     }
 
     public boolean hasLowPermission(String userName) {
-        if(isManager(userName) || isOwner(userName)) {
+        if (isManager(userName) || isOwner(userName)) {
             return true;
         }
         return false;
     }
 
     public boolean hasMidPermission(String userName) {
-        if(isOwner(userName) || (isManager(userName) && managersPermissions.get(userName) != managersPermission.LOW)) {
+        if (isOwner(userName) || (isManager(userName) && managersPermissions.get(userName) != managersPermission.LOW)) {
             return true;
         }
         return false;
     }
 
     public boolean hasHighPermission(String userName) {
-        if(isOwner(userName) || (isManager(userName) && managersPermissions.get(userName) == managersPermission.HIGH)) {
+        if (isOwner(userName) || (isManager(userName) && managersPermissions.get(userName) == managersPermission.HIGH)) {
             return true;
         }
         return false;
     }
 
-    public boolean changeStoreManagersPermission(String userName, String managerName, managersPermission newPermission){
-        if(!isOwner(userName) || !isManager(managerName) || !managersAppointments.get(userName).contains(managerName)) {
+    public boolean changeStoreManagersPermission(String userName, String managerName, managersPermission newPermission) {
+        if (!isOwner(userName) || !isManager(managerName) || !managersAppointments.get(userName).contains(managerName)) {
             return false;
         }
         managersPermissions.computeIfPresent(managerName, (K, V) -> V = newPermission);
@@ -157,7 +157,7 @@ public class Store {
         return name;
     }
 
-    private boolean isFounder(String name){
+    private boolean isFounder(String name) {
         return founderName.equals(name);
     }
 
@@ -170,16 +170,16 @@ public class Store {
     }
 
     public boolean closeStore(String name) {
-        if(isFounder(name) && !closed) {
+        if (isFounder(name) && !closed) {
             closed = true;
-           // notifySubscribers(name+" closed the store "+ getName()+"\n",name);
+            // notifySubscribers(name+" closed the store "+ getName()+"\n",name);
             return true;
         }
         return false;
     }
 
     public boolean adminCloseStore() {
-        if(!closed) {
+        if (!closed) {
             closed = true;
             //notifySubscribers("A system manager closed the store "+ getName()+"\n",name);
             return true;
@@ -187,18 +187,18 @@ public class Store {
         return false;
     }
 
-    public synchronized boolean purchase(Map<String,Integer> prods, String buyer){
-        Map<Product,Integer> amounts = inventory.getAmountsFromNames(prods);
-        if(policyManager.canPurchase(amounts) && inventory.canPurchase(prods)) {
+    public synchronized boolean purchase(Map<String, Integer> prods, String buyer) {
+        Map<Product, Integer> amounts = inventory.getAmountsFromNames(prods);
+        if (policyManager.canPurchase(amounts) && inventory.canPurchase(prods)) {
             inventory.purchase(prods);
             Map<Product, Integer> products = new HashMap<Product, Integer>();
-            for(String productName : prods.keySet()) {
+            for (String productName : prods.keySet()) {
                 Product product = inventory.getProductByName(productName);
                 products.put(product, prods.get(productName));
             }
             storeHistory.addPurchase(policyManager.getTotalPrice(products), prods, buyer);
             new RepoThread<>(AllRepos.getStoreRepo(), new StoreDTO(this)).start();
-            purchased(prods.keySet().stream().toList(),buyer);
+            purchased(prods.keySet().stream().toList(), buyer);
             return true;
         }
         return false;
@@ -206,7 +206,7 @@ public class Store {
 
     public boolean counterBid(int bidId, double newOffer) {
         Bid bid = getBidById(bidId);
-        if(bid == null) {
+        if (bid == null) {
             return false;
         }
         boolean ans = bid.counterOffer(newOffer);
@@ -214,18 +214,18 @@ public class Store {
         return ans;
     }
 
-    public synchronized boolean purchaseBid(Map<String,Integer> prods, User buyer, double price){
-        Map<Product,Integer> amounts = inventory.getAmountsFromNames(prods);
-        if(policyManager.canPurchase(amounts) && inventory.canPurchase(prods)) {
+    public synchronized boolean purchaseBid(Map<String, Integer> prods, User buyer, double price) {
+        Map<Product, Integer> amounts = inventory.getAmountsFromNames(prods);
+        if (policyManager.canPurchase(amounts) && inventory.canPurchase(prods)) {
             inventory.purchase(prods);
             Map<Product, Integer> products = new HashMap<Product, Integer>();
-            for(String productName : prods.keySet()) {
+            for (String productName : prods.keySet()) {
                 Product product = inventory.getProductByName(productName);
                 products.put(product, prods.get(productName));
             }
             storeHistory.addPurchase(price, prods, buyer.getUserName());
             new RepoThread<>(AllRepos.getStoreRepo(), new StoreDTO(this)).start();
-            purchased(prods.keySet().stream().toList(),buyer.getUserName());
+            purchased(prods.keySet().stream().toList(), buyer.getUserName());
             //notifyUser("Your bid has been approved", name, buyer);
             //notifySubscribers("A bid for - " + prods.keySet().toArray()[0] + "  in " + name + " has been approved", buyer.getUserName());
 
@@ -235,7 +235,7 @@ public class Store {
     }
 
     public String getHistory(String userName) {
-        if(hasLowPermission(userName)) {
+        if (hasLowPermission(userName)) {
             return storeHistory.getHistory();
         }
         return null;
@@ -243,7 +243,7 @@ public class Store {
 
     public boolean startAuction(double startingPrice, LocalDate auctionEnd, String productName) {
         Product product = inventory.getProductByName(productName);
-        if(product == null || product.getSelectedOption() != purchaseOption.AUCTION) {
+        if (product == null || product.getSelectedOption() != purchaseOption.AUCTION) {
             return false;
         }
         auctions.add(new Auction(startingPrice, auctionEnd, product, "NONE", auctionId));
@@ -253,23 +253,23 @@ public class Store {
 
     public String printAuctions() {
         StringBuilder result = new StringBuilder();
-        for(Auction auction : auctions) {
+        for (Auction auction : auctions) {
             result.append(auction.toString());
         }
         return result.toString();
     }
 
-    public String printAuction(int auctionId){
+    public String printAuction(int auctionId) {
         Auction auction = getAuctionById(auctionId);
-        if(auction == null) {
+        if (auction == null) {
             return "There is no auction with id: " + auctionId;
         }
         return auction.toString();
     }
 
     private Auction getAuctionById(int auctionId) {
-        for(Auction auction : auctions) {
-            if(auction.getAuctionId() == auctionId) {
+        for (Auction auction : auctions) {
+            if (auction.getAuctionId() == auctionId) {
                 return auction;
             }
         }
@@ -278,8 +278,8 @@ public class Store {
 
     public boolean addBid(String productName, double amount, String biddersName, CreditCard creditCard, SupplyAddress supplyAddress, String storeName) {
         Product product = inventory.getProductByName(productName);
-        if(product != null && product.getSelectedOption() == purchaseOption.BID) {
-            Bid bid = new Bid(product,biddersName,amount,ownersAppointments.keySet(), bidId, creditCard, supplyAddress, storeName);
+        if (product != null && product.getSelectedOption() == purchaseOption.BID) {
+            Bid bid = new Bid(product, biddersName, amount, ownersAppointments.keySet(), bidId, creditCard, supplyAddress, storeName);
             bids.add(bid);
             AllRepos.getBidRepo().save(new BidDTO(bid));
             bidId++;
@@ -290,26 +290,26 @@ public class Store {
 
     public boolean startRaffle(String productName, LocalDate raffleEnd, double price) {
         Product product = inventory.getProductByName(productName);
-        if(product != null && product.getSelectedOption() == purchaseOption.RAFFLE) {
+        if (product != null && product.getSelectedOption() == purchaseOption.RAFFLE) {
             raffles.add(new Raffle(price, raffleEnd, raffleId));
             return true;
         }
         return false;
     }
 
-    public purchaseOption getPurchaseOption(String productName){
+    public purchaseOption getPurchaseOption(String productName) {
         return inventory.getPurchaseOption(productName);
     }
 
     public boolean setPurchaseOption(String userName, String productName, purchaseOption option) {
-        if(hasMidPermission(userName)) {
+        if (hasMidPermission(userName)) {
             return inventory.setPurchaseOption(productName, option);
         }
         return false;
     }
 
-    public boolean addManager(String ownerName, String nameToAdd){
-        if(!isManager(nameToAdd) && !isOwner(nameToAdd) && isOwner(ownerName)){
+    public boolean addManager(String ownerName, String nameToAdd) {
+        if (!isManager(nameToAdd) && !isOwner(nameToAdd) && isOwner(ownerName)) {
             managersAppointments.get(ownerName).add(nameToAdd);
             managersPermissions.put(nameToAdd, managersPermission.LOW);
             return true;
@@ -317,7 +317,7 @@ public class Store {
         return false;
     }
 
-    public boolean addManager(String ownerName, String nameToAdd, String permission){
+    public boolean addManager(String ownerName, String nameToAdd, String permission) {
         managersPermission mp;
         switch (permission) {
             case "LOW": {
@@ -334,7 +334,7 @@ public class Store {
             }
         }
 
-        if(!isManager(nameToAdd) && !isOwner(nameToAdd) && isOwner(ownerName)){
+        if (!isManager(nameToAdd) && !isOwner(nameToAdd) && isOwner(ownerName)) {
             managersAppointments.get(ownerName).add(nameToAdd);
             managersPermissions.put(nameToAdd, mp);
             return true;
@@ -345,8 +345,8 @@ public class Store {
 
     private Map<String, Boolean> getAwaiting(String owner) {
         Map<String, Boolean> awaiting = new HashMap<>();
-        for(String name : getOwners(owner)) {
-            if(owner.equals(name)) {
+        for (String name : getOwners(owner)) {
+            if (owner.equals(name)) {
                 awaiting.put(name, true);
             } else {
                 awaiting.put(name, false);
@@ -354,6 +354,7 @@ public class Store {
         }
         return awaiting;
     }
+
     public String addOwner(String ownersName, String nameToAdd) {
         if (!isOwner(ownersName)) {
             return ownersName + " is not an owner in this store";
@@ -380,7 +381,7 @@ public class Store {
     public String approveOwner(String ownersName, String nameToApprove, boolean approve) {
         String ans = ownersAppointmentAgreement.get(nameToApprove).approve(ownersName, approve);
         AppointmentAgreement aa = ownersAppointmentAgreement.get(nameToApprove);
-        if(aa.isApproved()) {
+        if (aa.isApproved()) {
             ownersAppointments.get(aa.getMainOwner()).add(nameToApprove);
             ownersAppointments.put(nameToApprove, new LinkedList<>());
             managersAppointments.put(nameToApprove, new LinkedList<>());
@@ -391,15 +392,15 @@ public class Store {
     public double getPrice(Map<String, Integer> items) {
         List<Product> products = inventory.getProductsByListOfNames(items.keySet());
         Map<Product, Integer> productsAmounts = new HashMap<Product, Integer>();
-        for(Product product : products) {
+        for (Product product : products) {
             productsAmounts.put(product, items.get(product.getName()));
         }
         return policyManager.getTotalPrice(productsAmounts);
     }
 
     public boolean addProduct(String userName, String productName, int amount, double price, String category) {
-        if(hasHighPermission(userName)) {
-            if(inventory.addProduct(productName, amount, price, category)) {
+        if (hasHighPermission(userName)) {
+            if (inventory.addProduct(productName, amount, price, category)) {
                 return true;
             }
         }
@@ -407,45 +408,83 @@ public class Store {
     }
 
     public double getProductPrice(String productName) {
-        return  inventory.getProductByName(productName).getPrice();
+        return inventory.getProductByName(productName).getPrice();
     }
 
-    public boolean removeOwner(String ownersName, String ownerToRemove) {
-        if(isOwner(ownersName) && ownersAppointments.get(ownersName).contains(ownerToRemove)) {
+    public List<String> removeOwner(String ownersName, String ownerToRemove) {
+        List<String> ret = new ArrayList<>();
+        if (isOwner(ownersName) && ownersAppointments.get(ownersName).contains(ownerToRemove)) {
+            ret.add(ownerToRemove);
+
+            List<String> otherOwners = new ArrayList<>();
+            otherOwners.addAll(ownersAppointments.get(ownerToRemove));
+            List<String> otherManagers = new ArrayList<>();
+            otherManagers.addAll(managersAppointments.get(ownerToRemove));
+            for (String o : otherOwners) {
+                ret.addAll(removeOwner(ownerToRemove, o));
+            }
+            for (String o : otherManagers) {
+                ret.addAll(removeManager(ownerToRemove, o));
+            }
+            for(String a : ownersAppointmentAgreement.keySet()){
+                AppointmentAgreement aa = ownersAppointmentAgreement.get(a);
+                aa.removeOwnerFromAprroval(ownerToRemove);
+                if(aa.isApproved()) {
+                    ownersAppointments.get(aa.getMainOwner()).add(a);
+                    ownersAppointments.put(a, new LinkedList<>());
+                    managersAppointments.put(a, new LinkedList<>());
+                }
+
+            }
             ownersAppointments.get(ownersName).remove(ownerToRemove);
-            List<String> otherOwners = ownersAppointments.get(ownerToRemove);
-            List<String> otherManagers = managersAppointments.get(ownerToRemove);
-            for(String o : otherOwners) {
-                removeOwner(ownerToRemove, o);
-            }
-            for(String o : otherManagers) {
-                removeManager(ownerToRemove, o);
-            }
             ownersAppointments.remove(ownerToRemove);
+            subscribers.remove(ownerToRemove);
+
+//            for(String a : getAppointmentAgreements().keySet()){
+//                AppointmentAgreement agreement = ownersAppointmentAgreement.get(a);
+//                agreement.removeOwnerFromAprroval(ownerToRemove);
+//                if(agreement.isApproved()) {
+//                    ownersAppointments.get(agreement.getMainOwner()).add(a);
+//                    ownersAppointments.put(a, new LinkedList<>());
+//                    managersAppointments.put(a, new LinkedList<>());
+//                }
+            //}
             //notifyOne("You are no longer Owner at " + getName(),ownersName,ownerToRemove);
-            return true;
+            return ret;//true
         }
-        return false;
+        return ret; // false
     }
 
-    public boolean removeManager(String ownersName ,String managerName) {
-        if(isOwner(ownersName) && managersAppointments.get(ownersName).contains(managerName)) {
+    public List<String> removeManager(String ownersName, String managerName) {
+        List<String> ret = new ArrayList<>();
+        if (isOwner(ownersName) && managersAppointments.get(ownersName).contains(managerName)) {
+            ret.add(managerName);
             managersAppointments.get(ownersName).remove(managerName);
+            if(managersPermissions.containsKey(managerName))
+                managersPermissions.remove(managerName);
+            if(managersAppointments.containsKey(managerName))
+                managersAppointments.remove(managerName);
+            if(subscribers.contains(managerName))
+                subscribers.remove(managerName);
+//            List<String> otherManagers = managersAppointments.get(managerName);
+//            for (String o : otherManagers) {
+//                ret.addAll(removeManager(managerName, o));
+//            }
             //notifyOne("You are no longer Manager at " + getName()+"\n",ownersName,managerName);
-            return true;
+            return ret;
         }
-        return false;
+        return ret;
     }
 
     public Set<String> getOwners(String name) {
-        if(isOwner(name)) {
+        if (isOwner(name)) {
             return ownersAppointments.keySet();
         }
         return null;
     }
 
     public Set<String> getManagers(String name) {
-        if(isOwner(name)) {
+        if (isOwner(name)) {
             return managersAppointments.keySet();
         }
         return null;
@@ -453,9 +492,9 @@ public class Store {
 
     public Set<String> getAllManagement(String name) {
         Set<String> management = new HashSet();
-        for(String owner : ownersAppointments.keySet()) {
+        for (String owner : ownersAppointments.keySet()) {
             management.add(owner);
-            for(String manager : managersAppointments.get(owner)) {
+            for (String manager : managersAppointments.get(owner)) {
                 management.add(manager);
             }
         }
@@ -464,27 +503,27 @@ public class Store {
         return management;
     }
 
-    public boolean canPurchase(String prodName,int quantity){
+    public boolean canPurchase(String prodName, int quantity) {
         return inventory.canPurchase(prodName, quantity);
     }
 
     public boolean removeProduct(String userName, String productName) {
-        if(hasHighPermission(userName)) {
+        if (hasHighPermission(userName)) {
             return inventory.removeProduct(productName);
         }
         return false;
     }
 
-    public boolean changeProductName(String userName,String oldName, String newName){
-        if(hasMidPermission(userName)) {
+    public boolean changeProductName(String userName, String oldName, String newName) {
+        if (hasMidPermission(userName)) {
             inventory.changeProductName(oldName, newName);
             return true;
         }
         return false;
     }
 
-    public boolean changeProductPrice(String userName,String productName, double newPrice) {
-        if(hasMidPermission(userName)) {
+    public boolean changeProductPrice(String userName, String productName, double newPrice) {
+        if (hasMidPermission(userName)) {
             inventory.changeProductPrice(productName, newPrice);
             return true;
         }
@@ -493,14 +532,14 @@ public class Store {
 
     public String getAllProdsByCategory(String categoryName) {
         String result = "";
-        for(Product product: inventory.getProductsByCategory(categoryName)) {
+        for (Product product : inventory.getProductsByCategory(categoryName)) {
             result = result + product.toString();
         }
         return result;
     }
 
     public boolean addKeywordToProduct(String ownerName, String productName, String keyword) {
-        if(hasMidPermission(ownerName)) {
+        if (hasMidPermission(ownerName)) {
             return inventory.addKeyWordToProduct(productName, keyword);
         }
         return false;
@@ -523,15 +562,15 @@ public class Store {
     }
 
     public String toString() {
-        if(isClosed()){
+        if (isClosed()) {
             return null;
         }
         return inventory.toString();
     }
 
     public boolean isOwner(String nameToSearch) {
-        for(String owner : ownersAppointments.keySet()) {
-            if(owner.equals(nameToSearch)){
+        for (String owner : ownersAppointments.keySet()) {
+            if (owner.equals(nameToSearch)) {
                 return true;
             }
         }
@@ -555,9 +594,9 @@ public class Store {
     }
 
     private boolean isManager(String nameToSearch) {
-        for(String ownersName : managersAppointments.keySet()) {
-            for(String manger : managersAppointments.get(ownersName)) {
-                if(manger.equals(nameToSearch)) {
+        for (String ownersName : managersAppointments.keySet()) {
+            for (String manger : managersAppointments.get(ownersName)) {
+                if (manger.equals(nameToSearch)) {
                     return true;
                 }
             }
@@ -566,12 +605,13 @@ public class Store {
     }
 
     public boolean changeProductQuantity(String userName, String productName, int newQuantity) {
-        if(hasMidPermission(userName)) {
+        if (hasMidPermission(userName)) {
             return inventory.changeProductQuantity(productName, newQuantity);
         }
         return false;
     }
-    public int getProductAmount(String prodName){
+
+    public int getProductAmount(String prodName) {
         return inventory.getProductByName(prodName).getAmount();
     }
 
@@ -579,10 +619,10 @@ public class Store {
         return storeHistory.getHistory();
     }
 
-    public void purchased(List<String> products,String userNamePurchased){
+    public void purchased(List<String> products, String userNamePurchased) {
         String mess = "";
-        for(String p : products){
-            mess+=p+"\n";
+        for (String p : products) {
+            mess += p + "\n";
         }
         //notifySubscribers(mess,userNamePurchased);
 
@@ -590,14 +630,14 @@ public class Store {
 
 
     public void attach(Member user) {
-        if(!subscribers.contains(user))
+        if (!subscribers.contains(user))
             subscribers.add(user);
 
     }
 
 
     public void detach(Member user) {
-        if(subscribers.contains(user))
+        if (subscribers.contains(user))
             subscribers.remove(user);
     }
 
@@ -626,17 +666,18 @@ public class Store {
 //        }
 //    }
 
-//    public void notifyUser(String message,String sendFrom,User sendTo) {
+    //    public void notifyUser(String message,String sendFrom,User sendTo) {
 //        //
 //        sendTo.update(message,sendFrom);
 //    }
-    public List<String> getSubscribers(){
+    public List<String> getSubscribers() {
         List<String> subs = new ArrayList<>();
-        for (Member m: this.subscribers){
+        for (Member m : this.subscribers) {
             subs.add(m.getUserName());
         }
         return subs;
     }
+
     public List<Product> getProducts() {
         return inventory.getProducts();
     }
@@ -647,8 +688,8 @@ public class Store {
     }
 
     private Bid getBidById(int bidId) {
-        for(Bid bid : bids) {
-            if(bid.getId() == bidId) {
+        for (Bid bid : bids) {
+            if (bid.getId() == bidId) {
                 return bid;
             }
         }
@@ -656,11 +697,11 @@ public class Store {
     }
 
     public Bid reviewBid(String userName, int bidId, boolean approve) {
-        if(isOwner(userName)) {
+        if (isOwner(userName)) {
             Bid bid = getBidById(bidId);
-            if(approve) {
+            if (approve) {
                 Bid ans = bid.approve(userName);
-                if(ans != null) {
+                if (ans != null) {
                     HashMap<String, Integer> mapHelper = new HashMap<>();
                     mapHelper.put(ans.getProductName(), 1);
                 }
@@ -674,8 +715,8 @@ public class Store {
 
     public List<Bid> userBids(String userName) {
         List<Bid> ans = new LinkedList<>();
-        for(Bid b : bids) {
-            if(b.getBidderName().equals(userName)) {
+        for (Bid b : bids) {
+            if (b.getBidderName().equals(userName)) {
                 ans.add(b);
             }
         }
@@ -684,12 +725,12 @@ public class Store {
 
     public Bid counterBidReview(int bidId, boolean approve) {
         Bid bid = getBidById(bidId);
-        if(bid == null) {
+        if (bid == null) {
             return null;
         }
         Bid b = bid.counterOfferReview(approve);
         AllRepos.getBidRepo().save(new BidDTO(bid));
-        if(b != null) {
+        if (b != null) {
             HashMap<String, Integer> mapHelper = new HashMap<>();
             mapHelper.put(b.getProductName(), 1);
             storeHistory.addPurchase(b.getPrice(), mapHelper, b.getBidderName());
@@ -738,14 +779,14 @@ public class Store {
     }
 
     public int addComplexDiscount(String discountOn, int discountPercentage, String description, DiscountType discountType, OperatorComponent component) {
-        return policyManager.addPredicateDiscount(policyManager.getDiscountId(),discountOn, discountPercentage, description, discountType, component);
+        return policyManager.addPredicateDiscount(policyManager.getDiscountId(), discountOn, discountPercentage, description, discountType, component);
     }
 
     public Map<String, OwnerWaitingForApproveForm> getOwnersWaitingForApprove() {
         Map<String, OwnerWaitingForApproveForm> ans = new HashMap<>();
-        for(String name : ownersAppointmentAgreement.keySet()) {
+        for (String name : ownersAppointmentAgreement.keySet()) {
             AppointmentAgreement aa = ownersAppointmentAgreement.get(name);
-            ans.put(name, new OwnerWaitingForApproveForm(aa.getWaiting(),aa.isRejected(), aa.isApproved()));
+            ans.put(name, new OwnerWaitingForApproveForm(aa.getWaiting(), aa.isRejected(), aa.isApproved()));
         }
         return ans;
     }
@@ -755,15 +796,29 @@ public class Store {
     }
 
     public boolean editProduct(String productName, int amount, int price) {
-        return inventory.editProduct(productName,amount, price);
+        return inventory.editProduct(productName, amount, price);
     }
 
     public Pair<List<String>, Map<String, String>> getStoreManagement(String userName, boolean userSysManager) {
         List<String> owners = ownersAppointments.keySet().stream().toList();
         HashMap<String, String> managersPermissions = new HashMap<>();
-        for(String man : this.managersPermissions.keySet()) {
+        for (String man : this.managersPermissions.keySet()) {
             managersPermissions.put(man, this.managersPermissions.get(man).toString());
         }
         return new Pair<>(owners, managersPermissions);
+    }
+
+    public List<String> removeMemberFromStore(String member) { // return list of removed owners or managers
+        List<String> ret = new ArrayList<>();
+        if (isManager(member)) {
+
+            ret = removeManager(founderName, member);
+            return ret;
+        }
+        if (isOwner(member)) {
+            ret = removeOwner(founderName, member);
+        }
+        return ret;
+
     }
 }

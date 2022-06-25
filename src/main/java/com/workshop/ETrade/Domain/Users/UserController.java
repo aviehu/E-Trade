@@ -33,6 +33,7 @@ public class UserController {
     private List<Guest> guests;
     private List<String> systemManagers;
     private List<User> users;
+    private HashMap<String,List<String>> adminsAppointment;
     private Logger logger = Logger.getLogger("users");
 
     public UserController() {
@@ -43,6 +44,7 @@ public class UserController {
         this.guests = Collections.synchronizedList(new ArrayList<>());
         this.systemManagers = Collections.synchronizedList(new ArrayList<>());
         users = Collections.synchronizedList(new ArrayList<>());
+        this.adminsAppointment = new HashMap<>();
         try {
             Handler fileHandler = new FileHandler(System.getProperty("user.dir") + "/usersLogs/users.log", 2000, 5);
             logger.addHandler(fileHandler);
@@ -59,6 +61,7 @@ public class UserController {
         members.add(systemManager);
         systemManagers.add(systemManager.getUserName());
         logIn("domain",enc);
+        adminsAppointment.put("domain",new ArrayList<>());
         loadMembers();
         loadSystemManager();
         loadTraffic();
@@ -106,6 +109,7 @@ public class UserController {
                     //members.remove(m);
                     systemManagers.add(sm.getUserName());
                     users.add(sm);
+                    adminsAppointment.get(userName).add(managerToAdd);
                     AllRepos.getSystemManagerRepo().save(new SystemManagerDTO(sm.getUserName()));
                     logger.info("new system manager - " + managerToAdd);
                     return null;
@@ -114,7 +118,7 @@ public class UserController {
                     return managerToAdd+" is already a system manager\n";
 
             }else
-            return managerToAdd+ " is not a registered member\n";
+                return managerToAdd+ " is not a registered member\n";
 
         }
         else
@@ -330,6 +334,11 @@ public class UserController {
             if(m != null){
                 members.remove(m);
                 users.remove(m);
+                if(isUserSysManager(memberToRemove) && canRemoveAdmin(userName,memberToRemove)){
+                    systemManagers.remove(memberToRemove);
+                    adminsAppointment.get(userName).remove(memberToRemove);
+                }
+
                 AllRepos.getMemberRepo().delete(new MemberDTO(m));
                 //return "Successfully removed "+ memberToRemove+" from the system\n";
                 logger.info("removed member - " + memberToRemove);
@@ -526,5 +535,12 @@ public class UserController {
         for(Member m : members){
             m.isConnected = false;
         }
+    }
+    public boolean canRemoveAdmin(String admin,String adminToRemvove){
+        if(this.adminsAppointment.containsKey(admin)){
+            if(this.adminsAppointment.get(admin).contains(adminToRemvove))
+                return true;
+        }
+        return false;
     }
 }
