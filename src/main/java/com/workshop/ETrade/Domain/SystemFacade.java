@@ -55,7 +55,7 @@ public interface SystemFacade {
 
     public Result<HashMap<String, List<Product>>> searchByKeyword(String userName, String keyword);
 
-    public Result<List<String>> searchByCategory(String userName, String category);
+    public Result<List<ProductForm>> searchByCategory(String userName, String category);
     public Result<Boolean> isAdmin(String userName);
     public Result<List<ProductForm>> searchByName(String userName, String productName);
 

@@ -150,11 +150,12 @@ public class Inventory {
         return ans;
     }
 
-    public List<String> searchByCategory(String category) {
-        List<String> result = new LinkedList<>();
-        List<Product> foundProducts = getProductsByCategory(category);
-        for(Product product : foundProducts) {
-            result.add(product.getName());
+    public List<Product> searchByCategory(String category) {
+        List<Product> result = new LinkedList<>();
+        for(Product product : products) {
+            if(product.getCategory().toLowerCase().contains(category.toLowerCase())) {
+                result.add(product);
+            }
         }
         return result;
     }

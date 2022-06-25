@@ -541,14 +541,6 @@ public class Store {
         return false;
     }
 
-    public String getAllProdsByCategory(String categoryName) {
-        String result = "";
-        for (Product product : inventory.getProductsByCategory(categoryName)) {
-            result = result + product.toString();
-        }
-        return result;
-    }
-
     public boolean addKeywordToProduct(String ownerName, String productName, String keyword) {
         if (hasMidPermission(ownerName)) {
             return inventory.addKeyWordToProduct(productName, keyword);
@@ -568,7 +560,7 @@ public class Store {
         return inventory.searchByName(name);
     }
 
-    public List<String> searchByCategory(String category) {
+    public List<Product> searchByCategory(String category) {
         return inventory.searchByCategory(category);
     }
 

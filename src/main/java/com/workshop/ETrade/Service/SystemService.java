@@ -304,7 +304,7 @@ public class SystemService implements ServiceInterface {
     }
 
     @Override
-    public Result<List<String>> searchByCategory(String userName, String category) {
+    public Result<List<ProductForm>> searchByCategory(String userName, String category) {
         try {
             return facade.searchByCategory(userName, category);
         } catch (Exception e) {

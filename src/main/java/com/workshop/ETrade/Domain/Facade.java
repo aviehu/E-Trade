@@ -328,10 +328,10 @@ public class Facade implements SystemFacade {
     }
 
     @Override
-    public Result<List<String>> searchByCategory(String userName, String category) {
+    public Result<List<ProductForm>> searchByCategory(String userName, String category) {
         if(userController.isConnected(userName)){
-            List<String> ans = storesFacade.searchByCategory(category);
-            if(ans != null) {
+            List<ProductForm> ans = storesFacade.searchByCategory(category);
+            if(ans != null && !ans.isEmpty()) {
                 return new Result<>(ans, null);
             }
             return new Result<>(null, "No Items Matched Your Search");
