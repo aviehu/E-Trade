@@ -16,6 +16,7 @@ import com.workshop.ETrade.Persistance.Stores.*;
 import com.workshop.ETrade.AllRepos;
 import com.workshop.ETrade.RepoThread;
 
+import java.lang.management.ManagementPermission;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -448,6 +449,10 @@ public class Store {
             }
             ownersAppointments.get(ownersName).remove(ownerToRemove);
             ownersAppointments.remove(ownerToRemove);
+            if(this.managersPermissions.containsKey(ownerToRemove))
+                managersPermissions.remove(ownerToRemove);
+            if(this.managersAppointments.containsKey(ownerToRemove))
+                this.managersAppointments.remove(ownerToRemove);
             subscribers.remove(ownerToRemove);
 
 //            for(String a : getAppointmentAgreements().keySet()){
