@@ -370,6 +370,7 @@ public class Store {
                 ownersAppointments.get(aa.getMainOwner()).add(nameToAdd);
                 ownersAppointments.put(nameToAdd, new LinkedList<>());
                 managersAppointments.put(nameToAdd, new LinkedList<>());
+                ownersAppointmentAgreement.remove(nameToAdd);
                 return nameToAdd + " has been added as store owner";
             }
 
@@ -385,6 +386,7 @@ public class Store {
             ownersAppointments.get(aa.getMainOwner()).add(nameToApprove);
             ownersAppointments.put(nameToApprove, new LinkedList<>());
             managersAppointments.put(nameToApprove, new LinkedList<>());
+            ownersAppointmentAgreement.remove(nameToApprove);
         }
         return ans;
     }
@@ -426,13 +428,17 @@ public class Store {
             for (String o : otherManagers) {
                 ret.addAll(removeManager(ownerToRemove, o));
             }
-            for(String a : ownersAppointmentAgreement.keySet()){
+            List<String> waitingAgreement = new ArrayList<>();
+            waitingAgreement.addAll(ownersAppointmentAgreement.keySet());
+
+            for(String a : waitingAgreement){
                 AppointmentAgreement aa = ownersAppointmentAgreement.get(a);
                 aa.removeOwnerFromAprroval(ownerToRemove);
                 if(aa.isApproved()) {
                     ownersAppointments.get(aa.getMainOwner()).add(a);
                     ownersAppointments.put(a, new LinkedList<>());
                     managersAppointments.put(a, new LinkedList<>());
+                    ownersAppointmentAgreement.remove(a);
                 }
 
             }

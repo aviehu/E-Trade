@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Collections;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -62,6 +63,7 @@ public class NotificationTest {
         Assert.assertEquals(1,notificationList.size());
         Assert.assertEquals("Batya1",notificationList.get(0).getSentFrom());
         notificationList = service.getMessages("Batya2").getVal();
+        Collections.reverse(notificationList);
         Assert.assertEquals(2,notificationList.size());
         String sentFrom = notificationList.get(1).getSentFrom();
         Assert.assertEquals("Batya1",sentFrom);
@@ -75,6 +77,7 @@ public class NotificationTest {
         service.adminCloseStorePermanently("domain","Hila");
         service.login(userName,"Batya3","123");
         notificationList = service.getMessages("Batya3").getVal();
+        Collections.reverse(notificationList);
         Assert.assertEquals(2,notificationList.size());
         String sentFrom = notificationList.get(0).getSentFrom();
         Assert.assertEquals("domain",sentFrom);
