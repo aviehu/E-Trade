@@ -118,4 +118,10 @@ public class StoreBasket {
     public HashMap<String, Integer> getProds() {
         return prods;
     }
+
+    public int getProdAmount(String prod) {
+        if(this.prods.containsKey(prod))
+            return this.prods.get(prod);
+        return -1;
+    }
 }

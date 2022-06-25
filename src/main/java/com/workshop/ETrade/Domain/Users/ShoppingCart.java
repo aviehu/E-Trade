@@ -198,4 +198,10 @@ public class ShoppingCart {
     }
 
 
+    public int getProdAmount(Store store, String prod) {
+        StoreBasket b = getBasketByStore(store);
+        if(b == null)
+            return -1;
+        return b.getProdAmount(prod);
+    }
 }
