@@ -36,15 +36,15 @@ public class AddProductToStoreTest {
     }
     @Test
     public void addProductToStoreSuccessTest(){
-        Assert.assertFalse(systemService.getStoreInfo("Andalus", "Mega").getVal().contains("Bamba"));
+        Assert.assertFalse(systemService.getStoreInfo("Andalus", "Mega").getVal().first.contains("Bamba"));
         systemService.addProductToStore("Andalus", "Mega",
                 "Bamba", 100, 5,"snacks");
-        Assert.assertTrue(isInList(systemService.getStoreInfo("Andalus", "Mega").getVal(),"Bamba"));
+        Assert.assertTrue(isInList(systemService.getStoreInfo("Andalus", "Mega").getVal().first,"Bamba"));
     }
 
     @Test
     public void addProductToStoreFailTest(){
-        Assert.assertFalse(systemService.getStoreInfo("Andalus", "Mega").getVal().contains("Bamba"));
+        Assert.assertFalse(systemService.getStoreInfo("Andalus", "Mega").getVal().first.contains("Bamba"));
         systemService.addProductToStore("Andalus", "Mega",
                 "Bamba", 100, 5,"snacks");
         Assert.assertFalse(systemService.addProductToStore("Andalus", "Mega",

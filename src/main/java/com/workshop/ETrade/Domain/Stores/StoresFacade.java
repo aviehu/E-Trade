@@ -140,10 +140,13 @@ public class StoresFacade {
         return ans;
     }
 
-    public List<String> searchByCategory(String category) {
-        List<String> result = new LinkedList<>();
+    public List<ProductForm> searchByCategory(String category) {
+        List<ProductForm> result = new LinkedList<>();
         for(Store store : stores) {
-            result.addAll(store.searchByCategory(category));
+            List<Product> prods = store.searchByCategory(category);
+            for (Product p : prods) {
+                result.add(new ProductForm(p, store.getName()));
+            }
         }
         return result;
     }

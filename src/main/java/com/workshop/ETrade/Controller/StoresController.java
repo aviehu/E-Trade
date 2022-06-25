@@ -73,7 +73,7 @@ public class StoresController {
     }
 
     @PostMapping("/searchbycat")
-    public Result<List<String>> searchByCategory(@RequestHeader("Authorization") String userName, @RequestBody SearchForm form) {
+    public Result<List<ProductForm>> searchByCategory(@RequestHeader("Authorization") String userName, @RequestBody SearchForm form) {
         return systemService.searchByCategory(userName, form.search);
     }
 
