@@ -1042,7 +1042,28 @@ public class Facade implements SystemFacade {
         return new Result<>(null, "User Is Not Connected");
     }
 
+    @Override
+    public Result<Boolean> reopenStore(String userName, String storeName) {
+        if (userController.isConnected(userName)) {
+            return new Result<>(storesFacade.reopenStore(storeName), null);
+        }
+        return new Result<>(null, "User Is Not Connected");
+    }
+
+    @Override
+    public Result<String> getStoreFounder(String userName, String storeName) {
+        if(userController.isConnected(userName)) {
+            return new Result<>(storesFacade.getStoreFounder(storeName), null);
+        }
+        return new Result<>(null, "User Is Not Connected");
+
+    }
+
     public void allLogOut() {
         this.userController.allLogOut();
+    }
+
+    public boolean isStoreOpen(String storeName) {
+        return storesFacade.isStoreOpen(storeName);
     }
 }

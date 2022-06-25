@@ -26,6 +26,8 @@ public class Store {
     private String founderName;
     private int card;
     private boolean closed;
+
+    private boolean closedByAdmin;
     private int auctionId;
     private int bidId;
     private int raffleId;
@@ -67,7 +69,6 @@ public class Store {
         for (BidDTO b : storeDTO.bids) {
             bids.add(new Bid(b, inventory.getProductByName(b.productName)));
         }
-        closed = false;
 
         ownersAppointmentAgreement = new HashMap<>();
         for (AwaitingAppointmentDTO adto : storeDTO.awaitingAppointment) {
@@ -824,5 +825,18 @@ public class Store {
         }
         return ret;
 
+    }
+
+    public boolean isOpen() {
+        return !closed;
+    }
+
+    public boolean reopenStore() {
+        closed = false;
+        return true;
+    }
+
+    public String getStoreFounder(String storeName) {
+        return founderName;
     }
 }

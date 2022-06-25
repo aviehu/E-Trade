@@ -32,13 +32,22 @@ const DashboardContent = ({setSuccessMsg}) => {
     const [hasError, setHasError] = React.useState(false)
     const [myStores, setMyStores] = React.useState([]);
     const [isAdmin, setIsAdmin] = React.useState(false);
+    const [management, setManagement] = React.useState(null)
+
+    const getManagement = async () => {
+        const res = await get(`stores/getmanagement/${name}`);
+        const ans = await res.json();
+        if(ans.val) {
+            setManagement(ans.val)
+        }
+    }
 
     useEffect(() => {
         async function getStore() {
             const res = await get(`stores/info/${name}`)
             const ans = await res.json()
             const products = ans.val
-            setProducts(products)
+            setProducts(products.first)
         }
 
         async function getMyStores() {
@@ -57,6 +66,7 @@ const DashboardContent = ({setSuccessMsg}) => {
             }
         }
 
+        getManagement();
         checkAdmin()
         getStore()
         getMyStores()
@@ -170,7 +180,7 @@ const DashboardContent = ({setSuccessMsg}) => {
                                 :
                                 null
                             }
-                            {myStores.includes(name) || isAdmin ?
+                            { (myStores.includes(name) && !Object.keys(management.managers).includes(localStorage.getItem("userName")))  || isAdmin ?
                                 <Grid item xs={12}>
                                     <Button onClick={() => navigate(`/store/edit/${name}/viewmanagement`)}>View Management</Button>
                                 </Grid>
