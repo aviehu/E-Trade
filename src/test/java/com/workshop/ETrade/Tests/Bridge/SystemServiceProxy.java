@@ -164,6 +164,16 @@ public class SystemServiceProxy implements ServiceInterface {
         return null;
     }
 
+    @Override
+    public Result<Boolean> editProduct(String userName, String storeName, String productName, int amount, int price) {
+        return null;
+    }
+
+    @Override
+    public Result<ManagementForm> getStoreManagement(String userName, String storeName) {
+        return null;
+    }
+
 
     @Override
     public Result<List<String>> getOnlineMembers(String userName) {
@@ -454,6 +464,11 @@ public class SystemServiceProxy implements ServiceInterface {
     }
 
     @Override
+    public Result<Boolean> appointStoreManager(String userName, String storeName, String newManager, String permission) {
+        return null;
+    }
+
+    @Override
     public Result<Boolean> removeStoreManager(String userName, String storeName, String managerToRemove) {
         if (real == null)
             throw new NotImplementedException();
@@ -523,12 +538,6 @@ public class SystemServiceProxy implements ServiceInterface {
         return real.getProductAmount(storeName, prodName);
     }
 
-    @Override
-    public String getOnline() {
-        if(real == null)
-            throw new NotImplementedException();
-        return real.getOnline();
-    }
 
 
 }

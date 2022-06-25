@@ -24,291 +24,497 @@ public class SystemService implements ServiceInterface {
     private Facade facade;
 
     public SystemService() throws Exception {
-       // initialize = false;
         init();
     }
-    private static SystemService myInstance = null;
 
     public void init() throws Exception {
         this.facade = new Facade();
-
     }
 
     @Override
     public Result<Integer> addComplexPolicy(String userName, String store, String policyOn, String description, PolicyType policyType, ComponentPredicateForm predicateForms, String connectionType) {
-        return facade.addComplexPolicy(userName, store, policyOn, description, policyType, predicateForms, connectionType);
+        try {
+            return facade.addComplexPolicy(userName, store, policyOn, description, policyType, predicateForms, connectionType);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<Integer> addComplexDiscount(String userName, String storeName, String discountOn, int discountPercentage, String description, DiscountType discountType, ComponentPredicateForm predicateForms, String connectionType) {
-        return facade.addComplexDiscount(userName, storeName, discountOn, discountPercentage, description, discountType, predicateForms, connectionType);
+        try {
+            return facade.addComplexDiscount(userName, storeName, discountOn, discountPercentage, description, discountType, predicateForms, connectionType);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<Double> getCartPrice(String userName) {
-        return facade.getCartPrice(userName);
+        try {
+            return facade.getCartPrice(userName);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<Integer> addPolicy(String userName, String store, String policyOn, String description, PolicyType policyType, List<PredicateForm> predicateForms, String connectionType) {
-        return facade.addPolicy(userName, store, policyOn, description, policyType, predicateForms, connectionType);
+        try {
+            return facade.addPolicy(userName, store, policyOn, description, policyType, predicateForms, connectionType);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
 
     @Override
     public Result<List<String>> getOnlineMembers(String userName) {
-        return facade.getOnlineMembers(userName);
+        try {
+            return facade.getOnlineMembers(userName);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<List<String>> getOfflineMembers(String userName) {
-        return facade.getOfflineMembers(userName);
+        try {
+            return facade.getOfflineMembers(userName);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<List<String>> getOnlineGuests() {
-        return facade.getOnlineGuests();
+        try {
+            return facade.getOnlineGuests();
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
     @Override
     public Result<List<String>> getOfflineGuests() {
-        return facade.getOfflineGuests();
+        try {
+            return facade.getOfflineGuests();
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
     public Result<Boolean> supplyServiceExists(){
-        return facade.supplyServiceExists();
+        try {
+            return facade.supplyServiceExists();
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     public Result<Boolean> paymentServiceExists(){
-        return facade.paymentServiceExists();
+        try {
+            return facade.paymentServiceExists();
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     public Result<Boolean> hasAdmin(){
-        return facade.hasAdmin();
+        try {
+            return facade.hasAdmin();
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<List<String>> getAllStores(String userName) {
-        return facade.getAllStores(userName);
+        try {
+            return facade.getAllStores(userName);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<Boolean> removeMember(String userName, String memberToRemove) {
-        return facade.removeMember(userName, memberToRemove);
+        try {
+            return facade.removeMember(userName, memberToRemove);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<String> enterSystem() {
-
-        return facade.enterSystem();
+        try {
+            return facade.enterSystem();
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<Boolean> addSystemManager(String userName, String managerToAdd) {
-        return facade.addSystemManager(userName, managerToAdd);
+        try {
+            return facade.addSystemManager(userName, managerToAdd);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<Boolean> removeSystemManager(String userName, String managerToRemove) {
-        return facade.removeSystemManager(userName, managerToRemove);
+        try {
+            return facade.removeSystemManager(userName, managerToRemove);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<Boolean> addExternalPaymentService(PaymentAdaptee paymentAdaptee) {
-        return facade.addExternalPaymentService(paymentAdaptee);
+        try {
+            return facade.addExternalPaymentService(paymentAdaptee);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<Boolean> changeExternalPaymentService(String userName, PaymentAdaptee paymentAdaptee) {
-        return facade.changeExternalPaymentService(userName, paymentAdaptee);
+        try {
+            return facade.changeExternalPaymentService(userName, paymentAdaptee);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<Boolean> editExternalPaymentService() {
-        return facade.editExternalPaymentService();
+        try {
+            return facade.editExternalPaymentService();
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<Boolean> addExternalSupplyService(SupplyAdaptee supplyAdaptee) {
-        return facade.addExternalSupplyService(supplyAdaptee);
+        try {
+            return facade.addExternalSupplyService(supplyAdaptee);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<Boolean> changeExternalSupplyService(String userName, SupplyAdaptee supplyAdaptee) {
-        return facade.changeExternalSupplyService(userName, supplyAdaptee);
+        try {
+            return facade.changeExternalSupplyService(userName, supplyAdaptee);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<Boolean> editExternalSupplyService() {
-        return facade.editExternalSupplyService();
+        try {
+            return facade.editExternalSupplyService();
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<Boolean> exitSystem(String userName) {
-        return facade.exitSystem(userName);
+        try {
+            return facade.exitSystem(userName);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<Boolean> signUp(String userName, String newUserName, String password, String name, String lastName) {
-        return facade.signUp(userName, newUserName, password, name, lastName);
+        try {
+            return facade.signUp(userName, newUserName, password, name, lastName);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<Boolean> login(String userName, String memberUserName, String password) {
-        return facade.login(userName, memberUserName, password);
+        try {
+            return facade.login(userName, memberUserName, password);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<List<ProductForm>> getStoreInfo(String userName, String storeName) {
-        List<Product> products = facade.getStoreInfo(userName, storeName).getVal();
-        if(products == null) {
-            return new Result<>(null, "Store Doesn't Exist");
+        try {
+            List<Product> products = facade.getStoreInfo(userName, storeName).getVal();
+            if(products == null) {
+                return new Result<>(null, "Store Doesn't Exist");
+            }
+            List<ProductForm> formProds = new LinkedList<>();
+            for(Product p : products) {
+                formProds.add(new ProductForm(p, storeName));
+            }
+            return new Result(formProds, null);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
         }
-        List<ProductForm> formProds = new LinkedList<>();
-        for(Product p : products) {
-            formProds.add(new ProductForm(p, storeName));
-        }
-        return new Result(formProds, null);
+
     }
 
     @Override
     public Result<Map<String, managersPermission>> getStaffInfo(String userName, String storeName) {
-        Map<String, managersPermission> staff = facade.getStaffInfo(userName, storeName).getVal();
-        if(staff == null) {
-            return new Result<>(null, "Store Doesn't Exist");
+        try {
+            Map<String, managersPermission> staff = facade.getStaffInfo(userName, storeName).getVal();
+            if(staff == null) {
+                return new Result<>(null, "Store Doesn't Exist");
+            }
+            return new Result(staff, null);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
         }
-        return new Result(staff, null);
     }
 
     @Override
     public Result<List<String>> searchByKeyword(String userName, String keyword) {
-        return facade.searchByKeyword(userName, keyword);
+        try {
+            return facade.searchByKeyword(userName, keyword);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<List<String>> searchByCategory(String userName, String category) {
-        return facade.searchByCategory(userName, category);
+        try {
+            return facade.searchByCategory(userName, category);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<List<String>> searchByName(String userName, String productName) {
-        return facade.searchByName(userName, productName);
+        try {
+            return facade.searchByName(userName, productName);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<String> addProductToShoppingCart(String userName, String productName, String storeName, int quantity) {
-        return facade.addProductToShoppingCart(userName, productName, storeName, quantity);
+        try {
+            return facade.addProductToShoppingCart(userName, productName, storeName, quantity);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<List<ProductForm>> displayShoppingCart(String userName) {
-        Result<List<ProductForm>> res = facade.displayShoppingCart(userName);
-        return res;
+        try {
+            return facade.displayShoppingCart(userName);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<String> removeProductFromShoppingCart(String userName, String storeName, int quantity, String prodName) {
-        return facade.removeProductFromShoppingCart(userName, storeName, quantity, prodName);
+        try {
+            return facade.removeProductFromShoppingCart(userName, storeName, quantity, prodName);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<Boolean> purchase(String userName, String creditCard, int month, int year, String holderName , int cvv, int id, String country, String city, String street, int stNum, int apartmentNum, int zip) {
-        return facade.purchase(userName, creditCard, month, year,holderName, cvv, id, country, city, street, stNum, apartmentNum, zip);
+        try {
+            return facade.purchase(userName, creditCard, month, year,holderName, cvv, id, country, city, street, stNum, apartmentNum, zip);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<String> logOut(String userName) {
-        return facade.logOut(userName);
+        try {
+            return facade.logOut(userName);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<Boolean> openStore(String founderName, String storeName, int card) {
-        Result<Boolean> res = facade.openStore(founderName, storeName, card);
-        return res;
+        try {
+            return facade.openStore(founderName, storeName, card);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<Boolean> addProductToStore(String userName, String storeName, String productName, int amount, double price, String category) {
-        Result<Boolean> res = facade.addProductToStore(userName, storeName, productName, amount, price, category);
-        return res;
+        try {
+            return facade.addProductToStore(userName, storeName, productName, amount, price, category);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<Boolean> removeProductFromStore(String userName, String storeName, String productName) {
-        return facade.removeProductFromStore(userName, storeName, productName);
+        try {
+            return facade.removeProductFromStore(userName, storeName, productName);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<Boolean> editProductName(String userName, String storeName, String oldProductName, String newProductName) {
-        return facade.editProductName(userName, storeName, oldProductName, newProductName);
+        try {
+            return facade.editProductName(userName, storeName, oldProductName, newProductName);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<Boolean> editProductPrice(String userName, String storeName, String ProductName, double newPrice) {
-        return facade.editProductPrice(userName, storeName, ProductName, newPrice);
+        try {
+            return facade.editProductPrice(userName, storeName, ProductName, newPrice);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<Boolean> editProductQuantity(String userName, String storeName, String ProductName, int newQuantity) {
-        return facade.editProductQuantity(userName, storeName, ProductName, newQuantity);
+        try {
+            return facade.editProductQuantity(userName, storeName, ProductName, newQuantity);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<Boolean> changePurchaseOption(String userName, String storeName, String ProductName, purchaseOption newOption) {
-        return facade.changePurchaseOption(userName, storeName, ProductName, newOption);
+        try {
+            return facade.changePurchaseOption(userName, storeName, ProductName, newOption);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<String> appointStoreOwner(String userName, String storeName, String newOwner) {
-        return facade.appointStoreOwner(userName, storeName, newOwner);
+        try {
+            return facade.appointStoreOwner(userName, storeName, newOwner);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<Boolean> removeStoreOwner(String userName, String storeName, String ownerToRemove) {
-        return facade.removeStoreOwner(userName, storeName, ownerToRemove);
+        try {
+            return facade.removeStoreOwner(userName, storeName, ownerToRemove);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<Boolean> appointStoreManager(String userName, String storeName, String newManager) {
-        return facade.appointStoreManager(userName, storeName, newManager);
+        try {
+            return facade.appointStoreManager(userName, storeName, newManager);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<Boolean> appointStoreManager(String userName, String storeName, String newManager, String permission) {
-        return facade.appointStoreManager(userName, storeName, newManager, permission);
+        try {
+            return facade.appointStoreManager(userName, storeName, newManager, permission);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<Boolean> removeStoreManager(String userName, String storeName, String managerToRemove) {
-        return facade.removeStoreManager(userName, storeName, managerToRemove);
+        try {
+            return facade.removeStoreManager(userName, storeName, managerToRemove);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<Boolean> changeStoreManagersPermission(String userName, String storeName, String managerName, managersPermission newPermission) {
-        return facade.changeStoreManagersPermission(userName, storeName, managerName, newPermission);
+        try {
+            return facade.changeStoreManagersPermission(userName, storeName, managerName, newPermission);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<Boolean> closeStore(String userName, String storeName) {
-        return facade.closeStore(userName, storeName);
+        try {
+            return facade.closeStore(userName, storeName);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<String> getStoresManagement(String userName, String storeName) {
-        return facade.getStoresManagement(userName, storeName);
+        try {
+            return facade.getStoresManagement(userName, storeName);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<String> getStoresPurchaseHistory(String userName, String storeName) {
-        return facade.getStoresPurchaseHistory(userName, storeName);
+        try {
+            return facade.getStoresPurchaseHistory(userName, storeName);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<Boolean> adminCloseStorePermanently(String adminName, String storeName) {
-        return facade.adminCloseStorePermanently(adminName, storeName);
+        try {
+            return facade.adminCloseStorePermanently(adminName, storeName);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<List<String>> getStoresOfUser(String userName) {
-        return facade.getStoresOfUser(userName);
+        try {
+            return facade.getStoresOfUser(userName);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
 //    @Override
@@ -318,119 +524,207 @@ public class SystemService implements ServiceInterface {
 
     @Override
     public Result<String> adminGetStoresPurchaseHistory(String adminName, String storeName) {
-        return facade.adminGetStoresPurchaseHistory(adminName, storeName);
+        try {
+            return facade.adminGetStoresPurchaseHistory(adminName, storeName);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
-    public String getOnline() {
-        return facade.getOnline();
-    }
 
     @Override
     public Result<Integer> addDiscount(String userName, String store, String discountOn, int discountPercentage, String description, DiscountType discountType) {
-        return facade.addDiscount(userName,store, discountOn, discountPercentage, description, discountType);
+        try {
+            return facade.addDiscount(userName,store, discountOn, discountPercentage, description, discountType);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<Double> getProdPrice(String store, String prod) {
-        return facade.getProdPrice(store, prod);
+        try {
+            return facade.getProdPrice(store, prod);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<Integer> getProdAmount(String store, String prod) {
-        return facade.getProdAmount(store, prod);
+        try {
+            return facade.getProdAmount(store, prod);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<List<Notification>> getMessages(String userName) {
-        return facade.getMessages(userName);
+        try {
+            return facade.getMessages(userName);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<Boolean> isAdmin(String userName) {
-        return facade.isAdmin(userName);
+        try {
+            return facade.isAdmin(userName);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<Integer> addPreDiscount(String userName, String storeName, String discountOn, int discountPercentage, String description, DiscountType discountType, List<PredicateForm> predicateForms, String connectionType) {
-        return facade.addPreDiscount(userName, storeName, discountOn, discountPercentage, description, discountType, predicateForms, connectionType);
+        try {
+            return facade.addPreDiscount(userName, storeName, discountOn, discountPercentage, description, discountType, predicateForms, connectionType);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<Boolean> addBid(String userName, String storeName, String productName, double bidAmount, CreditCardForm creditCard, SupplyAddressForm supplyAddress) {
-        return facade.addBid(userName, storeName, productName, bidAmount, creditCard, supplyAddress);
+        try {
+            return facade.addBid(userName, storeName, productName, bidAmount, creditCard, supplyAddress);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<List<BidForm>> getStoreBids(String userName, String storeName) {
-        return facade.getStoreBids(userName, storeName);
+        try {
+            return facade.getStoreBids(userName, storeName);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<Boolean> reviewBid(String userName, String storeName, int bidId, boolean approve) {
-        return facade.reviewBid(userName, storeName, bidId, approve);
+        try {
+            return facade.reviewBid(userName, storeName, bidId, approve);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<Boolean> counterBid(String userName, String storeName, int bidId, double newOffer) {
-        return facade.counterBid(userName, storeName, bidId, newOffer);
+        try {
+            return facade.counterBid(userName, storeName, bidId, newOffer);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<List<BidForm>> userBids(String userName) {
-        return facade.userBids(userName);
+        try {
+            return facade.userBids(userName);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<Boolean> counterBidReview(String userName, String storeName, int bidId, boolean approve) {
-        return facade.counterBidReview(userName, storeName, bidId, approve);
+        try {
+            return facade.counterBidReview(userName, storeName, bidId, approve);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<Map<String, OwnerWaitingForApproveForm>> getOwnersWaitingForApprove(String userName, String storeName) {
-        return facade.getOwnersWaitingForApprove(userName, storeName);
+        try {
+            return facade.getOwnersWaitingForApprove(userName, storeName);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<String> approveNewOwner(String userName, String storeName, String appointee, boolean approve) {
-        return facade.approveOwner(userName, storeName,appointee, approve);
+        try {
+            return facade.approveOwner(userName, storeName,appointee, approve);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<List<Purchase>> getStorePurchaseHistory(String userName, String storeName) {
-        return facade.getStorePurchaseHistory(userName, storeName);
+        try {
+            return facade.getStorePurchaseHistory(userName, storeName);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     public Result<Integer> getProductAmount(String storeName, String prodName){
-        return facade.getProductAmount(storeName,prodName);
+        try {
+            return facade.getProductAmount(storeName,prodName);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     public Result<Boolean> addKeyword(String userName, String productName, String storeName, String keyWord) {
-        return facade.addKeyword(userName, productName, storeName, keyWord);
+        try {
+            return facade.addKeyword(userName, productName, storeName, keyWord);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
     public void initFacade(){
         this.facade.init();
     }
 
     public Result<TotalTraffic> getTrafficByDates(int startYear, int startMonth, int startDay, int endYear, int endMonth, int endDay){
-        return this.facade.getTrafficByDates(startYear, startMonth, startDay, endYear, endMonth, endDay);
+        try {
+            return this.facade.getTrafficByDates(startYear, startMonth, startDay, endYear, endMonth, endDay);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
 
     }
     public Result<Boolean> guestEnteredMarket(String userName){
-        return facade.guestEnteredMarket(userName);
+        try {
+            return facade.guestEnteredMarket(userName);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<Boolean> editProduct(String userName, String storeName,String productName, int amount, int price) {
-        return facade.editProduct(userName, storeName,productName, amount, price);
+        try {
+            return facade.editProduct(userName, storeName,productName, amount, price);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     @Override
     public Result<ManagementForm> getStoreManagement(String userName, String storeName) {
-        return facade.getStoreManagement(userName, storeName);
+        try {
+            return facade.getStoreManagement(userName, storeName);
+        } catch (Exception e) {
+            return new Result<>(null, e.getMessage());
+        }
     }
 
     public void allLogOut(){
-        this.facade.allLogOut();
+        try {
+            this.facade.allLogOut();
+        } catch (Exception ignored) {
+        }
     }
 
 }

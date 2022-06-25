@@ -28,7 +28,6 @@ public class Facade implements SystemFacade {
     private UserController userController;
 
     private ExtSysController externalSys;
-    private String myUserName;
 
     public Facade() {
         storesFacade = new StoresFacade();
@@ -169,7 +168,6 @@ public class Facade implements SystemFacade {
     public Result<String> enterSystem() {
         String userName = userController.enterSystem();
         if(userName != null) {
-            this.myUserName = userName;
             return new Result<String>(userName, null);
         }
         return new Result<String>(null,"Can't enter System\n");
@@ -280,7 +278,6 @@ public class Facade implements SystemFacade {
             String pass = this.externalSys.encode(password); //SECURITY
             String ret = userController.logIn(memberUserName, pass);
             if (ret == null){
-                this.myUserName = memberUserName;
                 updateTraffic(memberUserName);
                 userController.getMember(memberUserName).updateStats();
                 return new Result<Boolean>(true, null);
@@ -454,7 +451,6 @@ public class Facade implements SystemFacade {
         if (userController.isConnected(userName)){
             String us = userController.logOut(userName);
             if(us != null){
-                this.myUserName = us;
                 return new Result<String>(us,null);
             }
 
@@ -875,10 +871,6 @@ public class Facade implements SystemFacade {
             return new Result<Boolean>(true, null);
         return new Result<Boolean>(false,"has no admins");
 
-    }
-
-    public String getOnline(){
-        return this.myUserName;
     }
 
     public Result<Integer> getProductAmount(String storeName, String prodName){
