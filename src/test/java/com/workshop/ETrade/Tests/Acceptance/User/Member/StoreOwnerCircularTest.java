@@ -54,6 +54,7 @@ public class StoreOwnerCircularTest {
         systemService.removeStoreOwner("Andalus","Mega", "Andalus2");
         newGuest = systemService.logOut("Andalus").getVal();
         systemService.login(newGuest, "Andalus30", "100");
-        Assert.assertTrue(systemService.getStoresOfUser("Andalus30").getVal().isEmpty());
+        List<String> stores = systemService.getStoresOfUser("Andalus30").getVal();
+        Assert.assertTrue(stores.isEmpty());
     }
 }

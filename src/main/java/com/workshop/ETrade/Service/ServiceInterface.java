@@ -2,6 +2,7 @@ package com.workshop.ETrade.Service;
 
 import com.workshop.ETrade.Controller.Forms.*;
 import com.workshop.ETrade.Domain.Notifications.Notification;
+import com.workshop.ETrade.Domain.Pair;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
 import com.workshop.ETrade.Domain.Stores.Purchase;
@@ -67,7 +68,7 @@ public interface ServiceInterface {
 
     public Result<Boolean> login(String userName, String memberUserName, String password);
 
-    public Result<List<ProductForm>> getStoreInfo(String userName, String storeName);
+    public Result<Pair<List<ProductForm>, Boolean>> getStoreInfo(String userName, String storeName);
 
     Result<Map<String, managersPermission>> getStaffInfo(String userName, String storeName);
 
@@ -170,4 +171,8 @@ public interface ServiceInterface {
     Result<Boolean> editProduct(String userName, String storeName, String productName, int amount, int price);
 
     Result<ManagementForm> getStoreManagement(String userName, String storeName);
+
+    Result<Boolean> reopenStore(String userName, String storeName);
+
+    Result<String> getStoreFounder(String userName, String storeName);
 }

@@ -1,6 +1,7 @@
 package com.workshop.ETrade.Controller;
 
 import com.workshop.ETrade.Controller.Forms.*;
+import com.workshop.ETrade.Domain.Pair;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
 import com.workshop.ETrade.Domain.Stores.Purchase;
@@ -42,7 +43,7 @@ public class StoresController {
     }
 
     @GetMapping("/info/{store}")
-    public Result<List<ProductForm>> getStoreInfo(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName) {
+    public Result<Pair<List<ProductForm>, Boolean>> getStoreInfo(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName) {
         return systemService.getStoreInfo(userName, storeName);
     }
 
@@ -151,6 +152,11 @@ public class StoresController {
         return systemService.openStore(userName, form.storeName, form.card);
     }
 
+    @GetMapping("/openstore/{store}")
+    public Result<Boolean> reopenStore(@RequestHeader("Authorization") String userName , @PathVariable("store") String storeName) {
+        return systemService.reopenStore(userName, storeName);
+    }
+
     @PostMapping("/addproducttostore")
     public Result<Boolean> addProductToStore(@RequestHeader("Authorization") String userName, @RequestBody NewProductForm form) {
         return systemService.addProductToStore(userName, form.storeName, form.productName, form.amount, form.price, form.category);
@@ -232,7 +238,7 @@ public class StoresController {
     }
 
     @GetMapping("/closestore/{store}")
-    public Result<Boolean> closeStore(String userName, @PathVariable("store") String storeName) {
+    public Result<Boolean> closeStore(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName) {
         return systemService.closeStore(userName, storeName);
     }
 
@@ -249,6 +255,11 @@ public class StoresController {
     @GetMapping("/admin/closepermanent/{store}")
     public Result<Boolean> adminCloseStorePermanently(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName) {
         return systemService.adminCloseStorePermanently(userName, storeName);
+    }
+
+    @GetMapping("/founder/{store}")
+    public Result<String> getStoreFounder(@RequestHeader("Authorization") String userName, @PathVariable("store") String storeName) {
+        return systemService.getStoreFounder(userName, storeName);
     }
 
     @GetMapping("/admin/gethistory/{store}")

@@ -137,6 +137,10 @@ public interface SystemFacade {
 
     Result<ManagementForm> getStoreManagement(String userName, String storeName);
 
+    Result<Boolean> reopenStore(String userName, String storeName);
+
+    Result<String> getStoreFounder(String userName, String storeName);
+
 //    public newResult<Boolean> exitSystem();
 
 }
