@@ -175,4 +175,6 @@ public interface ServiceInterface {
     Result<Boolean> reopenStore(String userName, String storeName);
 
     Result<String> getStoreFounder(String userName, String storeName);
+
+    Result<String> editProductInCart(String userName, String productName, String storeName, int quantity);
 }

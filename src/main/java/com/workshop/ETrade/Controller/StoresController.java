@@ -262,6 +262,11 @@ public class StoresController {
         return systemService.getStoreFounder(userName, storeName);
     }
 
+    @PostMapping("/editproductincart")
+    public Result<String> editProductInCart(@RequestHeader("Authorization") String userName, @RequestBody ShoppingCartProductForm form) {
+        return systemService.editProductInCart(userName, form.productName, form.storeName, form.quantity);
+    }
+
     @GetMapping("/admin/gethistory/{store}")
     public Result<String> adminGetStoresPurchaseHistory(String adminName, @PathVariable("store") String storeName) {
         return systemService.adminGetStoresPurchaseHistory(adminName, storeName);
