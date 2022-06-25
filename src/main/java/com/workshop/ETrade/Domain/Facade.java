@@ -721,9 +721,13 @@ public class Facade implements SystemFacade {
 
     @Override
     public Result<Boolean> adminCloseStorePermanently(String adminName, String storeName) {
-        if(storesFacade.adminCloseStore(storeName) && userController.isUserSysManager(adminName)){
+        if( userController.isUserSysManager(adminName) && storesFacade.adminCloseStore(storeName)){
             Store s = storesFacade.getStore(storeName);
             notifySubscribers(s.getSubscribers(),"Your Store "+ storeName+" has been close permanently by Admin",adminName);
+            storesFacade.deleteStore(storeName);
+                //logger.info("store - " + storeName + "closed by admin");
+
+
             return new Result<Boolean>(true, null);
         }
         return new Result<Boolean>(false , "Cannot Close Store Permanently");

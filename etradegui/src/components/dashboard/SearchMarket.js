@@ -39,6 +39,7 @@ const DashboardContent = () => {
         } else {
             setError(ans.err)
             setHasError(true)
+            setProducts([])
         }
     }
 

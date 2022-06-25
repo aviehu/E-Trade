@@ -94,12 +94,8 @@ public class StoresFacade {
     public boolean adminCloseStore(String storeName) {
         Store store = getStoreByName(storeName);
         if(store != null) {
-            if(store.adminCloseStore()) {
-                stores.remove(store);
-                logger.info("store - " + storeName + "closed by admin");
-                return true;
-            }
-            AllRepos.getStoreRepo().delete(new StoreDTO(store));
+            return true;
+            //AllRepos.getStoreRepo().delete(new StoreDTO(store));
         }
         return false;
     }

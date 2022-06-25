@@ -79,12 +79,6 @@ public class StoreTest {
         Assert.assertTrue(store.addProduct("Andalus", "Bamba", 100, 2.5, "snacks"));
     }
 
-    @Test
-    public void removeOwner() {
-        store.addOwner("Andalus", "Andalus1");
-        Assert.assertTrue(!store.removeOwner("Andalus", "Andalus1").isEmpty());
-        Assert.assertFalse(store.removeOwner("Andalus", "Andalus").isEmpty());
-    }
 
     @Test
     public void removeManager() {
