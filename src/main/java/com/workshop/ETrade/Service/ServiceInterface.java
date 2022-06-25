@@ -71,7 +71,7 @@ public interface ServiceInterface {
 
     Result<Map<String, managersPermission>> getStaffInfo(String userName, String storeName);
 
-    public Result<List<String>> searchByKeyword(String userName, String keyword);
+    public Result<List<ProductForm>> searchByKeyword(String userName, String keyword);
 
     public Result<List<String>> searchByCategory(String userName, String category);
 

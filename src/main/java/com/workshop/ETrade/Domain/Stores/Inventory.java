@@ -129,13 +129,14 @@ public class Inventory {
         return result.toString();
     }
 
-    public String searchByKeyword(String keyword) {
-        StringBuilder result = new StringBuilder();
-        List<Product> foundProducts = getProductsByKeyword(keyword);
-        for(Product product : foundProducts) {
-            result.append(product.toString());
+    public List<Product> searchByKeyword(String keyword) {
+        List<Product> result = new LinkedList<>();
+        for (Product product : products) {
+            if(product.getKeywords().contains(keyword)) {
+                result.add(product);
+            }
         }
-        return result.toString();
+        return result;
     }
 
     public String searchByName(String name) {

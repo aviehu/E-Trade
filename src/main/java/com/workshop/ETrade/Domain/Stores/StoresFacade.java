@@ -116,10 +116,13 @@ public class StoresFacade {
         return true;
     }
 
-    public List<String> searchByKeyword(String keyword) {
-        List<String> result = new LinkedList<>();
+    public HashMap<String, List<Product>> searchByKeyword(String keyword) {
+        HashMap<String, List<Product>> result = new HashMap<>();
         for(Store store : stores) {
-            result.add(store.searchByKeyword(keyword));
+            List<Product> prods = store.searchByKeyword(keyword);
+            if(!prods.isEmpty()) {
+                result.put(store.getName(), prods);
+            }
         }
         return result;
     }

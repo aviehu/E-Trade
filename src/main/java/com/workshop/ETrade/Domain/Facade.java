@@ -316,9 +316,9 @@ public class Facade implements SystemFacade {
     }
 
     @Override
-    public Result<List<String>> searchByKeyword(String userName, String keyword) {
+    public Result<HashMap<String, List<Product>>> searchByKeyword(String userName, String keyword) {
         if(userController.isConnected(userName)){
-            List<String> ans = storesFacade.searchByKeyword(keyword);
+            HashMap<String, List<Product>> ans = storesFacade.searchByKeyword(keyword);
             if(ans != null) {
                 return new Result<>(ans, null);
             }

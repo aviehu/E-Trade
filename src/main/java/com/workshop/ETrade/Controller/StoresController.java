@@ -62,7 +62,7 @@ public class StoresController {
     }
 
     @PostMapping("/searchbykw")
-    public Result<List<String>> searchByKeyword(@RequestHeader("Authorization") String userName, @RequestBody String keyword) {
+    public Result<List<ProductForm>> searchByKeyword(@RequestHeader("Authorization") String userName, @RequestBody String keyword) {
         return systemService.searchByKeyword(userName, keyword);
     }
 
