@@ -564,7 +564,7 @@ public class Store {
         return inventory.searchByKeyword(keyword);
     }
 
-    public String searchByName(String name) {
+    public List<Product> searchByName(String name) {
         return inventory.searchByName(name);
     }
 

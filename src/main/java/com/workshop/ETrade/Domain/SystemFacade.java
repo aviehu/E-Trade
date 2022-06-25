@@ -57,7 +57,7 @@ public interface SystemFacade {
 
     public Result<List<String>> searchByCategory(String userName, String category);
     public Result<Boolean> isAdmin(String userName);
-    public Result<List<String>> searchByName(String userName, String productName);
+    public Result<List<ProductForm>> searchByName(String userName, String productName);
 
     public Result<List<Notification>> getMessages(String userName);
     public Result<List<String>> getStoresOfUser(String userName);

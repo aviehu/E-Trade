@@ -352,7 +352,7 @@ public class SystemServiceProxy implements ServiceInterface {
     }
 
     @Override
-    public Result<List<String>> searchByName(String userName, String productName) {
+    public Result<List<ProductForm>> searchByName(String userName, String productName) {
         if (real == null)
             throw new NotImplementedException();
         return real.searchByName(userName, productName);

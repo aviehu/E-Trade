@@ -76,7 +76,7 @@ public interface ServiceInterface {
 
     public Result<List<String>> searchByCategory(String userName, String category);
 
-    public Result<List<String>> searchByName(String userName, String productName);
+    public Result<List<ProductForm>> searchByName(String userName, String productName);
 
     public Result<String> addProductToShoppingCart(String userName, String productName, String storeName, int quantity);
 

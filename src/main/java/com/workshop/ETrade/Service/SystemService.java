@@ -313,7 +313,7 @@ public class SystemService implements ServiceInterface {
     }
 
     @Override
-    public Result<List<String>> searchByName(String userName, String productName) {
+    public Result<List<ProductForm>> searchByName(String userName, String productName) {
         try {
             return facade.searchByName(userName, productName);
         } catch (Exception e) {

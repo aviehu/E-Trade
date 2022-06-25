@@ -3,6 +3,7 @@ package com.workshop.ETrade.Domain.Stores;
 import com.workshop.ETrade.Controller.Forms.ComponentPredicateForm;
 import com.workshop.ETrade.Controller.Forms.OwnerWaitingForApproveForm;
 import com.workshop.ETrade.Controller.Forms.PredicateForm;
+import com.workshop.ETrade.Controller.Forms.ProductForm;
 import com.workshop.ETrade.Domain.Pair;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
@@ -129,10 +130,12 @@ public class StoresFacade {
         return result;
     }
 
-    public List<String> searchByName(String name) {
-        List<String> ans = new LinkedList<>();
+    public List<ProductForm> searchByName(String name) {
+        List<ProductForm> ans = new LinkedList<>();
         for(Store store : stores) {
-            ans.add(store.searchByName(name));
+            for (Product p : store.searchByName(name)) {
+                ans.add(new ProductForm(p, store.getName()));
+            }
         }
         return ans;
     }
