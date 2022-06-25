@@ -371,9 +371,10 @@ public class Store {
                 ownersAppointments.put(nameToAdd, new LinkedList<>());
                 managersAppointments.put(nameToAdd, new LinkedList<>());
                 ownersAppointmentAgreement.remove(nameToAdd);
+                AllRepos.getStoreRepo().save(new StoreDTO(this));
                 return nameToAdd + " has been added as store owner";
             }
-
+            AllRepos.getStoreRepo().save(new StoreDTO(this));
             return nameToAdd + " has been added to review as store owner";
         }
         return "User is already waiting for approval";
@@ -387,6 +388,7 @@ public class Store {
             ownersAppointments.put(nameToApprove, new LinkedList<>());
             managersAppointments.put(nameToApprove, new LinkedList<>());
             ownersAppointmentAgreement.remove(nameToApprove);
+            AllRepos.getStoreRepo().save(new StoreDTO(this));
         }
         return ans;
     }
@@ -439,6 +441,7 @@ public class Store {
                     ownersAppointments.put(a, new LinkedList<>());
                     managersAppointments.put(a, new LinkedList<>());
                     ownersAppointmentAgreement.remove(a);
+
                 }
 
             }
@@ -456,6 +459,7 @@ public class Store {
 //                }
             //}
             //notifyOne("You are no longer Owner at " + getName(),ownersName,ownerToRemove);
+            AllRepos.getStoreRepo().save(new StoreDTO(this));
             return ret;//true
         }
         return ret; // false
