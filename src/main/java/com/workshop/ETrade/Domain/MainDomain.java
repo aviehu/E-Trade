@@ -7,9 +7,7 @@ public class MainDomain {
 
         System.out.println("Hello, World!");
         Facade facade = new Facade();
-        facade.enterSystem();
-        System.out.println(facade.getOnline());
-        Result<Boolean> r = facade.login(facade.getOnline(),"domain","domain");
+        Result<Boolean> r = facade.login(facade.enterSystem().getVal(),"domain","domain");
         if(r.getVal()) {
             System.out.println("good");
             facade.openStore("domain","hila",123);

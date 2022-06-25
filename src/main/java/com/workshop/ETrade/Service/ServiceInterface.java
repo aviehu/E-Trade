@@ -133,10 +133,10 @@ public interface ServiceInterface {
 
     public Result<Integer> getProductAmount(String storeName, String prodName);
 
-    public String getOnline();
     public Result<Integer> addDiscount(String userName, String store, String discountOn, int discountPercentage, String description, DiscountType discountType);
 
     public Result<Double> getProdPrice(String store, String prod);
+
     public Result<Integer> getProdAmount(String store, String prod);
 
     public Result<List<Notification>> getMessages(String userName);
@@ -150,7 +150,8 @@ public interface ServiceInterface {
     Result<List<BidForm>> getStoreBids(String userName, String storeName);
 
     Result<Boolean> reviewBid(String userName, String storeName, int bidId, boolean approve);
-    public Result<Boolean> counterBid(String userName, String storeName, int bidId, double newOffer);
+
+    Result<Boolean> counterBid(String userName, String storeName, int bidId, double newOffer);
 
     Result<List<BidForm>> userBids(String userName);
 
@@ -160,8 +161,9 @@ public interface ServiceInterface {
 
     Result<String> approveNewOwner(String userName, String storeName, String appointee, boolean approve);
 
-    public Result<List<Purchase>> getStorePurchaseHistory(String userName, String storeName);
-    public Result<TotalTraffic> getTrafficByDates(int startYear, int startMonth, int startDay, int endYear, int endMonth, int endDay);
+    Result<List<Purchase>> getStorePurchaseHistory(String userName, String storeName);
+
+    Result<TotalTraffic> getTrafficByDates(int startYear, int startMonth, int startDay, int endYear, int endMonth, int endDay);
 //    public newResult<Boolean> exitSystem();
     Result<Boolean> guestEnteredMarket(String userName);
 
