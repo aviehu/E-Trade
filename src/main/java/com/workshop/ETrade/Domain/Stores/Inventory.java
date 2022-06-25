@@ -224,6 +224,7 @@ public class Inventory {
         }
         product.setAmount(amount);
         product.setPrice(price);
+        new RepoThread<>(AllRepos.getProductRepo(), new ProductDTO(product)).start();
         return true;
     }
 }

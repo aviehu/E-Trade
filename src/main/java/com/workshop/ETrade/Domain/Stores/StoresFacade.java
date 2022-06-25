@@ -15,6 +15,7 @@ import com.workshop.ETrade.Domain.purchaseOption;
 import com.workshop.ETrade.Persistance.Stores.StoreDTO;
 import com.workshop.ETrade.AllRepos;
 import com.workshop.ETrade.RepoThread;
+import org.springframework.security.core.parameters.P;
 
 import java.util.*;
 import java.util.logging.FileHandler;
@@ -93,10 +94,11 @@ public class StoresFacade {
         Store store = getStoreByName(storeName);
         if(store != null) {
             if(store.adminCloseStore()) {
+                stores.remove(store);
                 logger.info("store - " + storeName + "closed by admin");
                 return true;
             }
-            new RepoThread<>(AllRepos.getStoreRepo(), new StoreDTO(store)).start();
+            AllRepos.getStoreRepo().delete(new StoreDTO(store));
         }
         return false;
     }
@@ -564,5 +566,29 @@ public class StoresFacade {
             return null;
         }
         return store.getStoreManagement(userName, userSysManager);
+    }
+
+    public boolean isStoreOpen(String storeName) {
+        Store store = getStoreByName(storeName);
+        if(store == null) {
+            return false;
+        }
+        return store.isOpen();
+    }
+
+    public boolean reopenStore(String storeName) {
+        Store store = getStoreByName(storeName);
+        if(store == null) {
+            return false;
+        }
+        return store.reopenStore();
+    }
+
+    public String getStoreFounder(String storeName) {
+        Store store = getStoreByName(storeName);
+        if(store == null) {
+            return null;
+        }
+        return store.getStoreFounder(storeName);
     }
 }

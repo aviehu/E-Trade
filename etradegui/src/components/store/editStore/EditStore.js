@@ -30,15 +30,28 @@ const DashboardContent = ({setSuccessMsg}) => {
     const [openEditDialog, setOpenEditDialog] = useState(false)
     const [amount, setAmount] = useState(0)
     const [price, setPrice] = useState(0)
+    const [isOpen, setIsOpen] = useState(false);
+    const [isFounder, setIsFounder] = useState(false);
+
+
+    async function getFounder() {
+        const res = await get(`stores/founder/${name}`)
+        const ans = await res.json();
+        if(ans.val) {
+            setIsFounder(ans.val === localStorage.getItem('userName'))
+        }
+    }
 
     async function getStore() {
         const res = await get(`stores/info/${name}`)
         const ans = await res.json()
         const products = ans.val
-        setProducts(products)
+        setProducts(products.first)
+        setIsOpen(products.second)
     }
 
     useEffect(() => {
+        getFounder()
         getStore()
     }, [])
 
@@ -73,6 +86,25 @@ const DashboardContent = ({setSuccessMsg}) => {
             setOpenDialog(false)
         }
     }
+
+    async function handleClose() {
+        const res = await get(`stores/closestore/${name}`)
+        const ans = await res.json();
+        if(ans.val) {
+            setSuccessMsg(`Store ${name} has been closed`)
+            navigate('/etrade')
+        }
+    }
+
+    async function handleOpen() {
+        const res = await get(`stores/openstore/${name}`)
+        const ans = await res.json();
+        if(ans.val) {
+            setSuccessMsg(`Store ${name} has been reopened`)
+            navigate('/etrade')
+        }
+    }
+
 
     function changePurchaseType(product) {
         setProductToChange(product)
@@ -194,6 +226,20 @@ const DashboardContent = ({setSuccessMsg}) => {
                                                 <Grid item xl={12}>
                                                     <Button onClick={() => navigate(`/store/edit/${name}/addpolicy`)}>Add Policy</Button>
                                                 </Grid>
+                                                {
+                                                    isOpen  && isFounder ?
+                                                    <Grid item xl={12}>
+                                                        <Button onClick={handleClose}>Close Store</Button>
+                                                    </Grid> : null
+                                                }
+
+                                                {
+                                                    !isOpen && isFounder ?
+                                                    <Grid item xl={12}>
+                                                        <Button onClick={handleOpen}>Open Store</Button>
+                                                    </Grid> : null
+                                                }
+
                                             </Grid>
                                         </Box>
                                     </Box>
@@ -203,8 +249,8 @@ const DashboardContent = ({setSuccessMsg}) => {
                     </Container>
                 </Box>
             </Box>
-            {openDialog ? <ChangePurchaseType open={openDialog} type={typeToChange} setType={setTypeToChange} handleChange={handleChange} ></ChangePurchaseType> : null}
-            {openEditDialog ? <EditProduct open={openEditDialog} handleChange={handleEdit} amount={amount} setAmount={setAmount} price={price} setPrice={setPrice}></EditProduct> : null}
+            {openDialog ? <ChangePurchaseType open={openDialog} type={typeToChange} setType={setTypeToChange} handleChange={handleChange} /> : null}
+            {openEditDialog ? <EditProduct open={openEditDialog} handleChange={handleEdit} amount={amount} setAmount={setAmount} price={price} setPrice={setPrice}/> : null}
 
         </ThemeProvider>
     );

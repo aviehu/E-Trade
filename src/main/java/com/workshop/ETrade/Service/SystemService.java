@@ -3,6 +3,7 @@ package com.workshop.ETrade.Service;
 import com.workshop.ETrade.Controller.Forms.*;
 import com.workshop.ETrade.Domain.Facade;
 import com.workshop.ETrade.Domain.Notifications.Notification;
+import com.workshop.ETrade.Domain.Pair;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
 import com.workshop.ETrade.Domain.Stores.Product;
@@ -36,7 +37,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.addComplexPolicy(userName, store, policyOn, description, policyType, predicateForms, connectionType);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -45,7 +46,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.addComplexDiscount(userName, storeName, discountOn, discountPercentage, description, discountType, predicateForms, connectionType);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -54,7 +55,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.getCartPrice(userName);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -63,7 +64,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.addPolicy(userName, store, policyOn, description, policyType, predicateForms, connectionType);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -73,7 +74,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.getOnlineMembers(userName);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -82,7 +83,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.getOfflineMembers(userName);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -91,7 +92,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.getOnlineGuests();
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
     @Override
@@ -99,14 +100,14 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.getOfflineGuests();
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
     public Result<Boolean> supplyServiceExists(){
         try {
             return facade.supplyServiceExists();
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -114,7 +115,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.paymentServiceExists();
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -122,7 +123,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.hasAdmin();
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -131,7 +132,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.getAllStores(userName);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -140,7 +141,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.removeMember(userName, memberToRemove);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -149,7 +150,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.enterSystem();
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -158,7 +159,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.addSystemManager(userName, managerToAdd);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -167,7 +168,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.removeSystemManager(userName, managerToRemove);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -176,7 +177,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.addExternalPaymentService(paymentAdaptee);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -185,7 +186,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.changeExternalPaymentService(userName, paymentAdaptee);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -194,7 +195,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.editExternalPaymentService();
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -203,7 +204,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.addExternalSupplyService(supplyAdaptee);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -212,7 +213,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.changeExternalSupplyService(userName, supplyAdaptee);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -221,7 +222,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.editExternalSupplyService();
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -230,7 +231,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.exitSystem(userName);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -239,7 +240,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.signUp(userName, newUserName, password, name, lastName);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -248,12 +249,12 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.login(userName, memberUserName, password);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
     @Override
-    public Result<List<ProductForm>> getStoreInfo(String userName, String storeName) {
+    public Result<Pair<List<ProductForm>, Boolean>> getStoreInfo(String userName, String storeName) {
         try {
             List<Product> products = facade.getStoreInfo(userName, storeName).getVal();
             if(products == null) {
@@ -263,9 +264,9 @@ public class SystemService implements ServiceInterface {
             for(Product p : products) {
                 formProds.add(new ProductForm(p, storeName));
             }
-            return new Result(formProds, null);
+            return new Result<>(new Pair<>(formProds,facade.isStoreOpen(storeName)), null);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
 
     }
@@ -279,7 +280,7 @@ public class SystemService implements ServiceInterface {
             }
             return new Result(staff, null);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -288,7 +289,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.searchByKeyword(userName, keyword);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -297,7 +298,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.searchByCategory(userName, category);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -306,7 +307,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.searchByName(userName, productName);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -315,7 +316,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.addProductToShoppingCart(userName, productName, storeName, quantity);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -324,7 +325,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.displayShoppingCart(userName);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -333,7 +334,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.removeProductFromShoppingCart(userName, storeName, quantity, prodName);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -342,7 +343,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.purchase(userName, creditCard, month, year,holderName, cvv, id, country, city, street, stNum, apartmentNum, zip);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -351,7 +352,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.logOut(userName);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -360,7 +361,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.openStore(founderName, storeName, card);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -369,7 +370,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.addProductToStore(userName, storeName, productName, amount, price, category);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -378,7 +379,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.removeProductFromStore(userName, storeName, productName);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -387,7 +388,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.editProductName(userName, storeName, oldProductName, newProductName);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -396,7 +397,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.editProductPrice(userName, storeName, ProductName, newPrice);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -405,7 +406,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.editProductQuantity(userName, storeName, ProductName, newQuantity);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -414,7 +415,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.changePurchaseOption(userName, storeName, ProductName, newOption);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -423,7 +424,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.appointStoreOwner(userName, storeName, newOwner);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -432,7 +433,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.removeStoreOwner(userName, storeName, ownerToRemove);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -441,7 +442,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.appointStoreManager(userName, storeName, newManager);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -450,7 +451,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.appointStoreManager(userName, storeName, newManager, permission);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -459,7 +460,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.removeStoreManager(userName, storeName, managerToRemove);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -468,7 +469,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.changeStoreManagersPermission(userName, storeName, managerName, newPermission);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -477,7 +478,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.closeStore(userName, storeName);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -486,7 +487,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.getStoresManagement(userName, storeName);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -495,7 +496,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.getStoresPurchaseHistory(userName, storeName);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -504,7 +505,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.adminCloseStorePermanently(adminName, storeName);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -513,7 +514,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.getStoresOfUser(userName);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -527,7 +528,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.adminGetStoresPurchaseHistory(adminName, storeName);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -537,7 +538,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.addDiscount(userName,store, discountOn, discountPercentage, description, discountType);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -546,7 +547,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.getProdPrice(store, prod);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -555,7 +556,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.getProdAmount(store, prod);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -564,7 +565,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.getMessages(userName);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -573,7 +574,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.isAdmin(userName);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -582,7 +583,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.addPreDiscount(userName, storeName, discountOn, discountPercentage, description, discountType, predicateForms, connectionType);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -591,7 +592,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.addBid(userName, storeName, productName, bidAmount, creditCard, supplyAddress);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -600,7 +601,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.getStoreBids(userName, storeName);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -609,7 +610,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.reviewBid(userName, storeName, bidId, approve);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -618,7 +619,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.counterBid(userName, storeName, bidId, newOffer);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -627,7 +628,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.userBids(userName);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -636,7 +637,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.counterBidReview(userName, storeName, bidId, approve);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -645,7 +646,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.getOwnersWaitingForApprove(userName, storeName);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -654,7 +655,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.approveOwner(userName, storeName,appointee, approve);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -663,7 +664,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.getStorePurchaseHistory(userName, storeName);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -671,7 +672,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.getProductAmount(storeName,prodName);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -679,7 +680,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.addKeyword(userName, productName, storeName, keyWord);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
     public void initFacade(){
@@ -690,7 +691,7 @@ public class SystemService implements ServiceInterface {
         try {
             return this.facade.getTrafficByDates(startYear, startMonth, startDay, endYear, endMonth, endDay);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
 
     }
@@ -698,7 +699,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.guestEnteredMarket(userName);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -707,7 +708,7 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.editProduct(userName, storeName,productName, amount, price);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
@@ -716,7 +717,25 @@ public class SystemService implements ServiceInterface {
         try {
             return facade.getStoreManagement(userName, storeName);
         } catch (Exception e) {
-            return new Result<>(null, e.getMessage());
+            return new Result<>(null, "Could not perform action!");
+        }
+    }
+
+    @Override
+    public Result<Boolean> reopenStore(String userName, String storeName) {
+        try {
+            return facade.reopenStore(userName, storeName);
+        } catch (Exception e) {
+            return new Result<>(null, "Could not perform action!");
+        }
+    }
+
+    @Override
+    public Result<String> getStoreFounder(String userName, String storeName) {
+        try {
+            return facade.getStoreFounder(userName, storeName);
+        } catch (Exception e) {
+            return new Result<>(null, "Could not perform action!");
         }
     }
 
