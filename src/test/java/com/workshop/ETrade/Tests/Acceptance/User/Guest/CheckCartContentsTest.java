@@ -20,10 +20,10 @@ public class CheckCartContentsTest {
     @org.junit.Before
     public void setUp() throws Exception {
         String guestName = systemService.enterSystem().getVal();
-        systemService.signUp(guestName, "Andalus", "100","Andalus","Andalus");
-        systemService.login(guestName, "Andalus", "100");
-        systemService.openStore("Andalus", "Mega", 123);
-        systemService.addProductToStore("Andalus", "Mega",
+        systemService.signUp(guestName, "Andalush", "100","Andalus","Andalus");
+        systemService.login(guestName, "Andalush", "100");
+        systemService.openStore("Andalush", "Mega1", 123);
+        systemService.addProductToStore("Andalush", "Mega1",
                 "Bamba", 100, 5,"snacks");
     }
 
@@ -33,16 +33,17 @@ public class CheckCartContentsTest {
 
     @Test
     public void CheckCartContentsSuccessTest(){
-        List<ProductForm> cartInfo = systemService.displayShoppingCart("Andalus").getVal();
+        List<ProductForm> cartInfo = systemService.displayShoppingCart("Andalush").getVal();
         Assert.assertTrue(cartInfo.isEmpty());
-        systemService.addProductToShoppingCart("Andalus", "Bamba", "Mega", 5);
-        Assert.assertEquals("Bamba", systemService.displayShoppingCart("Andalus").getVal().get(0).productName);
+        systemService.addProductToShoppingCart("Andalush", "Bamba", "Mega1", 5);
+        Assert.assertEquals("Bamba", systemService.displayShoppingCart("Andalush").getVal().get(0).productName);
     }
 
     @Test
     public void CheckCartContentsFailTest(){
 
-        systemService.addProductToShoppingCart("Andalus", "Bisly", "Mega", 5);
-        Assert.assertFalse(systemService.displayShoppingCart("Andalus").getVal().contains("Bisly"));
+        systemService.addProductToShoppingCart("Andalush", "Bisly", "Mega1", 5);
+        Assert.assertFalse(systemService.displayShoppingCart("Andalush").getVal().contains("Bisly"));
+        systemService.editProductInCart("Andalus","Bisly","Mega1",0);
     }
 }

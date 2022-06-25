@@ -71,6 +71,7 @@ public class NotificationTest {
     }
     @Test
     public void adminCloseStoreNotificationsTest(){
+        service.logOut("Batya3");
         List<Notification> notificationList;
         service.appointStoreManager("domain","Hila","Batya3");
 
