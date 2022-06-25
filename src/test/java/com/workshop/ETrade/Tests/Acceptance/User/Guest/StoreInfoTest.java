@@ -29,7 +29,7 @@ public class StoreInfoTest {
 
     @Test
     public void StoreInfoSuccessTest(){
-        Assert.assertTrue(isInList(systemService.getStoreInfo("Andalus", "Mega").getVal(), "Bamba"));
+        Assert.assertTrue(isInList(systemService.getStoreInfo("Andalus", "Mega").getVal().first, "Bamba"));
     }
 
     private boolean isInList(List<ProductForm> productForms, String productName)  {

@@ -35,12 +35,7 @@ const DashboardContent = () => {
         const res = await post(body, "stores/searchbykw")
         const ans = await res.json()
         if(ans.val) {
-            const fixed = ans.val.map(product => {
-                return {
-                    title: product
-                }
-            })
-            setProducts(fixed)
+            setProducts(ans.val)
         } else {
             setError(ans.err)
             setHasError(true)
@@ -54,12 +49,7 @@ const DashboardContent = () => {
         const res = await post(body, "stores/searchbycat")
         const ans = await res.json()
         if(ans.val) {
-            const fixed = ans.val.map(product => {
-                return {
-                    title: product
-                }
-            })
-            setProducts(fixed)
+            setProducts(ans.val)
         } else {
             setError(ans.err)
             setHasError(true)
@@ -73,12 +63,7 @@ const DashboardContent = () => {
         const res = await post(body, "stores/searchbyname")
         const ans = await res.json()
         if(ans.val) {
-            const fixed = ans.val.map(product => {
-                return {
-                    title: product
-                }
-            })
-            setProducts(fixed)
+            setProducts(ans.val)
         } else {
             setError(ans.err)
             setHasError(true)
@@ -88,17 +73,29 @@ const DashboardContent = () => {
 
     const renderProducts = (products) => {
         return (<ul className='stores'>
-            {products.map((product,index) => (<li key={product.id} className='store'>
+            {products.map((product,index) => (<li key={product.productName} className='store'>
 
                 <div className='topStore' >
                     <div>
-                        <h5 className='title' >{product.title}</h5>
+                        <h5 className='title' >Name: {product.productName}</h5>
+                    </div>
+                    <div>
+                        <h5 className='title' >Purchase Type: {product.purchaseOption}</h5>
+                    </div>
+                    <div>
+                        <h5 className='title' >Amount In Stock: {product.amount}</h5>
+                    </div>
+                    <div>
+                        <h5 className='title' >Base Price: {product.price}$</h5>
+                    </div>
+                    <div>
+                        <h5 className='title' >Store: {product.storeName}</h5>
                     </div>
                 </div>
 
-                {/*<div className="store-footer">*/}
-                {/*    <Button onClick={async () => await handleProduct(product)}>Remove</Button>*/}
-                {/*</div>*/}
+                <div className="store-footer">
+                    <Button onClick={() => navigate(`/store/${product.storeName}`)}>Go To Shop</Button>
+                </div>
             </li>))}
         </ul>);
     }

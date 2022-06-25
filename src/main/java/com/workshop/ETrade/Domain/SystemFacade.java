@@ -12,6 +12,7 @@ import com.workshop.ETrade.Domain.Users.ExternalService.Supply.SupplyAdaptee;
 import com.workshop.ETrade.Domain.Users.TotalTraffic;
 import com.workshop.ETrade.Service.ResultPackge.Result;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -52,11 +53,11 @@ public interface SystemFacade {
 
     Result<Map<String, managersPermission>> getStaffInfo(String userName, String storeName);
 
-    public Result<List<String>> searchByKeyword(String userName, String keyword);
+    public Result<HashMap<String, List<Product>>> searchByKeyword(String userName, String keyword);
 
-    public Result<List<String>> searchByCategory(String userName, String category);
+    public Result<List<ProductForm>> searchByCategory(String userName, String category);
     public Result<Boolean> isAdmin(String userName);
-    public Result<List<String>> searchByName(String userName, String productName);
+    public Result<List<ProductForm>> searchByName(String userName, String productName);
 
     public Result<List<Notification>> getMessages(String userName);
     public Result<List<String>> getStoresOfUser(String userName);

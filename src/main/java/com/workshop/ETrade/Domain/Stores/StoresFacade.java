@@ -3,6 +3,7 @@ package com.workshop.ETrade.Domain.Stores;
 import com.workshop.ETrade.Controller.Forms.ComponentPredicateForm;
 import com.workshop.ETrade.Controller.Forms.OwnerWaitingForApproveForm;
 import com.workshop.ETrade.Controller.Forms.PredicateForm;
+import com.workshop.ETrade.Controller.Forms.ProductForm;
 import com.workshop.ETrade.Domain.Pair;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
@@ -118,26 +119,34 @@ public class StoresFacade {
         return true;
     }
 
-    public List<String> searchByKeyword(String keyword) {
-        List<String> result = new LinkedList<>();
+    public HashMap<String, List<Product>> searchByKeyword(String keyword) {
+        HashMap<String, List<Product>> result = new HashMap<>();
         for(Store store : stores) {
-            result.add(store.searchByKeyword(keyword));
+            List<Product> prods = store.searchByKeyword(keyword);
+            if(!prods.isEmpty()) {
+                result.put(store.getName(), prods);
+            }
         }
         return result;
     }
 
-    public List<String> searchByName(String name) {
-        List<String> ans = new LinkedList<>();
+    public List<ProductForm> searchByName(String name) {
+        List<ProductForm> ans = new LinkedList<>();
         for(Store store : stores) {
-            ans.add(store.searchByName(name));
+            for (Product p : store.searchByName(name)) {
+                ans.add(new ProductForm(p, store.getName()));
+            }
         }
         return ans;
     }
 
-    public List<String> searchByCategory(String category) {
-        List<String> result = new LinkedList<>();
+    public List<ProductForm> searchByCategory(String category) {
+        List<ProductForm> result = new LinkedList<>();
         for(Store store : stores) {
-            result.addAll(store.searchByCategory(category));
+            List<Product> prods = store.searchByCategory(category);
+            for (Product p : prods) {
+                result.add(new ProductForm(p, store.getName()));
+            }
         }
         return result;
     }

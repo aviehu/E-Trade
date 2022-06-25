@@ -39,15 +39,15 @@ public class RemoveProductTest {
 
     @Test
     public void removeProductFromStoreSuccessTest(){
-        Assert.assertTrue(isInList(systemService.getStoreInfo("Andalus", "Mega").getVal(), "Bamba"));
+        Assert.assertTrue(isInList(systemService.getStoreInfo("Andalus", "Mega").getVal().first, "Bamba"));
         systemService.removeProductFromStore("Andalus", "Mega", "Bamba");
-        Assert.assertFalse(systemService.getStoreInfo("Andalus", "Mega").getVal().contains("Bamba"));
+        Assert.assertFalse(systemService.getStoreInfo("Andalus", "Mega").getVal().first.contains("Bamba"));
     }
 
     @Test
     public void removeProductFromStoreFailTest(){
-        Assert.assertTrue(isInList(systemService.getStoreInfo("Andalus", "Mega").getVal(), "Bamba"));
+        Assert.assertTrue(isInList(systemService.getStoreInfo("Andalus", "Mega").getVal().first, "Bamba"));
         Assert.assertFalse(systemService.removeProductFromStore("Andalus", "Mega", "Bisly").isSuccess());
-        Assert.assertTrue(isInList(systemService.getStoreInfo("Andalus", "Mega").getVal(),"Bamba"));
+        Assert.assertTrue(isInList(systemService.getStoreInfo("Andalus", "Mega").getVal().first,"Bamba"));
     }
 }

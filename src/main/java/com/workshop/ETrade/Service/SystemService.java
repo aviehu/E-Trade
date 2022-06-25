@@ -16,6 +16,7 @@ import com.workshop.ETrade.Domain.purchaseOption;
 import com.workshop.ETrade.Service.ResultPackge.Result;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -285,16 +286,25 @@ public class SystemService implements ServiceInterface {
     }
 
     @Override
-    public Result<List<String>> searchByKeyword(String userName, String keyword) {
+    public Result<List<ProductForm>> searchByKeyword(String userName, String keyword) {
         try {
-            return facade.searchByKeyword(userName, keyword);
+            Result<HashMap<String, List<Product>>> hashMap = facade.searchByKeyword(userName, keyword);
+            if (!hashMap.isSuccess())
+                return new Result<>(null, hashMap.getErr());
+            List<ProductForm> ans = new LinkedList<>();
+            for(String store : hashMap.getVal().keySet()) {
+                for (Product p : hashMap.getVal().get(store)) {
+                    ans.add(new ProductForm(p, store));
+                }
+            }
+            return new Result<>(ans, null);
         } catch (Exception e) {
             return new Result<>(null, "Could not perform action!");
         }
     }
 
     @Override
-    public Result<List<String>> searchByCategory(String userName, String category) {
+    public Result<List<ProductForm>> searchByCategory(String userName, String category) {
         try {
             return facade.searchByCategory(userName, category);
         } catch (Exception e) {
@@ -303,7 +313,7 @@ public class SystemService implements ServiceInterface {
     }
 
     @Override
-    public Result<List<String>> searchByName(String userName, String productName) {
+    public Result<List<ProductForm>> searchByName(String userName, String productName) {
         try {
             return facade.searchByName(userName, productName);
         } catch (Exception e) {

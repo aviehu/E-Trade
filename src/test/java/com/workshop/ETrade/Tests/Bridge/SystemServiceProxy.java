@@ -2,6 +2,7 @@ package com.workshop.ETrade.Tests.Bridge;
 
 import com.workshop.ETrade.Controller.Forms.*;
 import com.workshop.ETrade.Domain.Notifications.Notification;
+import com.workshop.ETrade.Domain.Pair;
 import com.workshop.ETrade.Domain.Stores.Discounts.DiscountType;
 import com.workshop.ETrade.Domain.Stores.Policies.PolicyType;
 import com.workshop.ETrade.Domain.Stores.Purchase;
@@ -14,6 +15,7 @@ import com.workshop.ETrade.Service.ResultPackge.Result;
 import com.workshop.ETrade.Service.ServiceInterface;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -174,6 +176,21 @@ public class SystemServiceProxy implements ServiceInterface {
         return null;
     }
 
+    @Override
+    public Result<Boolean> reopenStore(String userName, String storeName) {
+        return null;
+    }
+
+    @Override
+    public Result<String> getStoreFounder(String userName, String storeName) {
+        return null;
+    }
+
+    @Override
+    public Result<String> editProductInCart(String userName, String productName, String storeName, int quantity) {
+        return null;
+    }
+
 
     @Override
     public Result<List<String>> getOnlineMembers(String userName) {
@@ -323,7 +340,7 @@ public class SystemServiceProxy implements ServiceInterface {
     }
 
     @Override
-    public Result<List<ProductForm>> getStoreInfo(String userName, String storeName) {
+    public Result<Pair<List<ProductForm>, Boolean>> getStoreInfo(String userName, String storeName) {
         if (real == null)
             throw new NotImplementedException();
         return real.getStoreInfo(userName, storeName);
@@ -337,21 +354,21 @@ public class SystemServiceProxy implements ServiceInterface {
     }
 
     @Override
-    public Result<List<String>> searchByKeyword(String userName, String keyword) {
+    public Result<List<ProductForm>> searchByKeyword(String userName, String keyword) {
         if (real == null)
             throw new NotImplementedException();
         return real.searchByKeyword(userName, keyword);
     }
 
     @Override
-    public Result<List<String>> searchByCategory(String userName, String category) {
+    public Result<List<ProductForm>> searchByCategory(String userName, String category) {
         if (real == null)
             throw new NotImplementedException();
         return real.searchByCategory(userName, category);
     }
 
     @Override
-    public Result<List<String>> searchByName(String userName, String productName) {
+    public Result<List<ProductForm>> searchByName(String userName, String productName) {
         if (real == null)
             throw new NotImplementedException();
         return real.searchByName(userName, productName);

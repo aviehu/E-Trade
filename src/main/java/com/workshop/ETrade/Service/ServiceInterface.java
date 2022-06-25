@@ -72,11 +72,11 @@ public interface ServiceInterface {
 
     Result<Map<String, managersPermission>> getStaffInfo(String userName, String storeName);
 
-    public Result<List<String>> searchByKeyword(String userName, String keyword);
+    public Result<List<ProductForm>> searchByKeyword(String userName, String keyword);
 
-    public Result<List<String>> searchByCategory(String userName, String category);
+    public Result<List<ProductForm>> searchByCategory(String userName, String category);
 
-    public Result<List<String>> searchByName(String userName, String productName);
+    public Result<List<ProductForm>> searchByName(String userName, String productName);
 
     public Result<String> addProductToShoppingCart(String userName, String productName, String storeName, int quantity);
 
