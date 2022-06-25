@@ -113,7 +113,7 @@ const DashboardContent = ({setSuccessMsg}) => {
 
     async function handleProduct(product) {
         const body = {
-            productName: product.title,
+            productName: product.productName,
         }
         const res = await post(body, `stores/removeproductfromstore/${name}`)
         const ans = await res.json()

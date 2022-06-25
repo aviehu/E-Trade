@@ -543,4 +543,10 @@ public class UserController {
         }
         return false;
     }
+    public int getProdAmountInCart(String userName,Store store,String prod){
+        User user = getUser(userName);
+        if(user == null)
+            return -1;
+        return user.getMyShopCart().getProdAmount(store,prod);
+    }
 }

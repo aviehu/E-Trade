@@ -368,7 +368,22 @@ public class Facade implements SystemFacade {
         }
         return new Result<>(null, "User Is Not Connected");
     }
+   public Result<String> editCart(String userName, String productName, String storeName, int quantity){
+       if(userController.isConnected(userName)){
+           if(storesFacade.getStore(storeName).getProductAmount(productName) < quantity || quantity < 0) {
+               return new Result<>(null, "Invalid quantity");
+           }
+           Store s = storesFacade.getStore(storeName);
+           int i = this.userController.getProdAmountInCart(userName,s,productName);
+           if(i > quantity){//remove prods
+               return removeProductFromShoppingCart(userName,storeName,i - quantity,productName);
 
+           }
+           return addProductToShoppingCart(userName,productName,storeName,quantity - i);
+
+       }
+       return new Result<>(null, "User is not connected");
+   }
     @Override
     public Result<String> addProductToShoppingCart(String userName, String productName, String storeName, int quantity) {
         if(userController.isConnected(userName)){
