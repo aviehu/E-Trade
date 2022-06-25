@@ -739,6 +739,16 @@ public class SystemService implements ServiceInterface {
         }
     }
 
+    @Override
+    public Result<String> editProductInCart(String userName, String productName, String storeName, int quantity) {
+        try {
+            return facade.editCart(userName, productName, storeName, quantity);
+        } catch (Exception e) {
+            return new Result<>(null, "Could not perform action!");
+        }
+    }
+
+
     public void allLogOut(){
         try {
             this.facade.allLogOut();
