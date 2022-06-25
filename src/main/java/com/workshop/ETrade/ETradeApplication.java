@@ -76,7 +76,6 @@ public class ETradeApplication implements CommandLineRunner {
 			this.service.initFacade();
 			File file = new File("src\\main\\java\\com\\workshop\\ETrade\\Service\\InitExecuter\\initState.json");
 			String path = file.getAbsolutePath();
-
 			LoadServiceFromInitState.loadFromFile(path, service);
 			this.service.allLogOut();
 		}catch (Exception e){

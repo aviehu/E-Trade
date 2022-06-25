@@ -14,6 +14,9 @@ public class PurchaseDTO {
     public LocalDate purchaseTime;
     public int purchaseId;
 
+    public PurchaseDTO() {
+    }
+
     public PurchaseDTO(double price, Map<String, Integer> prods, String buyer, LocalDate purchaseTime, int purchaseId) {
         this.price = price;
         this.prods = prods;
