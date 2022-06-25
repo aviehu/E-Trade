@@ -53,4 +53,8 @@ public class AppointmentAgreement {
     public String getMainOwner() {
         return mainOwner;
     }
+    public void removeOwnerFromAprroval(String owner){
+        if(awaitingApproval.containsKey(owner))
+            awaitingApproval.remove(owner);
+    }
 }

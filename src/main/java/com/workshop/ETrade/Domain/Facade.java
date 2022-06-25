@@ -122,19 +122,36 @@ public class Facade implements SystemFacade {
     }
     @Override
     public Result<Boolean> removeMember(String userName, String memberToRemove) {
-        if(userController.isConnected(userName)){
-            if(!userController.isUserSysManager(userName)){
-                return new Result<Boolean>(false,"PERMISSION DENIED you must be system manager\n");
+        if(userController.isConnected(userName)) {
+            if (!userController.isUserSysManager(userName)) {
+                return new Result<Boolean>(false, "PERMISSION DENIED you must be system manager\n");
             }
-            if(isInManagment(userName,memberToRemove)){
-                return new Result<Boolean>(false,"Can't remove " + memberToRemove+ ", "+ memberToRemove+" is in Management\n");
+//            if(isInManagment(userName,memberToRemove)){
+//                return new Result<Boolean>(false,"Can't remove " + memberToRemove+ ", "+ memberToRemove+" is in Management\n");
+//            }
+            if (isAdmin(memberToRemove).getVal()){
+                if(!userController.canRemoveAdmin(userName,memberToRemove))
+                    return new Result<>(null, "Can't remove " + memberToRemove + " because he is a System Manager and you didn't appoint him\n");
             }
-            String ret = userController.removeMember(userName, memberToRemove);
-            if(ret == null)
-                return new Result<Boolean>(true,null);
-            return new Result<Boolean>(false,ret);
 
-        }
+                List<String> stores = storesFacade.getStoresOfUser(memberToRemove);
+                Store s;
+                for (String store : stores) {
+
+                    s = storesFacade.getStore(store);
+                    if (s.getFounderName().equals(memberToRemove))
+                        adminCloseStorePermanently(userName, store);
+                    List<String> ret = s.removeMemberFromStore(memberToRemove);
+                    notifySubscribers(ret,"You are no longer works at "+ store,userName);
+
+                }
+                String ret = userController.removeMember(userName, memberToRemove);
+                if (ret == null)
+                    return new Result<Boolean>(true, null);
+                else
+                    return new Result<Boolean>(false, ret);
+
+            }
         return new Result<Boolean>(false, "User is not connected");
     }
     public boolean isInManagment(String admin,String memberToRemove){
@@ -347,6 +364,7 @@ public class Facade implements SystemFacade {
         if(userController.isConnected(userName)){
             List<Notification> ans = userController.getMessages(userName);
             if(ans != null) {
+                Collections.reverse(ans);
                 return new Result<>(ans, null);
             }
             return new Result<>(null, "No Items Matched Your Search");
@@ -357,11 +375,15 @@ public class Facade implements SystemFacade {
     @Override
     public Result<String> addProductToShoppingCart(String userName, String productName, String storeName, int quantity) {
         if(userController.isConnected(userName)){
+            if(quantity < 0)
+                return new Result<>(null,"Cant add negative quantity\n");
             Store s = null;
             String result;
             if((s = storesFacade.getStore(storeName)) == null)
                 return new Result<>(null, "No such store "+storeName);
             else {
+                if(s.getProductAmount(productName) < quantity)
+                    return new Result<>(null,"You can't add more then "+s.getProductAmount(productName)+ " "+productName );
                 result = userController.addProductToShoppingCart(userName, productName, s, quantity);
 
                 if (result == null)
@@ -583,11 +605,12 @@ public class Facade implements SystemFacade {
     @Override
     public Result<Boolean> removeStoreOwner(String userName, String storeName, String ownerToRemove) {
         if(userController.isConnected(userName) && userController.isUserNameExist(ownerToRemove)){
-            if(storesFacade.removeStoreOwner(userName, storeName, ownerToRemove)) {
+            List<String> ret = storesFacade.removeStoreOwner(userName, storeName, ownerToRemove);
+            if(!ret.isEmpty()) {
                 //subscribe new owner
                 Store s = this.storesFacade.getStore(storeName);
                 Member m = this.userController.getMember(ownerToRemove);
-                notifyOne("You are no longer Owner at " + s.getName(),userName,ownerToRemove);
+                notifySubscribers(ret,"You are no longer working at " + s.getName(),userName);
                 s.detach(m);
                 return new Result<>(true, null);
             }
@@ -631,12 +654,13 @@ public class Facade implements SystemFacade {
     @Override
     public Result<Boolean> removeStoreManager(String userName, String storeName, String managerToRemove) {
         if(userController.isConnected(userName) && userController.isUserNameExist(managerToRemove)){
-            if(storesFacade.removeStoreManager(userName, storeName, managerToRemove)) {
+            List<String> ret = storesFacade.removeStoreManager(userName, storeName, managerToRemove);
+            if(!ret.isEmpty()) {
                 //subscribe new owner
                 Store s = this.storesFacade.getStore(storeName);
                 Member m = this.userController.getMember(managerToRemove);
                 s.detach(m);
-                notifyOne("You are no longer Manager at " + storeName,userName,managerToRemove);
+                notifySubscribers(ret,"You are no longer working at " + storeName,userName);
                 return new Result<>(true, null);
             }
             return new Result<>(false, "Could Not Appoint Store Owner");
