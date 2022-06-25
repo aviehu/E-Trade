@@ -560,11 +560,11 @@ public class Store {
         return inventory.canPurchase(productName, quantity);
     }
 
-    public String searchByKeyword(String keyword) {
+    public List<Product> searchByKeyword(String keyword) {
         return inventory.searchByKeyword(keyword);
     }
 
-    public String searchByName(String name) {
+    public List<Product> searchByName(String name) {
         return inventory.searchByName(name);
     }
 

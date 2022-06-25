@@ -14,6 +14,7 @@ import com.workshop.ETrade.Service.ResultPackge.Result;
 import com.workshop.ETrade.Service.ServiceInterface;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -337,7 +338,7 @@ public class SystemServiceProxy implements ServiceInterface {
     }
 
     @Override
-    public Result<List<String>> searchByKeyword(String userName, String keyword) {
+    public Result<List<ProductForm>> searchByKeyword(String userName, String keyword) {
         if (real == null)
             throw new NotImplementedException();
         return real.searchByKeyword(userName, keyword);
@@ -351,7 +352,7 @@ public class SystemServiceProxy implements ServiceInterface {
     }
 
     @Override
-    public Result<List<String>> searchByName(String userName, String productName) {
+    public Result<List<ProductForm>> searchByName(String userName, String productName) {
         if (real == null)
             throw new NotImplementedException();
         return real.searchByName(userName, productName);

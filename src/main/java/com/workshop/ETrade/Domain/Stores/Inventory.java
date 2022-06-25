@@ -1,10 +1,12 @@
 package com.workshop.ETrade.Domain.Stores;
 
+import ch.qos.logback.core.util.StringCollectionUtil;
 import com.workshop.ETrade.AllRepos;
 import com.workshop.ETrade.Domain.purchaseOption;
 import com.workshop.ETrade.Persistance.Stores.ProductDTO;
 import com.workshop.ETrade.Persistance.Stores.StoreDTO;
 import com.workshop.ETrade.RepoThread;
+import org.apache.commons.codec.binary.StringUtils;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.util.*;
@@ -129,21 +131,23 @@ public class Inventory {
         return result.toString();
     }
 
-    public String searchByKeyword(String keyword) {
-        StringBuilder result = new StringBuilder();
-        List<Product> foundProducts = getProductsByKeyword(keyword);
-        for(Product product : foundProducts) {
-            result.append(product.toString());
+    public List<Product> searchByKeyword(String keyword) {
+        List<Product> result = new LinkedList<>();
+        for (Product product : products) {
+            if(product.getKeywords().contains(keyword)) {
+                result.add(product);
+            }
         }
-        return result.toString();
+        return result;
     }
 
-    public String searchByName(String name) {
-        Product product = getProductByName(name);
-        if(product == null) {
-            return null;
+    public List<Product> searchByName(String name) {
+        List<Product> ans = new LinkedList<>();
+        for (Product p : products) {
+            if (p.getName().toLowerCase().contains(name.toLowerCase()))
+                ans.add(p);
         }
-        return product.getName();
+        return ans;
     }
 
     public List<String> searchByCategory(String category) {
